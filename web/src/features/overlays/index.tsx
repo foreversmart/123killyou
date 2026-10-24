@@ -10,7 +10,7 @@ import { LedgerPanel } from './ledger_panel';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
-export function Overlays({ state, soundOn }: { state: GameState; soundOn: boolean }) {
+export function Overlays({ state }: { state: GameState }) {
   if (state.caught || state.paused) return <Encounter caught={state.caught} />;
   if (!state.overlay) return null;
   const item = state.inventory.find((item) => item.id === state.focusItem);
@@ -21,7 +21,7 @@ export function Overlays({ state, soundOn }: { state: GameState; soundOn: boolea
     journal: <JournalPanel state={state} />,
     inventory: <BagPanel state={state} />,
     help: <HelpPanel />,
-    settings: <SettingsPanel soundOn={soundOn} />,
+    settings: <SettingsPanel />,
   };
   return (
     <div className={cx(styles['scene-overlay'], styles['information-overlay'])} key={state.overlay}>

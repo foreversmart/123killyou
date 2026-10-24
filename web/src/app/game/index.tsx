@@ -33,7 +33,7 @@ export default function Game() {
       <section className={styles['game-shell']} aria-label="第一夜，语音密室逃脱">
         <PlayerStatus state={state} demo={demo} voiceStarted={voiceStarted} connected={connected} />
         <Room state={state} phase={roomPhase}>
-          <Overlays state={state} soundOn={voice.soundOn} />
+          <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
         </Room>
         <Inventory state={state} />

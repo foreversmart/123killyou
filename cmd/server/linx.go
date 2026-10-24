@@ -26,7 +26,7 @@ func prepareLinx(catalog *content.Catalog) (session.DialogueProvider, error) {
 	})
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	// Always refresh the exact named test agent so {{game_context}} is present.
+	// Refresh game prompts on startup; existing agents keep their console voices.
 	keeper, _ := catalog.NPC("keeper")
 	agentID, err := client.EnsureAgent(ctx, linx.AgentSpec{
 		Name: "1024-keeper", AssistantName: keeper.Name, VoiceID: keeper.Voice.ProviderVoiceID,

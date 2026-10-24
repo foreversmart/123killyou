@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { VoiceStatus, VoiceAnswer } from './types';
 import { useSpeechOutput } from './useSpeechOutput';
-import { soundSettingFor } from './soundSetting';
 import { createVoiceTurns } from './voiceTurns';
 import { attachAudioInput } from './audioInput';
 import { createPushToTalk } from './pushToTalk';
@@ -17,7 +16,6 @@ export function useVoice(
 ) {
   const [status, setStatus] = useState<VoiceStatus>('idle');
   const [problem, setProblem] = useState('');
-  const [soundOn, setSoundOn] = useState(true);
   const [caption, setCaption] = useState<SpeechCaption | null>(null);
   const handler = useRef(onText);
   handler.current = onText;
@@ -30,8 +28,6 @@ export function useVoice(
   const audio = useRef<AudioContext | null>(null);
   const analyser = useRef<AnalyserNode | null>(null);
   const ambient = useRef<GainNode | null>(null);
-  const sound = useRef(soundOn);
-  sound.current = soundOn;
   const initializing = useRef(false);
   const mounted = useRef(true);
 
@@ -39,11 +35,7 @@ export function useVoice(
     setProblem(message);
     setStatus(wanted.current ? 'listening' : 'idle');
   }, []);
-  const {
-    speak,
-    stream: receiveSpeech,
-    stop,
-  } = useSpeechOutput(wanted, sound, setStatus, audio, report);
+  const { speak, stream: receiveSpeech, stop } = useSpeechOutput(wanted, setStatus, audio, report);
   const turns = useMemo(
     () =>
       createVoiceTurns({
@@ -65,15 +57,10 @@ export function useVoice(
             );
           receiveSpeech(event);
         },
-        start(text) {
+        start() {
           setProblem('');
           setStatus('processing');
           stop();
-          const setting = soundSettingFor(text);
-          if (setting !== undefined) {
-            sound.current = setting;
-            setSoundOn(setting);
-          }
         },
         answer(answer) {
           setStatus(wanted.current ? 'listening' : 'idle');
@@ -123,7 +110,7 @@ export function useVoice(
       if (!audio.current) audio.current = new AudioContext({ sampleRate: 16000 });
       await audio.current.resume();
       if (!mounted.current) return;
-      const input = attachAudioInput(audio.current, stream, ambient.current, sound.current);
+      const input = attachAudioInput(audio.current, stream, ambient.current);
       analyser.current = input.analyser;
       ambient.current = input.ambient;
       microphone.current = await prepareMicrophone(audio.current, stream);
@@ -173,12 +160,6 @@ export function useVoice(
   );
 
   useEffect(() => {
-    if (ambient.current && audio.current)
-      ambient.current.gain.setTargetAtTime(soundOn ? 0.018 : 0, audio.current.currentTime, 0.3);
-    if (!soundOn) stop();
-  }, [soundOn, stop]);
-
-  useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
@@ -201,5 +182,5 @@ export function useVoice(
     return Math.min(1, Math.sqrt(sum / data.length) * 5);
   }, []);
 
-  return { status, problem, caption, start, submit, level, soundOn, setSoundOn };
+  return { status, problem, caption, start, submit, level };
 }

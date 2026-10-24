@@ -74,13 +74,13 @@ func TestSystemCommandsDoNotChangeDevotion(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for index, text := range []string{"看看地图", "关掉地图", "打开背包", "看看手记", "暂停游戏", "继续游戏", "关闭声音"} {
+	for index, text := range []string{"看看地图", "关掉地图", "打开背包", "看看手记", "暂停游戏", "继续游戏", "系统设置"} {
 		result := run(t, s, state.ID, string(rune('a'+index)), text)
 		if result.State.Devotion != state.Devotion {
 			t.Fatalf("系统命令 %q 改变了虔诚度", text)
 		}
-		if text == "关闭声音" && result.State.Overlay != "settings" {
-			t.Fatal("关闭声音被误判成了关闭界面")
+		if text == "系统设置" && result.State.Overlay != "settings" {
+			t.Fatal("系统设置没有打开")
 		}
 	}
 }

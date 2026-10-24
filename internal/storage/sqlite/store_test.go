@@ -117,9 +117,17 @@ func TestRewardCheckpointSurvivesResetAndRestart(t *testing.T) {
 	start := createGame(t, s)
 	run(t, s, start.ID, "give", "把铜钥匙给守夜人")
 	run(t, s, start.ID, "save", "保存为交付后")
-	reset := run(t, s, start.ID, "reset", "重新开始")
+	run(t, s, start.ID, "settings", "系统设置")
+	reset := run(t, s, start.ID, "reset", "重置进度")
 	if reset.State.RunID == start.RunID || reset.State.Flags["keyDelivered"] {
 		t.Fatal("重开没有建立干净的新一局")
+	}
+	if reset.State.Overlay != "" || reset.State.Devotion != start.Devotion || reset.SpeakerID != "" || reset.State.Dialogue.Portrait != "" {
+		t.Fatal("设置中重置进度没有收起面板、恢复初始状态并由旁白确认")
+	}
+	duplicate, err := s.Command(start.ID, start.RunID, "reset", "重置进度")
+	if err != nil || duplicate.State.RunID != reset.State.RunID || duplicate.State.Revision != reset.State.Revision {
+		t.Fatal("重置请求的重试又产生了新进度")
 	}
 	var count int
 	s.db.QueryRow("SELECT count(*) FROM npc_memories WHERE run_id=?", reset.State.RunID).Scan(&count)
