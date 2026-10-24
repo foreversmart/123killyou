@@ -1,0 +1,31 @@
+.check-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background: #100f0b;
+  color: #c1aa7d;
+  text-align: center;
+  letter-spacing: 3px;
+}
+.check-screen svg {
+  width: 64px;
+  height: 64px;
+  opacity: 0.6;
+}
+.check-screen p {
+  margin: 0;
+}
+.probe-host {
+  width: 16px;
+  height: 16px;
+}
+.check-screen small {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #95876c;
+  letter-spacing: 1px;
+}

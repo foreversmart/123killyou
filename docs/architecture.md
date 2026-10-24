@@ -10,7 +10,8 @@ web/src/
   app/startup/                      启动能力检查，通过后懒加载游戏
   app/game/                         页面组装、回合反馈、自动演示
   features/
-    startup/browser_requirements/   实验功能未开启时的说明与重新检测入口
+    startup/browser_check/          启动绘制自检、前后台切换及取消
+    startup/browser_requirements/   能力检查失败时的说明与重新检测入口
     hud/player_status/              玩家状态、房间标题、存档状态
     inventory/inventory/            常驻物品栏
     dialogue/dialogue_panel/        当前说话者、头像与对白
@@ -56,7 +57,9 @@ features/dialogue/dialogue_panel/
 
 页面入口只负责组装，语音回合反馈和自动演示分别在 `useGameController.ts`、`useDemoTour.ts` 中。HTTP 请求适配与 WebSocket 状态恢复放在会话功能内，GPU shader 作为 `.glsl` 文件独立维护。新增地图内容、语音状态或对白样式不需要修改同一个大组件和全局样式表。
 
-启动入口 `app/startup` 使用 `shared/lib/htmlCanvas.ts` 检查 `HTMLCanvasElement.requestPaint` 与 `CanvasRenderingContext2D.drawElementImage` 是否为可调用函数。两者都存在才挂载懒加载的 `Game`；否则显示 `BrowserRequirements`。检查位于会话、演示、调试输入和麦克风启动之前，不提供绕过选项，也不缓存手动确认。刷新或重新聚焦页面时再次检测；浏览器 flags 的启用步骤见 [README](../README.md#本机启动)。账本不再保留普通 HTML 回退。当前检查验证接口可用性，不等同于实际纹理绘制已联调通过。
+启动入口 `app/startup` 先挂载 `BrowserCheck`，使用 `shared/lib/htmlCanvas.ts` 检查必需方法，再由 `htmlCanvasProbe.ts` 创建一个 16×16 的实际 HTML-in-Canvas 探针：在 `paint` 事件内调用 `drawElementImage()`，读取两个区域的像素，与已知颜色比较。只有通过像素校验才挂载懒加载的 `Game`；接口缺失、异常、空白 / 错误颜色或 5 秒超时均显示 `BrowserRequirements`，区分缺少接口与绘制失败。自检和账本共用 `configureHtmlCanvas()` 配置 `drawable`。
+
+检查位于会话、演示、调试输入和麦克风启动之前，不提供绕过选项，也不缓存手动确认。检测页变为后台时取消等待，回到前台重新检测；每次完成或取消都清理探针、监听与定时器。失败页重新聚焦时重试，已进入的游戏不因切换窗口重新挂载；刷新始终重新自检。浏览器 flags 仅作为官方试用指引，网页不能读取其值，实际绘制结果决定是否放行。账本不提供普通 HTML 回退；自检通过不等同于 PixiJS 纹理上传与 shader 已完整验证。
 
 每轮反馈不能依赖命中剧情：NPC 配置提供兜底台词，应用为缺少读白的结果保留操作说明；语音模块处理没收完整的识别与系统错误提示，HTTP 适配器限制请求和响应体等待时间。进度刷新不阻塞失败反馈，后台的请求重试继续使用同一个请求 ID。具体体验约定见 [语音与 NPC 设计](design/voice-and-npc.md#21-每轮都要有反馈)。
 
@@ -136,4 +139,4 @@ npm run build
 go test -race ./...
 ```
 
-架构检查约束前端目录命名、导入路径大小写、CSS Modules、依赖方向与单文件规模（300 行）。Prettier 与 TypeScript 的未使用符号检查保持前端一致；Go 使用 gofmt。测试分别覆盖内容配置校验、纯游戏规则、SQLite 事务 / 重启 / 回档，以及 HTTP / WebSocket 适配。`test:web` 使用 Node 内置测试运行器，验证实验 API 完全缺失 / 部分可用 / 全部可用的准入判断、识别收句与纯静音的区别，以及 HTTP 无响应 / 响应体卡住时的反馈期限。
+架构检查约束前端目录命名、导入路径大小写、CSS Modules、依赖方向与单文件规模（300 行）。Prettier 与 TypeScript 的未使用符号检查保持前端一致；Go 使用 gofmt。测试分别覆盖内容配置校验、纯游戏规则、SQLite 事务 / 重启 / 回档，以及 HTTP / WebSocket 适配。`test:web` 使用 Node 内置测试运行器，验证接口前置检查、绘制像素成功 / 空白 / 错色、绘制异常 / 超时 / 取消后的清理，以及语音反馈与请求期限。自检单元测试使用可控的模拟 paint 源验证分支和生命周期，不能代替目标 Chrome 的原生渲染验证。

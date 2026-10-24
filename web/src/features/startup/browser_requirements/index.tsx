@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { HtmlCanvasSupport } from '@/shared/lib/htmlCanvas';
 import { Icon } from '@/shared/ui/icon';
 import styles from './style.module.css';
 
@@ -10,7 +11,7 @@ const flags = [
   },
 ];
 
-export function BrowserRequirements({ missing }: { missing: string[] }) {
+export function BrowserRequirements({ support }: { support: HtmlCanvasSupport }) {
   const [message, setMessage] = useState('');
   const copy = async (url: string) => {
     try {
@@ -29,20 +30,27 @@ export function BrowserRequirements({ missing }: { missing: string[] }) {
             <Icon kind="seal" />
             第一夜
           </span>
-          <span className={styles['status-badge']}>实验功能未开启</span>
+          <span className={styles['status-badge']}>画面能力检测未通过</span>
         </header>
         <div className={styles['card-body']}>
           <p className={styles['eyebrow']}>进入之前 · 浏览器检查</p>
-          <h1 id="requirements-title">请先开启浏览器实验功能</h1>
+          <h1 id="requirements-title">暂时无法进入游戏</h1>
           <p className={styles['intro']}>
-            本作需要 HTML-in-Canvas 来呈现文字与画面的特效。检测通过后，才能进入游戏。
+            本作需要 HTML-in-Canvas
+            来呈现文字与画面的特效。启动时会实际绘制并核对像素，检测通过后才能进入。
           </p>
+          {support.error && (
+            <p className={styles['failure-reason']} role="alert">
+              {support.error}
+            </p>
+          )}
+          <p className={styles['browser-tip']}>请参考官方试用说明检查以下开关，并重启浏览器：</p>
           <ol className={styles['steps']}>
             {flags.map((flag) => (
               <li key={flag.url}>
                 <div className={styles['step-heading']}>
                   <span>{flag.name}</span>
-                  <span className={styles['enable-label']}>设为 Enabled</span>
+                  <span className={styles['enable-label']}>官方试用建议：Enabled</span>
                 </div>
                 <div className={styles['flag-address']}>
                   <code>{flag.url}</code>
@@ -61,7 +69,8 @@ export function BrowserRequirements({ missing }: { missing: string[] }) {
             </li>
           </ol>
           <p className={styles['browser-tip']}>
-            请将地址粘贴到浏览器地址栏。如果找不到开关，请使用最新版 Chrome Canary。
+            请将地址粘贴到浏览器地址栏。如果找不到开关，请使用最新版 Chrome
+            Canary。游戏以实际绘制结果判断可用性，无法读取开关状态。
           </p>
           <div className={styles['actions']}>
             <button
@@ -69,7 +78,7 @@ export function BrowserRequirements({ missing }: { missing: string[] }) {
               type="button"
               onClick={() => location.reload()}
             >
-              已开启，刷新检测 <span aria-hidden="true">↻</span>
+              重新检测 <span aria-hidden="true">↻</span>
             </button>
             <a
               href="https://github.com/WICG/html-in-canvas#developer-trial-information"
@@ -84,14 +93,20 @@ export function BrowserRequirements({ missing }: { missing: string[] }) {
           </p>
           <details className={styles['diagnostics']}>
             <summary>查看检测信息</summary>
-            <p>尚未提供以下必需 API：</p>
-            <ul>
-              {missing.map((name) => (
-                <li key={name}>
-                  <code>{name}</code>
-                </li>
-              ))}
-            </ul>
+            {support.missing.length > 0 ? (
+              <>
+                <p>尚未提供以下必需 API，未开始绘制自检：</p>
+                <ul>
+                  {support.missing.map((name) => (
+                    <li key={name}>
+                      <code>{name}</code>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p>必需 API 已提供，但实际绘制校验失败。{support.error}</p>
+            )}
           </details>
         </div>
         <footer className={styles['card-footer']}>固定视角 · 全程语音 · 第一夜</footer>

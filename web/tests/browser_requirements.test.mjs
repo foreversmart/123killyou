@@ -37,7 +37,7 @@ test('同名属性存在但不能调用，不算已开启', () => {
   assert.equal(result.missing.length, 2);
 });
 
-test('全部必需接口可调用才放行，不依赖浏览器名称或缓存确认', () => {
+test('全部必需接口可调用只通过前置检查，不依赖浏览器名称或缓存确认', () => {
   const environment = {
     HTMLCanvasElement: { prototype: { requestPaint() {} } },
     CanvasRenderingContext2D: { prototype: { drawElementImage() {} } },

@@ -16,14 +16,14 @@ npm run dev
 
 打开 [http://127.0.0.1:5173/](http://127.0.0.1:5173/)。Go/Gin 服务使用 `127.0.0.1:8787`，前端通过 Vite 代理访问。
 
-进入游戏前会强制检查 HTML-in-Canvas 的 `requestPaint()` 和 `drawElementImage()` 是否可调用。未通过时只展示启用说明，不加载游戏、不创建 / 读取会话，也不能观看演示或通过调试参数绕过。请使用最新版 Chrome Canary，将以下两个开关设为 Enabled，点击 Relaunch 重启浏览器后重新打开本页：
+进入游戏前先检查 HTML-in-Canvas 的 `requestPaint()` 和 `drawElementImage()` 是否可调用，再实际绘制一个包含两种已知颜色的 HTML 元素，并读取像素核对。只有绘制成功才加载游戏；接口缺失、绘制异常、像素不符或等待超过 5 秒都会停留在说明页，不创建 / 读取会话，也不能观看演示或通过调试参数绕过。检测失败时，可按官方试用建议使用最新版 Chrome Canary，将以下开关设为 Enabled，点击 Relaunch 重启浏览器后重新打开本页：
 
 ```text
 chrome://flags/#canvas-draw-element
 chrome://flags/#enable-experimental-web-platform-features
 ```
 
-启用方式依据 [WICG 开发者试用说明](https://github.com/WICG/html-in-canvas#developer-trial-information)。网页根据实际 API 能力判断，不能读取浏览器内部的开关值；刷新和重新聚焦页面都会重新检测，不保存“我已开启”一类可绕过检查的确认。
+启用方式依据 [WICG 开发者试用说明](https://github.com/WICG/html-in-canvas#developer-trial-information)。网页以实际绘制结果判断，不能读取浏览器内部的开关值；即使总开关未开启，真实绘制通过也可进入。每次刷新重新自检，检测时切到后台会取消本次等待、回到前台重新绘制；失败页重新聚焦时重试。游戏进入后不会因切换窗口重新挂载，也不保存“我已开启”一类可绕过检查的确认。
 
 首次进入可开启语音会话并允许麦克风。正式游戏使用持续识别，不按住说话，不用鼠标或键盘操作道具和房间。也可在开启会话前选择“先看一遍演示”，无需麦克风即可观看游戏状态驱动的流程。
 
@@ -94,7 +94,7 @@ npm run assets:slice
 
 原图是合成画面，值守室 NPC 目前仍与房间背景合在同一张图里；独立头像和道具已经切开。后续若需要 NPC 离场、换装或完整骨骼动画，需要再补人物透明层与无遮挡背景。
 
-账本通过“HTML → Canvas 纹理 → PixiJS”参与渲染。应用入口先检查所需实验 API，缺少能力时停留在启用说明页，已移除普通 HTML 的游戏内回退。API 检查通过只表示接口已提供；目标 Chrome 上的实际纹理绘制、shader 和语音仍需单独联调。
+账本通过“HTML → Canvas 纹理 → PixiJS”参与渲染。应用入口先完成 HTML-in-Canvas 的实际绘制与像素自检，失败时停留在说明页，已移除普通 HTML 的游戏内回退。自检与账本共用 `drawable` 配置逻辑；这一步验证 DOM 到 2D Canvas 的绘制，账本纹理上传、PixiJS shader 和语音仍需在目标 Chrome 中单独联调。
 
 账本显示加载反馈；成功绘制后才切为就绪，绘制失败或等待超过 5 秒会明确提示通过语音返回并重新打开，不以空白画面代替错误反馈。
 

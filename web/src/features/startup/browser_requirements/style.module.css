@@ -70,6 +70,15 @@
 .intro {
   margin: 0 0 24px;
 }
+.failure-reason {
+  padding: 12px 14px;
+  border-left: 2px solid #b0865d;
+  background: #422c1e38;
+  color: #d3b08d;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
 .steps {
   margin: 0;
   padding-left: 24px;

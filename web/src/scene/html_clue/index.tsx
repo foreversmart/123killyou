@@ -2,6 +2,7 @@ import styles from './style.module.css';
 
 import { useEffect, useRef, useState } from 'react';
 import { Application, Sprite, Texture } from 'pixi.js';
+import { configureHtmlCanvas } from '@/shared/lib/htmlCanvas';
 import { atmosphereFilter } from '../effects/atmosphere';
 
 type ExperimentalCanvas = HTMLCanvasElement & { requestPaint: () => void };
@@ -36,9 +37,7 @@ export function HtmlClue() {
     if (!source.current || !target.current) return;
     const canvas = source.current as ExperimentalCanvas;
     const element = canvas.firstElementChild as HTMLElement;
-    if ('content' in HTMLCanvasElement.prototype) canvas.setAttribute('content', 'drawable');
-    else canvas.setAttribute('layoutsubtree', '');
-    element.setAttribute('drawable', '');
+    configureHtmlCanvas(canvas, element);
     const ctx = canvas.getContext('2d') as ExperimentalContext;
     const app = new Application();
     let dead = false;
