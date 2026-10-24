@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-25",
+  "status": "selected",
+  "generator": "built-in image_gen",
+  "styleReferences": [
+    "assets/references/style_reference/ref_01_character_closeup.png",
+    "assets/references/style_reference/ref_02_character_counter.png",
+    "assets/references/style_reference/ref_03_group_interior.png",
+    "assets/references/style_reference/ref_04_night_exterior.png"
+  ],
+  "assets": [
+    {
+      "id": "east_courtyard",
+      "name": "东院回廊·晴日下午",
+      "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2035284,
+      "sha256": "eb26468f6e6ca3de87eeb979e578fb8d5d879ff66ac3b0d3317fc93696c77290"
+    },
+    {
+      "id": "player_room",
+      "name": "主角门房·夜间亮烛",
+      "path": "assets/scenes/player_room/room_candlelit.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1724499,
+      "sha256": "fa98b6e67d15d1f88857ff71d31a4694c441d968efa4265dfe2ae2aa1ec75bd9"
+    },
+    {
+      "id": "lin_lan",
+      "name": "林岚·正常站姿",
+      "path": "assets/characters/lin_lan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1519523,
+      "sha256": "44781db08da1f7f847c7d7ed4c244546eee40fd640697db18c766d445c011a1e"
+    },
+    {
+      "id": "lu_chen",
+      "name": "陆沉·提灯站姿",
+      "path": "assets/characters/lu_chen/standing_lantern.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1716155,
+      "sha256": "493c3d16664cd1fddd949ab63c1df9eb42fccbd5b36da2f3c7f50f0375425e84"
+    }
+  ]
+}

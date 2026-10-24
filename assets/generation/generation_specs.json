@@ -1,0 +1,41 @@
+{
+  "purpose": "当前素材的后续生成与派生规范",
+  "styleReferences": [
+    "assets/references/style_reference/ref_01_character_closeup.png",
+    "assets/references/style_reference/ref_02_character_counter.png",
+    "assets/references/style_reference/ref_03_group_interior.png",
+    "assets/references/style_reference/ref_04_night_exterior.png"
+  ],
+  "sharedStyle": "以四张用户截图为美术主参考，写实比例的二维线描叙事游戏画面。深色细线组织轮廓与结构，大色面、少量分层阴影和柔和过渡，轻纸质感，材质纹理稀疏，表情与演出克制。光色随场景变化，日间暖灰、米黄与灰绿，夜间冷青暗部配局部琥珀暖光。主角第一视角，线索在正常显示尺寸下清楚可辨。",
+  "commonConstraints": "画面不含界面、字幕、截图黑边、名字、水印或伪文字。场景为空背景，人物为独立透明图层。保持人物与道具身份、空间布局、机位及光源连续。",
+  "assets": [
+    {
+      "id": "east_courtyard",
+      "referenceAsset": "assets/scenes/east_courtyard/corridor_afternoon.png",
+      "transparentBackground": false,
+      "framing": "横向16:9，站立游客眼高，沿东院回廊看向尽头庭院",
+      "prompt": "晴日下午，维护中的古寺客房回廊。两侧各两扇房门，空白铜房牌，近左门边铜铃，一排未点檐灯，远右花瓶与窄桌，干燥石板地。尽头可见灰瓦、树叶与少量浅蓝天空。木构、米灰墙和石板用清楚线条与概括色面表现，只保留少量材质纹理。日光温暖、阴影柔和且成块，空出人物站立区域。无人、无动物、无雨、无血迹。"
+    },
+    {
+      "id": "player_room",
+      "referenceAsset": "assets/scenes/player_room/room_candlelit.png",
+      "transparentBackground": false,
+      "framing": "横向16:9，房内眼高，左床、后左窗、后右门与右前桌",
+      "prompt": "主角门房夜间，一支红烛在朴素烛台中燃烧，油灯未点。蓝灰床品、格窗外深蓝夜色与对面回廊灯线、关闭的木门、清楚门闩与门槛细红蜡迹。桌上有蓝封薄经书、米色寺史册和残页，标签留白。冷月光配局部琥珀烛光，床沿、烛芯、门闩与地面通路可辨。木、墙、床褶和地板用概括色面与主要结构线表达。空房间，不添加人影或额外光源。"
+    },
+    {
+      "id": "lin_lan",
+      "referenceAsset": "assets/characters/lin_lan/standing.png",
+      "transparentBackground": true,
+      "framing": "竖向2:3，全身自然站姿，头、双手、相机和鞋完整可见",
+      "prompt": "林岚，约27岁的中国女性游客与摄影爱好者，齐肩深色短发一侧别耳，留有个体差异的自然五官与克制浅笑。浅砂休闲外套、米白圆领上衣、炭灰直筒裤和实用步行鞋。一台无品牌小相机由深色颈带挂在上腹，右手轻托相机，左臂自然下垂，入住前镜头盖在镜头上。清楚结构线、主要衣褶和概括阴影，头发按块面组织。中性柔光，真实透明背景，轮廓外透明，不加底色、雾、地面或投影。"
+    },
+    {
+      "id": "lu_chen",
+      "referenceAsset": "assets/characters/lu_chen/standing_lantern.png",
+      "transparentBackground": true,
+      "framing": "竖向2:3，全身三分之四站姿，钥匙、提灯与双脚完整可见",
+      "prompt": "陆沉，约45岁的中国守夜僧，剃发、清瘦、眼下疲惫、神情警觉而克制。灰褐交领工作僧衣、浅内领、布腰带、深色长裤与布鞋。衣服洗旧，只有少量补缀。左手在腿侧提一盏有罩油灯，右手在腰前握铜钥匙串。保持当前脸型、衣领、体型和握持方式。清楚细线、主要衣褶与概括色面，中性身体光与提灯对近侧袖手的局部暖光。真实透明背景，轮廓外透明，不添加光雾、地面或投影。"
+    }
+  ]
+}
