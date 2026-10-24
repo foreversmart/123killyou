@@ -1,0 +1,38 @@
+.action-notice {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 1.4cqw;
+  transform: translate3d(-50%, 0, 0);
+  transform-origin: center top;
+  width: max-content;
+  max-width: 86%;
+  padding: 0.7cqw 1.1cqw;
+  font-size: 0.96cqw;
+  line-height: 1.6;
+  color: #cfc3a5;
+  background: #0d0c09df;
+  border: 1px solid #90744b55;
+  box-shadow: 0 3px 12px #0007;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7cqw;
+  animation: notice-pop-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.action-notice > span {
+  width: 0.35cqw;
+  height: 0.35cqw;
+  background: #bd9457;
+  flex-shrink: 0;
+  transform: rotate(45deg);
+}
+@keyframes notice-pop-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-50%, -8px, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+}

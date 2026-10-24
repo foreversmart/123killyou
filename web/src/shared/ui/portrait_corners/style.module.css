@@ -1,0 +1,18 @@
+.portrait-corner {
+  position: absolute;
+  width: 16%;
+  height: 15%;
+  border-color: #e0d8b9bb;
+  border-style: solid;
+  pointer-events: none;
+}
+.portrait-corner--tl {
+  top: 1px;
+  left: 1px;
+  border-width: 2px 0 0 2px;
+}
+.portrait-corner--br {
+  bottom: 1px;
+  right: 1px;
+  border-width: 0 2px 2px 0;
+}

@@ -1,0 +1,80 @@
+{
+  "id": "keeper",
+  "name": "守夜人",
+  "aliases": [
+    "看门人",
+    "守夜"
+  ],
+  "room": "watch",
+  "portrait": "keeper",
+  "voice": {
+    "profile": "keeper_low_male",
+    "providerVoiceId": ""
+  },
+  "traits": [
+    "寡言",
+    "多疑",
+    "重视规矩"
+  ],
+  "knowledge": [
+    "负责值守与登记",
+    "认识铜钥匙，能够发放通行凭"
+  ],
+  "intro": "夜里不该有人来这里。你找谁？",
+  "return": "又回来了？这里的夜很长，有话慢慢说。",
+  "default": "你说的这些，我听见了。可我只管值夜和登记。你来这里，到底要办什么事？",
+  "reject": "这东西你自己留着。我问的是那把铜钥匙。",
+  "exposureThreshold": 30,
+  "exposedReply": "你果然不是我们的人。门外的人，进来。",
+  "dialogueRules": [
+    {
+      "id": "doubt",
+      "keywords": [
+        "骗子",
+        "邪教",
+        "不信",
+        "谎言",
+        "假的"
+      ],
+      "reply": "这话，不该从你的嘴里说出来。你到底是谁？",
+      "devotionDelta": -14,
+      "glitch": true
+    },
+    {
+      "id": "devout",
+      "keywords": [
+        "谨遵",
+        "虔诚",
+        "祈祷",
+        "愿光",
+        "虔心"
+      ],
+      "reply": "记得自己的誓言就好。夜里少走动，尤其不要去内堂。",
+      "devotionDelta": 4,
+      "glitch": false
+    },
+    {
+      "id": "identity",
+      "keywords": [
+        "找谁",
+        "你是谁",
+        "你的名字",
+        "守夜"
+      ],
+      "reply": "我只替这里看门、记名。其他的事，你最好不要问。",
+      "devotionDelta": 0,
+      "glitch": false
+    }
+  ],
+  "exchanges": [
+    {
+      "id": "keeper_accept_key",
+      "itemId": "key",
+      "rewardId": "permit",
+      "flag": "keyDelivered",
+      "devotionDelta": 3,
+      "clue": "铜钥匙已经归还。守夜人给了你一张通行凭，并提醒你不要追问名字",
+      "reply": "原来是你。钥匙我收下了。这张通行凭拿好，记住，不要追问名字。"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+.help-sheet dl {
+  margin: 1cqw 0;
+}
+.help-sheet dl > div {
+  display: flex;
+  font-size: 1.15cqw;
+  line-height: 2.5;
+  gap: 1.7cqw;
+}
+.help-sheet dt {
+  color: #7f3e28;
+}
+.help-sheet dd {
+  margin: 0;
+}

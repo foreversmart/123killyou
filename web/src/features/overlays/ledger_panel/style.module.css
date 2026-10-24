@@ -1,0 +1,10 @@
+.ledger-sheet {
+  width: 68%;
+}
+.overlay-voice-hint {
+  margin-top: 1.3cqw;
+  text-align: center;
+  font-size: 0.9cqw;
+  color: #c7b996;
+  letter-spacing: 0.15cqw;
+}

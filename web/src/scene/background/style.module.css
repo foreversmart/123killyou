@@ -1,0 +1,23 @@
+.scene-art,
+.scene-fallback,
+.pixi-host {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.scene-fallback {
+  object-fit: cover;
+}
+.pixi-host {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.pixi-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.scene-art--ready .pixi-host {
+  opacity: 1;
+}

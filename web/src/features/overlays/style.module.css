@@ -1,0 +1,21 @@
+.scene-overlay {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.information-overlay {
+  background: #0707059c;
+  backdrop-filter: blur(3px);
+  animation: overlay-in 0.3s ease;
+}
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

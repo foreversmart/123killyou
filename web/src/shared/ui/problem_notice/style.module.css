@@ -1,0 +1,15 @@
+.voice-problem {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, 90vw);
+  background: #211c13f5;
+  color: #cbb890;
+  border: 1px solid #80663c;
+  padding: 12px 20px;
+  font-size: 13px;
+  line-height: 1.8;
+  z-index: 30;
+  box-shadow: 0 5px 30px #0007;
+}

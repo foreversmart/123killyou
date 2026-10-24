@@ -1,0 +1,23 @@
+.bag-items {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1.3cqw;
+  padding: 1.5cqw 0;
+}
+.bag-items > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8cqw;
+}
+.bag-items img {
+  height: 9cqw;
+  max-width: 8cqw;
+  object-fit: contain;
+  background: #15140f;
+  border: 4px solid #8d7753;
+}
+.bag-items strong {
+  font-size: 1.2cqw;
+  font-weight: 400;
+}

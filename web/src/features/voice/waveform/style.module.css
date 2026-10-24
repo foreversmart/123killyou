@@ -1,0 +1,26 @@
+.waveform {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.18cqw;
+  height: 2.9cqw;
+  width: 100%;
+}
+.waveform i {
+  display: block;
+  width: 0.16cqw;
+  height: 100%;
+  background: #6c665a;
+  transform: scaleY(0.12);
+  border-radius: 1px;
+}
+.waveform i:nth-child(-n + 16) {
+  background: #c59850;
+}
+.waveform--idle i,
+.waveform--error i {
+  background: #625d50;
+}
+.inactive i {
+  background: #625d50;
+}

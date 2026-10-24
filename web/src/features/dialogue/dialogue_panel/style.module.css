@@ -1,0 +1,87 @@
+.dialogue-panel {
+  grid-column: 1;
+  grid-row: 3;
+  position: relative;
+  display: grid;
+  grid-template-columns: 11% minmax(0, 1fr) 19%;
+  padding: 0.55cqw 0.85cqw 0.6cqw 0.7cqw;
+  min-height: 7.8cqw;
+  border-top: 2px solid #675033;
+  z-index: 8;
+}
+.speaker-portrait {
+  position: relative;
+  align-self: start;
+  width: calc(100% - 0.8cqw);
+  max-width: 7.8cqw;
+  aspect-ratio: 1;
+  margin-top: -0.9cqw;
+  margin-right: 0.8cqw;
+  padding: 0.3cqw;
+  border: 1px solid #b9b39d;
+  box-shadow:
+    0 0 0 2px #1a1913,
+    0 0 0 3px #706b57;
+  background: var(--noise), linear-gradient(130deg, #adac9b, #646654 50%, #a5a18d);
+}
+.speaker-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(0.75);
+  display: block;
+}
+.dialogue-content {
+  padding: 0.1cqw 0.8cqw 0 0.3cqw;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.speaker-name {
+  display: flex;
+  align-items: center;
+  gap: 0.8cqw;
+  color: var(--gold-bright);
+  letter-spacing: 0.12cqw;
+  font-size: clamp(11px, 1.15cqw, 18px);
+}
+.speaker-name > span:first-child {
+  flex-shrink: 0;
+}
+.speaker-name i {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, #95794275, transparent);
+}
+.dialogue-text {
+  margin: 0.35cqw 0 0.1cqw;
+  color: #e3decd;
+  font-size: clamp(12px, 1.35cqw, 20px);
+  line-height: 1.6;
+  letter-spacing: 0.035cqw;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 3px #000;
+  animation: text-appear 0.45s ease both;
+}
+.speaker-name .heard-text {
+  max-width: 65%;
+  color: #8c8779;
+  font-size: 0.78cqw;
+  letter-spacing: 0.04cqw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@keyframes text-appear {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

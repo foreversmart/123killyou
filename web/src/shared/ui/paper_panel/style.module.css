@@ -1,0 +1,40 @@
+.paper-panel {
+  width: 72%;
+  padding: 2cqw 2.7cqw 1.1cqw;
+  position: relative;
+  background: var(--noise), radial-gradient(ellipse at 45% 40%, #c9b991, #b4a17c 70%, #8c795b);
+  color: #302a1e;
+  border: 1px solid #75603f;
+  box-shadow:
+    0 15px 70px #0009,
+    inset 0 0 0 6px #88714970,
+    inset 0 0 0 7px #e2d3ad44,
+    inset 0 0 35px #66543855;
+}
+.paper-panel::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid #56472b44;
+  pointer-events: none;
+}
+.paper-eyebrow {
+  font-size: 0.8cqw;
+  letter-spacing: 0.25cqw;
+  color: #5e5038;
+}
+.paper-panel h2 {
+  font-size: 2.5cqw;
+  letter-spacing: 0.4cqw;
+  margin: 0.8cqw 0;
+  font-weight: 500;
+}
+.paper-instruction {
+  border-top: 1px solid #7a684437;
+  text-align: center;
+  margin: 1.1cqw 0 0;
+  padding: 0.9cqw 0 0.3cqw;
+  color: #62543c;
+  font-size: 0.86cqw;
+  letter-spacing: 0.1cqw;
+}
