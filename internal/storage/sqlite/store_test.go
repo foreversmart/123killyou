@@ -75,6 +75,7 @@ func TestCheckpointRestoresWorldMemoryAndFencesOldRun(t *testing.T) {
 	run(t, s, start.ID, "talk", "你是谁")
 	want := run(t, s, start.ID, "ledger", "看看账本").State
 	run(t, s, start.ID, "save", "保存为交付前")
+	run(t, s, start.ID, "close", "返回")
 	run(t, s, start.ID, "give", "把铜钥匙给守夜人")
 	run(t, s, start.ID, "later-talk", "你们都是骗子")
 	later := run(t, s, start.ID, "move", "去走廊").State
@@ -83,8 +84,11 @@ func TestCheckpointRestoresWorldMemoryAndFencesOldRun(t *testing.T) {
 	if loaded.Intent != "load_checkpoint" || got.RunID == start.RunID || got.Revision <= later.Revision {
 		t.Fatal("读取检查点没有建立新分支和递增版本")
 	}
-	if got.Room != want.Room || got.Devotion != want.Devotion || !reflect.DeepEqual(got.Inventory, want.Inventory) || !reflect.DeepEqual(got.Flags, want.Flags) || !reflect.DeepEqual(got.Clues, want.Clues) || got.Dialogue != want.Dialogue {
-		t.Fatal("回档没有同步恢复世界和对白")
+	if got.Room != want.Room || got.Devotion != want.Devotion || !reflect.DeepEqual(got.Inventory, want.Inventory) || !reflect.DeepEqual(got.Flags, want.Flags) || !reflect.DeepEqual(got.Clues, want.Clues) {
+		t.Fatal("回档没有同步恢复世界")
+	}
+	if got.Dialogue != (game.Dialogue{Speaker: "系统", Text: loaded.Speak}) {
+		t.Fatal("回档确认未使用无头像系统反馈")
 	}
 	var memories, events, archived int
 	s.db.QueryRow("SELECT count(*) FROM npc_memories WHERE run_id=?", got.RunID).Scan(&memories)

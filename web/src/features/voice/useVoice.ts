@@ -56,7 +56,7 @@ export function useVoice(
           if (event.kind === 'start')
             setCaption({
               speaker: event.speaker || '系统',
-              portrait: event.portrait || 'player',
+              portrait: event.portrait || '',
               text: '',
             });
           else if (event.kind === 'text')

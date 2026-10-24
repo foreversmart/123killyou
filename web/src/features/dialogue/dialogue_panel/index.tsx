@@ -22,12 +22,21 @@ export function DialoguePanel({
   onTour: () => Promise<void>;
 }) {
   const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
+  const hasPortrait = Boolean(dialogue.portrait) && dialogue.speaker !== '系统';
   return (
-    <footer className={cx(surface.framed, styles['dialogue-panel'])}>
-      <div className={styles['speaker-portrait']} key={dialogue.portrait}>
-        <img src={`/art/portrait-${dialogue.portrait}.webp`} alt={`${dialogue.speaker}头像`} />
-        <PortraitCorners />
-      </div>
+    <footer
+      className={cx(
+        surface.framed,
+        styles['dialogue-panel'],
+        !hasPortrait && styles['dialogue-panel--narrator'],
+      )}
+    >
+      {hasPortrait && (
+        <div className={styles['speaker-portrait']} key={dialogue.portrait}>
+          <img src={`/art/portrait-${dialogue.portrait}.webp`} alt={`${dialogue.speaker}头像`} />
+          <PortraitCorners />
+        </div>
+      )}
       <div className={styles['dialogue-content']}>
         <div className={styles['speaker-name']}>
           <span>{dialogue.speaker}</span>

@@ -57,7 +57,8 @@ func (e *Engine) give(state *State, text string) (string, string) {
 			state.Flags[exchange.Flag] = true
 			clampDevotion(state, exchange.DevotionDelta)
 			state.Clues = append(state.Clues, exchange.Clue)
-			state.Overlay, state.FocusItem = "item", reward.ID
+			// Keep the scene visible for the NPC response; rewards can be inspected by voice.
+			state.FocusItem = ""
 			return "give", reply(state, npc, exchange.Reply)
 		}
 		return "blocked", feedback(state, "你身上没有这件物品。")

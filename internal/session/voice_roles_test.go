@@ -30,8 +30,12 @@ func (p *roleProvider) Synthesize(_ context.Context, request session.SpeechReque
 func TestSystemNarrationAndRuleAuthoredNPCLinesUseTheirOwnRoles(t *testing.T) {
 	for _, test := range []struct{ text, setup, npc string }{
 		{"看看地图", "", ""},
+		{"看看铜钥匙", "", ""},
+		{"看看账本", "", ""},
+		{"保存为初见", "", ""},
 		{"去走廊", "", ""},
 		{"回休息室", "去走廊", "keeper"},
+		{"回休息室", "看看地图", ""},
 		{"把红烛给守夜人", "", "keeper"},
 		{"把铜钥匙给守夜人", "", "keeper"},
 		{"重新开始", "", ""},
@@ -56,11 +60,14 @@ func TestSystemNarrationAndRuleAuthoredNPCLinesUseTheirOwnRoles(t *testing.T) {
 			if err != nil || result.SpeakerID != test.npc || result.VoiceError == "" {
 				t.Fatalf("wrong committed role: %+v %v", result, err)
 			}
+			if test.npc == "" && result.State.Dialogue.Portrait != "" {
+				t.Fatal("云端播报失败后的快照仍显示人物头像")
+			}
 			p.fail = false
-			var speaker string
+			var speaker, portrait string
 			replayed, err := service.CommandStream(context.Background(), before.ID, before.RunID, "role", test.text, func(event session.SpeechEvent) error {
 				if event.Kind == "start" {
-					speaker = event.Speaker
+					speaker, portrait = event.Speaker, event.Portrait
 				}
 				return nil
 			})
@@ -77,6 +84,9 @@ func TestSystemNarrationAndRuleAuthoredNPCLinesUseTheirOwnRoles(t *testing.T) {
 			}
 			if test.npc == "keeper" && speaker != "守夜人" || test.npc == "" && speaker != "系统" {
 				t.Fatalf("replay label differs from voice: %s", speaker)
+			}
+			if test.npc == "" && portrait != "" || test.npc == "keeper" && portrait != "keeper" {
+				t.Fatalf("重放头像与角色不一致: %s / %s", speaker, portrait)
 			}
 		})
 	}

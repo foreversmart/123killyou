@@ -15,7 +15,7 @@ export function ItemDetails({ item }: { item: GameState['inventory'][number] }) 
             <p>{item.description}</p>
           </div>
         </div>
-        <PaperInstruction>直接说出要对它做的事 · 说“返回”收起</PaperInstruction>
+        <PaperInstruction>说出其他物品名称查看 · 说“返回”收起后可交付物品</PaperInstruction>
       </PaperPanel>
     )
   );

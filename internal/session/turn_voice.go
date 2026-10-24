@@ -32,7 +32,7 @@ func (s *Service) planVoice(tx Transaction, before game.State, text string) (voi
 	if !handled {
 		intent, reply = s.engine.Apply(&candidate, text)
 	}
-	plan := voicePlan{Reply: reply, Speaker: "系统", Portrait: "player"}
+	plan := voicePlan{Reply: reply, Speaker: "系统"}
 	if candidate.Dialogue.Text == reply {
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {
 			plan.NPCID = npcID

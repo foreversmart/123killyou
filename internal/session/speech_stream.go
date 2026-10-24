@@ -36,7 +36,7 @@ func (s *Service) replaySpeech(ctx context.Context, result game.Result, emit Spe
 	if !found {
 		return ErrLinxUnavailable
 	}
-	speaker, portrait := "系统", "player"
+	speaker, portrait := "系统", ""
 	if result.SpeakerID != "" {
 		speaker, portrait = result.State.Dialogue.Speaker, result.State.Dialogue.Portrait
 	}

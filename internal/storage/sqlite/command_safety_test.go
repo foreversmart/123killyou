@@ -21,6 +21,7 @@ func TestNegatedAndHypotheticalActionsDoNotExecute(t *testing.T) {
 			after := result.State
 			after.Revision, after.SavedAt = before.Revision, before.SavedAt
 			after.LastHeard, after.LastAction = before.LastHeard, before.LastAction
+			after.Dialogue = before.Dialogue
 			if !reflect.DeepEqual(before, after) {
 				t.Fatal("否定或假设中的行动改变了世界或存档分支")
 			}

@@ -65,7 +65,11 @@ func (s *Service) Snapshot(id string) (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error { var e error; state, e = tx.Current(id); return e })
 	return
 }
-func feedback(state *game.State, text string) string { state.LastAction = text; return text }
+func feedback(state *game.State, text string) string {
+	state.Dialogue = game.Dialogue{Speaker: "系统", Text: text}
+	state.LastAction = text
+	return text
+}
 func (s *Service) fork(tx Transaction, next *game.State, before game.State, memories []Memory, events []Event) error {
 	next.ID, next.RunID, next.Revision = before.ID, newID(), before.Revision+1
 	next.Effect = game.Effect{Kind: "none"}

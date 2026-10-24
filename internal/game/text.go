@@ -25,14 +25,14 @@ func Has(text string, words ...string) bool {
 	return false
 }
 
-func feedback(state *State, text string) string { state.LastAction = text; return text }
-
-func narrate(state *State, text string) string {
-	state.Dialogue = Dialogue{"你", text, "player"}
-	return feedback(state, text)
+func feedback(state *State, text string) string {
+	state.Dialogue = Dialogue{Speaker: "系统", Text: text}
+	state.LastAction = text
+	return text
 }
 
 func reply(state *State, profile content.NPC, text string) string {
 	state.Dialogue = Dialogue{Speaker: profile.Name, Text: text, Portrait: profile.Portrait}
-	return feedback(state, text)
+	state.LastAction = text
+	return text
 }

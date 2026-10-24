@@ -16,7 +16,7 @@ func (e *Engine) Initial(id string) State {
 	return State{ID: id, Revision: 1, Room: world.InitialRoom, RoomName: world.InitialRoomName, Devotion: world.InitialDevotion, Inventory: inventory, Clues: []string{}, Flags: map[string]bool{}, Dialogue: Dialogue{Speaker: profile.Name, Text: profile.Intro, Portrait: profile.Portrait}, LastAction: "说出你的行动，房间会回应。", Effect: Effect{Kind: "none"}}
 }
 
-// Priority is explicit: system controls, movement, handover, inspection, then NPC dialogue.
+// Panels keep interaction with the narrator; world dialogue resumes after closing.
 func (e *Engine) Apply(state *State, text string) (string, string) {
 	text = Normalize(text)
 	if message, clarify := ActionClarification(text); clarify {
@@ -28,7 +28,16 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	if intent, speak, ok := e.movement(state, text); ok {
 		return intent, speak
 	}
-	if Has(text, "给", "交付", "递给", "交给", "归还") {
+	handover := Has(text, "给", "交付", "递给", "交给", "归还")
+	if state.Overlay != "" {
+		if !handover {
+			if intent, speak, ok := e.inspection(state, text); ok {
+				return intent, speak
+			}
+		}
+		return "blocked", feedback(state, "当前正在查看信息面板。说“返回”关闭面板后，再与人物交谈或交付物品；也可以继续查看其他信息。")
+	}
+	if handover {
 		return e.give(state, text)
 	}
 	if intent, speak, ok := e.inspection(state, text); ok {
@@ -68,7 +77,7 @@ func (e *Engine) currentNPC(state State, text string) (content.NPC, bool) {
 func (e *Engine) returnToNPC(state *State) string {
 	npc, ok := e.currentNPC(*state, "")
 	if !ok {
-		return narrate(state, "房间里没有人回应。")
+		return feedback(state, "房间里没有人回应。")
 	}
 	return reply(state, npc, npc.Return)
 }

@@ -135,8 +135,13 @@ func TestAmbiguousGiveDoesNotConsumeItems(t *testing.T) {
 	}
 	run(t, s, state.ID, "focus", "看看铜钥匙")
 	r = run(t, s, state.ID, "resolved", "把这个给他")
-	if r.Intent != "give" {
-		t.Fatal("未使用当前物品上下文解析指代")
+	if r.Intent != "blocked" || r.State.Flags["keyDelivered"] {
+		t.Fatal("物品面板中仍向 NPC 交付了物品")
+	}
+	run(t, s, state.ID, "close", "返回")
+	r = run(t, s, state.ID, "give", "把铜钥匙给守夜人")
+	if r.Intent != "give" || !r.State.Flags["keyDelivered"] {
+		t.Fatal("关闭面板后不能正常交付物品")
 	}
 }
 
