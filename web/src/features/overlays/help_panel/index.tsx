@@ -5,7 +5,8 @@ export function HelpPanel() {
   return (
     <PaperPanel className={styles['help-sheet']}>
       <PaperEyebrow>在这里，让声音替你行动</PaperEyebrow>
-      <h2>只需开口</h2>
+      <h2>按住空格，说出行动</h2>
+      <p>松开空格发送。NPC 回应时再次按住空格，可以打断并说话。</p>
       <dl>
         <div>
           <dt>观察</dt>

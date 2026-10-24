@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"sync"
 	"time"
 
 	"nightwatch/internal/game"
@@ -12,10 +13,24 @@ import (
 type Service struct {
 	repository Repository
 	engine     *game.Engine
+	provider   DialogueProvider
+	locksMu    sync.Mutex
+	locks      map[string]*commandLock
+	audioMu    sync.Mutex
+	audio      map[audioKey]cachedAudio
 }
 
-func New(repository Repository, engine *game.Engine) *Service {
-	return &Service{repository: repository, engine: engine}
+func New(repository Repository, engine *game.Engine, provider DialogueProvider) *Service {
+	return &Service{repository: repository, engine: engine, provider: provider}
+}
+
+func (s *Service) LinxConnected() bool { return s.DialogueStatus().Verified }
+
+func (s *Service) SpeechProvider() string {
+	if s.provider != nil {
+		return "linx"
+	}
+	return "unavailable"
 }
 func newID() string {
 	var bytes [16]byte

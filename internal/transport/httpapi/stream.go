@@ -43,7 +43,7 @@ func (h handler) stream(c *gin.Context) {
 			}
 			continue
 		}
-		result, err := h.sessions.Command(id, input.RunID, input.RequestID, input.Text)
+		result, err := h.executeCommand(ctx, id, input)
 		if err != nil {
 			_, message := publicError(err)
 			current, _ := h.sessions.Snapshot(id)

@@ -1,0 +1,4 @@
+.pio/
+sdkconfig.esp32_s3
+sdkconfig.esp32_s3.old
+__pycache__/

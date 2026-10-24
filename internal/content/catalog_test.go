@@ -54,7 +54,7 @@ func TestContentRejectsUnknownFieldsBrokenRewardsAndMissingPrompts(t *testing.T)
 				json.Unmarshal(pack["npcs/keeper/profile.json"].Data, &npc)
 				switch kind {
 				case "blank-reply":
-					npc.Default = " \n "
+					npc.DialogueRules[0].Reply = " \n "
 				case "missing-return":
 					npc.Return = ""
 				case "empty-keyword":

@@ -1,6 +1,6 @@
 # 第一夜：代码架构与协作边界
 
-更新时间：2026-10-24。本文描述已经落地的目录和依赖，不把未来七牛接入当成已经实现。
+更新时间：2026-10-24。本文描述已经落地的目录和依赖；灵矽当前接入范围及后续限制见 [虚拟设备接入](development/linx.md)。
 
 ## 前端：按功能维护组件和样式
 
@@ -15,7 +15,7 @@ web/src/
     hud/player_status/              玩家状态、房间标题、存档状态
     inventory/inventory/            常驻物品栏
     dialogue/dialogue_panel/        当前说话者、头像与对白
-    voice/                          浏览器语音会话与识别类型
+    voice/                          按住录音、PCM 采集与云端识别会话
       voice_dock/                   语音入口及状态
       waveform/                     音量可视化
     session/                        HTTP / WebSocket 会话与状态同步
@@ -55,15 +55,15 @@ features/dialogue/dialogue_panel/
 
 对白以语音为主，字幕为辅助：底部对白行按内容自动增高，较长回复换行时向上占用部分场景空间，不固定在画面高度的某个百分比，也不要求玩家用鼠标滚动字幕。头像保持方形尺寸，不随文字高度拉伸；字幕使用较小字号、保留分行，并允许长串字符折行。
 
-页面入口只负责组装，语音回合反馈和自动演示分别在 `useGameController.ts`、`useDemoTour.ts` 中。HTTP 请求适配与 WebSocket 状态恢复放在会话功能内，GPU shader 作为 `.glsl` 文件独立维护。新增地图内容、语音状态或对白样式不需要修改同一个大组件和全局样式表。
+页面入口只负责组装，语音回合反馈和自动演示分别在 `useGameController.ts`、`useDemoTour.ts` 中。HTTP NDJSON 语音流适配与 WebSocket 快照恢复放在会话功能内，GPU shader 作为 `.glsl` 文件独立维护。新增地图内容、语音状态或对白样式不需要修改同一个大组件和全局样式表。
 
 启动入口 `app/startup` 先挂载 `BrowserCheck`，使用 `shared/lib/htmlCanvas.ts` 检查必需方法，再由 `htmlCanvasProbe.ts` 创建一个 16×16 的实际 HTML-in-Canvas 探针：在 `paint` 事件内调用 `drawElementImage()`，读取两个区域的像素，与已知颜色比较。只有通过像素校验才挂载懒加载的 `Game`；接口缺失、异常、空白 / 错误颜色或 5 秒超时均显示 `BrowserRequirements`，区分缺少接口与绘制失败。自检和账本共用 `configureHtmlCanvas()` 配置 `drawable`。
 
 检查位于会话、演示、调试输入和麦克风启动之前，不提供绕过选项，也不缓存手动确认。检测页变为后台时取消等待，回到前台重新检测；每次完成或取消都清理探针、监听与定时器。失败页重新聚焦时重试，已进入的游戏不因切换窗口重新挂载；刷新始终重新自检。浏览器 flags 仅作为官方试用指引，网页不能读取其值，实际绘制结果决定是否放行。账本不提供普通 HTML 回退；自检通过不等同于 PixiJS 纹理上传与 shader 已完整验证。
 
-每轮反馈不能依赖命中剧情：NPC 配置提供兜底台词，应用为缺少读白的结果保留操作说明；语音模块处理没收完整的识别与系统错误提示，HTTP 适配器限制请求和响应体等待时间。进度刷新不阻塞失败反馈，后台的请求重试继续使用同一个请求 ID。具体体验约定见 [语音与 NPC 设计](design/voice-and-npc.md#21-每轮都要有反馈)。
+每轮反馈不能依赖命中剧情：开放式 NPC 回应由灵矽生成；系统与动作结果通过灵矽 TTS 播报，不提供本地 NPC 台词或浏览器读白回退。AudioWorklet 只在按住空格时采集，WebSocket 将 PCM 上行到 Go，再由 `SpeechRecognizer` 返回灵矽 STT 文字。识别错误、空结果和断连均有反馈；静音与取消不创建游戏回合。HTTP NDJSON 先交付已提交的动作状态，再逐段交付字幕与 PCM；同一请求 ID 的重试只重放原结果。
 
-语音请求的失效控制独立在 `voiceTurns.ts`：玩家出现新的临时转写、开启下一轮或退出时，就阻止旧结果和旧错误继续播报；播放结束事件也检查所属轮次，不覆盖新回合状态。声音开关只接受明确指令，不从包含“静音”的闲聊或否定句中执行设置。账本在真实绘制后标记就绪，异常或首次绘制超时显示恢复提示。
+语音请求的失效控制独立在 `voiceTurns.ts`：玩家按下空格、开启下一轮或退出时，通过 AbortController 取消 HTTP 与云端生成，清空 PCM 播放队列并阻止旧字幕和旧错误；播放结束事件也检查所属轮次，不覆盖新回合状态。`pcmPlayer.ts` 负责 PCM16 转换、约 120ms 小块缓冲和音频时钟调度，`useSpeechOutput.ts` 负责音频生命周期和播放反馈。`pushToTalk.ts` 负责一次按住期间的识别、松开收句与迟到结果隔离；`pushToTalkKeys.ts` 负责键盘事件、输入框排除和失焦取消。未按键时不运行识别，避免依赖台词字符串匹配来过滤扬声器回声。声音开关只接受明确指令，不从包含“静音”的闲聊或否定句中执行设置。账本在真实绘制后标记就绪，异常或首次绘制超时显示恢复提示。
 
 ## 后端：规则、编排与基础设施分开
 
@@ -88,9 +88,19 @@ internal/
   session/
     service.go                    会话创建、恢复与分支
     commands.go                   回合编排、去重和进度记录
+    turn_voice.go                 预结算、事务外云端请求、提交前复核
+    command_lock.go               同一请求的并发重试去重
+    dialogue_provider.go          必需的台词与语音服务端口
+    speech_stream.go              动作状态、字幕 / PCM 事件及去重重放
+    dialogue_audio.go             临时音频缓存与分支隔离
     checkpoints.go                保存 / 列出 / 读取检查点
     repository.go                 存储事务端口
     models.go、snapshot.go        存档模型与格式标识
+  integration/linx/
+    client.go、agents.go          灵矽管理 API 与测试智能体配置
+    identity.go、ota.go、devices.go 软件设备身份、OTA 激活与绑定
+    websocket.go                  云端握手、文本回合和取消
+    reply.go                      云端字幕 / PCM 逐段接收与校验
   storage/sqlite/
     open.go、schema.go、schema.sql 数据库连接与当前结构初始化
     transaction.go                实现事务边界
@@ -102,14 +112,16 @@ internal/
     router.go                     路由与服务接口
     sessions.go、stream.go         HTTP / WebSocket 适配
     command.go、errors.go          输入约束与错误映射
+    command_stream.go             可取消的 HTTP NDJSON 语音流
+    audio.go                      将缓存 PCM 包装为 WAV，供独立调试
     static.go                     网页产物服务
 ```
 
-依赖方向为 HTTP / WebSocket → 会话服务 → 游戏规则和存储接口；SQLite 实现该接口，并在入口装配进服务。`game` 不导入数据库和 Gin，`session` 不写 SQL，SQLite 不决定奖励或角色性格，传输层不依赖具体数据库。
+依赖方向为 HTTP / WebSocket → 会话服务 → 游戏规则、存储及对白服务接口；SQLite 和灵矽适配器分别实现对应接口，并在入口装配进服务。`game` 不导入数据库和 Gin，`session` 不写 SQL 或灵矽协议，SQLite 不决定奖励或角色性格，传输层不依赖具体数据库。
 
 `game/action_guard.go` 为关键词演示提供常见否定、假设、转述和行动询问的保守澄清；会话控制与游戏规则入口复用，防止在移动、交付、重开或读档前误执行。命名检查点的名称是字面参数，不解析为动作。这个保护不替代后续 AI 的完整语义判断。
 
-一次交付的状态、事件、角色记忆和请求结果仍由同一个事务提交。`Repository.Transaction` 是会话层拥有的端口，换数据库适配器不需要修改剧情规则；未来接入七牛时，语音或工具请求也进入同一会话服务。
+规则预结算只用于区分动作与开放式对白。地图、移动、道具和存档等明确动作先提交状态、事件、记忆及请求结果，再通过 `StateSink` 推送给前端，随后在事务外生成播报；播报失败与取消不撤销动作。开放式对白先在事务外调用灵矽，完整返回后复核 `runId`、`revision` 与取消状态再提交。`Repository.Transaction`、`DialogueProvider` 和 `SpeechRecognizer` 都由会话层定义。识别阶段不落库、不推进回合；PCM 与播放缓存不进入存档。
 
 ## 新增和调整 NPC
 
@@ -123,7 +135,7 @@ internal/
 
 加载器会拒绝未知字段、无效 ID、缺少提示词、空台词、空关键词 / 别名、重复规则和不存在的物品引用。测试覆盖修改配置后的称呼、台词、虔诚变化和道具交换，确保配置实际参与游戏。规则不依赖“守夜人”这一显示名称，角色记忆使用配置中的 NPC ID。
 
-`voice.profile` 为内部音色映射，`providerVoiceId` 留给七牛音色 ID；`prompt.md` 是后续 AI 的角色设定来源。当前仍使用浏览器语音与规则演示，七牛尚未接入，角色音色和提示词不会被描述为已经由平台执行。
+`voice.profile` 为内部音色映射，`providerVoiceId` 是灵矽音色 ID，`prompt.md` 提供角色提示词。当前启动时同步 `1024-keeper` 的提示词和音色，并绑定一个虚拟设备；其他 NPC 的路由尚未开放，不能复用守夜人的人设假装已接入。浏览器负责采集 PCM 和播放云端音频，语音识别、开放式 NPC 台词和每轮 TTS 必须调用灵矽。
 
 ## 开发阶段的检查与数据策略
 
@@ -139,4 +151,4 @@ npm run build
 go test -race ./...
 ```
 
-架构检查约束前端目录命名、导入路径大小写、CSS Modules、依赖方向与单文件规模（300 行）。Prettier 与 TypeScript 的未使用符号检查保持前端一致；Go 使用 gofmt。测试分别覆盖内容配置校验、纯游戏规则、SQLite 事务 / 重启 / 回档，以及 HTTP / WebSocket 适配。`test:web` 使用 Node 内置测试运行器，验证接口前置检查、绘制像素成功 / 空白 / 错色、绘制异常 / 超时 / 取消后的清理，以及语音反馈与请求期限。自检单元测试使用可控的模拟 paint 源验证分支和生命周期，不能代替目标 Chrome 的原生渲染验证。
+架构检查约束前端目录命名、导入路径大小写、CSS Modules、依赖方向与单文件规模（300 行）。Prettier 与 TypeScript 的未使用符号检查保持前端一致；Go 使用 gofmt。测试分别覆盖内容配置校验、纯游戏规则、SQLite 事务 / 重启 / 回档，以及 HTTP / WebSocket 适配。`test:web` 使用 Node 内置测试运行器，验证接口前置检查、绘制像素成功 / 空白 / 错色、绘制异常 / 超时 / 取消后的清理，以及按住说话的提交边界、键盘重复事件、失焦取消、语音反馈与请求期限。自检单元测试使用可控的模拟 paint 源验证分支和生命周期，不能代替目标 Chrome 的原生渲染验证。

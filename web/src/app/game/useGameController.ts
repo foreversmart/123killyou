@@ -3,37 +3,45 @@ import { useGameSession } from '@/features/session/useGameSession';
 import { useRoomTransition } from '@/scene/room/useRoomTransition';
 import { useVoice } from '@/features/voice/useVoice';
 import { useDemoTour } from './useDemoTour';
+import type { GameResult, TurnControls } from '@/shared/types/game';
 
 export function useGameController() {
-  const { state: incomingState, error, connected, send } = useGameSession();
+  const { state: incomingState, error, connected, send, openTranscription } = useGameSession();
   const { state, phase: roomPhase } = useRoomTransition(incomingState);
   const [notice, setNotice] = useState('');
   const [systemNotice, setSystemNotice] = useState(false);
   const latestAction = useRef(0);
   const act = useCallback(
-    async (text: string) => {
+    async (text: string, controls?: TurnControls) => {
       const action = ++latestAction.current;
-      const result = await send(text);
+      let announced = false;
+      const announce = (result: GameResult) => {
+        if (action !== latestAction.current || announced) return;
+        announced = true;
+        setSystemNotice(
+          [
+            'save_checkpoint',
+            'load_checkpoint',
+            'checkpoints',
+            'save',
+            'resume_save',
+            'clarify',
+            'reset',
+          ].includes(result.intent || ''),
+        );
+        if (result.intent !== 'dialogue' && result.intent !== 'give')
+          setNotice(result.state.lastAction);
+        else setNotice('');
+      };
+      const { result, streamed } = await send(text, { ...controls, onAction: announce });
       if (action !== latestAction.current) return '';
-      setSystemNotice(
-        [
-          'save_checkpoint',
-          'load_checkpoint',
-          'checkpoints',
-          'save',
-          'resume_save',
-          'clarify',
-          'reset',
-        ].includes(result.intent || ''),
-      );
-      if (result.intent !== 'dialogue' && result.intent !== 'give')
-        setNotice(result.state.lastAction);
-      else setNotice('');
-      return result.speak?.trim() || result.state.lastAction?.trim() || '';
+      announce(result);
+      const textReply = result.speak?.trim() || result.state.lastAction?.trim() || '';
+      return { text: textReply, streamed, problem: result.voiceError };
     },
     [send],
   );
-  const voice = useVoice(act);
+  const voice = useVoice(act, openTranscription);
   const voiceStarted = !['idle', 'unsupported', 'error'].includes(voice.status);
 
   useEffect(() => {

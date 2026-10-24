@@ -54,6 +54,9 @@ func TestSaveSurvivesRestartAndDeduplicatesOldRequest(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Audio availability is transient; durable state and command output must match.
+	again.HasAudio, given.HasAudio = false, false
+	again.VoiceError, given.VoiceError = "", ""
 	if !reflect.DeepEqual(again, given) {
 		t.Fatal("重启后没有返回原请求结果")
 	}

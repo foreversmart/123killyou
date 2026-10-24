@@ -41,12 +41,14 @@ type State struct {
 }
 
 type Result struct {
-	Type      string `json:"type"`
-	RequestID string `json:"requestId,omitempty"`
-	State     State  `json:"state"`
-	Speak     string `json:"speak,omitempty"`
-	Intent    string `json:"intent,omitempty"`
-	Error     string `json:"error,omitempty"`
+	Type       string `json:"type"`
+	RequestID  string `json:"requestId,omitempty"`
+	State      State  `json:"state"`
+	Speak      string `json:"speak,omitempty"`
+	Intent     string `json:"intent,omitempty"`
+	Error      string `json:"error,omitempty"`
+	HasAudio   bool   `json:"hasAudio,omitempty"`
+	VoiceError string `json:"voiceError,omitempty"`
 }
 
 func Clone(state State) State {

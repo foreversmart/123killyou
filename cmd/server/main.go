@@ -18,6 +18,9 @@ import (
 )
 
 func main() {
+	if err := loadDotEnv(".env"); err != nil {
+		log.Fatalf("无法读取环境配置: %v", err)
+	}
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8787"
@@ -35,12 +38,17 @@ func main() {
 		log.Fatalf("无法打开本地存档: %v", err)
 	}
 	defer repository.Close()
-	sessions := session.New(repository, game.NewEngine(catalog))
+	engine := game.NewEngine(catalog)
+	dialogueProvider, err := prepareLinx(catalog)
+	if err != nil {
+		log.Fatalf("灵矽为必需依赖，游戏服务未启动：%v", err)
+	}
+	sessions := session.New(repository, engine, dialogueProvider)
 	server := &http.Server{Addr: "127.0.0.1:" + port, Handler: httpapi.NewRouter(sessions), ReadHeaderTimeout: 5 * time.Second}
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 	go func() {
-		log.Printf("Gin 本地演示服务：http://127.0.0.1:%s（七牛尚未接入）", port)
+		log.Printf("Gin 本地演示服务：http://127.0.0.1:%s", port)
 		log.Printf("SQLite 自动存档：%s；已加载 %d 个 NPC 配置", dbPath, len(catalog.NPCs()))
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err)

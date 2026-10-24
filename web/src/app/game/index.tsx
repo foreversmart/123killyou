@@ -48,7 +48,7 @@ export default function Game() {
       </section>
       <div className={styles['outside-caption']}>
         <span>第一夜 · 交互原型</span>
-        <span>固定视角 / 全程语音 / 剧情暂定</span>
+        <span>固定视角 / 按住空格说话 / 剧情暂定</span>
       </div>
       <ProblemNotice message={voice.problem} />
       <ProblemNotice message={error} />

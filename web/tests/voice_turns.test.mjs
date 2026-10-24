@@ -58,3 +58,54 @@ test('空回应和当前回合的失败都有明确反馈', async () => {
   assert.match(problems[0], /没有收到完整回应/);
   assert.equal(problems[1], '连接暂时中断');
 });
+
+test('云端最终字幕与流式播放标记一起交给播放器', async () => {
+  const answer = { text: '云端回应', streamed: true };
+  const { turns, answers, problems } = fixture(async () => answer);
+  await turns.submit('你是谁');
+  assert.deepEqual(answers, [answer]);
+  assert.deepEqual(problems, []);
+});
+
+test('打断会取消上游请求，旧音频和字幕事件不能进入新回合', async () => {
+  let controls;
+  let resolve;
+  const events = [];
+  let cancelled = 0;
+  const turns = createVoiceTurns({
+    process: (_text, value) => {
+      controls = value;
+      return new Promise((done) => {
+        resolve = done;
+      });
+    },
+    start() {},
+    answer() {
+      assert.fail('stale answer');
+    },
+    problem() {
+      assert.fail('stale error');
+    },
+    stream: (event) => events.push(event),
+    cancel: () => cancelled++,
+  });
+  const pending = turns.submit('你是谁');
+  controls.onSpeech({ kind: 'text', text: '守夜人' });
+  turns.interrupt();
+  assert.equal(controls.signal.aborted, true);
+  controls.onSpeech({ kind: 'audio', pcm: 'AAA=' });
+  resolve({ text: '旧回应', streamed: true });
+  await pending;
+  assert.deepEqual(events, [{ kind: 'text', text: '守夜人' }]);
+  assert.equal(cancelled, 2);
+});
+
+test('音频服务失败显示原因，不播放本地替代读白', async () => {
+  const { turns, answers, problems } = fixture(async () => ({
+    text: '已记录的动作',
+    problem: '灵矽音频生成失败',
+  }));
+  await turns.submit('去走廊');
+  assert.deepEqual(answers, []);
+  assert.deepEqual(problems, ['灵矽音频生成失败']);
+});

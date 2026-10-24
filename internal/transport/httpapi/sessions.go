@@ -36,7 +36,7 @@ func (h handler) command(c *gin.Context) {
 		c.JSON(400, gin.H{"error": "需要有效的 runId、requestId 和 text。"})
 		return
 	}
-	result, err := h.sessions.Command(c.Param("id"), input.RunID, input.RequestID, input.Text)
+	result, err := h.executeCommand(c.Request.Context(), c.Param("id"), input)
 	if err != nil {
 		writeError(c, err)
 		return

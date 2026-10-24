@@ -33,7 +33,7 @@ for (let attempt = 0; attempt < 240 && !closing; attempt++) {
   await setTimeout(500);
 }
 if (ready && !closing) {
-  launch(process.execPath, ['node_modules/vite/bin/vite.js', '--host', '127.0.0.1']);
+  launch(process.execPath, ['node_modules/vite/bin/vite.js']);
 } else if (!closing) {
   console.error('Go 服务没有成功启动，请检查 8787 端口和终端输出。');
   stop(1);

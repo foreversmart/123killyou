@@ -1,6 +1,7 @@
 package sqlite
 
 import (
+	"context"
 	"database/sql"
 	"testing"
 
@@ -26,7 +27,21 @@ func openFixture(path string) (*fixture, error) {
 		repo.Close()
 		return nil, err
 	}
-	return &fixture{session.New(repo, game.NewEngine(catalog)), repo.db, repo}, nil
+	return &fixture{session.New(repo, game.NewEngine(catalog), testVoice{}), repo.db, repo}, nil
+}
+
+// Protocol double for rule/storage tests; never used by the running server.
+type testVoice struct{}
+
+func (testVoice) Respond(_ context.Context, request session.DialogueRequest) (session.DialogueResponse, error) {
+	if request.RuleReply == "" {
+		request.RuleReply = "测试云端回应。"
+	}
+	audio, _ := (testVoice{}).Synthesize(context.Background(), request.RuleReply, nil)
+	return session.DialogueResponse{Text: request.RuleReply, Audio: &audio}, nil
+}
+func (testVoice) Synthesize(context.Context, string, session.SpeechSink) (session.DialogueAudio, error) {
+	return session.DialogueAudio{PCM: []byte{0, 0}, SampleRate: 16000}, nil
 }
 func (s *fixture) Close() error { return s.repository.Close() }
 

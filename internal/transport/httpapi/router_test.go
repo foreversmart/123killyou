@@ -144,5 +144,5 @@ func openTestService(t *testing.T, path string) (*testService, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &testService{session.New(repo, game.NewEngine(catalog)), repo}, nil
+	return &testService{session.New(repo, game.NewEngine(catalog), spokenProvider{}), repo}, nil
 }

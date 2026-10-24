@@ -21,28 +21,21 @@ export function DialoguePanel({
   connected: boolean;
   onTour: () => Promise<void>;
 }) {
+  const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
   return (
     <footer className={cx(surface.framed, styles['dialogue-panel'])}>
-      <div className={styles['speaker-portrait']} key={state.dialogue.portrait}>
-        <img
-          src={`/art/portrait-${state.dialogue.portrait}.webp`}
-          alt={`${state.dialogue.speaker}头像`}
-        />
+      <div className={styles['speaker-portrait']} key={dialogue.portrait}>
+        <img src={`/art/portrait-${dialogue.portrait}.webp`} alt={`${dialogue.speaker}头像`} />
         <PortraitCorners />
       </div>
       <div className={styles['dialogue-content']}>
         <div className={styles['speaker-name']}>
-          <span>{state.dialogue.speaker}</span>
+          <span>{dialogue.speaker}</span>
           <i />
-          {(demo || voice.transcript) && (
-            <span className={styles['heard-text']}>
-              {demo ? '演示' : '听见你说'}：“
-              {demo ? demoText : voice.transcript}”
-            </span>
-          )}
+          {demo && <span className={styles['heard-text']}>演示：“{demoText}”</span>}
         </div>
-        <p className={styles['dialogue-text']} key={`${state.revision}-${state.dialogue.text}`}>
-          {state.dialogue.text}
+        <p className={styles['dialogue-text']} key={state.revision}>
+          {dialogue.text}
         </p>
       </div>
       <VoiceDock

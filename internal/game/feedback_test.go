@@ -8,7 +8,7 @@ import (
 	"nightwatch/internal/content"
 )
 
-func TestUnmatchedSpeechAlwaysRespondsWithoutStoryChanges(t *testing.T) {
+func TestSpeechRoutesToCloudDialogueOrExplicitRuleFeedbackWithoutStoryChanges(t *testing.T) {
 	catalog, err := content.Load()
 	if err != nil {
 		t.Fatal(err)
@@ -32,15 +32,15 @@ func TestUnmatchedSpeechAlwaysRespondsWithoutStoryChanges(t *testing.T) {
 			}
 			before := Clone(state)
 			intent, speak := engine.Apply(&state, test.text)
-			if intent != test.intent || strings.TrimSpace(speak) == "" || state.LastAction != speak {
+			if intent != test.intent || (intent != "dialogue" && strings.TrimSpace(speak) == "") || state.LastAction != speak {
 				t.Fatalf("没有明确回应: intent=%q speak=%q", intent, speak)
 			}
 			if intent == "dialogue" {
 				if state.Dialogue.Speaker != "守夜人" || state.Dialogue.Text != speak {
 					t.Fatal("跑题未由当前 NPC 回应")
 				}
-				if test.setup != "" && strings.Contains(speak, "钥匙") {
-					t.Fatal("兜底台词仍在索要已交付的钥匙")
+				if speak != "" {
+					t.Fatal("普通闲聊不应产生本地替代台词")
 				}
 			}
 			state.Dialogue, state.LastAction = before.Dialogue, before.LastAction

@@ -39,7 +39,6 @@ type NPC struct {
 	Prompt            string         `json:"-"`
 	Intro             string         `json:"intro"`
 	Return            string         `json:"return"`
-	Default           string         `json:"default"`
 	Reject            string         `json:"reject"`
 	ExposureThreshold int            `json:"exposureThreshold"`
 	ExposedReply      string         `json:"exposedReply"`

@@ -76,6 +76,9 @@ func (s *Service) control(tx Transaction, next *game.State, before game.State, t
 			return "", "", true, readErr
 		}
 		if !exists {
+			if strings.HasPrefix(text, "回到") && !strings.HasPrefix(text, "回到检查点") && !strings.HasPrefix(text, "回到存档") {
+				return respond("clarify", "没有找到叫“"+name+"”的房间或检查点。你是要回值守室，还是读取存档？请说出完整目的地。")
+			}
 			return respond("clarify", "没有找到检查点“"+name+"”。说“看看存档”查看已有名称。")
 		}
 		data := saved.Data

@@ -12,6 +12,8 @@ import (
 
 func publicError(err error) (int, string) {
 	switch {
+	case errors.Is(err, session.ErrLinxUnavailable):
+		return http.StatusServiceUnavailable, session.ErrLinxUnavailable.Error()
 	case errors.Is(err, session.ErrSession):
 		return http.StatusNotFound, "会话不存在，请重新进入游戏。"
 	case errors.Is(err, session.ErrStaleRun), errors.Is(err, session.ErrRequest), errors.Is(err, session.ErrSaveFormat):

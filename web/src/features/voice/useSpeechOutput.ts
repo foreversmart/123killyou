@@ -1,62 +1,62 @@
 import { useCallback, useRef } from 'react';
-import type { VoiceStatus } from './types';
-
-const clean = (text: string) => text.replace(/[\s\p{P}]/gu, '');
+import type { VoiceStatus, VoiceAnswer } from './types';
+import type { SpeechEvent } from '@/shared/types/game';
+import { createPCMPlayer } from './pcmPlayer';
 
 export function useSpeechOutput(
   enabled: { current: boolean },
   sound: { current: boolean },
   setStatus: (status: VoiceStatus) => void,
+  audio: { current: AudioContext | null },
+  onProblem: (message: string) => void,
 ) {
-  const spoken = useRef({ text: '', until: 0 });
   const generation = useRef(0);
+  const player = useRef<ReturnType<typeof createPCMPlayer> | null>(null);
   const stop = useCallback(() => {
     generation.current++;
-    spoken.current.until = Math.min(spoken.current.until, performance.now() + 900);
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
-  }, []);
-  const isEcho = useCallback((text: string) => {
-    const normalized = clean(text);
-    return (
-      normalized.length > 3 &&
-      performance.now() < spoken.current.until &&
-      spoken.current.text.includes(normalized)
-    );
+    player.current?.stop();
+    player.current = null;
   }, []);
 
-  const speak = useCallback(
-    (text: string) => {
-      if (!sound.current || !('speechSynthesis' in window) || !enabled.current) return;
-      stop();
-      const turn = generation.current;
-      spoken.current = {
-        text: clean(text),
-        until: performance.now() + Math.max(text.length * 500, 7000),
-      };
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN';
-      utterance.rate = 0.88;
-      utterance.pitch = 0.86;
-      utterance.volume = 0.85;
-      const voices = speechSynthesis.getVoices();
-      const voice =
-        voices.find((v) => v.lang === 'zh-CN') || voices.find((v) => v.lang.startsWith('zh'));
-      if (voice) utterance.voice = voice;
-      utterance.onstart = () => {
-        if (turn === generation.current && enabled.current) setStatus('speaking');
-      };
-      utterance.onend = () => {
-        if (turn !== generation.current) return;
-        spoken.current.until = performance.now() + 900;
-        if (enabled.current) setStatus('listening');
-      };
-      utterance.onerror = () => {
-        if (turn === generation.current && enabled.current) setStatus('listening');
-      };
-      speechSynthesis.speak(utterance);
+  const stream = useCallback(
+    (event: SpeechEvent) => {
+      if (event.kind === 'start') {
+        stop();
+        if (!enabled.current || !sound.current || !audio.current) return;
+        const turn = generation.current;
+        player.current = createPCMPlayer(audio.current, event.sampleRate || 0, () => {
+          if (turn !== generation.current) return;
+          setStatus(enabled.current ? 'listening' : 'idle');
+        });
+        void audio.current.resume().catch(() => {
+          if (turn !== generation.current) return;
+          stop();
+          onProblem('浏览器未能启动音频播放，请重新开启语音会话。');
+        });
+      } else if (event.kind === 'audio' && player.current) {
+        if (!event.pcm) throw new Error('灵矽返回了空的音频片段。');
+        const raw = atob(event.pcm);
+        const bytes = Uint8Array.from(raw, (character) => character.charCodeAt(0));
+        player.current.push(bytes);
+        setStatus('speaking');
+      }
     },
-    [enabled, sound, setStatus, stop],
+    [enabled, sound, setStatus, audio, stop, onProblem],
   );
 
-  return { isEcho, speak, stop };
+  const speak = useCallback(
+    (answer: VoiceAnswer) => {
+      if (!sound.current || !enabled.current) return;
+      if (typeof answer === 'string' || !answer.streamed || !player.current?.received) {
+        stop();
+        onProblem('灵矽没有提供可播放的语音，请稍后再试。');
+        return;
+      }
+      player.current.finish();
+      if (player.current.playing) setStatus('speaking');
+    },
+    [enabled, sound, setStatus, stop, onProblem],
+  );
+
+  return { speak, stream, stop };
 }

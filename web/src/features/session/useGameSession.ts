@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { GameResult, GameState } from '@/shared/types/game';
+import type { GameResult, GameState, TurnControls } from '@/shared/types/game';
 
 import { json } from './api';
-
-type Pending = {
-  resolve: (result: GameResult) => void;
-  reject: (reason: Error) => void;
-  timer: ReturnType<typeof setTimeout>;
-};
+import { commandStream } from './commandStream';
+import { recognitionStream } from './recognitionStream';
 
 export function useGameSession() {
   const [state, setState] = useState<GameState | null>(null);
@@ -15,7 +11,6 @@ export function useGameSession() {
   const [error, setError] = useState('');
   const current = useRef<GameState | null>(null);
   const socket = useRef<WebSocket | null>(null);
-  const pending = useRef(new Map<string, Pending>());
   const acceptState = useCallback((next: GameState) => {
     if (!next?.id) return;
     const previous = current.current;
@@ -44,14 +39,6 @@ export function useGameSession() {
         try {
           const result = JSON.parse(event.data) as GameResult;
           acceptState(result.state);
-          const request = result.requestId && pending.current.get(result.requestId);
-          if (request) {
-            clearTimeout(request.timer);
-            pending.current.delete(result.requestId!);
-            if (result.type === 'error')
-              request.reject(new Error(result.error || '操作未完成，请重试。'));
-            else request.resolve(result);
-          }
         } catch {
           setError('收到的游戏状态不完整，正在等待重连。');
         }
@@ -86,60 +73,37 @@ export function useGameSession() {
       stopped = true;
       clearTimeout(retry);
       socket.current?.close();
-      for (const request of pending.current.values()) {
-        clearTimeout(request.timer);
-        request.reject(new Error('游戏连接已关闭。'));
-      }
-      pending.current.clear();
     };
   }, [acceptState]);
 
   const send = useCallback(
-    async (text: string) => {
+    async (text: string, controls: Partial<TurnControls> = {}) => {
       const origin = current.current;
       if (!origin) throw new Error('房间还没有准备好，请稍等。');
-      // Capture the branch for both transports; a retry must never target a later run.
-      const command = {
-        type: 'command',
-        runId: origin.runId,
-        requestId: crypto.randomUUID(),
-        text,
-      };
-      const httpFallback = async () => {
-        try {
-          const result = await json<GameResult>(`/api/sessions/${origin.id}/commands`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(command),
-          });
-          acceptState(result.state);
-          return result;
-        } catch (cause) {
-          // Refresh uncertain progress without delaying feedback or replaying the command.
-          void json<GameState>(`/api/sessions/${origin.id}`).then(acceptState, () => {});
-          throw cause;
-        }
-      };
-      if (socket.current?.readyState === WebSocket.OPEN) {
-        return new Promise<GameResult>((resolve, reject) => {
-          const timer = setTimeout(() => {
-            pending.current.delete(command.requestId);
-            void httpFallback().then(resolve, reject);
-          }, 5000);
-          pending.current.set(command.requestId, { resolve, reject, timer });
-          try {
-            socket.current!.send(JSON.stringify(command));
-          } catch {
-            clearTimeout(timer);
-            pending.current.delete(command.requestId);
-            void httpFallback().then(resolve, reject);
-          }
-        });
+      const command = { runId: origin.runId, requestId: crypto.randomUUID(), text };
+      try {
+        return await commandStream(
+          `/api/sessions/${origin.id}/commands/stream`,
+          command,
+          controls,
+          (result) => acceptState(result.state),
+        );
+      } catch (cause) {
+        // An interrupted response may have committed just before cancellation.
+        void json<GameState>(`/api/sessions/${origin.id}`).then(acceptState, () => {});
+        throw cause;
       }
-      return httpFallback();
     },
     [acceptState],
   );
 
-  return { state, connected, error, send };
+  const openTranscription = useCallback(() => {
+    const origin = current.current;
+    if (!origin) throw new Error('房间还没有准备好，请稍等。');
+    return recognitionStream(
+      `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/api/sessions/${origin.id}/recognition`,
+      origin.runId,
+    );
+  }, []);
+  return { state, connected, error, send, openTranscription };
 }

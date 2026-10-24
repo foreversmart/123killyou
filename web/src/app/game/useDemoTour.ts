@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { demoSteps } from './demoSteps';
+import type { VoiceAnswer } from '@/features/voice/types';
 export function useDemoTour(
-  act: (text: string) => Promise<string>,
+  act: (text: string) => Promise<VoiceAnswer>,
   onProblem: (text: string) => void,
 ) {
   const [demo, setDemo] = useState(false);

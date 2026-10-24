@@ -14,6 +14,26 @@
   letter-spacing: 0.03cqw;
   text-align: center;
 }
+.talk-key {
+  display: inline-block;
+  padding: 0.04cqw 0.38cqw;
+  border: 1px solid #776447;
+  border-bottom-width: 2px;
+  border-radius: 0.2cqw;
+  color: #cbb88e;
+  font: inherit;
+  background: #211e17;
+}
+.voice-dock[data-recording='true'] .talk-key {
+  color: #f4d49b;
+  border-color: #c79951;
+  background: #44331e;
+}
+.voice-dock[data-recording='true'] .voice-light {
+  background: #f2c879;
+  box-shadow: 0 0 16px #e3a64b99;
+  animation: none;
+}
 .start-voice {
   background: var(--noise), linear-gradient(180deg, #3c3020, #211d14);
   border: 1px solid #ad8749;

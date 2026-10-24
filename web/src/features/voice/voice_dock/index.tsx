@@ -5,8 +5,10 @@ import styles from './style.module.css';
 const statusLabels: Record<VoiceStatus, string> = {
   idle: '语音待启用',
   starting: '正在连接',
-  listening: '正在聆听',
-  hearing: '听见你了',
+  listening: '等待你说话',
+  recording: '正在录音',
+  hearing: '正在录音',
+  transcribing: '正在识别',
   processing: '正在理解',
   speaking: '正在回应',
   error: '识别暂不可用',
@@ -27,8 +29,9 @@ export function VoiceDock({
   onTour: () => Promise<void>;
 }) {
   const voiceStarted = !['idle', 'unsupported', 'error'].includes(voice.status);
+  const recording = voice.status === 'recording' || voice.status === 'hearing';
   return (
-    <div className={styles['voice-dock']}>
+    <div className={styles['voice-dock']} data-recording={recording}>
       {voiceStarted || demo ? (
         <>
           <div className={styles['voice-wave-row']}>
@@ -39,11 +42,20 @@ export function VoiceDock({
             {demo ? '正在演示' : paused ? '等待你回来' : statusLabels[voice.status]}
           </span>
           <small>
-            {demo
-              ? '画面由真实游戏状态驱动'
-              : voice.status === 'speaking'
-                ? '你可以直接开口打断'
-                : '无需按键，直接说话'}
+            {demo ? (
+              '画面由真实游戏状态驱动'
+            ) : recording ? (
+              <>
+                松开 <kbd className={styles['talk-key']}>空格</kbd> 发送
+              </>
+            ) : voice.status === 'transcribing' ? (
+              '灵矽正在识别语音'
+            ) : (
+              <>
+                按住 <kbd className={styles['talk-key']}>空格</kbd>{' '}
+                {voice.status === 'speaking' ? '打断并说话' : '说话'}
+              </>
+            )}
           </small>
         </>
       ) : (
@@ -56,7 +68,7 @@ export function VoiceDock({
             {voice.status === 'error' ? '重新连接语音' : '开启语音会话'}
             <span>→</span>
           </button>
-          <small>首次允许麦克风后，全程直接说话</small>
+          <small>允许麦克风后，按住空格说话</small>
           <button
             className={styles['watch-tour']}
             onClick={() => void onTour()}

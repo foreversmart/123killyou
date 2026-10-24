@@ -33,4 +33,33 @@ export interface GameResult {
   speak?: string;
   intent?: string;
   error?: string;
+  hasAudio?: boolean;
+  voiceError?: string;
+}
+
+export interface SpeechEvent {
+  kind: 'start' | 'text' | 'audio';
+  text?: string;
+  pcm?: string;
+  sampleRate?: number;
+  speaker?: string;
+  portrait?: string;
+}
+
+export interface SpeechCaption {
+  speaker: string;
+  portrait: string;
+  text: string;
+}
+
+export interface TurnControls {
+  signal: AbortSignal;
+  onSpeech: (event: SpeechEvent) => void;
+  onAction?: (result: GameResult) => void;
+}
+
+export interface AudioTranscription {
+  write: (pcm: ArrayBuffer) => void;
+  finish: () => Promise<string>;
+  cancel: () => void;
 }

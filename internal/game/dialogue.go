@@ -19,5 +19,6 @@ func (e *Engine) dialogue(state *State, text string) (string, string) {
 		}
 		return "dialogue", reply(state, npc, rule.Reply)
 	}
-	return "dialogue", reply(state, npc, npc.Default)
+	// Open dialogue has no local substitute wording; the session must use Linx.
+	return "dialogue", reply(state, npc, "")
 }
