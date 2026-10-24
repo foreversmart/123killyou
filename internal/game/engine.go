@@ -13,7 +13,42 @@ func (e *Engine) Initial(id string) State {
 		item, _ := e.content.Item(id)
 		inventory = append(inventory, Item(item))
 	}
-	return State{ID: id, Revision: 1, Room: world.InitialRoom, RoomName: world.InitialRoomName, Devotion: world.InitialDevotion, Inventory: inventory, Clues: []string{}, Flags: map[string]bool{}, Dialogue: Dialogue{Speaker: profile.Name, Text: profile.Intro, Portrait: profile.Portrait}, LastAction: "说出你的行动，房间会回应。", Effect: Effect{Kind: "none"}}
+	return State{
+		ID:         id,
+		Revision:   1,
+		SceneKey:   "mini_arrival",
+		SceneName:  "晴天下午·灯影寺山门",
+		SceneText:  "阳光从大巴车窗斜进来，灯影寺的山门在树影中一明一暗。",
+		SceneProps: []string{"大巴", "灯影寺山门", "明照寺旧匾", "山门铜铃", "晒太阳的花猫"},
+		// Keep the legacy room fields for compatibility with non-story rule
+		// tests; the client renders the mini scene from SceneKey immediately.
+		Room:       world.InitialRoom,
+		RoomName:   world.InitialRoomName,
+		Devotion:   world.InitialDevotion,
+		Inventory:  inventory,
+		Clues:      []string{},
+		Flags:      map[string]bool{},
+		Dialogue:   Dialogue{Speaker: profile.Name, Text: profile.Intro, Portrait: profile.Portrait},
+		LastAction: "说出你的行动，房间会回应。",
+		Effect:     Effect{Kind: "none"},
+	}
+}
+
+// StartMiniStory positions a newly created browser session at the first
+// mini-script scene. Initial remains compatible with the legacy rule tests and
+// checkpoint fixtures, while the public session resume path uses this explicit
+// story start location.
+func (e *Engine) StartMiniStory(state *State) {
+	if state == nil {
+		return
+	}
+	state.StoryMode = false
+	e.setMiniScene(state, "mini_arrival")
+	state.Dialogue = Dialogue{
+		Speaker: "旁白",
+		Text:    "阳光明媚的下午，大巴停在灯影寺山门前。周末的游览从登记入住开始。",
+	}
+	state.LastAction = state.Dialogue.Text
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
@@ -23,6 +58,9 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 		return "clarify", feedback(state, message)
 	}
 	if intent, speak, ok := e.system(state, text); ok {
+		return intent, speak
+	}
+	if intent, speak, ok := e.story(state, text); ok {
 		return intent, speak
 	}
 	if intent, speak, ok := e.movement(state, text); ok {

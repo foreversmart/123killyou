@@ -7,6 +7,25 @@ import { atmosphereFilter } from '../effects/atmosphere';
 import type { GameState } from '@/shared/types/game';
 
 export function Scene({ state }: { state: GameState }) {
+  if (state.sceneKey) {
+    return <StoryBackdrop state={state} />;
+  }
+  return <LegacyScene state={state} />;
+}
+
+function StoryBackdrop({ state }: { state: GameState }) {
+  return (
+    <div className={cx(styles['scene-art'], styles['scene-art--story'])}>
+      <div className={styles['story-backdrop']}>
+        <span>灯影寺 · 第一夜</span>
+        <strong>{state.sceneName || '灯影寺'}</strong>
+        <p>{state.sceneText || '先看清声源，再走下一步。'}</p>
+      </div>
+    </div>
+  );
+}
+
+function LegacyScene({ state }: { state: GameState }) {
   const host = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const latest = useRef(state);

@@ -24,6 +24,11 @@ type State struct {
 	RunID      string          `json:"runId"`
 	SavedAt    string          `json:"savedAt"`
 	Revision   int             `json:"revision"`
+	StoryMode  bool            `json:"storyMode"`
+	SceneKey   string          `json:"sceneKey"`
+	SceneName  string          `json:"sceneName"`
+	SceneText  string          `json:"sceneText"`
+	SceneProps []string        `json:"sceneProps"`
 	Room       string          `json:"room"`
 	RoomName   string          `json:"roomName"`
 	Devotion   int             `json:"devotion"`
@@ -55,6 +60,7 @@ type Result struct {
 func Clone(state State) State {
 	state.Inventory = append([]Item{}, state.Inventory...)
 	state.Clues = append([]string{}, state.Clues...)
+	state.SceneProps = append([]string{}, state.SceneProps...)
 	flags := make(map[string]bool, len(state.Flags))
 	for key, value := range state.Flags {
 		flags[key] = value

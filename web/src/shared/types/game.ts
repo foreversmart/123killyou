@@ -10,7 +10,12 @@ export interface GameState {
   runId: string;
   savedAt: string;
   revision: number;
-  room: 'watch' | 'corridor';
+  storyMode?: boolean;
+  sceneKey?: string;
+  sceneName?: string;
+  sceneText?: string;
+  sceneProps?: string[];
+  room: 'watch' | 'corridor' | 'gate' | 'register' | 'refectory' | 'room_door';
   roomName: string;
   devotion: number;
   inventory: Item[];

@@ -71,5 +71,6 @@ export function useGameController() {
     demo,
     demoText,
     tour,
+    act,
   };
 }

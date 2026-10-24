@@ -20,13 +20,17 @@ export function VoiceDock({
   demo,
   paused,
   connected,
+  storyMode,
   onTour,
+  showTour = true,
 }: {
   voice: ReturnType<typeof useVoice>;
   demo: boolean;
   paused: boolean;
   connected: boolean;
+  storyMode: boolean;
   onTour: () => Promise<void>;
+  showTour?: boolean;
 }) {
   const voiceStarted = !['idle', 'unsupported', 'error'].includes(voice.status);
   const recording = voice.status === 'recording' || voice.status === 'hearing';
@@ -69,13 +73,15 @@ export function VoiceDock({
             <span>→</span>
           </button>
           <small>允许麦克风后，按住空格说话</small>
-          <button
-            className={styles['watch-tour']}
-            onClick={() => void onTour()}
-            disabled={!connected}
-          >
-            先看一遍演示
-          </button>
+          {showTour && !storyMode && (
+            <button
+              className={styles['watch-tour']}
+              onClick={() => void onTour()}
+              disabled={!connected}
+            >
+              先看一遍演示
+            </button>
+          )}
         </>
       )}
     </div>

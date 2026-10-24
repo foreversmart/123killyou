@@ -21,7 +21,15 @@ export function DialoguePanel({
   connected: boolean;
   onTour: () => Promise<void>;
 }) {
-  const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
+  const dialogue = voice.caption?.text
+    ? voice.caption
+    : state.sceneKey === 'mini_arrival' && !state.storyMode
+      ? {
+          speaker: '旁白',
+          portrait: '',
+          text: '阳光明媚的下午，大巴停在灯影寺山门前。周末的游览从登记入住开始。',
+        }
+      : state.dialogue;
   const hasPortrait = Boolean(dialogue.portrait) && dialogue.speaker !== '系统';
   return (
     <footer
@@ -50,7 +58,9 @@ export function DialoguePanel({
         demo={demo}
         paused={state.paused}
         connected={connected}
+        storyMode={Boolean(state.storyMode || state.sceneKey)}
         onTour={onTour}
+        showTour={!state.sceneKey}
       />
     </footer>
   );

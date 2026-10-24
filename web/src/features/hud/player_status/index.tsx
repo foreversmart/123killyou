@@ -41,7 +41,7 @@ export function PlayerStatus({
       </div>
       <h1>
         第一夜<span>·</span>
-        {state.roomName}
+        {state.sceneName || state.roomName}
       </h1>
       <div className={styles['connection-status']}>
         <span>{demo ? '演示进行中' : voiceStarted ? '语音会话' : '语音待启用'}</span>

@@ -26,13 +26,19 @@ export default function Game() {
     showNotice,
     tour,
     voiceStarted,
+    act,
   } = game;
   if (!state) return <LoadingScreen error={error} />;
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
       <section className={styles['game-shell']} aria-label="第一夜，语音密室逃脱">
         <PlayerStatus state={state} demo={demo} voiceStarted={voiceStarted} connected={connected} />
-        <Room state={state} phase={roomPhase}>
+        <Room
+          state={state}
+          phase={roomPhase}
+          onAction={async (command) => void (await act(command))}
+          interactive={connected}
+        >
           <Overlays state={state} soundOn={voice.soundOn} />
           {showNotice && <ActionNotice text={notice} />}
         </Room>
