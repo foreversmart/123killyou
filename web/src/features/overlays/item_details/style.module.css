@@ -1,0 +1,32 @@
+.item-sheet {
+  width: 66%;
+}
+.item-detail {
+  display: grid;
+  grid-template-columns: 34% 1fr;
+  align-items: center;
+  gap: 2.4cqw;
+  min-height: 14cqw;
+}
+.item-detail img {
+  display: block;
+  max-width: 100%;
+  height: 13cqw;
+  justify-self: center;
+  object-fit: contain;
+  box-shadow: 0 0 28px #4c3a1e66;
+  background: #12110d;
+  border: 0.6cqw solid #b5a07b;
+  outline: 1px solid #78623d;
+}
+.item-detail p {
+  font-size: 1.25cqw;
+  line-height: 1.95;
+  letter-spacing: 0.12cqw;
+}
+.paper-rule {
+  display: block;
+  width: 3cqw;
+  height: 1px;
+  background: #6f5c37;
+}

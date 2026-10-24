@@ -1,0 +1,54 @@
+.scene-overlay {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pause-overlay,
+.caught-overlay {
+  flex-direction: column;
+  background: #080806d9;
+  backdrop-filter: blur(5px);
+}
+.pause-overlay svg {
+  width: 3.5cqw;
+  height: 3.5cqw;
+  color: #bc985b;
+  margin-bottom: 1cqw;
+}
+.pause-overlay > span {
+  font-size: 0.85cqw;
+  letter-spacing: 0.5cqw;
+  color: #9c8b68;
+}
+.pause-overlay h2,
+.caught-overlay h2 {
+  font-size: 3cqw;
+  letter-spacing: 0.6cqw;
+  font-weight: 400;
+  color: #d4c5a6;
+  margin: 1.1cqw 0;
+}
+.pause-overlay p,
+.caught-overlay p {
+  font-size: 1.2cqw;
+  color: #9e9278;
+  letter-spacing: 0.15cqw;
+}
+.caught-overlay {
+  background: radial-gradient(ellipse, #2b0e09c9, #080604ef);
+}
+.caught-overlay > span {
+  font-size: 1cqw;
+  color: #aa674a;
+  letter-spacing: 1.5cqw;
+  margin-bottom: 1cqw;
+}
+.caught-overlay small {
+  margin-top: 2cqw;
+  font-size: 1cqw;
+  color: #a08b68;
+  letter-spacing: 0.15cqw;
+}

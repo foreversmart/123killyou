@@ -1,0 +1,15 @@
+.framed {
+  border: 1px solid #6c573347;
+  box-shadow:
+    inset 0 0 0 3px #100f0a,
+    inset 0 0 0 4px #846d3933;
+  background: var(--noise), linear-gradient(110deg, #171611, #0d0d0b 64%, #12110e);
+}
+.scene-overlay {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

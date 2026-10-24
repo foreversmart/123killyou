@@ -1,0 +1,43 @@
+.debug-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(900px, calc(100vw - 32px));
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  background: #171610f5;
+  padding: 12px 16px;
+  border: 1px solid #8d7648;
+  font:
+    12px system-ui,
+    sans-serif;
+}
+.debug-panel label {
+  color: #d3bc8b;
+}
+.debug-panel input {
+  flex: 1;
+  min-width: 80px;
+  padding: 9px 12px;
+  border: 1px solid #655333;
+  background: #0c0c09;
+  color: #eee0bb;
+}
+.debug-panel button {
+  background: #65502e;
+  border: 1px solid #9e814c;
+  color: #f4e3bd;
+  padding: 8px 16px;
+}
+.debug-panel > span {
+  color: #7d7460;
+}
+@media (max-width: 800px) {
+  .debug-panel label,
+  .debug-panel > span {
+    display: none;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "initialRoom": "watch",
+  "initialRoomName": "值守室",
+  "initialNpc": "keeper",
+  "initialDevotion": 68,
+  "startingItems": ["key", "page", "candle", "beads"]
+}

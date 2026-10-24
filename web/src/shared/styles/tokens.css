@@ -1,0 +1,13 @@
+@import url('/art/patina.css');
+
+:root {
+  color-scheme: dark;
+  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'SimSun', serif;
+  color: #ddd4bd;
+  background: #080807;
+  font-synthesis: none;
+  --gold: #be985a;
+  --gold-bright: #e2b466;
+  --muted: #8e897d;
+  --ink: #17150f;
+}

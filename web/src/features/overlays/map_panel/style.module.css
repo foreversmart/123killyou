@@ -1,0 +1,115 @@
+.paper-subtitle {
+  font-size: 1.1cqw;
+  color: #655740;
+  letter-spacing: 0.14cqw;
+  margin: 0;
+}
+.map-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8cqw;
+  letter-spacing: 0.2cqw;
+}
+.map-heading svg {
+  width: 1.7cqw;
+  height: 1.7cqw;
+  color: #846a42;
+}
+.map-sheet {
+  transform: rotate(-0.65deg);
+}
+.map-drawing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 3.5cqw 0 2cqw;
+}
+.map-room {
+  position: relative;
+  border: 1px solid #655332;
+  width: 10.5cqw;
+  height: 7cqw;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow:
+    inset 0 0 0 3px #c2b08a,
+    inset 0 0 0 4px #6756348c;
+  background: repeating-linear-gradient(0deg, transparent 0 9px, #6d5b3520 10px, transparent 11px);
+}
+.map-roof {
+  position: absolute;
+  width: 114%;
+  height: 1.4cqw;
+  border: 1px solid #665535;
+  border-bottom: 3px solid #665535;
+  top: -1.4cqw;
+  background: repeating-linear-gradient(90deg, #a08c66 0 8px, #b7a17c 8px 11px);
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+}
+.map-room strong {
+  font-weight: 400;
+  font-size: 1.55cqw;
+  letter-spacing: 0.25cqw;
+}
+.map-room small {
+  font-size: 0.8cqw;
+  margin-top: 0.6cqw;
+  color: #655539;
+}
+.map-room--current {
+  border: 2px solid #9b3c2a;
+  box-shadow:
+    inset 0 0 0 3px #ceb88e,
+    inset 0 0 0 4px #9b3c2a;
+}
+.map-room--current small {
+  color: #8d3729;
+}
+.map-room--current::after {
+  position: absolute;
+  content: '';
+  width: 0.55cqw;
+  height: 0.55cqw;
+  background: #9b3c2a;
+  border-radius: 50%;
+  bottom: -1.2cqw;
+  box-shadow: 0 0 0 3px #9b3c2a22;
+}
+.map-room--locked {
+  opacity: 0.48;
+}
+.map-path {
+  width: 4.8cqw;
+  display: flex;
+  justify-content: space-evenly;
+}
+.map-path i {
+  width: 0.3cqw;
+  height: 0.2cqw;
+  background: #75603c;
+}
+.map-path--closed {
+  opacity: 0.35;
+}
+.map-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6cqw;
+  font-size: 0.72cqw;
+  color: #6d5d40;
+}
+.map-current-dot {
+  width: 0.45cqw;
+  height: 0.45cqw;
+  background: #963e2c;
+  border-radius: 50%;
+}
+.map-legend-line {
+  width: 1.7cqw;
+  border-top: 1px dashed #75603c;
+  margin-left: 1.1cqw;
+}

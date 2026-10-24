@@ -1,0 +1,28 @@
+.journal-sheet {
+  min-height: 22cqw;
+}
+.journal-sheet ol {
+  padding-left: 1.8cqw;
+  margin-top: 1.5cqw;
+  font-size: 1.2cqw;
+  line-height: 1.95;
+}
+.journal-sheet li {
+  padding-left: 0.6cqw;
+  margin-bottom: 1.1cqw;
+}
+.empty-journal {
+  min-height: 11cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.8cqw;
+  color: #74613e;
+  font-size: 1.1cqw;
+}
+.empty-journal svg {
+  width: 3.7cqw;
+  height: 3.7cqw;
+  opacity: 0.6;
+}

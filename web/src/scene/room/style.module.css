@@ -1,0 +1,60 @@
+.room {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  border-left: 1px solid #65502e54;
+}
+.scene-shading {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.scene-shading {
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 3cqw #0006,
+    inset 0 -1.8cqw 2.2cqw -0.8cqw #080806b3;
+}
+.scene-transition {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.42s cubic-bezier(0, 0, 0.2, 1);
+}
+.scene-transition--leaving,
+.scene-transition--black {
+  opacity: 1;
+}
+.scene-transition--leaving {
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+.scene-caption {
+  position: absolute;
+  bottom: 0.8cqw;
+  width: 100%;
+  display: flex;
+  gap: 0.8cqw;
+  justify-content: center;
+  align-items: center;
+  color: #ddd3b27d;
+  letter-spacing: 0.35cqw;
+  font-size: 0.64cqw;
+  text-shadow: 0 1px 4px #000;
+  pointer-events: none;
+}
+.caption-line {
+  height: 1px;
+  width: 3cqw;
+  background: linear-gradient(90deg, transparent, #b3965959);
+}
+.caption-line:last-child {
+  transform: rotate(180deg);
+}

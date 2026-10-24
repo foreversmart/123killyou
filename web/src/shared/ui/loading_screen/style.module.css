@@ -1,0 +1,20 @@
+.loading-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  background: #100f0b;
+  color: #c1aa7d;
+  letter-spacing: 4px;
+}
+.loading-screen svg {
+  width: 64px;
+  height: 64px;
+  opacity: 0.6;
+}
+.loading-screen small {
+  opacity: 0.5;
+  font-size: 11px;
+}
