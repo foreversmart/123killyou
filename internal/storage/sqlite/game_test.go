@@ -37,10 +37,10 @@ func (testVoice) Respond(_ context.Context, request session.DialogueRequest) (se
 	if request.RuleReply == "" {
 		request.RuleReply = "测试云端回应。"
 	}
-	audio, _ := (testVoice{}).Synthesize(context.Background(), request.RuleReply, nil)
+	audio, _ := (testVoice{}).Synthesize(context.Background(), session.SpeechRequest{Text: request.RuleReply, NPCID: request.NPCID}, nil)
 	return session.DialogueResponse{Text: request.RuleReply, Audio: &audio}, nil
 }
-func (testVoice) Synthesize(context.Context, string, session.SpeechSink) (session.DialogueAudio, error) {
+func (testVoice) Synthesize(context.Context, session.SpeechRequest, session.SpeechSink) (session.DialogueAudio, error) {
 	return session.DialogueAudio{PCM: []byte{0, 0}, SampleRate: 16000}, nil
 }
 func (s *fixture) Close() error { return s.repository.Close() }
@@ -166,7 +166,7 @@ func TestRoomProgressAndJournalPersist(t *testing.T) {
 	}
 	run(t, s, state.ID, "ledger", "看看账本")
 	run(t, s, state.ID, "out", "去走廊")
-	run(t, s, state.ID, "back", "回值守室")
+	run(t, s, state.ID, "back", "回休息室")
 	r := run(t, s, state.ID, "ledger-again", "看看账本")
 	if len(r.State.Clues) != 1 || !r.State.Flags["visitedCorridor"] {
 		t.Fatal("跨房间状态丢失或重复记录线索")

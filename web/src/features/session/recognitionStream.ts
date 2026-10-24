@@ -9,6 +9,7 @@ export function recognitionStream(url: string, runId: string): AudioTranscriptio
   const frames: ArrayBuffer[] = [];
   let queued = 0,
     total = 0;
+  let failure: Error | undefined;
   let resolve: (text: string) => void;
   let reject: (cause: Error) => void;
   const result = new Promise<string>((yes, no) => {
@@ -26,8 +27,9 @@ export function recognitionStream(url: string, runId: string): AudioTranscriptio
   const fail = (message: string) => {
     if (settled) return;
     settled = true;
+    failure = new Error(message);
     cleanup();
-    reject(new Error(message));
+    reject(failure);
   };
   const send = (pcm: ArrayBuffer) => {
     if (socket.bufferedAmount > 128000) {
@@ -65,8 +67,9 @@ export function recognitionStream(url: string, runId: string): AudioTranscriptio
   socket.onerror = () => fail('无法连接灵矽语音识别，请检查游戏服务。');
   socket.onclose = () => fail('灵矽语音识别连接中断，请按住空格重试。');
   return {
+    result,
     write(pcm) {
-      if (settled) throw new Error('语音连接已关闭，请松开空格后重试。');
+      if (settled) throw failure || new Error('语音连接已关闭，请松开空格后重试。');
       if (released) return;
       total += pcm.byteLength;
       if (pcm.byteLength !== 640 || total > 960000) {

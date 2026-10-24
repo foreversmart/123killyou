@@ -14,10 +14,10 @@ type streamingProvider struct {
 	calls int
 }
 
-func (p *streamingProvider) Synthesize(_ context.Context, text string, emit session.SpeechSink) (session.DialogueAudio, error) {
+func (p *streamingProvider) Synthesize(_ context.Context, request session.SpeechRequest, emit session.SpeechSink) (session.DialogueAudio, error) {
 	p.calls++
 	if emit != nil {
-		for _, event := range []session.SpeechEvent{{Kind: "start", SampleRate: 16000}, {Kind: "text", Text: text}, {Kind: "audio", PCM: []byte{1, 0}}} {
+		for _, event := range []session.SpeechEvent{{Kind: "start", SampleRate: 16000}, {Kind: "text", Text: request.Text}, {Kind: "audio", PCM: []byte{1, 0}}} {
 			if err := emit(event); err != nil {
 				return session.DialogueAudio{}, err
 			}
@@ -26,7 +26,7 @@ func (p *streamingProvider) Synthesize(_ context.Context, text string, emit sess
 	return session.DialogueAudio{PCM: []byte{1, 0}, SampleRate: 16000}, nil
 }
 func (p *streamingProvider) Respond(ctx context.Context, request session.DialogueRequest) (session.DialogueResponse, error) {
-	audio, err := p.Synthesize(ctx, "云端台词。", request.OnSpeech)
+	audio, err := p.Synthesize(ctx, session.SpeechRequest{Text: "云端台词。"}, request.OnSpeech)
 	return session.DialogueResponse{Text: "云端台词。", Audio: &audio}, err
 }
 

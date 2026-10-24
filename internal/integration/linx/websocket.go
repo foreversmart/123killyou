@@ -17,14 +17,26 @@ func (c *Client) Respond(ctx context.Context, request session.DialogueRequest) (
 	if request.NPCID != "" && request.NPCID != "keeper" {
 		return response, errors.New("linx NPC is not configured")
 	}
+	c.mu.RLock()
+	request.AgentID = c.config.KeeperAgent
+	c.mu.RUnlock()
 	return c.exchange(ctx, request, "", request.OnSpeech)
 }
 
-func (c *Client) Synthesize(ctx context.Context, text string, emit session.SpeechSink) (session.DialogueAudio, error) {
-	if strings.TrimSpace(text) == "" {
+func (c *Client) Synthesize(ctx context.Context, request session.SpeechRequest, emit session.SpeechSink) (session.DialogueAudio, error) {
+	if strings.TrimSpace(request.Text) == "" {
 		return session.DialogueAudio{}, errors.New("linx speech text is empty")
 	}
-	response, err := c.exchange(ctx, session.DialogueRequest{PlayerText: "播报本轮已确认的操作结果"}, text, emit)
+	if request.NPCID != "" && request.NPCID != "keeper" {
+		return session.DialogueAudio{}, errors.New("linx speech NPC is not configured")
+	}
+	c.mu.RLock()
+	agentID := c.config.NarratorAgent
+	if request.NPCID == "keeper" {
+		agentID = c.config.KeeperAgent
+	}
+	c.mu.RUnlock()
+	response, err := c.exchange(ctx, session.DialogueRequest{AgentID: agentID, PlayerText: "播报本轮已确认的操作结果"}, request.Text, emit)
 	if err != nil {
 		return session.DialogueAudio{}, err
 	}
@@ -50,12 +62,12 @@ func (c *Client) exchange(ctx context.Context, request session.DialogueRequest, 
 		}
 	}()
 	c.mu.RLock()
-	agentID := c.config.KeeperAgent
+	keeper, narrator := c.config.KeeperAgent, c.config.NarratorAgent
 	c.mu.RUnlock()
-	if request.AgentID != "" && request.AgentID != agentID {
-		return response, errors.New("linx NPC agent does not match the bound virtual device")
+	if request.AgentID == "" || (request.AgentID != keeper && request.AgentID != narrator) {
+		return response, errors.New("linx target agent is not configured for this project")
 	}
-	conn, hello, err := c.connect(ctx, request.GameContext)
+	conn, hello, err := c.connect(ctx, request.GameContext, request.AgentID)
 	if err != nil {
 		return response, err
 	}
@@ -87,6 +99,7 @@ type wireEvent struct {
 	Type      string      `json:"type"`
 	Transport string      `json:"transport"`
 	SessionID string      `json:"session_id"`
+	AgentID   string      `json:"agent_id"`
 	State     string      `json:"state"`
 	Text      string      `json:"text"`
 	ErrorCode int         `json:"error_code"`

@@ -68,6 +68,7 @@ export function createPushToTalk(handlers: Handlers) {
         if (take !== current || !current.held) return;
         try {
           current.connection = handlers.open();
+          void current.connection.result.catch((cause) => problem(current, cause));
           current.recording = handlers.record((pcm) => {
             if (take !== current) return;
             try {

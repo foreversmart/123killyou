@@ -73,7 +73,7 @@ func TestReplyRejectsMismatchedSystemTextBeforeForwardingAudio(t *testing.T) {
 		conn.Write(ctx, websocket.MessageText, []byte(`{"type":"tts","state":"sentence_start","text":"你获得了钥匙。"}`))
 		conn.Write(ctx, websocket.MessageBinary, []byte{1, 0})
 	})
-	_, err := c.exchange(context.Background(), session.DialogueRequest{PlayerText: "你是谁"}, "地图已展开。", func(event session.SpeechEvent) error {
+	_, err := c.exchange(context.Background(), session.DialogueRequest{PlayerText: "你是谁", AgentID: "agent"}, "地图已展开。", func(event session.SpeechEvent) error {
 		if event.Kind == "text" || event.Kind == "audio" {
 			t.Error("mismatched speech escaped validation")
 		}

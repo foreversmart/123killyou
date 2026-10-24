@@ -19,7 +19,7 @@ type audioDialogueProvider struct {
 	release chan struct{}
 }
 
-func (p *audioDialogueProvider) Synthesize(context.Context, string, session.SpeechSink) (session.DialogueAudio, error) {
+func (p *audioDialogueProvider) Synthesize(context.Context, session.SpeechRequest, session.SpeechSink) (session.DialogueAudio, error) {
 	return session.DialogueAudio{PCM: []byte{0, 0}, SampleRate: 16000}, nil
 }
 

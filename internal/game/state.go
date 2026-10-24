@@ -49,6 +49,7 @@ type Result struct {
 	Error      string `json:"error,omitempty"`
 	HasAudio   bool   `json:"hasAudio,omitempty"`
 	VoiceError string `json:"voiceError,omitempty"`
+	SpeakerID  string `json:"speakerId,omitempty"`
 }
 
 func Clone(state State) State {

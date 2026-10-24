@@ -67,3 +67,10 @@ test('连接失败和识别超时明确失败，不使用浏览器识别降级',
   t.mock.timers.tick(12000);
   await assert.rejects(result, /没有识别出/);
 });
+test('连接失败后继续到达的音频帧不会覆盖首次错误', async (t) => {
+  const { take, socket } = fixture(t);
+  socket.event({ type: 'error', error: '灵矽语音识别未完成，请重试。' });
+  assert.throws(() => take.write(new ArrayBuffer(640)), /灵矽语音识别未完成/);
+  await assert.rejects(take.result, /灵矽语音识别未完成/);
+  await assert.rejects(take.finish(), /灵矽语音识别未完成/);
+});

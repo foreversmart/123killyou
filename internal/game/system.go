@@ -23,7 +23,7 @@ func (e *Engine) system(state *State, text string) (string, string, bool) {
 	}
 	if Has(text, "地图") && (Has(text, "看", "打开", "显示", "调出") || text == "地图") {
 		state.Overlay = "map"
-		return "map", feedback(state, "地图已展开。值守室与走廊相连，内堂暂时关闭。你可以说出要去的地方。"), true
+		return "map", feedback(state, "地图已展开。休息室与走廊相连，内堂暂时关闭。你可以说出要去的地方。"), true
 	}
 	if Has(text, "帮助", "怎么操作", "能做什么", "能说什么") {
 		state.Overlay = "help"

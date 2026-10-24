@@ -1,0 +1,8 @@
+{
+  "id": "narrator",
+  "name": "旁白",
+  "voice": {
+    "profile": "narrator_calm_female",
+    "providerVoiceId": "f75b3735b6f44c2cad7080e9b61a1da4"
+  }
+}

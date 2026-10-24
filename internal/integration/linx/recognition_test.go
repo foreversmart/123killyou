@@ -15,7 +15,7 @@ func TestRecognitionUploadsManualPCMAndAbortsAutomaticReply(t *testing.T) {
 	aborted := make(chan struct{}, 1)
 	c := mockDevice(t, func(ctx context.Context, conn *websocket.Conn) {
 		conn.Read(ctx)
-		conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","session_id":"speech","audio_params":{"format":"pcm","sample_rate":24000,"channels":1}}`))
+		conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","agent_id":"agent","session_id":"speech","audio_params":{"format":"pcm","sample_rate":24000,"channels":1}}`))
 		_, raw, _ := conn.Read(ctx)
 		var start map[string]string
 		if json.Unmarshal(raw, &start) != nil || start["state"] != "start" || start["mode"] != "manual" || start["session_id"] != "speech" {
@@ -64,7 +64,7 @@ func TestRecognitionUploadsManualPCMAndAbortsAutomaticReply(t *testing.T) {
 func TestRecognitionCancellationAndInvalidPCMReleaseDevice(t *testing.T) {
 	c := mockDevice(t, func(ctx context.Context, conn *websocket.Conn) {
 		conn.Read(ctx)
-		conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","audio_params":{"format":"pcm","sample_rate":16000,"channels":1}}`))
+		conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","agent_id":"agent","audio_params":{"format":"pcm","sample_rate":16000,"channels":1}}`))
 		conn.Read(ctx)
 		conn.Read(ctx)
 	})

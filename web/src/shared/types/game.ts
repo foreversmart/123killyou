@@ -35,6 +35,7 @@ export interface GameResult {
   error?: string;
   hasAudio?: boolean;
   voiceError?: string;
+  speakerId?: string;
 }
 
 export interface SpeechEvent {
@@ -59,6 +60,7 @@ export interface TurnControls {
 }
 
 export interface AudioTranscription {
+  readonly result: Promise<string>;
   write: (pcm: ArrayBuffer) => void;
   finish: () => Promise<string>;
   cancel: () => void;

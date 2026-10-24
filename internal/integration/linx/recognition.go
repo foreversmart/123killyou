@@ -30,7 +30,10 @@ func (c *Client) Transcribe(ctx context.Context, source session.AudioSource, rea
 	case <-ctx.Done():
 		return "", ctx.Err()
 	}
-	conn, hello, err := c.connect(ctx, "本连接只识别玩家语音，不执行游戏行动。")
+	c.mu.RLock()
+	agentID := c.config.KeeperAgent
+	c.mu.RUnlock()
+	conn, hello, err := c.connect(ctx, "本连接只识别玩家语音，不执行游戏行动。", agentID)
 	if err != nil {
 		return "", err
 	}

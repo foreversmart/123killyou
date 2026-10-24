@@ -3,7 +3,7 @@ package game
 func (e *Engine) inspection(state *State, text string) (string, string, bool) {
 	if Has(text, "账本", "登记册", "登记簿", "桌上的本子") {
 		if state.Room != "watch" {
-			return "blocked", feedback(state, "账本还在值守室的桌上。"), true
+			return "blocked", feedback(state, "账本还在休息室的桌上。"), true
 		}
 		state.Overlay = "ledger"
 		if !state.Flags["ledgerSeen"] {
@@ -20,7 +20,7 @@ func (e *Engine) inspection(state *State, text string) (string, string, bool) {
 	}
 	if Has(text, "看看房间", "环顾", "周围", "这里有什么", "观察房间") {
 		if state.Room == "corridor" {
-			return "look", narrate(state, "走廊左侧是亮着灯的值守室，右侧有一扇紧锁的门。尽头一盏灯笼轻轻晃着。"), true
+			return "look", narrate(state, "走廊左侧是亮着灯的休息室，右侧有一扇紧锁的门。尽头一盏灯笼轻轻晃着。"), true
 		}
 		return "look", narrate(state, "守夜人坐在桌后。桌上有登记册、油灯和茶杯，他身后的门通向走廊。"), true
 	}

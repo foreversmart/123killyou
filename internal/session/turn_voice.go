@@ -33,8 +33,11 @@ func (s *Service) planVoice(tx Transaction, before game.State, text string) (voi
 		intent, reply = s.engine.Apply(&candidate, text)
 	}
 	plan := voicePlan{Reply: reply, Speaker: "系统", Portrait: "player"}
-	if intent == "dialogue" || intent == "give" {
-		plan.Speaker, plan.Portrait = candidate.Dialogue.Speaker, candidate.Dialogue.Portrait
+	if candidate.Dialogue.Text == reply {
+		if npcID, known := s.engine.NPCForDialogue(candidate); known {
+			plan.NPCID = npcID
+			plan.Speaker, plan.Portrait = candidate.Dialogue.Speaker, candidate.Dialogue.Portrait
+		}
 	}
 	if intent == "dialogue" && !candidate.Caught {
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {
@@ -72,7 +75,7 @@ func (s *Service) generateVoice(ctx context.Context, plan voicePlan, text string
 		}
 		return strings.TrimSpace(response.Text), response.Audio, nil
 	}
-	audio, err := s.provider.Synthesize(ctx, plan.Reply, sink)
+	audio, err := s.provider.Synthesize(ctx, SpeechRequest{Text: plan.Reply, NPCID: plan.NPCID}, sink)
 	if ctx.Err() != nil {
 		return "", nil, ctx.Err()
 	}

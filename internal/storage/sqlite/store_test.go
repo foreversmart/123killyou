@@ -193,7 +193,7 @@ func TestInvalidCheckpointAndSystemCommandsDoNotBecomeNPCMemory(t *testing.T) {
 	if missing.Intent != "clarify" || missing.State.Room != "corridor" {
 		t.Fatal("不存在的检查点改变了场景")
 	}
-	back := run(t, s, state.ID, "back", "回到值守室")
+	back := run(t, s, state.ID, "back", "回到休息室")
 	if back.Intent != "move" {
 		t.Fatal("回房间被误判成读取存档")
 	}

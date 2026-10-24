@@ -33,7 +33,7 @@ func TestNegatedAndHypotheticalActionsDoNotExecute(t *testing.T) {
 }
 
 func TestReturningToRoomWithPunctuationDoesNotLoadCheckpoint(t *testing.T) {
-	for _, text := range []string{"回到值守室。", "回到值守室！", "回到 值守室"} {
+	for _, text := range []string{"回到休息室。", "回到休息室！", "回到 休息室"} {
 		t.Run(text, func(t *testing.T) {
 			s := newFixture(t)
 			start := createGame(t, s)

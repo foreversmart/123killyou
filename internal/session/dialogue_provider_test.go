@@ -25,7 +25,7 @@ func (p *fakeDialogueProvider) Respond(_ context.Context, request session.Dialog
 	return session.DialogueResponse{Text: p.text, Audio: &session.DialogueAudio{PCM: []byte{0, 0}, SampleRate: 16000}}, p.err
 }
 
-func (p *fakeDialogueProvider) Synthesize(context.Context, string, session.SpeechSink) (session.DialogueAudio, error) {
+func (p *fakeDialogueProvider) Synthesize(context.Context, session.SpeechRequest, session.SpeechSink) (session.DialogueAudio, error) {
 	return session.DialogueAudio{PCM: []byte{0, 0}, SampleRate: 16000}, p.err
 }
 

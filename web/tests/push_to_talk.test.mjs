@@ -20,6 +20,7 @@ function fixture(t) {
       void take.result.catch(() => {});
       takes.push(take);
       return {
+        result: take.result,
         write: (pcm) => take.frames.push(pcm),
         finish: () => {
           take.finishes = (take.finishes || 0) + 1;
@@ -91,6 +92,25 @@ test('未按键不打开识别，先打断扬声器，一次按住只在松开�
   f.capture.release();
   await tick();
   assert.deepEqual(f.submitted, ['去走廊']);
+});
+test('按住期间连接失败立即停止采集并保留原始原因，松开后可重试', async (t) => {
+  const f = fixture(t);
+  const take = press(t, f);
+  take.reject(new Error('灵矽连接失败，请检查游戏服务。'));
+  await tick();
+  assert.equal(f.capture.holding, false);
+  assert.equal(take.closed, true);
+  assert.equal(take.cancelled, true);
+  assert.deepEqual(f.problems, ['灵矽连接失败，请检查游戏服务。']);
+  f.capture.release();
+  await tick();
+  assert.equal(f.problems.length, 1);
+  const next = press(t, f);
+  f.capture.release();
+  await tick();
+  next.resolve('看看地图');
+  await tick();
+  assert.deepEqual(f.submitted, ['看看地图']);
 });
 test('轻点和纯静音不生成回合，也不提交云端可能的幻觉文字', async (t) => {
   const f = fixture(t);

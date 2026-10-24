@@ -28,9 +28,16 @@ type DialogueAudio struct {
 	SampleRate int
 }
 
+// Empty NPCID selects the system narrator. NPC lines keep their own voice,
+// including rule-authored rewards, refusals and room greetings.
+type SpeechRequest struct {
+	Text  string
+	NPCID string
+}
+
 type DialogueProvider interface {
 	Respond(context.Context, DialogueRequest) (DialogueResponse, error)
-	Synthesize(context.Context, string, SpeechSink) (DialogueAudio, error)
+	Synthesize(context.Context, SpeechRequest, SpeechSink) (DialogueAudio, error)
 }
 
 var ErrLinxUnavailable = errors.New("灵矽暂不可用，本轮操作未完成，请稍后重试。")

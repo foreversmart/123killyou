@@ -25,14 +25,15 @@ const (
 )
 
 type Config struct {
-	APIKey       string
-	APIBase      string
-	WSURL        string
-	DeviceID     string
-	DeviceFile   string
-	OTAURL       string
-	KeeperAgent  string
-	RequestLimit time.Duration
+	APIKey        string
+	APIBase       string
+	WSURL         string
+	DeviceID      string
+	DeviceFile    string
+	OTAURL        string
+	KeeperAgent   string
+	NarratorAgent string
+	RequestLimit  time.Duration
 }
 
 func (c Config) Enabled() bool { return strings.TrimSpace(c.APIKey) != "" }
@@ -84,11 +85,12 @@ func New(config Config) *Client {
 
 func (c *Client) Configured() bool { return c != nil && c.config.Enabled() }
 
-func (c *Client) SetKeeperAgent(id string) {
+func (c *Client) SetAgents(keeper, narrator string) {
 	if c != nil {
 		c.mu.Lock()
 		defer c.mu.Unlock()
-		c.config.KeeperAgent = strings.TrimSpace(id)
+		c.config.KeeperAgent = strings.TrimSpace(keeper)
+		c.config.NarratorAgent = strings.TrimSpace(narrator)
 	}
 }
 

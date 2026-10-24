@@ -123,7 +123,7 @@ func (s *Service) command(ctx context.Context, id, runID, requestID, text string
 		if err := tx.SaveState(next); err != nil {
 			return err
 		}
-		result = game.Result{Type: "state", RequestID: requestID, State: next, Speak: speak, Intent: intent}
+		result = game.Result{Type: "state", RequestID: requestID, State: next, Speak: speak, Intent: intent, SpeakerID: plan.NPCID}
 		if err := ctx.Err(); err != nil {
 			return err
 		}

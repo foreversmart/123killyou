@@ -28,7 +28,7 @@ func mockDevice(t *testing.T, handler func(context.Context, *websocket.Conn)) *C
 		handler(r.Context(), conn)
 	}))
 	t.Cleanup(server.Close)
-	c := New(Config{APIKey: "management-secret", KeeperAgent: "agent", RequestLimit: time.Second})
+	c := New(Config{APIKey: "management-secret", KeeperAgent: "agent", NarratorAgent: "narrator", RequestLimit: time.Second})
 	c.identity = DeviceIdentity{DeviceID: "02:00:00:00:00:01", ClientID: "fixed-client-id"}
 	c.access = deviceAccess{URL: "ws" + strings.TrimPrefix(server.URL, "http"), Token: "device-token"}
 	c.accessAt = time.Now()
@@ -47,7 +47,7 @@ func exchangeHello(t *testing.T, ctx context.Context, conn *websocket.Conn) {
 	if json.Unmarshal(raw, &hello) != nil || hello["type"] != "hello" {
 		t.Error("client hello missing")
 	}
-	conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","session_id":"cloud-session","audio_params":{"format":"pcm","sample_rate":24000,"channels":1}}`))
+	conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","agent_id":"agent","session_id":"cloud-session","audio_params":{"format":"pcm","sample_rate":24000,"channels":1}}`))
 	_, raw, err = conn.Read(ctx)
 	if err != nil {
 		t.Error(err)
@@ -115,7 +115,7 @@ func TestSynthesizeRequiresConfirmedTextAndAudio(t *testing.T) {
 		t.Run(spoken, func(t *testing.T) {
 			c := mockDevice(t, func(ctx context.Context, conn *websocket.Conn) {
 				conn.Read(ctx)
-				conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","audio_params":{"format":"pcm","sample_rate":16000,"channels":1}}`))
+				conn.Write(ctx, websocket.MessageText, []byte(`{"type":"hello","transport":"websocket","agent_id":"narrator","audio_params":{"format":"pcm","sample_rate":16000,"channels":1}}`))
 				_, raw, err := conn.Read(ctx)
 				if err != nil {
 					t.Error(err)
@@ -129,7 +129,7 @@ func TestSynthesizeRequiresConfirmedTextAndAudio(t *testing.T) {
 				conn.Write(ctx, websocket.MessageBinary, []byte{1, 0, 2, 0})
 				conn.Write(ctx, websocket.MessageText, []byte(`{"type":"tts","state":"stop"}`))
 			})
-			audio, err := c.Synthesize(context.Background(), "地图已展开。", nil)
+			audio, err := c.Synthesize(context.Background(), session.SpeechRequest{Text: "地图已展开。"}, nil)
 			if spoken == "地图已展开。" {
 				if err != nil || len(audio.PCM) != 4 || !c.DialogueStatus().Verified {
 					t.Fatalf("confirmed speech missing: %v", err)

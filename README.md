@@ -190,6 +190,9 @@ web/src/features/example_panel/
 internal/content/
   world.json                 初始世界与持有物品
   items.json                 物品定义
+  narrator/
+    profile.json             系统旁白身份与音色
+    prompt.md                播报边界与表达方式
   npcs/<npc_id>/
     profile.json             身份、头像、音色映射、对话与交换规则
     prompt.md                性格、表达方式与知识边界
@@ -197,7 +200,9 @@ internal/content/
 
 每个 NPC 独占目录，目录名与配置 ID 保持一致。新增物品先加入 `items.json`，在 NPC 配置中引用物品、奖励和条件；修改配置后重启 Go。加载器会校验字段、ID、台词、提示词和物品引用。
 
-当前动作与奖励仍由配置驱动的规则执行。`voice.profile`、`providerVoiceId` 和 `prompt.md` 用于灵矽智能体配置；启动时只查找或创建 `1024-keeper`。Go 管理虚拟设备、OTA 和设备绑定，同时提供灵矽音频识别代理。录音连接收到 STT 后终止自动 LLM/TTS，识别文字经游戏规则处理，再建立受规则控制的回复连接；识别连接中的自动音频不会传给前端。多 NPC 路由仍待扩展，整体方案见 [NPC 交互设计](docs/design/voice-and-npc.md)。
+当前动作与奖励仍由配置驱动的规则执行。`voice.profile`、`providerVoiceId` 和 `prompt.md` 用于灵矽智能体配置；启动时按精确名称查找或创建 `1024-keeper` 与 `1024-narrator`。守夜人对白、道具交互台词和返回房间时的招呼使用守夜人音色；地图、调查、存档等系统反馈使用旁白音色。每次连接通过 `X-Agent-ID` 选择角色，复用同一虚拟设备，无需为旁白再绑定硬件或设备。
+
+Go 管理虚拟设备、OTA 和设备绑定，同时提供灵矽音频识别代理。录音连接收到 STT 后终止自动 LLM/TTS，识别文字经游戏规则处理，再建立受规则控制的回复连接；识别连接中的自动音频不会传给前端。新增其他 NPC 的智能体路由仍待扩展，整体方案见 [NPC 交互设计](docs/design/voice-and-npc.md)。
 
 ### 本地存档与环境配置
 
@@ -219,9 +224,10 @@ NIGHTWATCH_DB=.local/data/dev.db npm run dev
 | `LINX_OTA_URL`         | `https://xrobo.qiniuapi.com/v1/ota/` | 虚拟设备注册与连接凭证获取                          |
 | `LINX_DEVICE_FILE`     | `.local/linx/device.json`            | 本机持久化设备身份，权限为 `0600`，已忽略提交       |
 | `LINX_KEEPER_AGENT_ID` | 自动查找 `1024-keeper`               | 守夜人测试智能体 ID                                 |
+| `LINX_NARRATOR_AGENT_ID` | 自动查找 `1024-narrator`           | 系统旁白测试智能体 ID                               |
 | `LINX_DEVICE_ID`       | 自动生成虚拟 MAC                     | 可选的首次设备 ID；已有身份文件后不能改成另一台设备 |
 
-`.env` 会在 Go 服务启动时读取，进程环境变量优先。仓库提供 [.env.example](.env.example) 作为模板，真实 Key 不应提交。`LINX_API_KEY` 为必填。配置后即可自动准备 `1024-keeper`、生成虚拟设备、OTA 激活和绑定，不需要连接硬件。管理 API Key 仅用于管理 API，WebSocket 使用 OTA 返回的设备令牌。不要删除或提交身份文件。
+`.env` 会在 Go 服务启动时读取，进程环境变量优先。仓库提供 [.env.example](.env.example) 作为模板，真实 Key 不应提交。`LINX_API_KEY` 为必填。配置后即可自动准备 `1024-keeper` 和 `1024-narrator`、生成虚拟设备、OTA 激活并绑定到守夜人，不需要连接硬件。管理 API Key 仅用于管理 API，WebSocket 使用 OTA 返回的设备令牌。不要删除或提交身份文件。
 
 `/api/health` 的 `linx.bound` 表示绑定完成；`linx.verified` / `qiniuConnected` 只在实际收到一轮有效云端回复后变为 `true`，并记录 `lastReplyAt`。当前 NPC 回应和系统播报按回合建立并关闭云端连接，因此这是最近一轮的验证结果，不表示始终存在一条在线连接。详细联调流程与限制见 [灵矽虚拟设备接入](docs/development/linx.md)。
 

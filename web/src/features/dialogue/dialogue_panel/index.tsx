@@ -34,9 +34,7 @@ export function DialoguePanel({
           <i />
           {demo && <span className={styles['heard-text']}>演示：“{demoText}”</span>}
         </div>
-        <p className={styles['dialogue-text']} key={state.revision}>
-          {dialogue.text}
-        </p>
+        <p className={styles['dialogue-text']}>{dialogue.text}</p>
       </div>
       <VoiceDock
         voice={voice}

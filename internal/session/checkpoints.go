@@ -66,7 +66,7 @@ func (s *Service) control(tx Transaction, next *game.State, before game.State, t
 		return "save_checkpoint", feedback(next, "已保存检查点“"+name+"”。说“回到"+name+"”可以读取。"), true, err
 	}
 	name, loading := checkpointName(text, "读取检查点", "回到检查点", "读取存档", "回到存档", "读档", "回到")
-	roomMovement := normalized == "回到值守室" || normalized == "回到走廊" || normalized == "回到内堂"
+	roomMovement := normalized == "回到休息室" || normalized == "回到走廊" || normalized == "回到内堂"
 	if loading && !roomMovement {
 		if name == "" {
 			return respond("clarify", "请说出要读取的检查点名称。说“看看存档”可以查看已有名称。")
@@ -77,7 +77,7 @@ func (s *Service) control(tx Transaction, next *game.State, before game.State, t
 		}
 		if !exists {
 			if strings.HasPrefix(text, "回到") && !strings.HasPrefix(text, "回到检查点") && !strings.HasPrefix(text, "回到存档") {
-				return respond("clarify", "没有找到叫“"+name+"”的房间或检查点。你是要回值守室，还是读取存档？请说出完整目的地。")
+				return respond("clarify", "没有找到叫“"+name+"”的房间或检查点。你是要回休息室，还是读取存档？请说出完整目的地。")
 			}
 			return respond("clarify", "没有找到检查点“"+name+"”。说“看看存档”查看已有名称。")
 		}

@@ -15,7 +15,7 @@ export function MapPanel({ room }: { room: string }) {
       <div className={styles['map-drawing']}>
         <div className={cx(styles['map-room'], room === 'watch' && styles['map-room--current'])}>
           <span className={styles['map-roof']} />
-          <strong>值守室</strong>
+          <strong>休息室</strong>
           <small>{room === 'watch' ? '你在这里' : '守夜人在此'}</small>
         </div>
         <div className={styles['map-path']}>
@@ -47,7 +47,7 @@ export function MapPanel({ room }: { room: string }) {
         <span className={styles['map-current-dot']} /> 当前所在{' '}
         <span className={styles['map-legend-line']} /> 已知通路
       </div>
-      <PaperInstruction>说“去走廊”或“回值守室”前往 · 说“返回”收起</PaperInstruction>
+      <PaperInstruction>说“去走廊”或“回休息室”前往 · 说“返回”收起</PaperInstruction>
     </PaperPanel>
   );
 }

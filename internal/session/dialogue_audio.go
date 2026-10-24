@@ -72,7 +72,7 @@ func (s *Service) attachSpeech(ctx context.Context, result game.Result, key audi
 		return result
 	}
 	if prepared == nil && s.provider != nil {
-		audio, err := s.provider.Synthesize(ctx, result.Speak, nil)
+		audio, err := s.provider.Synthesize(ctx, SpeechRequest{Text: result.Speak, NPCID: result.SpeakerID}, nil)
 		if err == nil {
 			prepared = &audio
 		}

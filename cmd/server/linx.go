@@ -24,7 +24,7 @@ func prepareLinx(catalog *content.Catalog) (session.DialogueProvider, error) {
 		DeviceID: os.Getenv("LINX_DEVICE_ID"), KeeperAgent: os.Getenv("LINX_KEEPER_AGENT_ID"),
 		RequestLimit: 20 * time.Second,
 	})
-	ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	// Always refresh the exact named test agent so {{game_context}} is present.
 	keeper, _ := catalog.NPC("keeper")
@@ -38,10 +38,21 @@ func prepareLinx(catalog *content.Catalog) (session.DialogueProvider, error) {
 	if configured := os.Getenv("LINX_KEEPER_AGENT_ID"); configured != "" && configured != agentID {
 		return nil, errors.New("LINX_KEEPER_AGENT_ID 与 1024-keeper 不一致，停止设备绑定")
 	}
-	client.SetKeeperAgent(agentID)
+	narrator := catalog.Narrator()
+	narratorID, err := client.EnsureAgent(ctx, linx.AgentSpec{
+		Name: "1024-narrator", AssistantName: narrator.Name, VoiceID: narrator.Voice.ProviderVoiceID,
+		SystemPrompt: narrator.Prompt,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("灵矽旁白智能体准备失败: %w", err)
+	}
+	if configured := os.Getenv("LINX_NARRATOR_AGENT_ID"); configured != "" && configured != narratorID {
+		return nil, errors.New("LINX_NARRATOR_AGENT_ID 与 1024-narrator 不一致")
+	}
+	client.SetAgents(agentID, narratorID)
 	if err := client.PrepareDevice(ctx); err != nil {
 		return nil, fmt.Errorf("灵矽虚拟设备准备失败: %w", err)
 	}
-	log.Print("灵矽虚拟设备已完成 OTA 和 1024-keeper 绑定；等待实际云端回合验证")
+	log.Print("灵矽虚拟设备已完成 OTA 和 1024-keeper 绑定；1024-narrator 已准备，等待实际云端回合验证")
 	return client, nil
 }

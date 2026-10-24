@@ -11,7 +11,7 @@ import (
 
 func TestCharacterConfigurationDrivesDialogueAndRewards(t *testing.T) {
 	pack := fstest.MapFS{}
-	for _, name := range []string{"items.json", "world.json", "npcs/keeper/profile.json", "npcs/keeper/prompt.md"} {
+	for _, name := range []string{"items.json", "world.json", "npcs/keeper/profile.json", "npcs/keeper/prompt.md", "narrator/profile.json", "narrator/prompt.md"} {
 		raw, err := os.ReadFile("../content/" + name)
 		if err != nil {
 			t.Fatal(err)

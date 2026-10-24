@@ -14,7 +14,7 @@ export function HelpPanel() {
         </div>
         <div>
           <dt>移动</dt>
-          <dd>“去走廊”“回值守室”</dd>
+          <dd>“去走廊”“回休息室”</dd>
         </div>
         <div>
           <dt>交付</dt>

@@ -13,14 +13,15 @@ import (
 	"strings"
 )
 
-//go:embed world.json items.json npcs/*/profile.json npcs/*/prompt.md
+//go:embed world.json items.json npcs/*/profile.json npcs/*/prompt.md narrator/profile.json narrator/prompt.md
 var files embed.FS
 
 type Catalog struct {
-	world  World
-	items  map[string]Item
-	npcs   map[string]NPC
-	npcIDs []string
+	world    World
+	items    map[string]Item
+	npcs     map[string]NPC
+	npcIDs   []string
+	narrator Narrator
 }
 
 var validID = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
@@ -30,6 +31,9 @@ func Load() (*Catalog, error) { return LoadFS(files) }
 // LoadFS also supports validating a separate content pack before wiring it into the game.
 func LoadFS(source fs.FS) (*Catalog, error) {
 	c := &Catalog{items: map[string]Item{}, npcs: map[string]NPC{}}
+	if err := c.loadNarrator(source); err != nil {
+		return nil, err
+	}
 	var items []Item
 	if err := readJSON(source, "items.json", &items); err != nil {
 		return nil, err

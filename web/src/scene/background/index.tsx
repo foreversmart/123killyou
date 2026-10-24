@@ -112,7 +112,7 @@ export function Scene({ state }: { state: GameState }) {
         alt={
           state.room === 'watch'
             ? '守夜人坐在木桌后，桌上摆着登记册和油灯，身后的门通往走廊。'
-            : '昏暗的走廊。左侧值守室亮着灯，内堂的门紧闭。'
+            : '昏暗的走廊。左侧休息室亮着灯，内堂的门紧闭。'
         }
       />
       <div className={styles['pixi-host']} ref={host} />

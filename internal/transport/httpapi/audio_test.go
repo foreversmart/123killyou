@@ -18,7 +18,7 @@ import (
 
 type spokenProvider struct{}
 
-func (spokenProvider) Synthesize(context.Context, string, session.SpeechSink) (session.DialogueAudio, error) {
+func (spokenProvider) Synthesize(context.Context, session.SpeechRequest, session.SpeechSink) (session.DialogueAudio, error) {
 	return session.DialogueAudio{PCM: []byte{0, 0, 2, 0}, SampleRate: 24000}, nil
 }
 

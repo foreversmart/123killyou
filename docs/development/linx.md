@@ -21,7 +21,7 @@
 
 1. 在根目录 `.env` 配置 `LINX_API_KEY`，其余变量可使用 `.env.example` 的默认值。
 2. 运行 `npm run dev`。
-3. 启动时按精确名称查找或创建 `1024-keeper`，同步角色提示词和音色。其他智能体不会被修改。
+3. 启动时按精确名称查找或创建 `1024-keeper` 和 `1024-narrator`，同步各自提示词与音色。其他智能体不会被修改。
 4. 创建或读取 `.local/linx/device.json`，持久化虚拟 MAC 和 UUID v4。文件权限为 `0600`，目录被 Git 忽略；设备身份不发送到网页。
 5. 向 OTA 接口上报身份。未绑定时使用六位激活码调用管理 API 绑定到 `1024-keeper`，再重新 OTA；预注册自动绑定的设备直接使用 OTA 结果。
 6. 查询该智能体的设备列表核对绑定，保留 OTA 返回的 WebSocket URL / token 于内存。
@@ -51,7 +51,15 @@
 
 同一虚拟设备的云端请求串行执行，避免多个连接互踢。台词和播报请求单轮最多等待 20 秒；断连、空台词、错误事件、异常音频协商或超限音频均报错。开放式对白失败时不结算，明确动作的播报失败时保留已提交状态。发生连接失败后下一轮重新 OTA，凭证超过 10 分钟也会重新获取。
 
-Go 通过规则预结算区分明确动作与开放对白。地图、移动、调查、交付道具和存档等动作先在事务中保存结果，通过 `type=action` 推送给前端，然后才调用 `listen.detect.text_response` 播报；播报失败返回 `voiceError`，不会撤销已保存动作。开放式对白仍先调用灵矽生成，再检查 `runId` / `revision` 和取消状态后提交。灵矽台词不能自行发放道具。当前仅开放 keeper 绑定，其他 NPC 不会套用 keeper 人设。
+Go 通过规则预结算区分明确动作与开放对白。地图、移动、调查、交付道具和存档等动作先在事务中保存结果，通过 `type=action` 推送给前端，然后才调用 `listen.detect.text_response` 播报；播报失败返回 `voiceError`，不会撤销已保存动作。开放式对白仍先调用灵矽生成，再检查 `runId` / `revision` 和取消状态后提交。灵矽台词不能自行发放道具。
+
+### 旁白与 NPC 音色
+
+设备仍绑定 `1024-keeper`，连接握手通过 `X-Agent-ID` 选择本轮角色。开放对白、规则决定的守夜人回应和返回房间的招呼使用 `1024-keeper`；系统操作与场景旁白使用 `1024-narrator`。旁白配置独立保存在 `internal/content/narrator/`，不作为游戏 NPC，也不参与剧情规则。其他 NPC 路由仍待扩展。
+
+`SpeechRequest.NPCID` 为空时选旁白，有值时选对应 NPC；已提交结果保存 `speakerId`，语音缓存过期或请求重试时沿用原角色，不重复执行动作。角色标签和头像随流式 `start` 事件传给前端。
+
+`connection.go` 校验 hello 的消息类型、传输和音频格式。平台 hello 不必回传 `agent_id`，缺少该字段不视为失败；明确返回了其他角色 ID 时才拒绝连接。`LINX_KEEPER_AGENT_ID` 和 `LINX_NARRATOR_AGENT_ID` 为可选校验项，填写后必须与按名称找到的项目智能体一致。
 
 ## 麦克风上行与识别边界
 
@@ -61,7 +69,7 @@ AudioWorklet 将真实输入采样率重采样为 16kHz 单声道并补齐最后
 
 灵矽 ASR 和回复共用已绑定的软件设备，以设备锁串行使用。识别连接收到 STT 就发 abort 并关闭，所有自动 LLM/TTS 事件都不向网页转发。完整文字返回后才由网页提交正常游戏命令。没有假设平台提供独立 ASR-only 接口，也不会将识别阶段的自动回复作为游戏结果。
 
-前端录音控制器负责按键、取消和单次提交，`microphoneCapture.ts` 管理 AudioWorklet 生命周期，`recognitionStream.ts` 负责同源 WebSocket、缓冲、超时与识别结果。Go 的 `session.Recognize` 通过 `SpeechRecognizer` 接口调用 `integration/linx/recognition.go`；`httpapi/recognition.go` 仅适配音频与控制帧。
+前端录音控制器负责按键、取消和单次提交，`microphoneCapture.ts` 管理 AudioWorklet 生命周期，`recognitionStream.ts` 负责同源 WebSocket、缓冲、超时与识别结果。连接在按住期间失败时立即停止采集并显示首次错误，后续音频帧不会覆盖原始原因。Go 的 `session.Recognize` 通过 `SpeechRecognizer` 接口调用 `integration/linx/recognition.go`；`httpapi/recognition.go` 仅适配音频与控制帧。
 
 ## 字幕、音频和存档
 

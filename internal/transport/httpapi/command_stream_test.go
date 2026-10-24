@@ -21,8 +21,8 @@ type heldSpeech struct {
 	cancelled chan struct{}
 }
 
-func (p heldSpeech) Synthesize(ctx context.Context, text string, emit session.SpeechSink) (session.DialogueAudio, error) {
-	for _, event := range []session.SpeechEvent{{Kind: "start", SampleRate: 16000}, {Kind: "text", Text: text}, {Kind: "audio", PCM: []byte{1, 0}}} {
+func (p heldSpeech) Synthesize(ctx context.Context, request session.SpeechRequest, emit session.SpeechSink) (session.DialogueAudio, error) {
+	for _, event := range []session.SpeechEvent{{Kind: "start", SampleRate: 16000}, {Kind: "text", Text: request.Text}, {Kind: "audio", PCM: []byte{1, 0}}} {
 		if err := emit(event); err != nil {
 			return session.DialogueAudio{}, err
 		}
@@ -38,7 +38,7 @@ func (p heldSpeech) Synthesize(ctx context.Context, text string, emit session.Sp
 	return session.DialogueAudio{PCM: []byte{1, 0}, SampleRate: 16000}, nil
 }
 func (p heldSpeech) Respond(ctx context.Context, request session.DialogueRequest) (session.DialogueResponse, error) {
-	audio, err := p.Synthesize(ctx, "云端回应。", request.OnSpeech)
+	audio, err := p.Synthesize(ctx, session.SpeechRequest{Text: "云端回应。"}, request.OnSpeech)
 	return session.DialogueResponse{Text: "云端回应。", Audio: &audio}, err
 }
 func streamServer(t *testing.T, provider session.DialogueProvider) (*session.Service, string, game.State) {
