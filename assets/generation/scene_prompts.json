@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-25",
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "temple_gate",
+      "path": "assets/scenes/temple_gate/gate_afternoon.png",
+      "use_case": "style-transfer",
+      "transparent_background": false,
+      "prompt": "Use case: style-transfer.\nImage 1 is the EDIT TARGET, the temple gate on a clear sunny afternoon. Images 2–4 are the user's PRIMARY VISUAL STYLE references; Image 5 is the existing game gallery and the ensemble environment continuity reference.\n\nCHANGE ONLY THE RENDERING LANGUAGE AND SURFACE DETAIL. Preserve the exact gate geometry, doorway, open doors, roof outline, visible layered blank plaques, bronze bell, steps, paving, blank signposts, trees, foreground standing space, viewpoint, framing and afternoon conditions.\n\nRepaint Image 1 as a distinctly two-dimensional hand-drawn narrative-adventure-game background matching Images 2–4. Make architecture and props read through clear fine dark contours and broad MATTE LOCAL-COLOR PLANES. Use a few broad simply drawn shadows and limited soft transitions.\nStrongly simplify the stone steps, paving and wall base: calm flat warm-gray and beige planes, only joints and a few worn edge lines. Remove the dense chipped speckles, random mottling and finely broken stone texture.\nSimplify wooden doors and beams to warm-brown planes with sparse grain lines; no all-over detailed weathering.\nTrees should read as grouped olive-green foliage silhouettes in a small number of broad light/dark color masses, with very few individually outlined leaves. Reduce the intricacy of dappled leaf shadows into a few soft broad shapes.\nWalls mostly smooth cream-gray, with isolated age marks. All materials share a very light uniform drawn/paper quality. Keep the original linework construction readable, not photorealistic or painterly microtextured.\nPreserve soft pale-gold afternoon sunlight and subtly cool under-eave shade. Keep natural realistic architectural proportions and the ordinary maintained temple feeling. No color-filter-only treatment, glossy 3D, fantasy concept-art spectacle, sterile vector icon, children's cartoon or posterized photo.\nDo not add or remove any object. No people, silhouettes, animals, lettering, pseudo-calligraphy, interface, borders, black bars, captions or watermark. The two plaque layers and all signs stay BLANK for later typesetting. One full-bleed wide landscape 16:9 opaque game background.",
+      "references": [
+        {
+          "path": "assets/scenes/temple_gate/gate_afternoon.png",
+          "role": "scene_edit_target"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_03_group_interior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_04_night_exterior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
+          "role": "environment_continuity_reference"
+        }
+      ]
+    },
+    {
+      "id": "registration",
+      "path": "assets/scenes/registration/registration_afternoon.png",
+      "use_case": "illustration-story",
+      "transparent_background": false,
+      "prompt": "晴日下午的古寺登记处干净背景，横向1672×941。保持右侧木格窗、左侧通往回廊的开口、木柱、米灰墙与石板地。墙面木板上只有四个固定挂钩，房牌另外叠加。无桌柜、簿册、笔、托盘、钥匙、纸叠、人物和动物。暖日光、概括树影、细暗轮廓线、哑光大色面与稀疏纹理，保持当前固定第一人称机位。无文字和界面。",
+      "references": [
+        {
+          "path": "assets/scenes/registration/registration_afternoon.png",
+          "role": "scene_continuity_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_03_group_interior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
+          "role": "environment_continuity_reference"
+        },
+        {
+          "path": "assets/scenes/temple_gate/gate_afternoon.png",
+          "role": "environment_continuity_reference"
+        }
+      ],
+      "layerPrompts": "assets/generation/registration_layer_prompts.json"
+    }
+  ]
+}

@@ -59,6 +59,7 @@
 - **性格分析**：说话快、善观察、愿意活跃气氛，有自己的分寸；会配合身份核验。真正害怕时先检查相机盖，把相机抱低，玩笑里开始有停顿。
 - **职业建议**：视觉内容编辑，摄影是长期爱好；也可保持普通游客身份。不要仅因爱摄影就写成职业摄影师。
 - **外形建议**：约25—29岁，利落的齐肩发或短发，眼神有活气；浅砂色休闲外套、普通深色长裤、舒适鞋、小型相机与固定相机带。浅砂外套与相机带来自完整版描写，其余为建议。
+- **脸部辨识锚点**：较窄的椭圆脸、偏尖下巴、眉峰与眼尾略有上扬，侧分短发，神态活跃。表情变化时保留这些结构。
 - **动作与表情**：平常扬一下相机、侧身看光；紧张时握紧相机带、肩膀微收，目光从镜头转到门外。
 - **首批变体**：自然交谈、克制玩笑、警觉、害怕；完整站姿和看向门缝的侧身姿态。
 
@@ -76,7 +77,8 @@
 - **剧本已有**：女性同行，来寺散心，住“纸”房；蓝发圈夹在《入住须知》上。具体职业与年龄未定。
 - **性格分析**：细心、及时接话、先关注同伴，把自己的不舒服往后放；“我不想”说完整时显出边界。散心不等于已有疾病或确定的创伤背景。
 - **职业建议**：图书编辑；这只是生活背景建议，也可不指定职业。避免为了温柔性格额外编造医护身份或悲惨身世。
-- **外形建议**：约25—30岁，自然中长发，神情温和但有清楚的目光。灰绿色长袖外衣、浅色内搭、普通长裤与帆布包；衣袖到指根、灰绿色衣服来自完整版。
+- **外形建议**：约25—30岁，自然平刘海与锁骨长度中长发，头部摆正，神情温和但有清楚的目光。灰绿色长袖外衣、浅色内搭、普通长裤与帆布包；衣袖到指根、灰绿色衣服来自完整版。
+- **脸部辨识锚点**：短圆脸、饱满面颊与圆下巴，较平直的眉、偏水平的眼形、短圆鼻头，嘴唇较薄、嘴角平缓。与林岚的窄脸、偏尖下巴和侧分短发形成区别，不能仅靠衣服与包区分两人。
 - **道具连续性**：蓝发圈已经放到纸上时，人物头发上不能同时出现另一枚相同发圈；发型要在无该发圈时也成立。
 - **动作与表情**：先回头确认别人，双手轻拢袖口；拒绝时站稳、抬眼、嘴部有明确发声姿态，避免一直缩肩流泪。
 - **首批变体**：关切、轻松接话、犹豫、坚定拒绝；与林岚的脸型和发型保持明显差异。
@@ -161,7 +163,7 @@
 
 - **角色定型图**：先为六名主要 NPC 做正面、侧面、背面或四分之三角度参考，锁定脸、发型、服装、体型和随身物。设定图只供制作，不进入游戏视角。
 - **人物成品**：透明背景、完整轮廓，日常与异常状态分开；半身和全身按出场机位选择。人物单独出图后，在实际背景里核对笔触、尺寸、地面接触与光照。
-- **头像**：同一角色从定型形象派生方形肩部以上构图，保留五官与服装锚点，避免每张表情重新设计一张脸。
+- **头像**：六名主要 NPC 已有独立方形普通对话头像，沿当前立绘生成，保留五官与服装锚点。边框、底色与名字由界面提供；情绪或异常状态从同一身份参考派生。帘后初见和未看清的门外发言使用共用黑影加问号占位，保留同一个头像框；不通过后台身份改变占位轮廓或提前暴露真假。
 - **背景**：沿用现有文档的16:9、优先2560×1440建议；空背景不混入 UI、字幕、头像、道具栏或不在场人物。
 - **裁切**：现有界面的背景区域比整屏16:9更宽，先以实际游戏容器预览再定出图比例；关键线索远离易被裁掉的上下边缘与字幕可能覆盖的位置。
 - **分层**：背景、人物、门板遮挡、道具、影子与光效按状态拆分；背景保留人物离开后的完整区域，人物使用独立透明图层。
@@ -181,11 +183,26 @@
 
 ## 8. 当前采用的素材
 
-| 素材              | 文件                                                                                | 尺寸与格式            |
-| ----------------- | ----------------------------------------------------------------------------------- | --------------------- |
-| 东院回廊·晴日下午 | [corridor_afternoon.png](../../assets/scenes/east_courtyard/corridor_afternoon.png) | 1672 × 941，PNG       |
-| 主角门房·夜间亮烛 | [room_candlelit.png](../../assets/scenes/player_room/room_candlelit.png)            | 1672 × 941，PNG       |
-| 林岚·正常站姿     | [standing.png](../../assets/characters/lin_lan/standing.png)                        | 1024 × 1536，透明 PNG |
-| 陆沉·提灯站姿     | [standing_lantern.png](../../assets/characters/lu_chen/standing_lantern.png)        | 1024 × 1536，透明 PNG |
+| 素材                | 文件                                                                                      | 尺寸与格式            |
+| ------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
+| 山门·晴日下午       | [gate_afternoon.png](../../assets/scenes/temple_gate/gate_afternoon.png)                  | 1672 × 941，PNG       |
+| 登记处·下午干净背景 | [registration_afternoon.png](../../assets/scenes/registration/registration_afternoon.png) | 1672 × 941，PNG       |
+| 东院回廊·晴日下午   | [corridor_afternoon.png](../../assets/scenes/east_courtyard/corridor_afternoon.png)       | 1672 × 941，PNG       |
+| 主角门房·夜间亮烛   | [room_candlelit.png](../../assets/scenes/player_room/room_candlelit.png)                  | 1672 × 941，PNG       |
+| 林岚·正常站姿       | [standing.png](../../assets/characters/lin_lan/standing.png)                              | 1024 × 1536，透明 PNG |
+| 陆沉·提灯站姿       | [standing_lantern.png](../../assets/characters/lu_chen/standing_lantern.png)              | 1024 × 1536，透明 PNG |
+| 周砚·正常站姿       | [standing.png](../../assets/characters/zhou_yan/standing.png)                             | 1024 × 1536，透明 PNG |
+| 许栀·正常站姿       | [standing.png](../../assets/characters/xu_zhi/standing.png)                               | 1024 × 1536，透明 PNG |
+| 慧普·正常站姿       | [standing.png](../../assets/characters/hui_pu/standing.png)                               | 1024 × 1536，透明 PNG |
+| 神公·持筊站姿       | [standing_jiaobei.png](../../assets/characters/shen_gong/standing_jiaobei.png)            | 1024 × 1536，透明 PNG |
+| 林岚·普通对话头像   | [portrait_neutral.png](../../assets/characters/lin_lan/portrait_neutral.png)              | 1254 × 1254，透明 PNG |
+| 周砚·普通对话头像   | [portrait_neutral.png](../../assets/characters/zhou_yan/portrait_neutral.png)             | 1254 × 1254，透明 PNG |
+| 许栀·普通对话头像   | [portrait_neutral.png](../../assets/characters/xu_zhi/portrait_neutral.png)               | 1254 × 1254，透明 PNG |
+| 陆沉·普通对话头像   | [portrait_neutral.png](../../assets/characters/lu_chen/portrait_neutral.png)              | 1254 × 1254，透明 PNG |
+| 慧普·普通对话头像   | [portrait_neutral.png](../../assets/characters/hui_pu/portrait_neutral.png)               | 1254 × 1254，透明 PNG |
+| 神公·普通对话头像   | [portrait_neutral.png](../../assets/characters/shen_gong/portrait_neutral.png)            | 1254 × 1254，透明 PNG |
+| 未知人物·占位头像   | [unknown.png](../../assets/portraits/unknown.png)                                         | 1254 × 1254，透明 PNG |
 
-以上四张已由用户选定保留。文件信息与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；当前游戏运行素材的接入由实现任务处理。
+当前已具备四处场景、六名主要 NPC 的普通状态人物图、六张普通对话头像与一张未知人物占位头像。逐张素材的对应幕次、使用位置与适用状态见 [素材用途总表](../../assets/generation/asset_usage.md)。文件信息、人物生成提示词与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；慧普帘后遮挡、神公桌后坐姿及异常状态按场景派生，游戏运行素材的接入由实现任务处理。
+
+登记处采用干净背景、登记桌前景与独立道具分层，共八张图片；登记簿开合、通行凭纸叠与单张为不同语义状态。铜房牌复用一张空白底图，房名准确排字。叠放与坐标见 [登记处分层说明](../../assets/scenes/registration/README.md)及 [定位配置](../../assets/scenes/registration/layout.json)。素材预览已核对道具切换与桌前遮挡，正式游戏状态与存档尚未接入。

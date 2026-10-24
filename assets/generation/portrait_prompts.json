@@ -1,0 +1,132 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "普通NPC头像及通用未知人物占位头像的当前提示词；普通表情沿用对应身份，黑影占位不包含身份信息",
+  "assets": [
+    {
+      "id": "lin_lan_portrait_neutral",
+      "characterId": "lin_lan",
+      "name": "林岚·普通对话头像",
+      "path": "assets/characters/lin_lan/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nLin Lan / 林岚, the same Chinese woman around 27 shown in Image 1. Preserve her narrower oval face, tapered slightly pointed chin, subtly arched brows and lifted eye corners, side-parted dark bob with one side behind the ear, lively restrained half-smile and slight head tilt. Preserve the sand-beige casual jacket over off-white shirt and the visible upper portions of the black camera neck strap. Do not include the camera itself. No straight fringe, round-cheeked face redesign, added accessories or jewelry."
+    },
+    {
+      "id": "zhou_yan_portrait_neutral",
+      "characterId": "zhou_yan",
+      "name": "周砚·普通对话头像",
+      "path": "assets/characters/zhou_yan/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/zhou_yan/standing.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nZhou Yan / 周砚, the same Chinese man around 30 shown in Image 1. Preserve his longer rectangular face, straight defined nose, modest narrow focused eyes, natural eyebrows, neatly side-parted short dark hair, clean-shaven jaw and calm serious closed-mouth expression. Preserve dark navy field jacket, cool gray collared shirt and plain taupe diagonal bag strap. Keep his natural adult proportions, no younger idol face, glasses, beard or new accessories."
+    },
+    {
+      "id": "xu_zhi_portrait_neutral",
+      "characterId": "xu_zhi",
+      "name": "许栀·普通对话头像",
+      "path": "assets/characters/xu_zhi/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nXu Zhi / 许栀, the same Chinese woman around 27 shown in Image 1. Preserve her noticeably SHORT ROUND face, fuller cheeks, rounded chin, fairly straight brows, horizontal quieter eyes, short rounded nose tip and relaxed level lips. Keep natural slightly uneven straight fringe and collarbone-length dark hair, head upright and near frontal. Quiet attentive warmth, not a coy half-smile or head tilt. Preserve gray-green cardigan over off-white round-neck shirt and the small upper section of the plain ivory shoulder-tote strap. No blue hair tie, hair ornament, glasses or jewelry. Do NOT turn her into a long narrow face, pointed chin, arched brows or side-parted bob."
+    },
+    {
+      "id": "lu_chen_portrait_neutral",
+      "characterId": "lu_chen",
+      "name": "陆沉·普通对话头像",
+      "path": "assets/characters/lu_chen/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/lu_chen/standing_lantern.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nLu Chen / 陆沉, the SAME Chinese watch monk around 45 shown in Image 1. Preserve shaved scalp with very short dark stubble, lean slightly hollow cheeks, tired watchful eyes and restrained guarded mouth, including the understated upper-lip stubble visible in the source. Same gray-brown crossed working monk robe and light inner collar. Do not age him into either elderly monk, broaden his face, beautify his skin or change the source's recognizable facial structure. No lantern, keys or hands in this close-up; no halo or supernatural content."
+    },
+    {
+      "id": "hui_pu_portrait_neutral",
+      "characterId": "hui_pu",
+      "name": "慧普·普通对话头像",
+      "path": "assets/characters/hui_pu/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/hui_pu/standing.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nHui Pu / 慧普, the SAME outwardly normal Chinese abbot around 65 shown in Image 1. Preserve his fuller broad oval face, heavy calm eyelids, specific forehead/eye lines, shaved scalp, clean-shaven jaw and faint patient reassuring smile. Same muted ochre inner robe and brown outer kasaya drape with sparse cloth-panel seam lines, off-white inner collar. Only his normal human appearance. No monster, evil grin, glowing eyes, peeling skin, stitches, wounds, exposed back or extra ritual objects. Do not copy Lu Chen's gaunt face or Shen Gong's bonier face."
+    },
+    {
+      "id": "shen_gong_portrait_neutral",
+      "characterId": "shen_gong",
+      "name": "神公·普通对话头像",
+      "path": "assets/characters/shen_gong/portrait_neutral.png",
+      "references": [
+        {
+          "path": "assets/characters/shen_gong/standing_jiaobei.png",
+          "role": "exact_character_identity_and_costume"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE square head-and-shoulders NPC dialogue portrait for the 2D Chinese narrative game 《红烛无声》.\nREFERENCE ROLES: Image 1 is the exact character identity and costume reference. Preserve that specific person's face, age, facial proportions, hairstyle, skin tone, subtle expression and collar design. Image 2 is ONLY the rendering-style reference: thin dark contours, broad matte color planes and restrained shading. Never borrow the face, clothes, lettering, scene or props from Image 2.\nPrimary request: derive a clean close-up portrait of the SAME person in Image 1, suitable for a small square dialogue avatar. This is a framing and clarity task, not a face redesign.\nComposition: square 1024x1024. Complete hair/scalp silhouette with about 6-8% clear margin above the crown. Head approximately centered horizontally. Eyes around 36-39% down the canvas, chin around 62-65%. Include neck and both shoulders with upper chest down to the bottom edge; shoulders may meet side edges near the bottom. The face must remain easy to recognize at 120x120 display pixels. Preserve the source's mild three-quarter orientation and individual head posture, with gaze toward the player.\nStyle: the same realistic-proportion 2D drawn game cast, fine dark outlines, sparse facial structure lines, grouped hair shapes, simple broad shadows and light uniform paper quality. Ordinary natural features. No glamour retouching, anime eyes, smooth doll face, glossy 3D, photo realism or dense painterly skin/fabric detail. Neutral soft warm-gray face lighting, readable eyes; no theatrical rim light, oil-lamp orange glow or scene-specific light direction.\nDelivery: ONE portrait, genuine transparent alpha outside head/neck/clothing silhouette, including transparent margins. Head and clothes opaque. No surrounding background haze, gradient, vignette, black fill, painted checkerboard, drop shadow, border, frame, UI, name, caption, watermark, hands, held objects or extra person. All framing and names will be supplied by the interface.\n\nSPECIFIC CHARACTER IDENTITY:\nShen Gong / 神公, the SAME living elderly Chinese guardian monk around 73 shown in Image 1. Preserve the narrow gaunt face, pronounced cheekbones, downturned tired but attentive eyes, specific forehead and mouth creases, shaved scalp, clean-shaven jaw, thin lips and modestly stooped neck/shoulder bearing. Same plain charcoal-gray crossed robe and dull off-white inner collar. Normal living low-saturation warm human skin, no stone, cracks or supernatural hints. No divination blocks, hands or props in this close-up. Do not broaden him into Hui Pu's rounder smiling face or make him middle-aged."
+    },
+    {
+      "id": "unknown_portrait",
+      "name": "未知人物·占位头像",
+      "path": "assets/portraits/unknown.png",
+      "references": [
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "linework_and_color_style_only"
+        },
+        {
+          "path": "assets/characters/lin_lan/portrait_neutral.png",
+          "role": "square_head_and_shoulders_framing_only_no_identity"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE generic unknown-speaker silhouette portrait for the dialogue avatar frame of the 2D Chinese folk-mystery game 《红烛无声》.\nREFERENCE ROLES: Image 1 is ONLY the thin drawn contours and broad matte shading style reference. Image 2 is ONLY the square head-and-shoulders framing reference. Do NOT copy any reference person's face, gender, hairstyle, garment, strap, or identity.\nPrimary request: a deliberately anonymous, slightly mysterious near-black head-and-shoulders human shadow. One simple indistinct oval head, neck and average shoulders, centered in the square like the framing reference, head crown 6-8% from the top, upper chest reaching the bottom edge. Gently softened irregular drawn silhouette edges. Quiet charcoal-black and very dark warm-gray broad planes with sparse paper quality and a subtle soft edge separation. The entire facial area stays one unreadable dark plane; NO facial features or highlights. Shoulders should have no recognizable collar or clothing construction.\nThe generic form must give no information about a speaker's age, sex, hairstyle, rank, profession, or true identity. Avoid any likeness to a cast member. No obvious shaved scalp, monk robe, bob haircut, hood, cloak, pointed hat or costume. No eye sockets, eyes, nose, mouth, beard, ear detail or body-specific clues. This placeholder means only 'unseen or unverified speaker', not 'monster'.\nFraming and style: square 1024x1024, complete head silhouette plus neck and upper chest, calm centered head pose; same realistic-proportion 2D hand-drawn narrative-game visual family, restrained matte planes. No 3D, photographic realism, horror poster, jump scare, evil smile, glowing eyes, tentacles, blood, fog, smoke, vignette or decorative magic.\nDelivery: genuine transparent alpha outside the head/neck/shoulders silhouette. Figure interior is opaque dark charcoal. Do NOT paint a solid black background. No scene, backdrop gradient, shadow cloud, floor or glow outside the figure.\nNO TEXT OR SYMBOLS: the UI will overlay one accurate '？' later. Do not draw that mark into this image. No question mark, lettering, name, border, avatar frame, UI elements or watermark. ONE standalone anonymous shadow portrait.",
+      "presentation": "assets/generation/portrait_presentation.json"
+    }
+  ]
+}
