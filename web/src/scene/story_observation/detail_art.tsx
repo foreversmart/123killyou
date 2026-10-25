@@ -38,44 +38,6 @@ export function DoorDetail({ wet, peephole }: { wet: boolean; peephole: boolean 
   );
 }
 
-export function CandleDetail({ lit }: { lit: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 320 210"
-      role="img"
-      aria-label={
-        lit
-          ? '火柴亮起后，红烛火焰稳定，蜡面留着细窄划痕'
-          : '黑色烛芯冒着淡烟，黑红蜡泪凝固在烛台上'
-      }
-    >
-      <ellipse cx="160" cy="187" rx="98" ry="15" fill="#5a6049" stroke="#a79a6c" strokeWidth="3" />
-      <path d="M136 68h48v107q-24 19-48 0Z" fill="#9e4437" stroke="#cc7855" strokeWidth="3" />
-      <path d="M137 72q11 13 13 0q10-14 13 14t19-11v45q-9 11-11-2" fill="#b95b45" />
-      <path d="M149 115l-3 28m20-14-4 30m11-57-3 17" stroke="#e29365" strokeWidth="2" />
-      <path d="M160 73V55" stroke="#171d1a" strokeWidth="5" />
-      {lit ? (
-        <g>
-          <ellipse cx="159" cy="95" rx="100" ry="90" fill="#dca756" opacity=".12" />
-          <path d="M158 12q29 39 3 48q-24-4-3-48" fill="#f1b356" />
-          <path d="M159 34q11 19 1 21q-10-1-1-21" fill="#fff0b3" />
-        </g>
-      ) : (
-        <g>
-          <path
-            d="M162 53q-17-16-2-26t-1-26"
-            fill="none"
-            stroke="#aabdb3"
-            opacity=".5"
-            strokeWidth="3"
-          />
-          <path d="M129 179q16 11 28 0l13 6 21-4" fill="none" stroke="#652b2a" strokeWidth="9" />
-        </g>
-      )}
-    </svg>
-  );
-}
-
 export function ShadowDetail({ seam }: { seam: boolean }) {
   return (
     <svg
