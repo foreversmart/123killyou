@@ -17,6 +17,11 @@ export function sceneLayout(state: GameState): StageLayout {
         // SVG key/ledger over the full-canvas asset.
         return { ...prop, draw: false };
       }
+      if (prop.id === 'tower' || prop.id === 'plaque') {
+        // These landmarks are already visible in the authored corridor/room
+        // plates. Retain the hotspot while avoiding a generic sign drawing.
+        return { ...prop, draw: false };
+      }
       if (prop.id === 'vase' && state.shotKey === 'listen_vase')
         return { ...prop, kind: 'shards' as const, name: '碎花瓶', command: '检查花瓶碎片' };
       if (prop.id === 'latch' && state.sceneKey === 'mini_three_knocks')

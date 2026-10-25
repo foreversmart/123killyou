@@ -1,0 +1,22 @@
+.assetCat {
+  position: absolute;
+  z-index: 2;
+  left: 47%;
+  bottom: 14%;
+  width: clamp(42px, 7.5cqw, 112px);
+  height: clamp(30px, 5.4cqw, 82px);
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.35cqw 0.25cqw #26382966);
+  animation: cat-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes cat-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-0.2cqw) scale(1.015);
+  }
+}

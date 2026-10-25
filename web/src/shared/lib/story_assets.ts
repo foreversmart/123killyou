@@ -114,6 +114,8 @@ const props = {
   porridgeFull: prop('porridge/bowl_full'),
   porridgeInspect: prop('porridge/bowl_inspect'),
   porridgeSpoon: prop('porridge/spoon'),
+  prayerBeads: prop('prayer_beads/inventory'),
+  repairDrawing: prop('repair_drawing/inventory'),
   bambooShoots: prop('bamboo_shoots/scene'),
   blueTieNotice: prop('blue_tie_notice/scene'),
   flatbread: prop('flatbread/scene'),
@@ -139,6 +141,10 @@ const props = {
   bell: scene('east_courtyard/props/bell'),
   travelBags: prop('travel_bags/group'),
   cameraCap: prop('camera_cap/scene'),
+  matches: prop('matches/inventory'),
+  flashlight: prop('flashlight/inventory'),
+  permit: prop('permit/inventory'),
+  copperKey: prop('copper_key/inventory'),
 } as const;
 
 export const storyAssets = {
@@ -172,7 +178,7 @@ export const storyAssets = {
     key: scenes.registrationCopperKey,
     page: props.tornPage,
     candle: props.candleUnlit,
-    beads: `${root}/items/prayer_beads.webp`,
+    beads: props.prayerBeads,
     permit: scenes.registrationPermitSingle,
   },
 } as const;
