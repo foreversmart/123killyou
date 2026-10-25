@@ -99,6 +99,26 @@ func TestAutomaticMealClosurePreservesExplicitPorridgeChoice(t *testing.T) {
 	}
 }
 
+func TestVegetarianMealChoiceStartsEatingBeatBeforeLeaving(t *testing.T) {
+	for _, choice := range []string{"我不吃肉粥", "我吃馒头", "我吃素"} {
+		t.Run(choice, func(t *testing.T) {
+			e := newStoryTestEngine(t)
+			s := e.Initial("vegetarian-meal-choice")
+			e.Apply(&s, "登记入住")
+			e.Apply(&s, "去斋堂")
+
+			e.Apply(&s, choice)
+			if !s.Flags["meal_player_refused"] || s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" {
+				t.Fatalf("素食选择没有进入吃饭动画: shot=%s next=%q flags=%v", s.ShotKey, s.DialogueNext, s.Flags)
+			}
+			e.Apply(&s, s.DialogueNext)
+			if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
+				t.Fatalf("吃饭动画结束后没有由陆沉带回东院: scene=%s flags=%v", s.SceneKey, s.Flags)
+			}
+		})
+	}
+}
+
 func TestPlayerInvestigationCancelsPendingSafeHandoff(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("auto-cancel")

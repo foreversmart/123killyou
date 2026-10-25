@@ -58,6 +58,15 @@ test('未开启播放时，安全的 NPC 串联仍会等待后自动提交', asy
   f.runtime.dispose();
 });
 
+test('斋堂吃饭镜头保留约七秒后才自动回东院', async () => {
+  const f = await fixture();
+  f.render({ ...f.state, dialogueNext: '自动离开斋堂' });
+  assert.deepEqual(f.runtime.pendingDelays, [7000]);
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, ['自动离开斋堂']);
+  f.runtime.dispose();
+});
+
 test('说话、录音、暂停、道具阅读、死亡或播放错误期间不自动触发下一动作', async () => {
   for (const override of [
     { voice: { status: 'speaking' } },

@@ -108,3 +108,33 @@
   top: 75%;
   left: 0;
 }
+.person[data-meal='true'] .body {
+  animation: meal_bite 1.6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+.person[data-meal='true']:nth-child(2) .body {
+  animation-delay: -0.45s;
+}
+.person[data-meal='true']:nth-child(3) .body {
+  animation-delay: -0.9s;
+}
+.person[data-meal='true']:nth-child(4) .body {
+  animation-delay: -1.25s;
+}
+@keyframes meal_bite {
+  0%,
+  100% {
+    transform: scaleX(var(--facing)) translateY(0);
+  }
+  38% {
+    transform: scaleX(var(--facing)) translateY(-1.6%);
+  }
+  58% {
+    transform: scaleX(var(--facing)) translateY(0.6%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .person[data-meal='true'] .body {
+    animation: none;
+  }
+}
