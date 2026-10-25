@@ -56,7 +56,6 @@ export const shotTitles: Record<string, string> = {
   refectory_curtain: '长明灯后的半张脸',
   corridor_candles: '陆沉逐人发烛',
   corridor_warning: '嘘，小声',
-  corridor_lamp: '檐灯亮起 · 五更的话',
   corridor_lock: '钟楼门锁 · 更锣声源',
   corridor_two_gongs: '两声更锣 · 房门前',
   room_table: '门房 · 矮桌前',

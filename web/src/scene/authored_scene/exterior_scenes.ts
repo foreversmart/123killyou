@@ -63,7 +63,7 @@ function courtyardScene(state: GameState): SceneComposition {
     time,
     vase: state.flags.vase_broken ? 'broken' : 'intact',
     privateClues: true,
-    door: state.shotKey === 'corridor_lamp' ? 'lamp' : 'closed',
+    door: 'closed',
   };
   const result = composeLayout(authored(courtyardLayout), 'east_courtyard', selection);
   const wanted = state.shotKey === 'corridor_candles' ? 'luchen' : actorForCourtyard(state);

@@ -60,7 +60,7 @@
     "broken_shadow": "assets/details/broken_shadow.png"
   },
   "transitions": {
-    "presentation": "场景切换以环境图、黑场淡出和淡入交接；不使用正面站姿立绘平移或缩放模拟行走。",
+    "presentation": "场景切换以环境图、黑场淡出和淡入交接；经过大殿时环境图连续约 3 秒并缓慢横向平移；不使用正面站姿立绘平移或缩放模拟行走。",
     "state": "转场只负责视觉衔接，进入场景、物品归属和存档继续由后端确认。"
   },
   "documents": {
