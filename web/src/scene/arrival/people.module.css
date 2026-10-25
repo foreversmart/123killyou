@@ -6,6 +6,23 @@
   width: 15%;
   text-align: center;
   transform: translateX(-50%);
+  animation: disembark 0.8s ease-out both;
+}
+
+.person[data-person='linlan'] {
+  animation-delay: 0.14s;
+}
+
+.person[data-person='zhouyan'] {
+  animation-delay: 0.26s;
+}
+
+.person[data-person='xuzhi'] {
+  animation-delay: 0.38s;
+}
+
+.person[data-person='luchen'] {
+  animation-delay: 0.5s;
 }
 
 .person[data-person='zhouyan'] {
@@ -108,60 +125,6 @@
   transform: rotate(-18deg);
 }
 
-.accessory {
-  position: absolute;
-  top: 40%;
-  right: -18%;
-  padding: 0.2cqw 0.25cqw;
-  border: 1px solid #5c625146;
-  color: #e4dbbd;
-  background: #3e4d41;
-  font-size: clamp(8px, 0.58cqw, 11px);
-  white-space: nowrap;
-  transform: rotate(-7deg);
-}
-
-.person[data-person='linlan'] .accessory {
-  top: 25%;
-  right: 0;
-  padding: 0.3cqw;
-  border-radius: 0.2cqw;
-  background: #353d36;
-  transform: rotate(8deg);
-}
-
-.person[data-person='luchen'] .accessory {
-  top: 48%;
-  right: -26%;
-  font-size: clamp(8px, 0.5cqw, 10px);
-  background: #746a51;
-}
-
-.name-tag {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.15cqw;
-  max-width: 100%;
-  margin-top: -0.1cqw;
-  padding: 0.35cqw 0.6cqw;
-  border: 1px solid #fbf0cd9c;
-  background: #f2e8cbdc;
-  color: #364637;
-  box-shadow: 0 0.25cqw 0.4cqw #50604622;
-}
-
-.name-tag b {
-  font-size: clamp(10px, 0.85cqw, 14px);
-  font-weight: 600;
-  letter-spacing: 0.12cqw;
-}
-
-.name-tag span {
-  font-size: clamp(8px, 0.57cqw, 11px);
-  white-space: nowrap;
-}
-
 .registration-desk {
   position: absolute;
   z-index: 1;
@@ -235,4 +198,79 @@
   width: 32%;
   height: 53%;
   background: #ac9970;
+}
+
+.assetBags,
+.assetDrawing,
+.assetNotice {
+  position: absolute;
+  z-index: 2;
+  object-fit: contain;
+  filter: drop-shadow(0 0.35cqw 0.25cqw #26382966);
+  pointer-events: none;
+}
+
+.assetBags {
+  left: 27%;
+  bottom: 7%;
+  width: clamp(90px, 17cqw, 260px);
+  animation: luggage-settle 1.2s ease-out 0.4s both;
+}
+
+.assetDrawing {
+  left: 70%;
+  bottom: 42%;
+  width: clamp(32px, 5.5cqw, 88px);
+  transform: rotate(-9deg);
+  animation: paper-lift 1.3s ease-out 0.7s both;
+}
+
+.assetNotice {
+  right: 7%;
+  bottom: 23%;
+  width: clamp(26px, 4.2cqw, 68px);
+  transform: rotate(7deg);
+  animation: paper-lift 1.3s ease-out 0.9s both;
+}
+
+@keyframes disembark {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 1.8cqw);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes luggage-settle {
+  from {
+    opacity: 0;
+    transform: translateY(-1.6cqw) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes paper-lift {
+  from {
+    opacity: 0;
+    transform: translateY(0.8cqw) rotate(-9deg);
+  }
+  to {
+    opacity: 0.92;
+    transform: translateY(0) rotate(-9deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .person,
+  .assetBags,
+  .assetDrawing,
+  .assetNotice {
+    animation: none;
+  }
 }

@@ -127,7 +127,7 @@ func TestDebugSkipRequiresExactNormalizedCommand(t *testing.T) {
 	}
 	s := e.Initial("normal")
 	e.Apply(&s, "继续听")
-	if s.SceneKey != "mini_arrival" || s.ShotKey != "arrival_linlan" || s.Flags["debug_scene_skipped"] {
+	if s.SceneKey != "mini_arrival" || s.ShotKey != "arrival_unload" || s.Flags["debug_scene_skipped"] {
 		t.Fatal("正常剧情被调试功能影响")
 	}
 	e.Apply(&s, " 调试 跳到 下一剧情场景。 ")

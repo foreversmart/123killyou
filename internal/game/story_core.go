@@ -86,24 +86,32 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 	return e.storyConversation(state, text)
 }
 
-// arrivalIntro presents the first scene's four fixed viewpoints in order. It
-// is intentionally a short call-and-response so each speaker and their place
-// beside the bus or gate is visible before the player chooses to register.
+// arrivalIntro presents the first scene's unload-and-look sequence in order.
+// Each line is tied to a visible action: stepping off the bus, taking luggage,
+// looking at the gate, and meeting the keeper before registration.
 func (e *Engine) arrivalIntro(state *State) string {
 	state.DialogueNext = "继续听"
 	switch {
 	case !state.Flags["arrival_intro_linlan"]:
 		miniSetFlag(state, "arrival_intro_linlan")
-		miniShot(state, "arrival_linlan")
-		return miniDialogue(state, "林岚", "今天的光真好。等天黑，要是这里还这么安静，我想拍一组灯影。")
+		miniShot(state, "arrival_unload")
+		return miniDialogue(state, "林岚", "坐了这么久的车，腿都麻了……终于到了。先下车活动一下。")
+	case !state.Flags["arrival_intro_xuzhi"]:
+		miniSetFlag(state, "arrival_intro_xuzhi")
+		miniShot(state, "arrival_gate_beauty")
+		return miniDialogue(state, "许栀", "这个寺庙好美啊，山门和檐角都好有古典的氛围。")
+	case !state.Flags["arrival_intro_weather"]:
+		miniSetFlag(state, "arrival_intro_weather")
+		miniShot(state, "arrival_weather")
+		return miniDialogue(state, "林岚", "今天的天气真好呀。晚上月色应该不错，拍出来的寺庙应该很美。")
 	case !state.Flags["arrival_intro_zhouyan"]:
 		miniSetFlag(state, "arrival_intro_zhouyan")
 		miniShot(state, "arrival_zhouyan")
-		return miniDialogue(state, "周砚", "先别急着拍正殿。网页上的照片只拍到前院，我想看看偏房这边的梁是不是后来补过的。")
-	case !state.Flags["arrival_intro_xuzhi"]:
-		miniSetFlag(state, "arrival_intro_xuzhi")
-		miniShot(state, "arrival_xuzhi")
-		return miniDialogue(state, "许栀", "我们先把东西放好，再吃饭、睡觉，好吗？今天谁也别临时加探险。")
+		return miniDialogue(state, "周砚", "先看看周围。新匾旁边露着旧字，梁架也像补过，我想把牌匾和檐梁一起看清楚。")
+	case !state.Flags["arrival_intro_luggage"]:
+		miniSetFlag(state, "arrival_intro_luggage")
+		miniShot(state, "arrival_luggage")
+		return miniDialogue(state, "许栀", "我来拿这只旅行包。大家先把行李带下车，放到檐下，再去登记，好吗？")
 	case !state.Flags["arrival_intro_luchen"]:
 		miniSetFlag(state, "arrival_intro_luchen")
 		miniShot(state, "arrival_luchen")
