@@ -8,6 +8,29 @@
   background: linear-gradient(180deg, #1c2832d9 0 42%, #17251fef 43% 100%), #17251f;
   animation: reveal 0.46s ease-out both;
 }
+.backdrop {
+  animation: backdrop-pan var(--travel-duration, 2.2s) cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+.transition[data-transition='arrival_walk_register'] {
+  background: linear-gradient(180deg, #1e2d31b8 0 42%, #17251fd9 43% 100%), #17251f;
+}
+.transition[data-transition='arrival_walk_register'] .backdrop {
+  opacity: 0.78 !important;
+  filter: saturate(0.92) brightness(0.9) contrast(0.98) !important;
+  animation-name: corridor-pan;
+}
+.transition[data-transition='arrival_walk_register'] .sky {
+  opacity: 0.24;
+}
+.transition[data-transition='arrival_walk_register'] .landmark {
+  opacity: 0.52;
+}
+.transition[data-transition='arrival_walk_register'] .walkers {
+  animation-duration: 2.55s;
+}
+.transition[data-transition='arrival_walk_register'] .walker {
+  animation-duration: 1.05s;
+}
 .sky {
   position: absolute;
   inset: 0 0 47%;
@@ -181,6 +204,24 @@
     transform: translateX(-2%);
   }
 }
+@keyframes backdrop-pan {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes corridor-pan {
+  from {
+    transform: scale(1.08) translateX(3%);
+  }
+  to {
+    transform: scale(1.01) translateX(-1%);
+  }
+}
 @keyframes walk {
   from {
     transform: translateX(-8%) scale(0.94);
@@ -234,6 +275,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .transition,
+  .backdrop,
   .sky,
   .walkers,
   .walker,

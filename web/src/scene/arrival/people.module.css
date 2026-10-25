@@ -125,40 +125,6 @@
   transform: rotate(-18deg);
 }
 
-.registration-desk {
-  position: absolute;
-  z-index: 1;
-  left: 59%;
-  top: 66%;
-  width: 11%;
-  height: 10%;
-  border-top: 0.5cqw solid #9e8053;
-  background: linear-gradient(90deg, #62583c 10%, transparent 10% 90%, #62583c 90%);
-}
-
-.registration-desk span {
-  position: absolute;
-  top: -1.3cqw;
-  left: 20%;
-  padding: 0.15cqw 0.6cqw;
-  color: #6c5739;
-  background: #dec58c;
-  border: 1px solid #aa8e5d;
-  font-size: 0.56cqw;
-  transform: rotate(-4deg);
-}
-
-.registration-desk i {
-  position: absolute;
-  top: -1.5cqw;
-  right: 7%;
-  width: 0.45cqw;
-  height: 1.2cqw;
-  border: 1px solid #655a3e;
-  border-radius: 30%;
-  background: #e5cc83;
-}
-
 .luggage-cart {
   position: absolute;
   left: 32%;
@@ -211,9 +177,12 @@
 }
 
 .assetBags {
-  left: 27%;
-  bottom: 7%;
-  width: clamp(90px, 17cqw, 260px);
+  /* The bags are already unloaded and resting beneath the gate eave. Keep
+     them small enough to read as carry-on luggage beside the steps, rather
+     than leaving an oversized group inside the bus foreground. */
+  left: 56%;
+  bottom: 5%;
+  width: clamp(74px, 15cqw, 225px);
   animation: luggage-settle 1.2s ease-out 0.4s both;
 }
 

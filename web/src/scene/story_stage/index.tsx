@@ -10,6 +10,7 @@ import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
 import { sceneChoices } from './choices';
 import styles from './style.module.css';
+import registrationStyles from './registration.module.css';
 
 export function StoryStage({
   state,
@@ -59,41 +60,49 @@ export function StoryStage({
               alt=""
               aria-hidden="true"
             />
-            <img
-              className={`${styles.registrationItem} ${styles.registrationLedger}`}
-              src={
+            <div
+              className={`${styles.registrationItem} ${registrationStyles.registrationLedger} ${
                 state.shotKey === 'register_rooms'
-                  ? storyAssets.scenes.registrationLedgerClosed
-                  : storyAssets.scenes.registrationLedgerOpen
-              }
-              alt=""
+                  ? registrationStyles.registrationLedgerClosed
+                  : ''
+              }`}
               aria-hidden="true"
-            />
-            <img
-              className={`${styles.registrationItem} ${styles.registrationKey}`}
-              src={storyAssets.scenes.registrationCopperKey}
-              alt=""
-              aria-hidden="true"
-            />
-            <img
-              className={`${styles.registrationItem} ${styles.registrationPermit}`}
-              src={
-                state.shotKey === 'register_luggage'
-                  ? storyAssets.scenes.registrationPermitSingle
-                  : storyAssets.scenes.registrationPermitStack
-              }
-              alt=""
-              aria-hidden="true"
-            />
-            {[
-              'register_key_tags',
-              'register_rooms',
-              'register_drag_mark',
-              'register_camera_bell',
-              'register_ribbon',
-              'register_luggage',
-            ].includes(state.shotKey || '') ? (
-              <div className={styles.registrationTags} aria-hidden="true">
+            >
+              <img
+                src={
+                  state.shotKey === 'register_rooms'
+                    ? storyAssets.scenes.registrationLedgerClosed
+                    : storyAssets.scenes.registrationLedgerOpen
+                }
+                alt=""
+              />
+            </div>
+            {state.shotKey === 'register_desk' && (
+              <div
+                className={registrationStyles.registrationWriting}
+                aria-label="陆沉正在用毛笔登记姓名"
+              >
+                <span className={registrationStyles.brush} />
+                <span className={registrationStyles.inkStroke} />
+                <span className={registrationStyles.inkStroke} />
+                <span className={registrationStyles.inkStroke} />
+              </div>
+            )}
+            {state.shotKey !== 'register_desk' &&
+              ['register_key_tags', 'register_rooms', 'register_luggage'].includes(
+                state.shotKey || '',
+              ) && (
+                <img
+                  className={`${styles.registrationItem} ${registrationStyles.registrationKey}`}
+                  src={storyAssets.scenes.registrationCopperKey}
+                  alt=""
+                  aria-hidden="true"
+                />
+              )}
+            {['register_key_tags', 'register_rooms', 'register_luggage'].includes(
+              state.shotKey || '',
+            ) ? (
+              <div className={registrationStyles.registrationTags} aria-hidden="true">
                 <span>听</span>
                 <span>灯</span>
                 <span>纸</span>

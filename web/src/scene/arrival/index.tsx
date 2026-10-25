@@ -87,10 +87,6 @@ export function ArrivalBackdrop() {
         <i />
         <i />
       </div>
-      <div className={people['registration-desk']}>
-        <span>登记簿</span>
-        <i />
-      </div>
       {visitors.map((person) => (
         <div
           className={people.person}

@@ -268,10 +268,10 @@
       "id": "ledger_open",
       "sprite": "ledger_open",
       "rect": {
-        "x": 465,
-        "y": 665,
-        "width": 718,
-        "height": 165
+        "x": 644,
+        "y": 706,
+        "width": 360,
+        "height": 83
       },
       "anchor": {
         "x": 0,
@@ -286,10 +286,10 @@
       "id": "ledger_closed",
       "sprite": "ledger_closed",
       "rect": {
-        "x": 642,
-        "y": 654,
-        "width": 360,
-        "height": 197
+        "x": 712,
+        "y": 702,
+        "width": 220,
+        "height": 120
       },
       "anchor": {
         "x": 0,
