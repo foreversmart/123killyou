@@ -32,6 +32,8 @@ export interface GameState {
   room: 'watch' | 'corridor' | 'gate' | 'register' | 'refectory' | 'room_door';
   roomName: string;
   devotion: number;
+  candleUnlitTurns?: number;
+  ghostDialogueTurns?: number;
   inventory: Item[];
   clues: string[];
   flags: Record<string, boolean>;

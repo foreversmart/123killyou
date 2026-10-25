@@ -1,7 +1,8 @@
 package game
 
 func (e *Engine) storyFourKnocks(state *State, text string) (string, string, bool) {
-	if miniHasAny(text, "回答姓名", "说出名字") {
+	if miniHasAny(text, "回答姓名", "说出名字", "和门外说话", "与门外对话", "继续和鬼说话") {
+		recordGhostDialogue(state)
 		miniSetFlag(state, "name_echo_heard")
 		if !state.Flags["red_candle_lit"] {
 			intent, speak := e.storyDeath(state, "姓名从门外被原样复述。门缝没有红光，影子从缝里挤了进来。")
@@ -14,6 +15,9 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 		return intent, speak, true
 	}
 	if miniHasAny(text, "不开门", "问是谁", "听门") {
+		if miniHasAny(text, "问是谁") {
+			recordGhostDialogue(state)
+		}
 		miniSetFlag(state, "four_knocks_survived")
 		e.setMiniScene(state, "mini_three_knocks")
 		if allCompanionsAte(state) {
@@ -69,7 +73,10 @@ func miniCompanionLine(state *State) string {
 }
 
 func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bool) {
-	if miniContinue(text) || miniHasAny(text, "核对身份", "核对门外身份", "确认私物", "问是谁") {
+	if miniContinue(text) || miniHasAny(text, "核对身份", "核对门外身份", "确认私物", "问是谁", "和门外说话", "与门外对话", "继续和鬼说话") {
+		if miniHasAny(text, "核对身份", "核对门外身份", "确认私物", "问是谁", "和门外说话", "与门外对话", "继续和鬼说话") || miniContinue(text) {
+			recordGhostDialogue(state)
+		}
 		miniSetFlag(state, "companion_checked")
 		if miniCompanionID(state) == "" {
 			return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
@@ -112,6 +119,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 	}
 	if miniContinue(text) || miniHasAny(text, "观察住持", "观察屋内", "看房内", "看半掩房门", "看剥皮", "靠近门缝") {
 		if !state.Flags["skin_seen"] {
+			recordSkinWitness(state)
 			miniSetFlag(state, "skin_seen")
 			miniShot(state, "listen_skin")
 			state.DialogueNext = "继续听"
@@ -123,12 +131,13 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 		return e.breakMiniVase(state)
 	}
 	if miniHasAny(text, "猫叫", "学猫", "模仿猫", "鸟叫", "学鸟", "模仿鸟") {
-		miniSetFlag(state, "skin_seen")
-		miniSetFlag(state, "vase_broken")
 		cat := miniHasAny(text, "猫")
 		if (cat && !state.Flags["cat_call_heard"]) || (!cat && !state.Flags["bird_call_heard"]) {
 			return "clarify", miniSystem(state, "还没听过这段动物声。请先听清墙边的猫叫或鸟鸣。"), true
 		}
+		recordSkinWitness(state)
+		miniSetFlag(state, "skin_seen")
+		miniSetFlag(state, "vase_broken")
 		miniSetFlag(state, "animal_call_passed")
 		return "story", e.afterMiniEscape(state, "动物声从墙边传出去，慧普转向窗台。视线沿原路退回门房，房门在身后合拢。"), true
 	}
@@ -155,6 +164,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 }
 
 func (e *Engine) breakMiniVase(state *State) (string, string, bool) {
+	recordSkinWitness(state)
 	miniSetFlag(state, "skin_seen")
 	miniSetFlag(state, "vase_broken")
 	miniShot(state, "listen_vase")

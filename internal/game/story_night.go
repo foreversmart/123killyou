@@ -62,7 +62,20 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		miniSetFlag(state, "candle_went_out")
 		state.Flags["red_candle_lit"] = false
 		e.setMiniScene(state, "mini_wake_three_gongs")
-		return "sleep", miniObserve(state, "烛光淡入黑场。三声沉闷的更锣之后，黑烛芯和凝固蜡泪出现在眼前，门外有湿重的呼吸。"), true
+		message := "烛光淡入黑场。三声沉闷的更锣之后，黑烛芯和凝固蜡泪出现在眼前，门外有湿重的呼吸。"
+		// The candle goes out as part of falling asleep, so include this
+		// turn's small unlit penalty when deciding whether the threshold is
+		// crossed. The actual deduction is settled by story's deferred event
+		// reconciliation below.
+		projectedDevotion := state.Devotion + DevotionCandleUnlitDelta
+		if projectedDevotion < 0 {
+			projectedDevotion = 0
+		}
+		if projectedDevotion <= LowDevotionMonsterThreshold {
+			lowDevotionMonsterThreat(state)
+			message += "虔诚渐薄，门外不止一个东西；几道沉重的撞击同时落在门板上。"
+		}
+		return "sleep", miniObserve(state, message), true
 	}
 	return e.storyConversation(state, text)
 }
@@ -76,7 +89,11 @@ func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
 		state.Flags["red_candle_lit"] = true
 		miniSetFlag(state, "candle_relit")
 		e.setMiniScene(state, "mini_four_knocks")
-		return "story", miniObserve(state, "烛芯重新燃起，门闩上的水痕在红光里显露。拖行声退远，四下敲门先后落在门板上，门眼外只有月光。"), true
+		message := "烛芯重新燃起，门闩上的水痕在红光里显露。拖行声退远，四下敲门先后落在门板上，门眼外只有月光。"
+		if lowDevotionMonsterThreat(state) {
+			message += "门外的撞击没有停，像有更多东西沿着回廊围了上来。"
+		}
+		return "story", miniObserve(state, message), true
 	}
 	if miniHasAny(text, "看红烛", "看烛芯", "看蜡泪") {
 		miniShot(state, "wake_candle_detail")

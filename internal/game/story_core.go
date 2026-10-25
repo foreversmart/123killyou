@@ -6,6 +6,7 @@ func (e *Engine) story(state *State, text string) (string, string, bool) {
 	if !state.StoryMode {
 		return "", "", false
 	}
+	defer e.reconcileStoryDevotion(state)
 
 	if state.Flags["story_dead"] {
 		if miniHasAny(text, "重试", "从最近安全", "再试一次") {
@@ -60,12 +61,16 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 	if miniHasAny(text, "听第一话", "听大家说话", "继续听", "下一句", "下车") {
 		return "story", e.arrivalIntro(state), true
 	}
-	if miniHasAny(text, "看看山门", "观察山门", "看铜铃", "看看花猫", "环顾") {
-		miniSetFlag(state, "gate_seen")
-		if miniHasAny(text, "花猫") {
+	if miniHasAny(text, "看看山门", "观察山门", "看铜铃", "看看花猫", "环顾", "看寺庙", "看佛像", "看正殿", "多看佛像") {
+		if miniHasAny(text, "佛像", "正殿") {
+			miniSetFlag(state, "gate_seen")
+			miniSetFlag(state, "buddha_seen")
+			miniShot(state, "arrival_inner")
+		} else if miniHasAny(text, "花猫") {
 			miniSetFlag(state, "cat_call_heard")
 			miniShot(state, "arrival_cat")
 		} else {
+			miniSetFlag(state, "gate_seen")
 			miniShot(state, "arrival_plaque")
 		}
 		miniClue(state, "山门新匾下露出旧字‘明照寺’，铜铃旁有一只晒太阳的花猫")
@@ -193,7 +198,8 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			miniChooseMeal(state, person, "refused")
 		}
-		return "story", miniDialogue(state, "许栀", "那就先吃馒头。问清楚之前，这碗粥先放着。"), true
+		miniSetFlag(state, "persuasion_success")
+		return "story", miniDialogue(state, "许栀", "那就先吃素饼。问清楚之前，这碗粥先放着。"), true
 	}
 	choice, explicitMeal := miniMealChoice(text)
 	if explicitMeal && miniHasAny(text, "林岚", "周砚", "许栀") {
@@ -210,6 +216,9 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 			return "dialogue", miniDialogue(state, "周砚", "先等一下。我想看清碗签和施食记，来历不清的东西，不能只凭一句‘照顾远客’。"), true
 		}
 		miniChooseMeal(state, person, choice)
+		if choice == "refused" && miniHasAny(text, "劝", "别吃", "不要吃") {
+			miniSetFlag(state, "persuasion_success")
+		}
 		return "story", miniMealReply(state, person, choice), true
 	}
 	if explicitMeal && choice == "deferred" {
