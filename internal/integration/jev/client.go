@@ -201,3 +201,74 @@ func (c *Client) JudgeOracle(ctx context.Context, input game.OracleJudgeRequest)
 		Confidence: choice.Confidence,
 	}, nil
 }
+
+func (c *Client) JudgeOption(ctx context.Context, input game.OptionJudgeRequest) (game.OptionJudgeResult, error) {
+	criteria := map[string]string{"none": "玩家发言与所有选项都不匹配，无法安全代选。"}
+	for _, option := range input.Options {
+		criteria[option.ID] = option.Description + "（执行命令：" + option.Command + "）"
+	}
+	questions := map[string]question{
+		"option": {
+			Type:         "choice",
+			Instructions: "根据语音转写内容判断玩家想执行哪个当前选项。只能选择给出的选项 ID，若无法确定必须选择 none，不要创造新操作。",
+			Criteria:     criteria,
+		},
+	}
+	state := fmt.Sprintf("场景：%s\n当前对白：%s\n玩家语音转写：%s\n可选操作：%s", input.Scene, input.Dialogue, input.PlayerText, optionSummary(input.Options))
+	out, err := c.call(ctx, request{Model: "jev-latest", State: state, Questions: questions})
+	if err != nil {
+		return game.OptionJudgeResult{}, err
+	}
+	answer, ok := out.Answers["option"]
+	if !ok || strings.TrimSpace(answer.Choice) == "" {
+		return game.OptionJudgeResult{}, fmt.Errorf("jev option response has no choice")
+	}
+	return game.OptionJudgeResult{Choice: strings.TrimSpace(answer.Choice), Confidence: answer.Confidence}, nil
+}
+
+func optionSummary(options []game.StoryOption) string {
+	items := make([]string, 0, len(options))
+	for _, option := range options {
+		items = append(items, option.ID+"："+option.Description)
+	}
+	return strings.Join(items, "；")
+}
+
+func (c *Client) JudgeRoomAction(ctx context.Context, input game.RoomActionRequest) (game.RoomActionResult, error) {
+	state := fmt.Sprintf("场景：%s\n镜头：%s\n当前画面：%s\n红烛已点燃：%t\n玩家原话：%s", input.Scene, input.Shot, input.SceneText, input.CandleLit, input.PlayerText)
+	questions := map[string]question{
+		"room_action": {
+			Type:         "choice",
+			Instructions: "只根据玩家原话在当前门房的四个可见操作中选择最接近的一项。再看烛火对应查看烛芯，寺史对应翻阅寺史，经书对应阅读大念处经，躺下或休息对应睡下。点燃红烛由本地明确命令处理；若玩家只是提问、同时提到多个选项、或无法判断，不要猜测，选择 unknown。",
+			Criteria: map[string]string{
+				string(game.RoomActionCandle):    "再看一眼烛火、查看烛芯或观察已经点燃的红烛。",
+				string(game.RoomActionHistory):   "翻阅寺史、误识别为四史的寺庙历史册或历史册。",
+				string(game.RoomActionScripture): "查看、阅读或翻开桌上的经书/经文。",
+				string(game.RoomActionSleep):     "躺下、睡觉、闭眼或歇一会儿。",
+				"unknown":                        "问题、闲聊、多个选项同时出现，或无法判断。",
+			},
+		},
+	}
+	out, err := c.call(ctx, request{Model: "jev-latest", State: state, Questions: questions})
+	if err != nil {
+		return game.RoomActionResult{}, err
+	}
+	answer, ok := out.Answers["room_action"]
+	if !ok {
+		return game.RoomActionResult{}, fmt.Errorf("jev room response has no action answer")
+	}
+	action := game.RoomAction(strings.ToLower(strings.TrimSpace(answer.Choice)))
+	if action == "unknown" || !validRoomAction(action) {
+		return game.RoomActionResult{}, fmt.Errorf("jev room response has invalid action %q", answer.Choice)
+	}
+	return game.RoomActionResult{Action: action, Confidence: answer.Confidence}, nil
+}
+
+func validRoomAction(action game.RoomAction) bool {
+	switch action {
+	case game.RoomActionCandle, game.RoomActionHistory, game.RoomActionScripture, game.RoomActionSleep:
+		return true
+	default:
+		return false
+	}
+}
