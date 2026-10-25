@@ -2,6 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { storyCues, cueSignature, cueDuration } from '../src/features/story_audio/cues.ts';
+import {
+  NIGHT_BACKGROUND_MUSIC,
+  NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+  shouldPlayNightBackground,
+} from '../src/features/story_audio/music.ts';
 import { oracleFaces } from '../src/scene/story_observation/oracle_faces.ts';
 import { audioFixture, hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
 
@@ -48,6 +53,71 @@ test('更锣与敲门按分镜给出清楚的独立计数，钟声不计作更�
   assert.ok(trueDawn[5].at > trueDawn[4].at);
 });
 
+test('三更醒来后才进入夜间背景音乐，并在天亮时停止', async () => {
+  const runtime = hookRuntime(),
+    audio = audioFixture(),
+    listeners = new Map(),
+    players = [];
+  class FakeAudio {
+    paused = true;
+    currentTime = 0;
+    loop = false;
+    preload = '';
+    volume = 1;
+    constructor(source) {
+      this.source = source;
+      players.push(this);
+    }
+    play() {
+      this.paused = false;
+      this.playCount = (this.playCount || 0) + 1;
+      return Promise.resolve();
+    }
+    pause() {
+      this.paused = true;
+      this.pauseCount = (this.pauseCount || 0) + 1;
+    }
+  }
+  audio.AudioContext.prototype.createGain = () => ({ gain: {}, connect() {}, disconnect() {} });
+  const useStorySound = await loadHook(
+    '../../src/features/story_audio/useStorySound.ts',
+    'useStorySound',
+    runtime,
+    {
+      Audio: FakeAudio,
+      AudioContext: audio.AudioContext,
+      cueSignature,
+      cueDuration,
+      storyCues,
+      NIGHT_BACKGROUND_MUSIC,
+      NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+      shouldPlayNightBackground,
+      document: {
+        addEventListener: (name, callback) => listeners.set(name, callback),
+        removeEventListener: (name) => listeners.delete(name),
+      },
+      playStoryCue: () => [{ stop() {} }],
+    },
+  );
+  const waking = state('wake_candle', { sceneKey: 'mini_wake_three_gongs' });
+  runtime.render(useStorySound, waking, true, 'idle');
+  listeners.get('pointerdown')();
+  await Promise.resolve();
+  runtime.render(useStorySound, waking, true, 'idle');
+  assert.equal(players.length, 1);
+  assert.equal(players[0].playCount || 0, 0);
+  runtime.flushTimers();
+  await Promise.resolve();
+  assert.equal(players[0].playCount, 1);
+
+  runtime.render(useStorySound, state('dawn_gongs', { sceneKey: 'mini_dawn_trap' }), true, 'idle');
+  assert.equal(players[0].paused, false);
+  runtime.render(useStorySound, state('dawn_courtyard', { sceneKey: 'mini_dawn' }), true, 'idle');
+  assert.equal(players[0].paused, true);
+  assert.equal(players[0].currentTime, 0);
+  runtime.dispose();
+});
+
 test('重听只改变声源播放签名，不变更道具、死亡或开门选择', () => {
   const original = state('four_knocks', { lastHeard: '观察门缝', flags: { candle_lit: true } });
   const before = structuredClone(original);
@@ -76,6 +146,9 @@ test('同一声源自动只播一次；主动重听后普通调查不再额外�
       cueSignature,
       cueDuration,
       storyCues,
+      NIGHT_BACKGROUND_MUSIC,
+      NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+      shouldPlayNightBackground,
       document: {
         addEventListener: (name, callback) => listeners.set(name, callback),
         removeEventListener: (name) => listeners.delete(name),
@@ -173,6 +246,9 @@ test('离开声源镜头会立即停止旧环境声，即使下一镜头暂在�
       cueSignature,
       cueDuration,
       storyCues,
+      NIGHT_BACKGROUND_MUSIC,
+      NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+      shouldPlayNightBackground,
       document: {
         addEventListener: (name, callback) => listeners.set(name, callback),
         removeEventListener: (name) => listeners.delete(name),
