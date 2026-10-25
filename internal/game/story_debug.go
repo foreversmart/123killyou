@@ -101,7 +101,8 @@ func (e *Engine) prepareMiniDebugScene(state *State, index int) {
 		miniSetFlag(state, "vase_broken")
 	}
 	if index == 9 {
-		clearMiniDebugFlags(state, "oracle_question", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark")
+		state.OracleSincerityScore = 0
+		clearMiniDebugFlags(state, "oracle_question", "oracle_sincerity_question", "oracle_sincerity_judged", "oracle_sincere", "oracle_sincerity_score", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark")
 	}
 	if index == 10 {
 		miniSetFlag(state, "skin_double_present")

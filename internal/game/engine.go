@@ -1,13 +1,15 @@
 package game
 
 import (
+	"context"
 	"nightwatch/internal/content"
 	"strings"
 )
 
 type Engine struct {
-	content   *content.Catalog
-	storyRoll func() int
+	content    *content.Catalog
+	storyRoll  func() int
+	storyJudge StoryJudge
 }
 
 func NewEngine(catalog *content.Catalog) *Engine { return &Engine{content: catalog} }
@@ -33,11 +35,23 @@ func (e *Engine) StartMiniStory(state *State) {
 	state.StoryMode = true
 	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
-	miniObserve(state, "阳光从车窗斜进来，大巴停在灯影寺山门前。车门打开，鸟鸣穿过树叶，登记桌就在檐下。")
+	miniObserve(state, "阳光从车窗斜进来，大巴停在红烛寺山门前。车门打开，鸟鸣穿过树叶，登记桌就在檐下。")
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
 func (e *Engine) Apply(state *State, text string) (string, string) {
+	decision := StoryDecision{}
+	if e.storyJudge != nil {
+		decision = e.PrepareStoryDecision(context.Background(), *state, Normalize(text), "")
+	}
+	return e.ApplyWithDecision(context.Background(), state, text, decision)
+}
+
+// ApplyWithDecision applies a precomputed remote story decision. The session
+// service uses this during its plan/commit pair so jev is called exactly once
+// for a player turn. Direct callers should use Apply, which prepares a
+// decision when a judge is configured.
+func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text string, decision StoryDecision) (string, string) {
 	defer func() {
 		if state.StoryMode {
 			syncMiniStaging(state)
@@ -57,7 +71,7 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	if intent, speak, ok := e.system(state, text); ok {
 		return intent, speak
 	}
-	if intent, speak, ok := e.story(state, text); ok {
+	if intent, speak, ok := e.story(state, text, decision); ok {
 		return intent, speak
 	}
 	if intent, speak, ok := e.movement(state, text); ok {

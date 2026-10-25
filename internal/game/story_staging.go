@@ -58,7 +58,7 @@ func miniShot(state *State, key string) {
 	state.ShotKey = key
 	if key == "dawn_gate" {
 		state.SceneName = "山门·晨光送客"
-		state.RoomName = "灯影寺山门"
+		state.RoomName = "红烛寺山门"
 	}
 	if key == "dawn_courtyard" {
 		state.SceneName = "东院·五更天亮"

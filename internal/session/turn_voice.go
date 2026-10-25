@@ -13,6 +13,7 @@ type voicePlan struct {
 	BufferedDialogue          bool
 	PreviousReplies           []string
 	Speaker, Portrait         string
+	StoryDecision             game.StoryDecision
 }
 
 // Preparing a voice plan cannot write checkpoints or fork the real save.
@@ -22,19 +23,26 @@ type planningTransaction struct{ Transaction }
 func (planningTransaction) SaveCheckpoint(SavedCheckpoint) error                 { return nil }
 func (planningTransaction) Fork(game.State, game.State, []Memory, []Event) error { return nil }
 
-func (s *Service) planVoice(tx Transaction, before game.State, text string) (voicePlan, error) {
+func (s *Service) planVoice(ctx context.Context, tx Transaction, before game.State, text string) (voicePlan, error) {
 	candidate := game.Clone(before)
 	candidate.Revision++
 	candidate.LastHeard = text
 	candidate.Effect = game.Effect{Kind: "none"}
 	intent, reply, handled, err := s.control(planningTransaction{tx}, &candidate, before, text)
+	plan := voicePlan{Reply: reply, Speaker: "系统"}
 	if err != nil {
 		return voicePlan{}, err
 	}
 	if !handled {
-		intent, reply = s.engine.Apply(&candidate, text)
+		memories, _, historyErr := tx.Context(before.RunID)
+		if historyErr != nil {
+			return voicePlan{}, historyErr
+		}
+		decision := s.engine.PrepareStoryDecision(ctx, before, text, describeStoryHistory(memories))
+		plan.StoryDecision = decision
+		intent, reply = s.engine.ApplyWithDecision(ctx, &candidate, text, decision)
 	}
-	plan := voicePlan{Reply: reply, Speaker: "系统"}
+	plan.Reply = reply
 	if candidate.Dialogue.Text == reply {
 		plan.Speaker, plan.Portrait = candidate.Dialogue.Speaker, candidate.Dialogue.Portrait
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {

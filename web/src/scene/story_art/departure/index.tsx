@@ -41,7 +41,7 @@ export function DawnGateArt({ id }: { id: string }) {
         fill="#e2d098"
         fontFamily="serif"
       >
-        灯影寺
+        红烛寺
       </text>
       <rect x="837" y="258" width="29" height="72" fill="#8b8764" />
       <text

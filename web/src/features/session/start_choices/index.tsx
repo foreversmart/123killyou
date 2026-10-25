@@ -41,7 +41,7 @@ export function StartChoices({
           autoPlay
           playsInline
           onEnded={() => setPhase('journey')}
-          aria-label="灯影寺片头"
+          aria-label="红烛寺片头"
         />
       </div>
     );

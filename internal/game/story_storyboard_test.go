@@ -170,10 +170,10 @@ func TestStoryboardOracleWeightedCastAndSafeRetry(t *testing.T) {
 		ate     bool
 		roll    int
 		success bool
-	}{{false, 50, true}, {true, 50, false}, {true, 20, true}} {
+	}{{false, 50, true}, {true, 60, false}, {true, 20, true}} {
 		e, s := storyAtListen(t, tt.ate)
 		e.storyRoll = func() int { return tt.roll }
-		storyCommands(e, &s, "跑向大殿", "救我")
+		storyCommands(e, &s, "跑向大殿", "救我", "可能是风，也可能是我拿得不稳，我会先稳住手")
 		if s.Flags["cup_cast_counted"] {
 			t.Fatal("求救代替玩家掷杯筊")
 		}
@@ -217,7 +217,7 @@ func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 		}
 	}
 	drainMiniDialogue(t, e, &s)
-	if s.ShotKey != "dawn_gate" || s.RoomName != "灯影寺山门" {
+	if s.ShotKey != "dawn_gate" || s.RoomName != "红烛寺山门" {
 		t.Fatal("没有随送客镜头走到山门")
 	}
 	for _, actor := range s.Actors {

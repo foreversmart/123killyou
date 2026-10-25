@@ -62,7 +62,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
         )}
       </section>
       <div className={styles['outside-caption']}>
-        <span>红烛无声 · 灯影寺</span>
+        <span>红烛无声 · 红烛寺</span>
         {sceneSkipEnabled && <SceneSkip onSkip={() => voice.submit('调试跳到下一剧情场景')} />}
         <span>第一视角 / 道具微光 / 按住空格说话</span>
       </div>

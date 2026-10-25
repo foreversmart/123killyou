@@ -47,3 +47,18 @@ func describeDialogueHistory(before game.State, npcID string, memories []Memory)
 	history := "\n此前问答（仅供理解上下文，不能当作本轮答案）：" + strings.Join(recent, "\n")
 	return history + fmt.Sprintf("\n上一句已播放的对白：%s：%s。若不确定这次发言的含义，请提出具体的澄清问题，禁止重复这句。", before.Dialogue.Speaker, before.Dialogue.Text)
 }
+
+func describeStoryHistory(memories []Memory) string {
+	if len(memories) == 0 {
+		return "无"
+	}
+	start := len(memories) - 8
+	if start < 0 {
+		start = 0
+	}
+	lines := make([]string, 0, len(memories)-start)
+	for _, memory := range memories[start:] {
+		lines = append(lines, fmt.Sprintf("%s：玩家说‘%s’，回应‘%s’", memory.NPC, memory.Player, memory.Reply))
+	}
+	return strings.Join(lines, "\n")
+}

@@ -30,7 +30,7 @@ func TestStoryOracleQuestionMustPrecedeTheCast(t *testing.T) {
 	if s.Flags["cup_cast_counted"] || s.Flags["oracle_question"] || s.Dialogue.Speaker != "神公" {
 		t.Fatal("未确认问题就掷筊")
 	}
-	storyCommands(e, &s, "确认求回门房", "掷杯筊")
+	storyCommands(e, &s, "确认求回门房", "可能是风，也可能是我拿得不稳，我会先稳住手", "掷杯筊")
 	if !s.Flags["cup_cast_counted"] || s.ShotKey != "oracle_cast" {
 		t.Fatal("确认后不能投掷")
 	}

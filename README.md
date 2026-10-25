@@ -61,7 +61,7 @@ chrome://flags/#enable-experimental-web-platform-features
 1. 确认 `requestPaint()` 与 `drawElementImage()` 可调用。
 2. 创建 16×16 Canvas，绘制包含两种已知颜色的 HTML 元素。
 3. 在 `paint` 事件中绘制并读取两处像素，核对颜色。
-4. 全部通过后才懒加载游戏，通过 `GET /api/story/opening` 只读显示第一幕“大巴抵达灯影寺”。
+4. 全部通过后才懒加载游戏，通过 `GET /api/story/opening` 只读显示第一幕“大巴抵达红烛寺”。
 
 接口缺失、绘制异常、像素不符或等待超过 5 秒，都会停留在说明页并显示检测信息。检测中切到后台会取消本次等待，回到前台重新检测；已进入的游戏不会因切换窗口重新挂载。演示和调试入口也必须通过自检。
 
