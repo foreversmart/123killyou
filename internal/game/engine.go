@@ -51,9 +51,14 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 // service uses this during its plan/commit pair so jev is called exactly once
 // for a player turn. Direct callers should use Apply, which prepares a
 // decision when a judge is configured.
-func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text string, decision StoryDecision) (string, string) {
+func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text string, decision StoryDecision) (intent, speak string) {
+	pendingNext := state.DialogueNext
+	pendingScene := state.SceneKey
+	pendingShot := state.ShotKey
+	pendingOverlay := state.Overlay
 	defer func() {
 		if state.StoryMode {
+			restoreSafeStoryContinuation(state, pendingScene, pendingShot, pendingOverlay, pendingNext, intent)
 			syncMiniStaging(state)
 		}
 	}()
@@ -72,7 +77,7 @@ func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text strin
 		if intent, speak, ok := e.system(state, text); ok {
 			return intent, speak
 		}
-		if intent, speak, ok := e.story(state, text); ok {
+		if intent, speak, ok := e.story(state, text, decision); ok {
 			return intent, speak
 		}
 	}
