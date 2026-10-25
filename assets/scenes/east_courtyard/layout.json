@@ -424,10 +424,10 @@
       "id": "actor_lu_chen",
       "sprite": "actor_lu_chen",
       "rect": {
-        "x": 775.553,
-        "y": 181,
-        "width": 278.895,
-        "height": 700
+        "x": 1088,
+        "y": 221,
+        "width": 245,
+        "height": 660
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -443,10 +443,10 @@
       "id": "actor_shen_gong",
       "sprite": "actor_shen_gong",
       "rect": {
-        "x": 785.457,
-        "y": 181,
-        "width": 259.085,
-        "height": 700
+        "x": 835,
+        "y": 261,
+        "width": 220,
+        "height": 620
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -462,10 +462,10 @@
       "id": "actor_lin_lan",
       "sprite": "actor_lin_lan",
       "rect": {
-        "x": 786.534,
-        "y": 181,
-        "width": 256.932,
-        "height": 700
+        "x": 420,
+        "y": 271,
+        "width": 224,
+        "height": 610
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -481,10 +481,10 @@
       "id": "actor_zhou_yan",
       "sprite": "actor_zhou_yan",
       "rect": {
-        "x": 798.566,
-        "y": 181,
-        "width": 232.869,
-        "height": 700
+        "x": 675,
+        "y": 301,
+        "width": 192,
+        "height": 580
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -500,10 +500,10 @@
       "id": "actor_xu_zhi",
       "sprite": "actor_xu_zhi",
       "rect": {
-        "x": 798.957,
-        "y": 181,
-        "width": 232.086,
-        "height": 700
+        "x": 925,
+        "y": 286,
+        "width": 202,
+        "height": 595
       },
       "zIndex": 20,
       "visibleWhen": {

@@ -27,20 +27,25 @@
 
 .person[data-person='zhouyan'] {
   --clothes: #718c83;
-  left: 78%;
-  bottom: 22%;
+  left: 82%;
+  bottom: 18%;
 }
 
 .person[data-person='xuzhi'] {
   --clothes: #9d7a6a;
-  left: 43%;
-  bottom: 5%;
+  left: 89%;
+  bottom: 14%;
 }
 
 .person[data-person='luchen'] {
   --clothes: #9b9273;
-  left: 65%;
-  bottom: 28%;
+  left: 71%;
+  bottom: 26%;
+}
+
+.person[data-person='linlan'] {
+  left: 61%;
+  bottom: 17%;
 }
 
 .figure {
