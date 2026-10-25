@@ -3,6 +3,7 @@ package session
 import (
 	"context"
 	"nightwatch/internal/game"
+	"strings"
 	"time"
 )
 
@@ -65,6 +66,10 @@ func (s *Service) SpeechAudio(id, runID, requestID string) (DialogueAudio, bool)
 }
 
 func (s *Service) attachSpeech(ctx context.Context, result game.Result, key audioKey, prepared *DialogueAudio) game.Result {
+	// A scene observation is delivered by its image and sound, without TTS.
+	if strings.TrimSpace(result.Speak) == "" {
+		return result
+	}
 	// Reset/load creates a new branch; its confirmation belongs to that branch.
 	key.RunID = result.State.RunID
 	if _, found := s.SpeechAudio(key.SessionID, key.RunID, key.RequestID); found {

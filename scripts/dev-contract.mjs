@@ -8,6 +8,7 @@ export function isOpeningState(state) {
     state?.storyMode === true &&
     state?.sceneKey === 'mini_arrival' &&
     state?.room === 'gate' &&
-    state?.dialogue?.speaker === '旁白'
+    Boolean(state?.sceneText) &&
+    state?.dialogue?.text === ''
   );
 }

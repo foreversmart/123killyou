@@ -77,7 +77,9 @@
       "空间折返",
       "死亡淡出"
     ],
-    "death": "只在主角机位即时反馈，不播放镜外追杀"
+    "death": "只在主角机位即时反馈，不播放镜外追杀",
+    "perception": "主角直接看见的物件、动作与光线通过对应画面、道具近景和效果呈现；直接听见的声音通过有方位和间隔的环境音呈现，不写入心声、旁白或人物TTS。",
+    "innerVoice": "仅在剧情需要时保留少量真实感受、记忆与未证实的猜想；主角实际朗读经文使用出声对白。"
   },
   "ownership": {
     "redCandle": "single object shared across inventory, room, shrine and guiding elder; at most one visible owner",

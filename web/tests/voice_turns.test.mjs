@@ -67,6 +67,18 @@ test('云端最终字幕与流式播放标记一起交给播放器', async () =>
   assert.deepEqual(problems, []);
 });
 
+test('有意通过画面和环境声反馈时允许没有对白，真实空回应仍报错', async () => {
+  const answer = { text: '', sceneOnly: true };
+  const { turns, answers, problems } = fixture(async (text) =>
+    text === '看烛芯' ? answer : { text: '', streamed: false },
+  );
+  await turns.submit('看烛芯');
+  await turns.submit('空回应');
+  assert.deepEqual(answers, [answer]);
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /没有收到完整回应/);
+});
+
 test('打断会取消上游请求，旧音频和字幕事件不能进入新回合', async () => {
   let controls;
   let resolve;

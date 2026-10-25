@@ -32,7 +32,7 @@ export const nightLayouts: Record<string, StageLayout> = {
   mini_wake_three_gongs: {
     ...room,
     chapter: '06 · 三更惊醒',
-    title: '烛芯怎么是黑的',
+    title: '熄灭的烛芯',
     atmosphere: '三声更锣，最后一声还在梁上震着。',
     props: roomProps.map((p) =>
       p.id === 'candle' || p.id === 'matches' ? { ...p, command: '续燃红烛' } : p,
@@ -53,7 +53,7 @@ export const nightLayouts: Record<string, StageLayout> = {
   },
   mini_listen: {
     chapter: '08 · 半掩的偏房',
-    title: '他背后，怎么没有骨头',
+    title: '半掩的偏房',
     atmosphere: '你贴在门轴这一侧，撕裂声从床边传来。',
     actors: {
       huipu: { x: 76, y: 72, height: 46, facing: 'left' },

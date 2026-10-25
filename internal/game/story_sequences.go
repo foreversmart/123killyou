@@ -19,7 +19,7 @@ func miniSequence(state *State, name string, lines []miniLine) string {
 			return miniDialogue(state, line.speaker, line.text)
 		}
 	}
-	return miniInner(state, "我把刚才的话记住了。先看清眼前，再决定下一步。")
+	return miniSystem(state, "这一段对白已经结束。请说出下一步行动，或重听当前对白。")
 }
 
 func miniContinue(text string) bool {

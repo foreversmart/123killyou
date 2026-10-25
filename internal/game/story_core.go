@@ -50,9 +50,9 @@ func (e *Engine) story(state *State, text string) (string, string, bool) {
 	case "mini_dawn":
 		return e.storyDawn(state, text)
 	case "mini_ending":
-		return "story", miniInner(state, "这一夜到这里结束了。山门已经看不见，可我还记得旧匾上的字。"), true
+		return "story", miniSystem(state, "这一夜已经结束。可以查看手记，或说‘重新开始’。"), true
 	default:
-		return "story", miniInner(state, "我还在灯影寺。先看眼前的人和物，再决定往哪走。"), true
+		return "story", miniSystem(state, "没有确认下一步行动。请说出要调查的物件或要去的地方。"), true
 	}
 }
 
@@ -69,7 +69,7 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 			miniShot(state, "arrival_plaque")
 		}
 		miniClue(state, "山门新匾下露出旧字‘明照寺’，铜铃旁有一只晒太阳的花猫")
-		return "inspect", miniInner(state, "新匾写着灯影寺，侧面旧匾还能看见‘明照寺’。山门铜铃没有被风碰响，花猫却一直盯着登记桌。"), true
+		return "inspect", miniObserve(state, "新匾写着灯影寺，侧面旧匾露出‘明照寺’。铜铃静止，花猫抬头望着登记桌。"), true
 	}
 	if miniHasAny(text, "登记入住", "办理入住", "登记", "报到", "写名字", "放行李", "自动登记入住") {
 		miniSetFlag(state, "checked_in")
@@ -78,7 +78,7 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 		miniShot(state, "register_key_tags")
 		return "move", miniDialogue(state, "陆沉", "四位施主，先把名字写清楚。钥匙只开各自的房，通行凭收好；背面那句‘只许去，不许问’，夜里认路时再看。"), true
 	}
-	return "story", miniInner(state, "阳光正好，树影却把旧匾切成一段一段。先看看山门，还是先登记入住？"), true
+	return "story", miniDialogue(state, "陆沉", "登记桌在檐下。想先看山门，还是现在登记？"), true
 }
 
 // arrivalIntro presents the first scene's four fixed viewpoints in order. It
@@ -107,7 +107,7 @@ func (e *Engine) arrivalIntro(state *State) string {
 		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_inner")
 		state.DialogueNext = "自动登记入住"
-		return miniInner(state, "车门气阀声慢慢停了。鸟鸣、树叶和远处一声低钟混在一起。先登记入住，别把这份安静当成安全。")
+		return miniInner(state, "别把这份安静当成安全。")
 	}
 }
 
@@ -137,7 +137,7 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 	if miniHasAny(text, "谁是守夜人", "你是谁", "为什么不能出门") {
 		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘，只替这里看门、记名。夜里要出门，先叫我；没有必要，就留在房里。"), true
 	}
-	return "story", miniInner(state, "名字已经写下，登记簿边角那些被划掉的旧名却像还没干。接下来去斋堂。"), true
+	return "story", miniDialogue(state, "陆沉", "名字记好了。还有要看的东西，还是先去斋堂？"), true
 }
 
 func (e *Engine) storyRefectory(state *State, text string) (string, string, bool) {

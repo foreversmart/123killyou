@@ -21,6 +21,7 @@ func TestStoryActorsKeepAuthoredWordsOwnVoiceAndReplayIdentity(t *testing.T) {
 		{"xuzhi", "许栀", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan"}},
 		{"keeper", "陆沉", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan", "arrival_intro_xuzhi"}},
 		{"player", "你·心声", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan", "arrival_intro_xuzhi", "arrival_intro_luchen"}},
+		{"player", "你", "mini_double", "朗读经文", []string{"mind_script_learned"}},
 		{"huipu", "慧普", "mini_refectory", "问住持", nil},
 		{"shangong", "神公", "mini_oracle", "查看杯筊规矩", nil},
 	}

@@ -80,7 +80,7 @@ func TestOpeningPreviewsFirstSceneWithoutChangingAutosave(t *testing.T) {
 
 func assertOpeningScene(t *testing.T, state game.State) {
 	t.Helper()
-	if state.SceneKey != "mini_arrival" || state.Room != "gate" || !state.StoryMode || state.Dialogue.Speaker != "旁白" {
+	if state.SceneKey != "mini_arrival" || state.Room != "gate" || !state.StoryMode || state.Dialogue != (game.Dialogue{}) || state.SceneText == "" {
 		t.Fatalf("not the first scene: scene=%s room=%s story=%v speaker=%s", state.SceneKey, state.Room, state.StoryMode, state.Dialogue.Speaker)
 	}
 	if len(state.Actors) != 5 || len(state.SceneProps) == 0 || len(state.Inventory) != 0 {

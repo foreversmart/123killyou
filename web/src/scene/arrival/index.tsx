@@ -1,4 +1,5 @@
 import type { GameState } from '@/shared/types/game';
+import { StoryObservation } from '@/scene/story_observation';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
 import artwork from './artwork.module.css';
@@ -163,7 +164,8 @@ export function ArrivalInteraction({
           <span>{prop.name}</span>
         </button>
       ))}
-      <div className={interaction.actions} aria-label="我接下来想做什么">
+      <StoryObservation state={state} />
+      <div className={interaction.actions} aria-label="接下来的行动">
         <button disabled={disabled} type="button" onClick={() => void onAction('听第一话')}>
           听听他们在说什么
         </button>

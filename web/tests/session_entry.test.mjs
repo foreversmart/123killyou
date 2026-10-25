@@ -63,7 +63,8 @@ test('dev 拒绝旧服务和任何后续场景，不把 mini 前缀当作第一�
     storyMode: true,
     sceneKey: 'mini_arrival',
     room: 'gate',
-    dialogue: { speaker: '旁白' },
+    sceneText: '大巴停在灯影寺山门前。',
+    dialogue: { speaker: '', text: '' },
   };
   assert.equal(isOpeningState(opening), true);
   for (const patch of [
@@ -71,6 +72,8 @@ test('dev 拒绝旧服务和任何后续场景，不把 mini 前缀当作第一�
     { room: 'watch' },
     { sceneKey: 'mini_register' },
     { storyMode: false },
+    { sceneText: '' },
+    { dialogue: { speaker: '旁白', text: '大巴停下了。' } },
   ])
     assert.equal(isOpeningState({ ...opening, ...patch }), false);
 });

@@ -13,8 +13,8 @@ func TestDebugSkipVisitsEverySceneAndStopsAtEnding(t *testing.T) {
 	s.Clues = append(s.Clues, "已调查的旧名")
 	s.Flags["history_read"] = true
 	for index, target := range miniDebugSceneOrder[1:] {
-		intent, speak := e.Apply(&s, debugNextScene)
-		if intent != "debug_skip" || speak == "" || s.SceneKey != target || s.ShotKey != miniOpeningShots[target] {
+		intent, _ := e.Apply(&s, debugNextScene)
+		if intent != "debug_skip" || s.SceneKey != target || s.ShotKey != miniOpeningShots[target] {
 			t.Fatalf("第%d次跳转没有停在目标首镜头: %s %+v", index+1, intent, s)
 		}
 		if s.DialogueNext != "" || s.Dialogue.Speaker == "系统" || len(s.Actors) == 0 || s.SceneText == "" {

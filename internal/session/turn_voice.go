@@ -52,6 +52,9 @@ func (s *Service) planVoice(tx Transaction, before game.State, text string) (voi
 }
 
 func (s *Service) generateVoice(ctx context.Context, plan voicePlan, text string, emit SpeechSink) (string, *DialogueAudio, error) {
+	if strings.TrimSpace(plan.Reply) == "" {
+		return "", nil, nil
+	}
 	if s.provider == nil {
 		return "", nil, ErrLinxUnavailable
 	}

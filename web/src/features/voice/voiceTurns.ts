@@ -38,7 +38,10 @@ export function createVoiceTurns(handlers: TurnHandlers) {
         });
         if (turn !== generation) return;
         if (typeof answer !== 'string' && answer.problem) throw new Error(answer.problem);
-        if (!(typeof answer === 'string' ? answer : answer.text).trim())
+        if (
+          !(typeof answer === 'string' ? answer : answer.text).trim() &&
+          !(typeof answer !== 'string' && answer.sceneOnly)
+        )
           throw new Error('听见了，但这次没有收到完整回应。请再说一次。');
         handlers.answer(answer);
       } catch (cause) {
