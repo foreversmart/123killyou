@@ -64,7 +64,7 @@ func TestMiniScriptCanReachDawnFromSafeChoices(t *testing.T) {
 		t.Fatalf("睡下后未进入三声锣场景: %s", state.SceneKey)
 	}
 	applyStory(t, engine, &state, "续燃红烛")
-	applyStory(t, engine, &state, "不开门并问是谁")
+	applyStory(t, engine, &state, "不开门")
 	applyStory(t, engine, &state, "跟同伴去偷听住持")
 	applyStory(t, engine, &state, "模仿猫叫")
 	applyStory(t, engine, &state, "不开门等待真正的五更")

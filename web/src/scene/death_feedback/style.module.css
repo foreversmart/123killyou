@@ -1,0 +1,196 @@
+.feedback {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: #f0d6bd;
+  animation: death-shake 0.8s ease-out both;
+}
+
+.blood-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 46%, transparent 25%, #22080bd1 82%),
+    linear-gradient(180deg, #420b1124, #09050c6b 72%, #020207d9);
+  mix-blend-mode: multiply;
+  animation: blood-pulse 2.8s ease-in-out infinite;
+}
+
+.blood-scratch {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: scratch-reveal 1.1s 0.15s ease-out forwards;
+}
+
+.blood-scratch i {
+  position: absolute;
+  display: block;
+  width: 0.24cqw;
+  min-width: 2px;
+  height: 31%;
+  background: linear-gradient(180deg, transparent, #9f1f2c 18%, #470812 88%, transparent);
+  box-shadow: 0 0 0.45cqw #a7192a80;
+  transform: rotate(var(--tilt));
+  transform-origin: top;
+}
+
+.blood-scratch i:nth-child(1) {
+  --tilt: 19deg;
+  top: -2%;
+  left: 14%;
+}
+
+.blood-scratch i:nth-child(2) {
+  --tilt: -11deg;
+  top: 3%;
+  right: 17%;
+  height: 24%;
+}
+
+.blood-scratch i:nth-child(3) {
+  --tilt: 8deg;
+  top: -4%;
+  left: 36%;
+  height: 22%;
+}
+
+.blood-scratch i:nth-child(4) {
+  --tilt: -17deg;
+  top: 1%;
+  right: 36%;
+  height: 35%;
+}
+
+.blood-scratch i:nth-child(5) {
+  --tilt: 13deg;
+  top: 9%;
+  left: 77%;
+  height: 18%;
+}
+
+.card {
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  width: min(44cqw, 560px);
+  padding: 1.5cqw 2cqw 1.3cqw;
+  border: 1px solid #b7353d9c;
+  border-top: 2px solid #d7685b;
+  background: linear-gradient(145deg, #180d12e8, #080a0fe8);
+  box-shadow:
+    0 0 3cqw #000b,
+    inset 0 0 1.6cqw #9b203322;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: card-arrive 0.8s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.kicker {
+  color: #d26b65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(9px, 0.67cqw, 13px);
+  letter-spacing: 0.14em;
+}
+
+.card h2 {
+  margin: 0.65cqw 0 0.5cqw;
+  color: #ffe0c9;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: clamp(21px, 2.2cqw, 38px);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 1.2cqw #b2212d88;
+}
+
+.card p {
+  max-width: 34cqw;
+  margin: 0 auto;
+  color: #d7bcb2;
+  font-size: clamp(11px, 0.78cqw, 15px);
+  line-height: 1.8;
+}
+
+.status {
+  display: block;
+  margin-top: 0.9cqw;
+  color: #a28785;
+  font-size: clamp(9px, 0.6cqw, 12px);
+  letter-spacing: 0.08em;
+}
+
+@keyframes death-shake {
+  0% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  35% {
+    opacity: 1;
+    transform: translateX(-0.24cqw) scale(1.015);
+  }
+  55% {
+    transform: translateX(0.18cqw) scale(1.005);
+  }
+  75% {
+    transform: translateX(-0.1cqw);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blood-pulse {
+  50% {
+    opacity: 0.58;
+  }
+}
+
+@keyframes scratch-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4%);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-arrive {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 1.6cqw) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@media (max-width: 800px) {
+  .card {
+    top: 24%;
+    width: min(70cqw, 560px);
+    padding: 3cqw 4cqw 2.6cqw;
+  }
+
+  .card p {
+    max-width: 62cqw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback,
+  .blood-vignette,
+  .blood-scratch,
+  .card {
+    animation: none;
+  }
+
+  .blood-scratch {
+    opacity: 0.9;
+  }
+}

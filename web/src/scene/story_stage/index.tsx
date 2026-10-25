@@ -10,6 +10,7 @@ import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
 import { authoredScene } from '@/scene/authored_scene/scenes';
 import { sceneChoices } from './choices';
+import { DeathFeedback } from '@/scene/death_feedback';
 import styles from './style.module.css';
 
 export function StoryStage({
@@ -176,6 +177,7 @@ export function StoryStage({
           )}
         </div>
       )}
+      {state.sceneKey === 'mini_death' && <DeathFeedback state={state} />}
       <div className={styles.choices} aria-label="接下来的行动">
         <span className={styles.thought}>接下来……</span>
         <div>

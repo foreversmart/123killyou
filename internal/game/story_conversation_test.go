@@ -28,6 +28,15 @@ func TestUnmatchedStorySpeechNeverReplaysSceneOrChangesStory(t *testing.T) {
 			s.DialogueNext = ""
 			before := Clone(s)
 			intent, speak := e.Apply(&s, "我今天想聊聊宇宙飞船")
+			if scene == "mini_four_knocks" {
+				if intent != "inspect" || speak != "" || s.Dialogue != (Dialogue{}) {
+					t.Fatalf("四敲闲聊应保持静默并停留现场：%s %q %+v", intent, speak, s.Dialogue)
+				}
+				if s.Devotion != before.Devotion+DevotionGhostDialogueDelta || s.SceneKey != before.SceneKey {
+					t.Fatalf("四敲闲聊应只扣虔诚度：before=%+v after=%+v", before, s)
+				}
+				return
+			}
 			if intent != "dialogue" && intent != "clarify" {
 				t.Fatalf("闲聊被当成剧情：%s %s", intent, speak)
 			}
