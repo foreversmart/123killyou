@@ -35,8 +35,8 @@ var registerLines = []miniLine{
 	{"周砚", "这道痕从偏殿那边过来，像是修缮时留下的？", "register_drag_mark"},
 	{"陆沉", "看见就好，别用手摸。晚膳后我带你们走一遍，白天认过路，晚上才不会绕错。", "register_drag_mark"},
 	{"林岚", "‘听’房……名字倒挺特别。这个铃要是响了，会不会把声音也录进去？", "register_camera_bell"},
-	{"许栀", "晚上要是想喝水，我是叫你，还是自己出来取？", "register_ribbon"},
-	{"陆沉", "先叫我，等我应了再开门。没有必要，今晚不要一个人出门。", "register_luggage"},
+	{"许栀", "蓝色发圈夹着入住须知，四块房牌我也都看清了。", "register_ribbon"},
+	{"陆沉", "这是各位的钥匙，请各位施主妥善保管就好了。房牌都对应好了，行李可以放到各自门边。", "register_key_tags"},
 }
 var refectoryLines = []miniLine{
 	{"周砚", "等一下，粥里好像有肉！和尚庙不是应该都吃素吗，为什么会有肉？", "refectory_porridge"},

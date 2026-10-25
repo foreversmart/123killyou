@@ -23,14 +23,19 @@ const closeups: Record<string, { title: string; asset: string }> = {
 export function StoryObservation({ state }: { state: GameState }) {
   const shot = state.shotKey || '';
   const closeup = closeups[shot];
-  const latch = ['room_latch', 'wake_door', 'four_peephole'].includes(shot);
+  const latch = ['room_latch', 'wake_door'].includes(shot);
   const shadow = ['double_enter', 'double_candle', 'double_exit'].includes(shot);
   const drag = shot === 'register_drag_mark';
   const bowlTags = shot === 'refectory_porridge' && Boolean(state.flags.bowl_tags_seen);
   const cups = ['oracle_cast', 'oracle_stone', 'oracle_rescue'].includes(shot);
   if (!closeup && !latch && !shadow && !drag && !bowlTags && !cups) return null;
   return (
-    <figure className={styles.closeup} data-observation={shot} key={shot}>
+    <figure
+      className={styles.closeup}
+      data-observation={shot}
+      data-painted={(!closeup && !bowlTags && !cups) || undefined}
+      key={shot}
+    >
       <figcaption>
         {closeup?.title ||
           (cups
@@ -52,9 +57,12 @@ export function StoryObservation({ state }: { state: GameState }) {
       ) : closeup ? (
         <img src={closeup.asset} alt={closeup.title} />
       ) : latch ? (
-        <DoorDetail wet={shot === 'wake_door'} peephole={shot === 'four_peephole'} />
+        <DoorDetail wet={shot === 'wake_door'} />
       ) : (
-        <ShadowDetail seam={shot === 'double_exit'} />
+        <ShadowDetail
+          seam={shot === 'double_exit'}
+          identity={state.actors?.find((actor) => actor.id === 'skin_double')?.portrait}
+        />
       )}
       {shot.endsWith('_bird') && <img className={styles.bird} src={props.sparrow} alt="笼中麻雀" />}
       {shot === 'register_camera_bell' && (

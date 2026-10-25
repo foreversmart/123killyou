@@ -2,7 +2,7 @@
   "purpose": "以 mini_script.md 为准的完整流程美术制作清单",
   "storySource": "story/mini_script.md",
   "status": "images_complete",
-  "runtimeIntegration": "not_integrated",
+  "runtimeIntegration": "integrated",
   "spatialPlan": {
     "eastCourtyard": {
       "nearLeft": "听：林岚",
@@ -758,24 +758,6 @@
       ],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 STYLE AND LIGHT ONLY, not an edit target. Create one SINGLE WOODEN SPOON ALONE on genuine transparent background. Long plain brown wooden handle and shallow oval spoon bowl, one tiny beige cooked meat fiber on it. Fine hand-drawn dark outlines, broad matte shading, warm light from left. Diagonal spoon, fully visible from tip to handle. NO ceramic bowl, NO porridge bowl, NO plate, NO table, NO food dish, NO person, NO shadows or surrounding objects. Center the spoon large on a square canvas; all space around spoon transparent.",
-      "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
-    },
-    {
-      "id": "flatbread",
-      "name": "素饼",
-      "path": "assets/props/flatbread/scene.png",
-      "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/porridge/bowl_full.png"
-      ],
-      "transparent": true,
-      "prompt": "Use case: illustration-story. Input1 exact bowl material and tabletop camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One modest round pale wheat flatbread on a plain small offwhite saucer; bread torn once so soft crumb visible. Ordinary temple vegetarian food, no meat/filling/decoration. Match bowl perspective and warm sunset lighting; no tabletop.",
       "status": "verified",
       "needs": [
         "porridge_full"
@@ -1620,6 +1602,183 @@
       "promptSet": "assets/generation/opening_title_prompt.json",
       "prompt": "Use case: logo-brand. Asset type: finished Chinese horror movie opening title card and exact typography reference for a video generator. Create ONE landscape 16:9 title card on a perfectly solid pure black background. The only visible text is the four simplified Chinese characters, written exactly and in this order: 红烛无声. Exactly four characters, no other letters or subtitles. Center them in one horizontal line occupying about 68 percent of canvas width, leaving generous black space on every side. Typography: authentic bold, wild, rough handwritten Chinese calligraphy with a large heavily loaded traditional brush; thick forceful irregular strokes, bold masses of ink alternating with deliberate dry-brush drag and visible feibai / flying-white gaps in the strokes, ragged bristle edges and forceful tapered brush ends. Each character is correctly constructed, readable, and individually hand written with confident energy, subtly irregular baseline. Make it feel like an austere, oppressive Chinese folk-horror film title painted by a real calligrapher. Flat muted cinnabar red ink, near #A52320, with black dry-brush gaps; strong legibility against pure black, no glow. This MUST look like real rough brush calligraphy, never a computer Songti/Ming/serif/Heiti/font with a distressed filter. No metallic material, beveling, 3D embossing, neon, shadows, gradients, flames, blood drips, splashes outside the glyphs, illustrations, paper background, border, logo or watermark. Output a fully opaque final raster title card.",
       "status": "verified"
+    },
+    {
+      "id": "lin_lan_slumped_calm",
+      "name": "林岚·安静跪伏",
+      "path": "assets/characters/lin_lan/slumped_calm.png",
+      "kind": "character_pose",
+      "beats": [
+        "10"
+      ],
+      "references": [
+        "assets/characters/lin_lan/standing.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: identity-preserve. 输入图是林岚当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "zhou_yan_slumped_calm",
+      "name": "周砚·安静跪伏",
+      "path": "assets/characters/zhou_yan/slumped_calm.png",
+      "kind": "character_pose",
+      "beats": [
+        "10"
+      ],
+      "references": [
+        "assets/characters/zhou_yan/standing.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: identity-preserve. 输入图是周砚当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "xu_zhi_slumped_calm",
+      "name": "许栀·安静跪伏",
+      "path": "assets/characters/xu_zhi/slumped_calm.png",
+      "kind": "character_pose",
+      "beats": [
+        "10"
+      ],
+      "references": [
+        "assets/characters/xu_zhi/standing.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: identity-preserve. 输入图是许栀当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "steamed_buns",
+      "name": "热馒头蒸笼",
+      "path": "assets/props/steamed_buns/scene.png",
+      "kind": "prop",
+      "beats": [
+        "03"
+      ],
+      "references": [
+        "assets/props/bamboo_shoots/scene.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只朴素浅竹色圆形蒸笼，里面放几只完整白面馒头，松软、无馅料，不是煎饼或素饼。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "pickled_vegetables",
+      "name": "咸菜",
+      "path": "assets/props/pickled_vegetables/scene.png",
+      "kind": "prop",
+      "beats": [
+        "03"
+      ],
+      "references": [
+        "assets/props/bamboo_shoots/scene.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只普通小号灰白瓷碟，盛少量切细的腌咸菜，不要其他菜肴或餐具。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "mushroom_greens",
+      "name": "香菇青菜",
+      "path": "assets/props/mushroom_greens/scene.png",
+      "kind": "prop",
+      "beats": [
+        "03"
+      ],
+      "references": [
+        "assets/props/bamboo_shoots/scene.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只普通灰白瓷盘，盛家常炒香菇与青菜，深色香菇和自然绿色菜叶可辨，无肉、无多余装饰。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "drag_marks",
+      "name": "回廊拖痕近景",
+      "path": "assets/details/drag_marks.png",
+      "kind": "observation_detail",
+      "beats": [
+        "02"
+      ],
+      "references": [
+        "assets/scenes/east_courtyard/corridor_afternoon.png"
+      ],
+      "transparent": false,
+      "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。贴近东院回廊原有石板地面，旧而细长的拖擦痕沿砖缝斜向延伸；保持石材、砖缝方向和白日侧光一致，近景只显示这一条实际可见线索，不加人物或工具。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "door_latch_wet",
+      "name": "门闩湿痕近景",
+      "path": "assets/details/door_latch_wet.png",
+      "kind": "observation_detail",
+      "beats": [
+        "07",
+        "10"
+      ],
+      "references": [
+        "assets/scenes/player_room/room_candlelit.png"
+      ],
+      "transparent": false,
+      "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。主角门房木门与门闩局部近景，旧木材、金属件和门缝红蜡保持原造型，门闩邻近留少量湿痕，局部暖烛光与冷暗边缘，不能凭空添加手、怪物或血迹。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "broken_shadow",
+      "name": "残缺影子近景",
+      "path": "assets/details/broken_shadow.png",
+      "kind": "observation_detail",
+      "beats": [
+        "10"
+      ],
+      "references": [
+        "assets/scenes/player_room/room_candlelit.png"
+      ],
+      "transparent": false,
+      "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。门房烛光照到的地板与床脚局部近景，一道人形投影的边缘有明显不连续与缺口；房间木石材质与烛光方向不变，线索是地面影子，不画站姿人物、完整身体或新怪物。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "lu_chen_writing_ledger",
+      "name": "陆沉·案后登记",
+      "path": "assets/characters/lu_chen/writing_ledger.png",
+      "kind": "character_pose",
+      "beats": [
+        "02"
+      ],
+      "references": [
+        "assets/characters/lu_chen/standing_reception.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: identity-preserve. 输入图为陆沉白日接待站姿，保持原脸型、剃发、清瘦体型、灰褐交领僧衣、浅内领、布腰带、长裤与布鞋，保持细暗线、哑光色块和克制二维手绘风格。只改变全身姿态为向前俯身、眼睛望向低处纸页，右手执毛笔做登记书写动作，左手下压作固定纸页的手势。全身、双手与毛笔完整可见；不画桌、纸、本、钥匙、灯、背景或额外道具。真实透明背景，轮廓外透明，无投影云、光雾、边框、文字或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
+    },
+    {
+      "id": "lu_chen_offering_candle",
+      "name": "陆沉·递出红烛",
+      "path": "assets/characters/lu_chen/offering_candle.png",
+      "kind": "character_pose",
+      "beats": [
+        "04"
+      ],
+      "references": [
+        "assets/characters/lu_chen/standing_reception.png"
+      ],
+      "transparent": true,
+      "prompt": "Use case: identity-preserve. 输入图为陆沉当前定型参考，保持原脸型、剃发、清瘦体型、灰褐交领僧衣、浅内领、腰带、长裤与布鞋，保持细暗线、哑光色块和克制二维手绘风格。全身三分之四朝向玩家，右手向前递出一支未点燃的红烛，左臂抱朴素小木盒，盒内恰好三支剩余红烛。手指与握持关系自然，双鞋完整可见。无钥匙、油灯或额外道具；真正透明背景，无地面、阴影云、光雾、文字、边框或水印。",
+      "generator": "built-in image_gen",
+      "status": "verified"
     }
   ],
   "reusePolicy": {
@@ -1628,7 +1787,8 @@
     "loopingCorridor": "回廊折返复用午夜机位与转场遮罩。",
     "effects": "烛光闪烁、压灯、人物影子、呼吸、声音波形与死亡淡出由渲染/声音层提供；环境观察不转写为心声或旁白TTS，仅保留少量真实心理活动。",
     "text": "牌匾、房名、簿册、凭证、书页、碗签及结尾旧匾均准确排字。",
-    "characterSizing": "严格保持每张取样区域原比例，使用头顶、脚底与遮挡线定位；禁止独立改变宽高。"
+    "characterSizing": "严格保持每张取样区域原比例，使用头顶、脚底与遮挡线定位；禁止独立改变宽高。",
+    "transitions": "转场使用同机位环境图配黑场淡出、淡入，不使用正面站姿人物横向平移模拟行走。"
   },
   "openingVideoProduction": "assets/generation/opening_video_production.json",
   "compositionStatus": "reviewed",

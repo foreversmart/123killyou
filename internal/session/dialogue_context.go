@@ -7,7 +7,7 @@ import (
 	"nightwatch/internal/game"
 )
 
-func describeDialogueContext(state game.State, settledReply string) string {
+func describeDialogueContext(state game.State, settledReply, playerText string) string {
 	if settledReply == "" {
 		settledReply = "本轮未触发剧情事件，请自然回应这次发言。"
 	}
@@ -22,7 +22,7 @@ func describeDialogueContext(state game.State, settledReply string) string {
 	if len(items) == 0 {
 		items = append(items, "无")
 	}
-	context := fmt.Sprintf("当前事实：房间=%s；虔诚度=%d；持有物=%s；已知线索=%s；身份已暴露=%t。\n本轮后端结算倾向：%s\n请只以当前 NPC 的身份自然回应玩家，不宣称未被后端确认的奖励、移动或剧情。", state.RoomName, state.Devotion, strings.Join(items, "、"), clues, state.Caught, settledReply)
+	context := fmt.Sprintf("当前事实：房间=%s；虔诚度=%d；持有物=%s；已知线索=%s；身份已暴露=%t。\n本轮后端结算倾向：%s\n本轮玩家原话（必须直接回应这一句）：%s\n请只以当前 NPC 的身份自然回应玩家，不宣称未被后端确认的奖励、移动或剧情。", state.RoomName, state.Devotion, strings.Join(items, "、"), clues, state.Caught, settledReply, strings.TrimSpace(playerText))
 	if state.StoryMode {
 		scene := state.SceneName
 		if state.SceneKey == "mini_double" || state.SceneKey == "mini_listen" {
