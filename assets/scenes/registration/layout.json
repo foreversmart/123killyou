@@ -1,0 +1,437 @@
+{
+  "sceneId": "registration",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "anchor": "normalized within rect; all placements use top-left",
+    "alpha": "preserve source alpha",
+    "state": "preview state only; runtime state comes from the game backend"
+  },
+  "defaultState": {
+    "ledger": "open",
+    "keyVisible": true,
+    "permit": "stack",
+    "roomTagsVisible": true
+  },
+  "sprites": {
+    "background": {
+      "path": "registration_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1915497,
+      "sha256": "913db82b91eb705ea8ae734211105067405701831ce44d74e6b8ae28d0e91cb9",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "desk": {
+      "path": "desk_foreground.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 797563,
+      "sha256": "d24a084868de92f7d014fb463a351854225ad6e9fda5610dfbeb4edfb9ba93cb",
+      "sourceFrame": {
+        "x": 0,
+        "y": 409,
+        "width": 1672,
+        "height": 532
+      },
+      "alphaCheck": {
+        "transparentPixels": 993474,
+        "nearOpaquePixels": 543787
+      }
+    },
+    "ledger_open": {
+      "path": "props/ledger_open.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 606250,
+      "sha256": "55d88511f4163229a853a7c0db94480f282e98e39e33ff6468b458842888f84e",
+      "sourceFrame": {
+        "x": 108,
+        "y": 448,
+        "width": 1458,
+        "height": 341
+      },
+      "alphaCheck": {
+        "transparentPixels": 1151731,
+        "nearOpaquePixels": 402784
+      }
+    },
+    "ledger_closed": {
+      "path": "props/ledger_closed.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 515425,
+      "sha256": "9b8dd53eb6f5aed911dfe3e1ba93308ad7be786ab9a1ccf77ae0a61af5525351",
+      "sourceFrame": {
+        "x": 448,
+        "y": 435,
+        "width": 712,
+        "height": 391
+      },
+      "alphaCheck": {
+        "transparentPixels": 1325163,
+        "nearOpaquePixels": 238341
+      }
+    },
+    "key": {
+      "path": "props/copper_key.png",
+      "width": 1671,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 87734,
+      "sha256": "e744aac17c8fbb1f2d08a1ed68282a0b580f538e416f7b7ea9845dca7118cf3f",
+      "sourceFrame": {
+        "x": 1297,
+        "y": 646,
+        "width": 189,
+        "height": 136
+      },
+      "alphaCheck": {
+        "transparentPixels": 1561422,
+        "nearOpaquePixels": 6254
+      }
+    },
+    "permit_stack": {
+      "path": "props/permit_stack.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 113310,
+      "sha256": "bd4d98880aafb01261082d1d4e78d98863cadd55a785dd33b4185c45a8aaac31",
+      "sourceFrame": {
+        "x": 1332,
+        "y": 640,
+        "width": 266,
+        "height": 146
+      },
+      "alphaCheck": {
+        "transparentPixels": 1543391,
+        "nearOpaquePixels": 26517
+      }
+    },
+    "permit_single": {
+      "path": "props/permit_single.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 79778,
+      "sha256": "219a30c48f01ddfd592e1f6a1221f0aa748c7c581a3991b323aae5b5a4b1cadd",
+      "sourceFrame": {
+        "x": 1369,
+        "y": 647,
+        "width": 220,
+        "height": 95
+      },
+      "alphaCheck": {
+        "transparentPixels": 1558950,
+        "nearOpaquePixels": 11600
+      }
+    },
+    "room_tag": {
+      "path": "props/room_tag.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 188996,
+      "sha256": "f5600c3ee8a5062a84109cb30be7c511368613e9a8d89b36bfb61b6c789af132",
+      "sourceFrame": {
+        "x": 563,
+        "y": 261,
+        "width": 185,
+        "height": 504
+      },
+      "alphaCheck": {
+        "transparentPixels": 1491392,
+        "nearOpaquePixels": 75043
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "sprite": "background",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "room_tag_1",
+      "sprite": "room_tag",
+      "rect": {
+        "x": 1121,
+        "y": 166,
+        "width": 40,
+        "height": 113
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_tag_2",
+      "sprite": "room_tag",
+      "rect": {
+        "x": 1185,
+        "y": 166,
+        "width": 40,
+        "height": 113
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_tag_3",
+      "sprite": "room_tag",
+      "rect": {
+        "x": 1249,
+        "y": 166,
+        "width": 40,
+        "height": 113
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_tag_4",
+      "sprite": "room_tag",
+      "rect": {
+        "x": 1313,
+        "y": 166,
+        "width": 40,
+        "height": 113
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "desk",
+      "sprite": "desk",
+      "rect": {
+        "x": 0,
+        "y": 409,
+        "width": 1672,
+        "height": 532
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 20
+    },
+    {
+      "id": "ledger_open",
+      "sprite": "ledger_open",
+      "rect": {
+        "x": 465,
+        "y": 665,
+        "width": 718,
+        "height": 165
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "ledger": "open"
+      }
+    },
+    {
+      "id": "ledger_closed",
+      "sprite": "ledger_closed",
+      "rect": {
+        "x": 642,
+        "y": 654,
+        "width": 360,
+        "height": 197
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "ledger": "closed"
+      }
+    },
+    {
+      "id": "key",
+      "sprite": "key",
+      "rect": {
+        "x": 1327,
+        "y": 689,
+        "width": 71,
+        "height": 49
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 31,
+      "visibleWhen": {
+        "keyVisible": true
+      }
+    },
+    {
+      "id": "permit_stack",
+      "sprite": "permit_stack",
+      "rect": {
+        "x": 1390,
+        "y": 658,
+        "width": 163,
+        "height": 86
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "permit": "stack"
+      }
+    },
+    {
+      "id": "permit_single",
+      "sprite": "permit_single",
+      "rect": {
+        "x": 1390,
+        "y": 658,
+        "width": 156,
+        "height": 67
+      },
+      "anchor": {
+        "x": 0,
+        "y": 0
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "permit": "single"
+      }
+    }
+  ],
+  "labels": [
+    {
+      "id": "room_label_1",
+      "text": "听",
+      "x": 1141,
+      "y": 232,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#483420",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 6,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_label_2",
+      "text": "灯",
+      "x": 1205,
+      "y": 232,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#483420",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 6,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_label_3",
+      "text": "纸",
+      "x": 1269,
+      "y": 232,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#483420",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 6,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    },
+    {
+      "id": "room_label_4",
+      "text": "门",
+      "x": 1333,
+      "y": 232,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#483420",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 6,
+      "visibleWhen": {
+        "roomTagsVisible": true
+      }
+    }
+  ],
+  "actorPreview": {
+    "path": "../../characters/lu_chen/standing_lantern.png",
+    "sourceFrame": {
+      "x": 227,
+      "y": 2,
+      "width": 607,
+      "height": 1534
+    },
+    "rect": {
+      "x": 656.0,
+      "y": 94.6,
+      "width": 408.0,
+      "height": 1030.8
+    },
+    "zIndex": 10,
+    "role": "existing sprite for placement and desk occlusion review; registration pose can be authored separately",
+    "placementNote": "人物水平中心为 x=860；桌后遮挡线 y=637 为可见躯干的定位基准。使用原立绘像素取样，按 rect 渲染。"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "登记处分层素材的当前生成与派生规范",
+  "styleReferences": [
+    "assets/references/style_reference/ref_02_character_counter.png",
+    "assets/references/style_reference/ref_03_group_interior.png"
+  ],
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "sharedStyle": "写实比例的二维线描；深色细轮廓、哑光概括色面、克制阴影和稀疏纸质纹理。机位、空间透视及下午光照沿用当前登记处。",
+  "assets": [
+    {
+      "id": "background",
+      "name": "登记处·下午干净背景",
+      "path": "assets/scenes/registration/registration_afternoon.png",
+      "transparentBackground": false,
+      "referenceAsset": "assets/scenes/registration/registration_afternoon.png",
+      "prompt": "晴日下午的古寺登记处干净背景，横向1672×941。保持右侧木格窗、左侧通往回廊的开口、木柱、米灰墙与石板地。墙面木板上只有四个固定挂钩，房牌另外叠加。无桌柜、簿册、笔、托盘、钥匙、纸叠、人物和动物。暖日光、概括树影、细暗轮廓线、哑光大色面与稀疏纹理，保持当前固定第一人称机位。无文字和界面。"
+    },
+    {
+      "id": "desk",
+      "name": "登记桌前景",
+      "path": "assets/scenes/registration/desk_foreground.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/desk_foreground.png",
+      "prompt": "登记处朴素木桌前景透明图层，含左侧折返柜台、一支笔和空浅木托盘。保持当前画面全宽、桌沿位置、透视和下午光照；不含登记簿、钥匙、通行凭、房牌或人物。轮廓外真实透明，不添加背景、光雾或额外家具。"
+    },
+    {
+      "id": "ledger_open",
+      "name": "登记簿·打开",
+      "path": "assets/scenes/registration/props/ledger_open.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/ledger_open.png",
+      "prompt": "打开的登记簿透明素材，横向摊开的两页米黄色纸，暗灰绿封皮边，空白表格与中缝。保持当前桌面俯视透视、横向压扁的外形及右侧暖日光。只有书本，无文字、数字、伪文字、笔、手或桌面。轮廓外透明。"
+    },
+    {
+      "id": "ledger_closed",
+      "name": "登记簿·合上",
+      "path": "assets/scenes/registration/props/ledger_closed.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/ledger_closed.png",
+      "prompt": "合上的登记簿透明素材，保持打开状态的暗灰绿封皮、米黄色纸页厚度和桌面透视，封面窄长标签留白。只有同一本书，无文字、手、桌面、阴影云或背景。细暗轮廓、概括色面、下午暖光，轮廓外透明。"
+    },
+    {
+      "id": "key",
+      "name": "铜钥匙",
+      "path": "assets/scenes/registration/props/copper_key.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/copper_key.png",
+      "prompt": "一枚旧铜房门钥匙透明素材，环形柄、短钥匙杆与简洁齿口，保持当前造型、桌面透视、斜放角度和下午暖光。哑光黄铜与细暗轮廓，无钥匙串、托盘、纸、桌面、文字、光雾或背景，轮廓与环孔真实透明。"
+    },
+    {
+      "id": "permit_stack",
+      "name": "通行凭·纸叠",
+      "path": "assets/scenes/registration/props/permit_stack.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/permit_stack.png",
+      "prompt": "一叠空白通行凭纸张透明素材，暖米白矩形薄纸，少量清楚的叠纸边线，保持当前桌面透视、斜放角度和下午日光。无字、印章、伪印刷、钥匙、托盘、桌面、光雾或背景，轮廓外真实透明。"
+    },
+    {
+      "id": "permit_single",
+      "name": "通行凭·单张",
+      "path": "assets/scenes/registration/props/permit_single.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/permit_single.png",
+      "prompt": "单张空白通行凭透明素材，保持纸叠顶面同样的形状、斜放角度、暖米白纸色与下午光照，厚度仅一张纸。无文字、印章、纸叠、钥匙、托盘、桌面、光雾或背景，轮廓外真实透明。"
+    },
+    {
+      "id": "room_tag",
+      "name": "空白铜房牌",
+      "path": "assets/scenes/registration/props/room_tag.png",
+      "transparentBackground": true,
+      "referenceAsset": "assets/scenes/registration/props/room_tag.png",
+      "prompt": "单块通用空白铜房牌透明素材，细长圆角矩形铜牌，顶部只有一个小圆连接环及穿过牌孔的小连接扣。保持当前比例、正面朝向、暖哑光黄铜和少量边缘磨痕。固定墙钩与木板不属于该道具。无字、无其他房牌、无大号上挂钩、无背景、无光雾，轮廓与环孔透明。"
+    }
+  ]
+}

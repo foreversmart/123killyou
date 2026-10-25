@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-25",
+  "generator": "built-in image_gen",
+  "use_case": "illustration-story",
+  "transparent_background": true,
+  "assets": [
+    {
+      "id": "zhou_yan",
+      "path": "assets/characters/zhou_yan/standing.png",
+      "prompt": "Use case: illustration-story.\nAsset type: ONE original FULL-BODY TRANSPARENT character sprite for the Chinese narrative adventure game 《红烛无声》.\n\nREFERENCE ROLES:\nImages 1–3 are the user's primary VISUAL STYLE references: hand-drawn two-dimensional narrative-game frames, realistic proportions, clear fine dark contours, broad matte color planes, selective facial structure lines and simplified shadow shapes.\nImages 4–5 are existing ensemble sprites of Lin Lan and Lu Chen. Match their ink weight, face rendering, level of detail, clothing shading and full-body presentation, but create the DIFFERENT individual described below. Do not copy their face, hairstyle, clothing or props.\nDraw an original person who belongs to this same ensemble. Ordinary individual features, restrained readable expression, realistic anatomy and natural standing balance. Main folds and broad shading with light uniform drawing-paper character. No highly modeled portrait, glossy 3D, dense skin/fabric microtexture, exaggerated anime eyes, fashion posing or children's cartoon.\n\nFRAMING AND DELIVERY:\nOne complete figure, portrait approximately 2:3, aim for 1024x1536, comfortable transparent margins around the whole silhouette. Head, both hands, all held items and both shoes fully visible. Soft neutral body lighting, restrained warm-gray shadows, no theatrical rim light.\nTRUE transparent alpha: the person, clothes and props opaque, all pixels outside the exact silhouette alpha 0, antialiasing only at edges. No background scene, floor, pedestal, cast ground shadow, oval haze, backdrop glow, painted checkerboard, text, name, UI, frame, letterbox bars or watermark.\n\nSUBJECT: 周砚 / Zhou Yan, a contemporary Chinese male traveler around 30, knowledgeable about old buildings. Tall and lean with a sober, observant manner. He relies on structure and logic, checking the way back when uneasy. This is his ordinary calm state.\nIDENTITY: a longer rectangular face, straight defined nose, focused modestly narrow eyes, natural eyebrows, closed mouth with a quiet attentive expression. Neat short black hair with a practical side part, clean-shaven, no glasses. He must be clearly different from the shaved-head monk and from the young man in reference 1.\nCLOTHING: dark NAVY casual field jacket with a simple collar over a muted cool-gray shirt, charcoal straight trousers, practical dark walking shoes. A small plain dark-gray canvas crossbody satchel at one hip, no logos. He wears normal contemporary travel clothes, not a work uniform or costume.\nPOSE: mild three-quarter view facing the player, upright but not military. One hand lightly rests on the satchel strap near the chest, the other arm relaxed at his side. Natural fingers and a coherent single bag strap. No paper map in his hands: the room's folded repair drawing is a separate scene clue. No torch, keys, camera, helmet or clipboard.",
+      "references": [
+        {
+          "path": "assets/references/style_reference/ref_01_character_closeup.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_03_group_interior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "existing_ensemble_style_reference"
+        },
+        {
+          "path": "assets/characters/lu_chen/standing_lantern.png",
+          "role": "existing_ensemble_style_reference"
+        }
+      ]
+    },
+    {
+      "id": "xu_zhi",
+      "path": "assets/characters/xu_zhi/standing.png",
+      "prompt": "Use case: identity-preserve.\nAsset type: full-body transparent Xu Zhi character sprite for the Chinese narrative game 《红烛无声》.\n\nImage 1 is the exact CURRENT identity, costume and pose reference. Preserve this specific woman's face, age, hairstyle, body proportions, clothing, bag, pose and hand positions. Keep the complete figure, head and both shoes visible in a 1024x1536 portrait canvas.\n\nCHARACTER:\nXu Zhi / 许栀, a Chinese adult woman around 27, quietly attentive and considerate, with personal resolve. Short round face, fuller cheeks, softly rounded lower jaw and round chin; fairly straight brows, horizontal calm eyes with modest eyelid emphasis, short rounded nose tip, relaxed thinner lips with nearly level corners. Natural slightly uneven straight fringe and dark collarbone-length hair. Upright head and near-frontal gaze while the body keeps the reference's mild three-quarter orientation.\n\nCOSTUME AND POSE:\nMuted gray-green long-sleeve cardigan, off-white round-neck shirt, charcoal-gray trousers, pale walking shoes and one plain ivory canvas shoulder tote. One hand lightly holds the tote strap; the other hangs naturally. Keep the existing collar, buttons, main folds and strap continuity. The blue hair tie belongs to a separate paper clue, so it is absent from hair, wrist and bag. No glasses, hair ornaments, jewelry or added props.\n\nSTYLE AND DELIVERY:\nPrecisely match Image 1's realistic proportions, fine dark contours, broad matte local-color planes, sparse facial and clothing structure lines, restrained shadows and light uniform paper quality. Preserve her individual facial geometry without a pointed-chin beauty template, glamour retouching, exaggerated eyes, infantilization or aging. Soft neutral body lighting. Genuine transparent alpha outside the complete silhouette, opaque character and clothing, antialiasing at edges only. No background haze, gradient, vignette, floor, cast shadow, extra person, text, frame, UI or watermark.",
+      "references": [
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "exact_current_character_identity_and_costume"
+        }
+      ],
+      "use_case": "identity-preserve"
+    },
+    {
+      "id": "hui_pu",
+      "path": "assets/characters/hui_pu/standing.png",
+      "prompt": "Use case: illustration-story.\nAsset type: ONE original FULL-BODY TRANSPARENT character sprite for the Chinese narrative adventure game 《红烛无声》.\n\nREFERENCE ROLES:\nImages 1–3 are the user's primary VISUAL STYLE references: hand-drawn two-dimensional narrative-game frames, realistic proportions, clear fine dark contours, broad matte color planes, selective facial structure lines and simplified shadow shapes.\nImages 4–5 are existing ensemble sprites of Lin Lan and Lu Chen. Match their ink weight, face rendering, level of detail, clothing shading and full-body presentation, but create the DIFFERENT individual described below. Do not copy their face, hairstyle, clothing or props.\nDraw an original person who belongs to this same ensemble. Ordinary individual features, restrained readable expression, realistic anatomy and natural standing balance. Main folds and broad shading with light uniform drawing-paper character. No highly modeled portrait, glossy 3D, dense skin/fabric microtexture, exaggerated anime eyes, fashion posing or children's cartoon.\n\nFRAMING AND DELIVERY:\nOne complete figure, portrait approximately 2:3, aim for 1024x1536, comfortable transparent margins around the whole silhouette. Head, both hands, all held items and both shoes fully visible. Soft neutral body lighting, restrained warm-gray shadows, no theatrical rim light.\nTRUE transparent alpha: the person, clothes and props opaque, all pixels outside the exact silhouette alpha 0, antialiasing only at edges. No background scene, floor, pedestal, cast ground shadow, oval haze, backdrop glow, painted checkerboard, text, name, UI, frame, letterbox bars or watermark.\n\nSUBJECT: 慧普 / Hui Pu, the temple abbot's outwardly NORMAL human appearance, resembling a Chinese monk around 65. His manner is patiently warm, welcoming and overly considerate. This image must reveal no monster anatomy.\nIDENTITY: a fuller broad oval face, heavy calm eyelids, a few age lines around the eyes and mouth, a faint reassuring smile. Shaved head, clean-shaven jaw, no beard. More settled and slightly fuller-bodied than Lu Chen, quietly upright. Natural ordinary older features, no saintly glow or villain sneer.\nCLOTHING: simple very neatly arranged dark OCHRE/UMBER monastic layers and a subdued old-brown kasaya-style outer drape with sparse rectangular cloth-panel seams. Matte cloth, plain practical cloth shoes. Robe folds lie unusually evenly; cuffs and neckline fit just slightly loosely, an understated ambiguity rather than visible deformity. Keep the design modest, not imperial or sumptuous.\nPOSE: full-body subtle three-quarter standing pose facing the player; one hand rests within a fold near the abdomen, the other offers a small low open-palmed welcoming gesture. Both hands anatomically coherent. His face and posture stay consistently gentle.\nNo exposed back, stitches, peeled skin, wounds, fangs, claws, ghost smoke, aura, halo, weapons, prayer staff, elaborate jewelry, overt magic or glowing eyes. No camera, keyring, lantern or ritual blocks. No bright orange uniform or shiny ceremonial brocade.",
+      "references": [
+        {
+          "path": "assets/references/style_reference/ref_01_character_closeup.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_03_group_interior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "existing_ensemble_style_reference"
+        },
+        {
+          "path": "assets/characters/lu_chen/standing_lantern.png",
+          "role": "existing_ensemble_style_reference"
+        }
+      ]
+    },
+    {
+      "id": "shen_gong",
+      "path": "assets/characters/shen_gong/standing_jiaobei.png",
+      "prompt": "Use case: illustration-story.\nAsset type: ONE original FULL-BODY TRANSPARENT character sprite for the Chinese narrative adventure game 《红烛无声》.\n\nREFERENCE ROLES:\nImages 1–3 are the user's primary VISUAL STYLE references: hand-drawn two-dimensional narrative-game frames, realistic proportions, clear fine dark contours, broad matte color planes, selective facial structure lines and simplified shadow shapes.\nImages 4–5 are existing ensemble sprites of Lin Lan and Lu Chen. Match their ink weight, face rendering, level of detail, clothing shading and full-body presentation, but create the DIFFERENT individual described below. Do not copy their face, hairstyle, clothing or props.\nDraw an original person who belongs to this same ensemble. Ordinary individual features, restrained readable expression, realistic anatomy and natural standing balance. Main folds and broad shading with light uniform drawing-paper character. No highly modeled portrait, glossy 3D, dense skin/fabric microtexture, exaggerated anime eyes, fashion posing or children's cartoon.\n\nFRAMING AND DELIVERY:\nOne complete figure, portrait approximately 2:3, aim for 1024x1536, comfortable transparent margins around the whole silhouette. Head, both hands, all held items and both shoes fully visible. Soft neutral body lighting, restrained warm-gray shadows, no theatrical rim light.\nTRUE transparent alpha: the person, clothes and props opaque, all pixels outside the exact silhouette alpha 0, antialiasing only at edges. No background scene, floor, pedestal, cast ground shadow, oval haze, backdrop glow, painted checkerboard, text, name, UI, frame, letterbox bars or watermark.\n\nSUBJECT: 神公 / Shen Gong, a living elderly Chinese temple attendant monk who guards the divination blocks. About 73, thin and tired, calm, reserved and quietly attentive. This is his NORMAL LIVING state before any petrification.\nIDENTITY: distinctly narrow gaunt face, visible cheekbones, downturned eye corners and sparse deliberate age lines. Pale low-saturation human skin with modest warmth in the cheeks and hands, normal dark eyes. Shaved scalp, no beard. He is older, bonier and more stooped than Lu Chen, and clearly different from Hui Pu's fuller welcoming face. No supernatural expression.\nCLOTHING: plain muted CHARCOAL-GRAY wide-sleeved monk robe, a dull off-white inner collar, sparse broad folds and normal modest cloth shoes. The sleeves have a small number of stable broad pleats. Simple everyday fabric, no ornate kasaya pattern or ceremonial jewelry.\nPOSE: one complete standing figure in a mild three-quarter view, slightly stooped with gently bent elbows; looking up toward the player with a tired but attentive gaze. Hold exactly TWO small polished red-brown wooden crescent-shaped jiaobei divination blocks near waist height, one resting naturally in each palm. Each is one solid crescent half-moon block with a flat side and a rounded side, not dice, cups or carved figurines. Hands show natural thin living fingers and small hesitant movement through the pose.\nDo not add a table, chair, stool, floor or backdrop; this must remain a reusable transparent standing character. No stone skin, cracks, petrification, ghost aura, gilding, closed dead eyes, blood, camera, keys, lantern or other props.",
+      "references": [
+        {
+          "path": "assets/references/style_reference/ref_01_character_closeup.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/references/style_reference/ref_03_group_interior.png",
+          "role": "primary_visual_style_reference"
+        },
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "existing_ensemble_style_reference"
+        },
+        {
+          "path": "assets/characters/lu_chen/standing_lantern.png",
+          "role": "existing_ensemble_style_reference"
+        }
+      ]
+    }
+  ]
+}

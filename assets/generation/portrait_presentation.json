@@ -1,0 +1,35 @@
+{
+  "purpose": "NPC头像框中的未知人物占位表现",
+  "runtimeIntegration": "not_integrated",
+  "frame": {
+    "aspectRatio": 1,
+    "reuseExistingNpcFrame": true,
+    "reserveSpace": true,
+    "background": "provided_by_ui",
+    "border": "provided_by_ui"
+  },
+  "unknown": {
+    "id": "unknown",
+    "assetPath": "assets/portraits/unknown.png",
+    "overlay": {
+      "text": "？",
+      "center": {
+        "x": 0.5,
+        "y": 0.43
+      },
+      "fontSizeRatio": 0.32,
+      "fontFamily": "serif",
+      "fontWeight": 500,
+      "color": "#cfc5ac",
+      "textShadow": "0 2px 3px rgba(0,0,0,0.65)"
+    },
+    "fallbackSpeakerLabels": ["帘后的声音", "门外的声音"]
+  },
+  "rules": [
+    "帘后人物或外貌不可见、未核实的门外发言使用共用未知头像，保留与普通NPC相同的头像框和布局。",
+    "不根据后台真实NPC、真假、性别、年龄或职业更换黑影；占位仅表示玩家暂未看清。",
+    "人物面容已被玩家看见时，按可见外貌展示普通头像；不能因后台判定为换皮者而继续黑影或提前切换异变头像。",
+    "称呼只使用剧情已经公开的信息；未知说话人不显示后台真实姓名，已知称呼如住持可保留帘后标记。",
+    "纯环境音和系统旁白沿用独立系统表现，不凭空添加一个发言人物。"
+  ]
+}

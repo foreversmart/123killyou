@@ -1,0 +1,562 @@
+{
+  "date": "2026-10-25",
+  "status": "current",
+  "generator": "built-in image_gen",
+  "styleReferences": [
+    "assets/references/style_reference/ref_01_character_closeup.png",
+    "assets/references/style_reference/ref_02_character_counter.png",
+    "assets/references/style_reference/ref_03_group_interior.png",
+    "assets/references/style_reference/ref_04_night_exterior.png"
+  ],
+  "assets": [
+    {
+      "id": "east_courtyard",
+      "name": "东院回廊·晴日下午",
+      "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2035284,
+      "sha256": "eb26468f6e6ca3de87eeb979e578fb8d5d879ff66ac3b0d3317fc93696c77290",
+      "status": "selected",
+      "usage": {
+        "storyBeats": ["02"],
+        "purpose": "下午分房的回廊背景；后续时段沿用空间结构，门与可变道具仍需分层"
+      }
+    },
+    {
+      "id": "player_room",
+      "name": "主角门房·夜间亮烛",
+      "path": "assets/scenes/player_room/room_candlelit.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1724499,
+      "sha256": "fa98b6e67d15d1f88857ff71d31a4694c441d968efa4265dfe2ae2aa1ec75bd9",
+      "status": "selected",
+      "usage": {
+        "storyBeats": ["05", "06", "07", "10", "11"],
+        "purpose": "主角房内夜间亮烛状态；仅用于烛亮且机位、烛长与道具位置匹配的段落"
+      }
+    },
+    {
+      "id": "lin_lan",
+      "name": "林岚·正常站姿",
+      "path": "assets/characters/lin_lan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1519523,
+      "sha256": "44781db08da1f7f847c7d7ed4c244546eee40fd640697db18c766d445c011a1e",
+      "status": "selected",
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "林岚正常同行图与角色定型；相机盖仍在镜头前，挂到铜铃旁后需去盖状态"
+      }
+    },
+    {
+      "id": "lu_chen",
+      "name": "陆沉·提灯站姿",
+      "path": "assets/characters/lu_chen/standing_lantern.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1716155,
+      "sha256": "493c3d16664cd1fddd949ab63c1df9eb42fccbd5b36da2f3c7f50f0375425e84",
+      "status": "selected",
+      "usage": {
+        "storyBeats": ["04"],
+        "purpose": "陆沉持灯站姿与造型参考；登记处仅用于遮挡预览，正式接待与递物姿态另制"
+      }
+    },
+    {
+      "id": "zhou_yan",
+      "name": "周砚·正常站姿",
+      "path": "assets/characters/zhou_yan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1446493,
+      "sha256": "56337ce8280c0b8ae1d5664bce59869e3407311287dd61f2784745f25e4f9543",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1139518,
+        "nearOpaquePixels": 403148,
+        "silhouetteBounds": {
+          "minX": 276,
+          "minY": 14,
+          "maxX": 776,
+          "maxY": 1520
+        }
+      },
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "周砚正常同行图与角色定型；持灯、夜间观察及异常状态从此派生"
+      }
+    },
+    {
+      "id": "xu_zhi",
+      "name": "许栀·正常站姿",
+      "path": "assets/characters/xu_zhi/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1551869,
+      "sha256": "27565053cae1a70686d71acc018900e345567969c27b7a83a9905e714a573250",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1118872,
+        "nearOpaquePixels": 424696,
+        "silhouetteBounds": {
+          "minX": 287,
+          "minY": 24,
+          "maxX": 780,
+          "maxY": 1516
+        }
+      },
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "许栀正常同行图与角色定型；蓝发圈夹纸线索独立制作，保留短圆脸辨识特征"
+      }
+    },
+    {
+      "id": "hui_pu",
+      "name": "慧普·正常站姿",
+      "path": "assets/characters/hui_pu/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1739032,
+      "sha256": "3bd8a776decaabb4c89be1947b28c05e1f6e949a12f09ca93c7ac5fb5b6b104d",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 972863,
+        "nearOpaquePixels": 577548,
+        "silhouetteBounds": {
+          "minX": 223,
+          "minY": 9,
+          "maxX": 829,
+          "maxY": 1519
+        }
+      },
+      "usage": {
+        "storyBeats": ["03", "08"],
+        "purpose": "慧普正常人形的造型参考；帘后初见与空背揭露需要专用姿态，不能直接替代"
+      }
+    },
+    {
+      "id": "shen_gong",
+      "name": "神公·持筊站姿",
+      "path": "assets/characters/shen_gong/standing_jiaobei.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1577578,
+      "sha256": "219827d54b77e086057f140f3ad025f1213c5a6aa793f927ea80a27fee8984f5",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1055810,
+        "nearOpaquePixels": 494758,
+        "silhouetteBounds": {
+          "minX": 292,
+          "minY": 28,
+          "maxX": 793,
+          "maxY": 1519
+        }
+      },
+      "usage": {
+        "storyBeats": ["09"],
+        "purpose": "神公及杯筊的造型参考；桌后坐姿、引灯与石化状态需要专用素材"
+      }
+    },
+    {
+      "id": "temple_gate",
+      "name": "山门·晴日下午",
+      "path": "assets/scenes/temple_gate/gate_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2061328,
+      "sha256": "20f58d75f77aa4208cdae46a3594a98bae6220acd7e23b950561b0060b588db5",
+      "status": "generated",
+      "usage": {
+        "storyBeats": ["01"],
+        "purpose": "下午抵达的山门背景；牌匾准确排字，人物、花猫与行李另行叠加"
+      }
+    },
+    {
+      "id": "registration",
+      "name": "登记处·下午",
+      "path": "assets/scenes/registration/registration_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1915497,
+      "sha256": "913db82b91eb705ea8ae734211105067405701831ce44d74e6b8ae28d0e91cb9",
+      "status": "generated",
+      "layerLayout": "assets/scenes/registration/layout.json",
+      "usage": {
+        "storyBeats": ["02"],
+        "purpose": "登记处分层背景，与独立桌前景、登记簿、钥匙、通行凭及四块房牌组合"
+      }
+    },
+    {
+      "id": "lin_lan_portrait_neutral",
+      "name": "林岚·普通对话头像",
+      "path": "assets/characters/lin_lan/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1705807,
+      "sha256": "d6598f143aada0e8b5f0c8dd3e57ad4f583a2f5cbb074cbeb3eee20c6b3f6920",
+      "status": "generated",
+      "derivedFrom": "assets/characters/lin_lan/standing.png",
+      "alphaCheck": {
+        "transparentPixels": 673583,
+        "nearOpaquePixels": 856584,
+        "silhouetteBounds": {
+          "minX": 2,
+          "minY": 56,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "林岚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
+      }
+    },
+    {
+      "id": "zhou_yan_portrait_neutral",
+      "name": "周砚·普通对话头像",
+      "path": "assets/characters/zhou_yan/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1637628,
+      "sha256": "6151735c5d4d3ecef47d1440757e6a11c110007f786c6ee927697843e4099ab3",
+      "status": "generated",
+      "derivedFrom": "assets/characters/zhou_yan/standing.png",
+      "alphaCheck": {
+        "transparentPixels": 717433,
+        "nearOpaquePixels": 826241,
+        "silhouetteBounds": {
+          "minX": 4,
+          "minY": 41,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "周砚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
+      }
+    },
+    {
+      "id": "xu_zhi_portrait_neutral",
+      "name": "许栀·普通对话头像",
+      "path": "assets/characters/xu_zhi/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1744007,
+      "sha256": "c404b08d3dfae579f67e8f2513dc3dfe66b77549c1dcdb5f68005e4397dc9c72",
+      "status": "generated",
+      "derivedFrom": "assets/characters/xu_zhi/standing.png",
+      "alphaCheck": {
+        "transparentPixels": 659255,
+        "nearOpaquePixels": 875563,
+        "silhouetteBounds": {
+          "minX": 39,
+          "minY": 46,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["01", "02"],
+        "purpose": "许栀普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
+      }
+    },
+    {
+      "id": "lu_chen_portrait_neutral",
+      "name": "陆沉·普通对话头像",
+      "path": "assets/characters/lu_chen/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1684721,
+      "sha256": "66c5815516e22a291906e1e91f1275081249b6d8bdd4d6c64499a7db2fe0dcb7",
+      "status": "generated",
+      "derivedFrom": "assets/characters/lu_chen/standing_lantern.png",
+      "alphaCheck": {
+        "transparentPixels": 714064,
+        "nearOpaquePixels": 844852,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 42,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["04"],
+        "purpose": "陆沉普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
+      }
+    },
+    {
+      "id": "hui_pu_portrait_neutral",
+      "name": "慧普·普通对话头像",
+      "path": "assets/characters/hui_pu/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1694866,
+      "sha256": "aee5fdbd4eb90bfe8e734c373e07c0370f568a95d8a10bd2b083a224c0715b3c",
+      "status": "generated",
+      "derivedFrom": "assets/characters/hui_pu/standing.png",
+      "alphaCheck": {
+        "transparentPixels": 698337,
+        "nearOpaquePixels": 862182,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 78,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["03", "08"],
+        "purpose": "慧普普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "帘后初见使用通用黑影加问号占位；面容已按分镜可见时使用普通头像，不提前展示怪物结构。"
+      }
+    },
+    {
+      "id": "shen_gong_portrait_neutral",
+      "name": "神公·普通对话头像",
+      "path": "assets/characters/shen_gong/portrait_neutral.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1725907,
+      "sha256": "039b551f7f5565e69a6e179197ea0c07be1e15498f8b601f23b96144f32dfa6b",
+      "status": "generated",
+      "derivedFrom": "assets/characters/shen_gong/standing_jiaobei.png",
+      "alphaCheck": {
+        "transparentPixels": 694543,
+        "nearOpaquePixels": 863411,
+        "silhouetteBounds": {
+          "minX": 7,
+          "minY": 50,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      },
+      "usage": {
+        "storyBeats": ["09"],
+        "purpose": "神公普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
+        "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
+      }
+    },
+    {
+      "id": "unknown_portrait",
+      "name": "未知人物·占位头像",
+      "kind": "ui_placeholder",
+      "path": "assets/portraits/unknown.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 981904,
+      "sha256": "58f907b7d50c345a7d57b1fbb26993398d394731c372d9c3fca5dff1123c6eaa",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 844376,
+        "nearOpaquePixels": 707702,
+        "silhouetteBounds": {
+          "minX": 34,
+          "minY": 61,
+          "maxX": 1222,
+          "maxY": 1253
+        }
+      },
+      "presentation": "assets/generation/portrait_presentation.json",
+      "usage": {
+        "storyBeats": ["03", "07", "08", "11"],
+        "purpose": "帘后人物及尚未看清、未核实的门外发言占位；保留NPC头像框，由界面叠加问号",
+        "visibilityRule": "依据玩家已见信息选择通用黑影或可见人物外貌，不依据后台真实身份暗示真假"
+      }
+    },
+    {
+      "id": "inventory_key",
+      "name": "铜钥匙·物品图",
+      "kind": "inventory_item",
+      "itemId": "key",
+      "path": "assets/props/copper_key/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 598034,
+      "sha256": "424f1fb6c74ab3180fd3a3ff1bcf262b52d1a5787086cfc7e0a5482248185e2e",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1285697,
+        "nearOpaquePixels": 263430,
+        "silhouetteBounds": {
+          "minX": 137,
+          "minY": 200,
+          "maxX": 1169,
+          "maxY": 1077
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "07", "08"],
+        "purpose": "单枚铜钥匙的道具栏、背包与调查图；沿用登记处钥匙身份"
+      }
+    },
+    {
+      "id": "inventory_page",
+      "name": "残页·物品图",
+      "kind": "inventory_item",
+      "itemId": "page",
+      "path": "assets/props/torn_page/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1426298,
+      "sha256": "b68bba9513928373845af3ab462a7c34bb900a319ab9448bcb1cdfad92d23ff0",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 772022,
+        "nearOpaquePixels": 772834,
+        "silhouetteBounds": {
+          "minX": 229,
+          "minY": 108,
+          "maxX": 1056,
+          "maxY": 1156
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "05", "07", "11", "12"],
+        "purpose": "残页的道具栏与调查底图；末行警告由准确排字提供"
+      }
+    },
+    {
+      "id": "inventory_candle",
+      "name": "红烛·物品图",
+      "kind": "inventory_item",
+      "itemId": "candle",
+      "path": "assets/props/red_candle/unlit.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 713734,
+      "sha256": "13d67b9d97c4cf610552ce523c02e78a0390723d300303eba077c0e60be188e8",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1073055,
+        "nearOpaquePixels": 485995,
+        "silhouetteBounds": {
+          "minX": 333,
+          "minY": 191,
+          "maxX": 936,
+          "maxY": 1117
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["04", "05", "06", "08", "09", "10", "11"],
+        "purpose": "未点燃红烛的道具栏与调查图；不是场景中燃烧或短芯状态"
+      }
+    },
+    {
+      "id": "inventory_beads",
+      "name": "念珠·物品图",
+      "kind": "inventory_item",
+      "itemId": "beads",
+      "path": "assets/props/prayer_beads/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 851302,
+      "sha256": "1428df57f24750caec0296051f908ea99efface451f586aa922959e87fcc06b4",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1141079,
+        "nearOpaquePixels": 384106,
+        "silhouetteBounds": {
+          "minX": 113,
+          "minY": 70,
+          "maxX": 1175,
+          "maxY": 1206
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "05", "06"],
+        "purpose": "木念珠的道具栏与调查图；保留一颗更深的珠子"
+      }
+    },
+    {
+      "id": "inventory_permit",
+      "name": "通行凭·物品图",
+      "kind": "inventory_item",
+      "itemId": "permit",
+      "path": "assets/props/permit/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1262943,
+      "sha256": "866e06c7b096b362c3bb6b691da76c102f58b6f659d2f818ba3ff23835544cdf",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 778059,
+        "nearOpaquePixels": 770592,
+        "silhouetteBounds": {
+          "minX": 233,
+          "minY": 130,
+          "maxX": 1028,
+          "maxY": 1135
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "12"],
+        "purpose": "通行凭的道具栏与正反面调查底图；不再与残页共用图片"
+      }
+    }
+  ],
+  "storySource": "story/mini_script.md",
+  "usageGuide": "assets/generation/asset_usage.md",
+  "runtimeIntegration": {
+    "status": "not_integrated",
+    "currentDemoGuide": "docs/design/assets-and-slicing.md"
+  }
+}

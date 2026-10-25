@@ -1,0 +1,100 @@
+{
+  "generator": "built-in image_gen",
+  "purpose": "铜钥匙、残页、未点燃红烛、念珠与通行凭的当前物品图生成规范",
+  "assets": [
+    {
+      "id": "inventory_key",
+      "itemId": "key",
+      "name": "铜钥匙·物品图",
+      "path": "assets/props/copper_key/inventory.png",
+      "references": [
+        {
+          "path": "assets/scenes/registration/props/copper_key.png",
+          "role": "prop_identity_or_world_continuity"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_2d_rendering_style"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE standalone inventory item illustration for the fixed-view 2D Chinese narrative game 《红烛无声》, used in small bag slots and a larger item-detail view.\nStyle: realistic ordinary prop proportions rendered in the game's restrained TWO-DIMENSIONAL HAND-DRAWN style. Thin dark contour lines, broad matte local-color planes, a few simply drawn shadows, sparse meaningful wear and very light paper-like drawing quality. Soft neutral warm-gray lighting. Small-scale silhouette must read clearly. No glossy 3D product render, photo realism, dense painterly texture, fantasy embellishment, horror-poster styling or cute cartoon.\nComposition: SQUARE 1024x1024 canvas, one complete object centered in BOTH axes. Its longest dimension occupies about 76-82% of the square with comfortable transparent margin all around. Keep all tips/edges intact. The prop is separate from the scene and from the interface. No surface, table, hand, human, pedestal or packaging unless the specific object description requires it.\nDelivery: true transparent alpha outside the EXACT object silhouette, including holes and gaps; solid material opaque with antialiasing at the contour only. No solid black/white background, gradient, shadow cloud, external glow, vignette, painted checkerboard, UI frame, caption, item name, watermark or extra object. Do not draw any lettering, pseudo-writing or numerals: exact clue text will be typeset separately.\n\nREFERENCE ROLES AND SPECIFIC OBJECT:\nImage 1 is the EXACT current key identity reference: the single copper key situated at the lower right of a mostly transparent canvas. Ignore its transparent margins, inspect that key and render the SAME key enlarged at the center. Image 2 is only the 2D linework and matte rendering-style reference.\nSubject: one worn warm-brass/copper-colored old room key, with the same thick oval open ring-shaped bow, short straight round-section shaft, and simple stepped bit with the same tooth structure as Image 1. Diagonal upper-left bow to lower-right bit, mild three-quarter angle that shows the shaft thickness and entire open bow. The ring hole must be truly transparent. A faint worn abstract mark near the bow-to-shaft joint may be two barely visible short incised strokes, never readable letters or a new emblem. Retain small edge rubs, subdued ochre highlights and brown shadow planes. No keyring, bunch of keys, modern serrated flat key, padlock, tag, cord, tray or hand.\nPainting treatment: calm broad matte ochre base planes, a few large brown shadow bands and subdued ochre highlights; only sparse rubbed edge marks. No all-over metallic mottling or shiny white streaks."
+    },
+    {
+      "id": "inventory_page",
+      "itemId": "page",
+      "name": "残页·物品图",
+      "path": "assets/props/torn_page/inventory.png",
+      "references": [
+        {
+          "path": "assets/scenes/player_room/room_candlelit.png",
+          "role": "prop_identity_or_world_continuity"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_2d_rendering_style"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE standalone inventory item illustration for the fixed-view 2D Chinese narrative game 《红烛无声》, used in small bag slots and a larger item-detail view.\nStyle: realistic ordinary prop proportions rendered in the game's restrained TWO-DIMENSIONAL HAND-DRAWN style. Thin dark contour lines, broad matte local-color planes, a few simply drawn shadows, sparse meaningful wear and very light paper-like drawing quality. Soft neutral warm-gray lighting. Small-scale silhouette must read clearly. No glossy 3D product render, photo realism, dense painterly texture, fantasy embellishment, horror-poster styling or cute cartoon.\nComposition: SQUARE 1024x1024 canvas, one complete object centered in BOTH axes. Its longest dimension occupies about 76-82% of the square with comfortable transparent margin all around. Keep all tips/edges intact. The prop is separate from the scene and from the interface. No surface, table, hand, human, pedestal or packaging unless the specific object description requires it.\nDelivery: true transparent alpha outside the EXACT object silhouette, including holes and gaps; solid material opaque with antialiasing at the contour only. No solid black/white background, gradient, shadow cloud, external glow, vignette, painted checkerboard, UI frame, caption, item name, watermark or extra object. Do not draw any lettering, pseudo-writing or numerals: exact clue text will be typeset separately.\n\nREFERENCE ROLES AND SPECIFIC OBJECT:\nImage 1 is the room/world and paper continuity reference: the loose worn sheet at the lower right of the tabletop, beside the books. Image 2 is only the clear 2D contour and matte-color style reference. Do not copy any furniture, people, books or scene lighting.\nSubject: ONE loose torn page from an old modest Chinese booklet. A warm light tan/aged cream paper rectangle, approximately 2:3 portrait proportions, almost straight-on facing the viewer with minimal perspective and no rotation so exact text can be overlaid later. One long left edge is irregularly torn from a binding, with a few small fibers and tiny losses; the other edges have restrained irregular nicks, NOT an ornate burned pirate map. One broad horizontal fold and a faint vertical fold, a slightly curled lower corner, sparse small age marks near edges. The main central and lower writing areas are empty, calm and light, without ruling, printing, ink strokes or hidden symbols. Only this single sheet, no book, paper stack, stamp, string, pin, blood or burned holes. Keep it visibly different from a clean, intact permit slip."
+    },
+    {
+      "id": "inventory_candle",
+      "itemId": "candle",
+      "name": "红烛·物品图",
+      "path": "assets/props/red_candle/unlit.png",
+      "references": [
+        {
+          "path": "assets/scenes/player_room/room_candlelit.png",
+          "role": "prop_identity_or_world_continuity"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_2d_rendering_style"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE standalone inventory item illustration for the fixed-view 2D Chinese narrative game 《红烛无声》, used in small bag slots and a larger item-detail view.\nStyle: realistic ordinary prop proportions rendered in the game's restrained TWO-DIMENSIONAL HAND-DRAWN style. Thin dark contour lines, broad matte local-color planes, a few simply drawn shadows, sparse meaningful wear and very light paper-like drawing quality. Soft neutral warm-gray lighting. Small-scale silhouette must read clearly. No glossy 3D product render, photo realism, dense painterly texture, fantasy embellishment, horror-poster styling or cute cartoon.\nComposition: SQUARE 1024x1024 canvas, one complete object centered in BOTH axes. Its longest dimension occupies about 76-82% of the square with comfortable transparent margin all around. Keep all tips/edges intact. The prop is separate from the scene and from the interface. No surface, table, hand, human, pedestal or packaging unless the specific object description requires it.\nDelivery: true transparent alpha outside the EXACT object silhouette, including holes and gaps; solid material opaque with antialiasing at the contour only. No solid black/white background, gradient, shadow cloud, external glow, vignette, painted checkerboard, UI frame, caption, item name, watermark or extra object. Do not draw any lettering, pseudo-writing or numerals: exact clue text will be typeset separately.\n\nREFERENCE ROLES AND SPECIFIC OBJECT:\nImage 1 is the EXACT candle appearance/world reference: the short thick red candle on the table at the right side of the room, currently lit in its holder. Image 2 is only the 2D linework and matte rendering-style reference.\nSubject: the SAME type of short thick red wax candle, now as an UNLIT portable item with NO holder. Upright, mild three-quarter view with its top ellipse and short dark wick clearly visible. The red wax body is a stout cylinder about 1.7-2 times as high as its diameter, with a few sparse uneven wax ridges/drips matching the reference's ordinary silhouette. Muted cinnabar/deep brick red, restrained drawn red-brown shadow planes and subdued warm-red highlights, NO glowing red light. Two or three shallow fingernail-like scratch lines on the front wax, not a rune, face or carved text. Short dry unlit black wick with no flame, ember, smoke or halo. Whole bottom visible. No candle dish, stand, saucer, match, lantern, room or extra candle.\nCurrent wick proportions: a short thin dry stub, about 2% of the full square canvas height and less than 1% of its width, seated in the wax depression. Wax uses a few broad matte red and red-brown planes with sparse surface marks."
+    },
+    {
+      "id": "inventory_beads",
+      "itemId": "beads",
+      "name": "念珠·物品图",
+      "path": "assets/props/prayer_beads/inventory.png",
+      "references": [
+        {
+          "path": "web/public/art/item-beads.webp",
+          "role": "prop_category_and_color_only"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_2d_rendering_style"
+        },
+        {
+          "path": "assets/props/red_candle/unlit.png",
+          "role": "current_batch_matte_rendering_style_only"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE standalone inventory item illustration for the fixed-view 2D Chinese narrative game 《红烛无声》, used in small bag slots and a larger item-detail view.\nStyle: realistic ordinary prop proportions rendered in the game's restrained TWO-DIMENSIONAL HAND-DRAWN style. Thin dark contour lines, broad matte local-color planes, a few simply drawn shadows, sparse meaningful wear and very light paper-like drawing quality. Soft neutral warm-gray lighting. Small-scale silhouette must read clearly. No glossy 3D product render, photo realism, dense painterly texture, fantasy embellishment, horror-poster styling or cute cartoon.\nComposition: SQUARE 1024x1024 canvas, one complete object centered in BOTH axes. Its longest dimension occupies about 76-82% of the square with comfortable transparent margin all around. Keep all tips/edges intact. The prop is separate from the scene and from the interface. No surface, table, hand, human, pedestal or packaging unless the specific object description requires it.\nDelivery: true transparent alpha outside the EXACT object silhouette, including holes and gaps; solid material opaque with antialiasing at the contour only. No solid black/white background, gradient, shadow cloud, external glow, vignette, painted checkerboard, UI frame, caption, item name, watermark or extra object. Do not draw any lettering, pseudo-writing or numerals: exact clue text will be typeset separately.\n\nREFERENCE ROLES AND SPECIFIC OBJECT:\nImage 1 is ONLY the prop category and general wooden loop/cord continuity reference; its rendering style is not the target. Image 2 is the PRIMARY thin-outline and broad matte-color rendering reference.\nSubject: ONE simple loop of modest wooden prayer beads on a continuous plain brown cord, arranged as a readable loose oval, mild near-frontal view. Warm medium walnut/chestnut-brown round beads of consistent ordinary size, a small plain knotted cord and short frayed brown tassel at the lower left. Exactly ONE bead near the upper-right part of the loop is visibly much darker, almost black-brown; all the other beads are warmer medium brown, so that single dark bead remains detectable at small size. Keep the string joins coherent, no detached or floating beads. Use simple matte rounded color planes and sparse rubbed edges, not glossy jewel highlights or dense wood grain. Gaps between beads and the open center must be transparent. No hand, wrist, pouch, gold jewelry, red gemstone, religious pendant, engraved writing, magical aura or dramatic light.\nImage 3 is the current red-candle inventory drawing, included ONLY to match this batch's simple outlined matte material planes. Do not copy its shape, red color or wax details. Each wooden bead should use a few restrained brown light/shadow planes and a fine dark outline, without photo-like gloss or dense grain.\nCurrent material treatment: each bead uses one broad matte walnut base plane, one broad dark-brown shadow crescent and one subdued warm-brown highlight shape. Fine dark contours and sparse rubbed edges, without little mottled facets or white specular glints. The tassel reads as a few clear cord groups."
+    },
+    {
+      "id": "inventory_permit",
+      "itemId": "permit",
+      "name": "通行凭·物品图",
+      "path": "assets/props/permit/inventory.png",
+      "references": [
+        {
+          "path": "assets/scenes/registration/props/permit_single.png",
+          "role": "prop_identity_or_world_continuity"
+        },
+        {
+          "path": "assets/references/style_reference/ref_02_character_counter.png",
+          "role": "primary_2d_rendering_style"
+        }
+      ],
+      "transparentBackground": true,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE standalone inventory item illustration for the fixed-view 2D Chinese narrative game 《红烛无声》, used in small bag slots and a larger item-detail view.\nStyle: realistic ordinary prop proportions rendered in the game's restrained TWO-DIMENSIONAL HAND-DRAWN style. Thin dark contour lines, broad matte local-color planes, a few simply drawn shadows, sparse meaningful wear and very light paper-like drawing quality. Soft neutral warm-gray lighting. Small-scale silhouette must read clearly. No glossy 3D product render, photo realism, dense painterly texture, fantasy embellishment, horror-poster styling or cute cartoon.\nComposition: SQUARE 1024x1024 canvas, one complete object centered in BOTH axes. Its longest dimension occupies about 76-82% of the square with comfortable transparent margin all around. Keep all tips/edges intact. The prop is separate from the scene and from the interface. No surface, table, hand, human, pedestal or packaging unless the specific object description requires it.\nDelivery: true transparent alpha outside the EXACT object silhouette, including holes and gaps; solid material opaque with antialiasing at the contour only. No solid black/white background, gradient, shadow cloud, external glow, vignette, painted checkerboard, UI frame, caption, item name, watermark or extra object. Do not draw any lettering, pseudo-writing or numerals: exact clue text will be typeset separately.\n\nREFERENCE ROLES AND SPECIFIC OBJECT:\nImage 1 is the paper material/identity continuity reference: the single blank permit sheet from the registration tray. Image 2 is only the 2D linework and matte-color style reference. Ignore transparent canvas margins and scene/table perspective.\nSubject: ONE complete temple visitor permit slip, shown almost exactly FRONT-ON and upright without rotation for later precise text printing. A clean intact warm-ivory rectangular single sheet, about 1:1.8 width-to-height proportions, squared straight edges with only tiny natural corner rounding, a faint single horizontal fold and a very subtly curled lower edge. It is a modest paper pass, not a bank card or ornate talisman. Very light cream planes with sparse fine contour marks. Leave the paper face BLANK, including an empty lower-right area reserved for a later accurately typeset dark-red stamp. No ink strokes, fake Chinese, text, numeral, stamp glyph, decorative border, name, QR code, signature, blood or supernatural mark. No tears, heavy stains or missing corners: it must be clearly distinguishable from the aged torn clue page. One thin sheet only, no stack, key, string, clip, envelope, book or hand."
+    }
+  ]
+}
