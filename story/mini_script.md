@@ -307,7 +307,7 @@
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 01 山门初见        | `scenes/bus/bus_arrival.webp` 作为大巴、山门和晴天下午底图；四只小旅行包从车门移到山门檐下靠墙处，同行人物、花猫和旧匾仍以独立层叠加；山门层不放登记桌或登记簿。 |
 | 02 登记入住        | `scenes/registration/registration_afternoon.webp` + `desk_foreground.webp`；登记室内用尺寸适中的 `ledger_open`、毛笔书写动画、铜钥匙和四块房牌透明图层，交接完成后才把行李带入东院回廊。 |
-| 03 斋堂晚膳        | `scenes/dining_hall/dining_sunset.webp` + `table_foreground.webp`；三位同行人使用 `seated_dining` 状态，粥碗、木勺、热水和笋干使用独立透明素材，馒头、咸菜与香菇青菜以有作用域的 SVG 道具绘制，四碗状态随吃粥旗标切换，慧普只在帘后出现。 |
+| 03 斋堂晚膳        | `scenes/dining_hall/dining_sunset.webp` + `table_foreground.webp`；三位同行人使用 `seated_dining` 状态，粥碗、木勺、热水和笋干使用独立透明素材，馒头蒸笼、咸菜与香菇青菜使用独立透明 PNG 道具，四碗状态随吃粥旗标切换，慧普只在帘后出现。 |
 | 04 回廊领烛        | `corridor_dusk.webp`、`corridor_night.webp` 按镜头切换；陆沉使用提灯、噤声状态，铜铃和房门保持在固定远近层。                                                                                                                              |
 | 05—07 门房与敲门   | `room_candlelit.webp`、`room_moonlit.webp`、`peephole_empty.webp` 对应点烛、三更和四敲；红烛、寺史册、经文、门闩使用透明道具，不复制可见烛火。                                                                                            |
 | 08 剥皮现场        | `guest_room/room_night.webp` 作偏房底图；慧普切换 `rear_hollow` / `turning_hollow`，碎花瓶和床沿垂手按 `vase_broken`、`skin_seen` 显示。                                                                                                  |

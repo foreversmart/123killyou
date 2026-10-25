@@ -159,6 +159,20 @@
         "transparentPixels": 1491392,
         "nearOpaquePixels": 75043
       }
+    },
+    "actor_writing": {
+      "path": "../../characters/lu_chen/writing_ledger.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1794555,
+      "sha256": "b4b3be7ae6eb7f6004d2a96cf056968f0921d34d38134b2247a7fa0ff8530ee3",
+      "sourceFrame": {
+        "x": 195,
+        "y": 29,
+        "width": 666,
+        "height": 1492
+      }
     }
   },
   "layers": [
@@ -269,7 +283,7 @@
       "sprite": "ledger_open",
       "rect": {
         "x": 644,
-        "y": 706,
+        "y": 696,
         "width": 360,
         "height": 83
       },
@@ -435,5 +449,20 @@
     "role": "陆沉白日接待站姿；保留人物放大后的站位及登记桌遮挡",
     "placementNote": "人物水平中心为 x=860；桌后遮挡线 y=637 为可见躯干的定位基准。使用原立绘像素取样，按 rect 渲染。",
     "scaleMode": "uniform"
+  },
+  "writingPreview": {
+    "sourceFrame": {
+      "x": 195,
+      "y": 29,
+      "width": 666,
+      "height": 1492
+    },
+    "rect": {
+      "x": 680,
+      "y": 140,
+      "width": 557.9758713136729,
+      "height": 1250
+    },
+    "zIndex": 10
   }
 }

@@ -30,9 +30,14 @@ export function composeLayout(
           rect: { ...layer.rect },
           zIndex: layer.zIndex,
           clipRect: layer.clipRect,
+          filter: layer.filter,
         };
       })
       .sort((a, b) => a.zIndex - b.zIndex),
-    labels: (layout.labels || []).map((label) => ({ ...label })),
+    labels: (layout.labels || [])
+      .filter((label) =>
+        Object.entries(label.visibleWhen || {}).every(([key, value]) => state[key] === value),
+      )
+      .map((label) => ({ ...label })),
   };
 }
