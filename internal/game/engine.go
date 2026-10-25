@@ -1,8 +1,14 @@
 package game
 
-import "nightwatch/internal/content"
+import (
+	"nightwatch/internal/content"
+	"strings"
+)
 
-type Engine struct{ content *content.Catalog }
+type Engine struct {
+	content   *content.Catalog
+	storyRoll func() int
+}
 
 func NewEngine(catalog *content.Catalog) *Engine { return &Engine{content: catalog} }
 func (e *Engine) Initial(id string) State {
@@ -37,6 +43,18 @@ func (e *Engine) StartMiniStory(state *State) {
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
 func (e *Engine) Apply(state *State, text string) (string, string) {
+	defer func() {
+		if state.StoryMode {
+			syncMiniStaging(state)
+		}
+	}()
+	if Normalize(text) == "调试跳到下一剧情场景" {
+		return e.skipMiniScene(state)
+	}
+	if state.StoryMode && miniHasAny(Normalize(text), "重听当前对白", "重听这句", "再说一遍") {
+		return "replay", state.Dialogue.Text
+	}
+	state.DialogueNext = ""
 	text = Normalize(text)
 	if message, clarify := ActionClarification(text); clarify {
 		return "clarify", feedback(state, message)
@@ -68,10 +86,17 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	return e.dialogue(state, text)
 }
 func (e *Engine) NPCForDialogue(state State) (string, bool) {
-	if state.SceneKey != "" && state.Dialogue.Speaker == "陆沉" && state.Dialogue.Portrait == "keeper" {
-		// The mini-script stages 陆沉 across the gate, register desk and
-		// corridor, while the legacy catalog keeps him in the watch room.
-		return "keeper", true
+	if state.StoryMode {
+		speaker := state.Dialogue.Speaker
+		for _, npc := range e.content.NPCs() {
+			names := append([]string{npc.Name}, npc.Aliases...)
+			for _, name := range names {
+				if speaker == name || strings.HasPrefix(speaker, name+"（") || strings.HasPrefix(speaker, name+"·") {
+					return npc.ID, true
+				}
+			}
+		}
+		return "", false
 	}
 	for _, npc := range e.content.NPCs() {
 		if npc.Room == state.Room && npc.Name == state.Dialogue.Speaker && npc.Portrait == state.Dialogue.Portrait {

@@ -14,3 +14,12 @@ func (e *Engine) grantStoryItems(state *State, ids ...string) {
 		}
 	}
 }
+
+func (e *Engine) removeMiniItem(state *State, id string) {
+	for index, item := range state.Inventory {
+		if item.ID == id {
+			state.Inventory = append(state.Inventory[:index], state.Inventory[index+1:]...)
+			return
+		}
+	}
+}

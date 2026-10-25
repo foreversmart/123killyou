@@ -22,6 +22,9 @@ export interface GameState {
   revision: number;
   storyMode?: boolean;
   sceneKey?: string;
+  shotKey?: string;
+  retryScene?: string;
+  dialogueNext?: string;
   sceneName?: string;
   sceneText?: string;
   sceneProps?: string[];

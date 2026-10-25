@@ -3,13 +3,15 @@
   "name": "守夜人",
   "aliases": [
     "看门人",
-    "守夜"
+    "守夜",
+    "陆沉",
+    "照尘"
   ],
   "room": "watch",
   "portrait": "keeper",
   "voice": {
     "profile": "keeper_low_male",
-    "providerVoiceId": ""
+    "providerVoiceId": "2e7965636b0d4472ae51e75f419dff41"
   },
   "traits": [
     "寡言",

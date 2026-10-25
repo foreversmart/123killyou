@@ -1,33 +1,21 @@
 package game
 
 func (e *Engine) storyCandleCorridor(state *State, text string) (string, string, bool) {
-	if miniHasAny(text, "继续听", "听回廊对白", "听大家") {
-		switch {
-		case !state.Flags["corridor_intro_linlan"]:
-			miniSetFlag(state, "corridor_intro_linlan")
-			return "story", miniDialogue(state, "林岚", "寺里也有脏东西？"), true
-		case !state.Flags["corridor_intro_shh"]:
-			miniSetFlag(state, "corridor_intro_shh")
-			return "story", miniDialogue(state, "陆沉", "嘘，小声。经文在桌上，心定了，脚下才不乱。"), true
-		case !state.Flags["corridor_intro_zhouyan"]:
-			miniSetFlag(state, "corridor_intro_zhouyan")
-			return "story", miniDialogue(state, "周砚", "五更天亮？这座寺的更锣听起来比山下的近。"), true
-		default:
-			miniSetFlag(state, "corridor_intro_done")
-			return "story", miniDialogue(state, "陆沉", "二更。各位施主早些休息。五更天亮，我们起床做早课。"), true
-		}
+	if miniContinue(text) || miniHasAny(text, "听回廊对白") {
+		return "story", miniSequence(state, "corridor_intro", corridorLines), true
 	}
 	if miniHasAny(text, "拿红烛", "领取红烛", "接过红烛", "给我红烛", "领一支") {
 		miniSetFlag(state, "red_candle_held")
+		miniShot(state, "corridor_candles")
 		e.grantStoryItems(state, "candle")
 		return "story", miniDialogue(state, "陆沉", "火不能灭。红烛守住的是你自己的影子。三更以前别出门，经文在桌上，心定了脚下才不乱。"), true
 	}
 	if miniHasAny(text, "回房", "去我的房间", "进门房", "回自己的房", "回偏房") {
 		if !state.Flags["red_candle_held"] {
-			return "blocked", miniSystem(state, "陆沉还没有把红烛交给你。先说‘拿红烛’。"), true
+			return "blocked", miniDialogue(state, "陆沉", "你的红烛还在这里。拿稳，再回自己的房间。"), true
 		}
 		e.setMiniScene(state, "mini_room")
-		return "move", miniSystem(state, "你回到写着‘门’的偏房。桌上放着寺史册和《清心静神经》。"), true
+		return "move", miniInner(state, "我回到写着‘门’的偏房。桌上是寺史册和《清心静神经》，红烛还没有点。"), true
 	}
 	if miniHasAny(text, "看看房牌", "看偏房", "看走廊", "观察回廊") {
 		miniSetFlag(state, "corridor_seen")
@@ -39,18 +27,21 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 	if miniHasAny(text, "点燃红烛", "点红烛", "点烛", "把红烛点上") {
 		if !state.Flags["red_candle_held"] {
-			return "blocked", miniSystem(state, "你手边没有红烛。先回东院回廊领取。"), true
+			return "blocked", miniInner(state, "我没有把红烛拿回来。它还在陆沉手里，这盏油灯替不了它。"), true
 		}
 		miniSetFlag(state, "red_candle_lit")
+		miniShot(state, "room_candle")
 		return "story", miniInner(state, "红烛亮了。火焰只照清眼前这一小块地方，不会替你认出门外的人。"), true
 	}
 	if miniHasAny(text, "看寺史", "读寺史", "查看历史", "查看寺庙历史", "看历史册", "翻阅寺史") {
 		miniSetFlag(state, "history_read")
+		miniShot(state, "room_history")
 		miniClue(state, "游客版寺史写着顾怀山七年前圆寂成佛，但验身一栏被撕掉")
 		return "inspect", miniInner(state, "寺史册写着‘七年前方丈顾怀山于方丈室圆寂，灯灭即成佛’。页角的验身一栏被整齐撕走，像有人不想让游客看见。"), true
 	}
 	if miniHasAny(text, "读经", "看经文", "清心静神", "翻开经书", "朗读经文") {
 		miniSetFlag(state, "mind_script_learned")
+		miniShot(state, "room_scripture")
 		miniClue(state, "清心静神经末页：心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后")
 		return "inspect", miniInner(state, "末页写着：‘心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后。’我把四句偈记在心里。"), true
 	}
@@ -68,7 +59,7 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		e.setMiniScene(state, "mini_wake_three_gongs")
 		return "sleep", miniInner(state, "更锣一声远、一声近。烛火在眼皮后轻轻晃，我还是睡着了。过了不知多久，三声沉闷的锣把我惊醒。"), true
 	}
-	return "story", miniSystem(state, "房内有红烛、寺史册、《清心静神经》和入住残页。你可以点烛、读寺史、读经，或在点烛后睡下。"), true
+	return "story", miniInner(state, "门闩在身后，红烛在桌上。先把烛火点稳，再看看桌上的两本书。"), true
 }
 
 func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
@@ -80,10 +71,10 @@ func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
 		state.Flags["red_candle_lit"] = true
 		miniSetFlag(state, "candle_relit")
 		e.setMiniScene(state, "mini_four_knocks")
-		return "story", miniSystem(state, "你重新点燃红烛。拖行声退到廊尾，门外暂时只剩月光。接下来先听清敲门次数，不要急着开门。"), true
+		return "story", miniInner(state, "红烛重新亮了。拖行声退到廊尾，四下敲门却跟着月光到了门前。我不能急着开门。"), true
 	}
 	if miniHasAny(text, "看红烛", "看烛芯", "看门外", "听声音") {
 		return "inspect", miniInner(state, "红烛已经熄灭，蜡泪凝成黑红色。门外有湿重的呼吸，还有一声指甲刮门；我不敢把脸贴近门缝。"), true
 	}
-	return "story", miniSystem(state, "红烛已经熄灭。你可以说‘续燃红烛’，也可以选择不点燃，但黑暗不会等你。"), true
+	return "story", miniInner(state, "我记得陆沉说过：火不能灭。先看烛芯，再听门外。"), true
 }

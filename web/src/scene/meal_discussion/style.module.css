@@ -1,0 +1,58 @@
+.meals {
+  position: absolute;
+  right: 3%;
+  top: 20%;
+  z-index: 5;
+  width: 23%;
+}
+.people {
+  display: flex;
+  gap: 0.3cqw;
+}
+.people button {
+  flex: 1;
+  padding: 0.4cqw;
+  background: #e3d1a9e8;
+  color: #394a3b;
+  border: 1px solid #baa97c;
+  font: inherit;
+  font-size: 0.75cqw;
+  cursor: pointer;
+}
+.people span {
+  display: block;
+  margin-top: 0.25cqw;
+  font-size: 0.55cqw;
+  opacity: 0.7;
+}
+.discussion {
+  margin-top: 0.4cqw;
+  padding: 0.7cqw;
+  border: 1px solid #b5a077;
+  color: #e7d7b1;
+  background: #263b30ed;
+}
+.discussion > span {
+  font-size: 0.7cqw;
+}
+.discussion button {
+  display: block;
+  margin-top: 0.5cqw;
+  padding: 0.4cqw;
+  width: 100%;
+  border: 1px solid #b9ad826b;
+  color: #e7d7b1;
+  background: #dae0b710;
+  font: inherit;
+  font-size: 0.7cqw;
+  text-align: left;
+  cursor: pointer;
+}
+.meals button:focus-visible {
+  outline: 2px solid #f9e7b6;
+  outline-offset: 2px;
+}
+.meals button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

@@ -8,11 +8,13 @@ export function PlayerStatus({
   state,
   demo,
   voiceStarted,
+  playbackOn,
   connected,
 }: {
   state: GameState;
   demo: boolean;
   voiceStarted: boolean;
+  playbackOn?: boolean;
   connected: boolean;
 }) {
   return (
@@ -44,8 +46,16 @@ export function PlayerStatus({
         {state.sceneName || state.roomName}
       </h1>
       <div className={styles['connection-status']}>
-        <span>{demo ? '演示进行中' : voiceStarted ? '语音会话' : '语音待启用'}</span>
-        <i className={voiceStarted || demo ? styles['is-active'] : undefined} />
+        <span>
+          {demo
+            ? '演示进行中'
+            : voiceStarted
+              ? '语音会话'
+              : playbackOn
+                ? '对白已开启'
+                : '语音待启用'}
+        </span>
+        <i className={voiceStarted || playbackOn || demo ? styles['is-active'] : undefined} />
         <small
           title={
             state.savedAt

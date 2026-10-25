@@ -1,16 +1,16 @@
-import { useVoice, type VoiceStatus } from '../useVoice';
-import { Waveform } from '../waveform';
+import { useVoice, type VoiceStatus } from '@/features/voice/useVoice';
+import { Waveform } from '@/features/voice/waveform';
 import styles from './style.module.css';
 
 const statusLabels: Record<VoiceStatus, string> = {
-  idle: '语音待启用',
+  idle: '对白播放已开启',
   starting: '正在连接',
   listening: '等待你说话',
   recording: '正在录音',
   hearing: '正在录音',
   transcribing: '正在识别',
   processing: '正在理解',
-  speaking: '正在回应',
+  speaking: '正在播放对白',
   error: '识别暂不可用',
   unsupported: '浏览器不支持',
 };
@@ -32,11 +32,12 @@ export function VoiceDock({
   onTour: () => Promise<void>;
   showTour?: boolean;
 }) {
-  const voiceStarted = !['idle', 'unsupported', 'error'].includes(voice.status);
+  const starting = voice.status === 'starting';
+  const showActivity = voice.playbackOn || voice.microphoneOn || starting || demo;
   const recording = voice.status === 'recording' || voice.status === 'hearing';
   return (
     <div className={styles['voice-dock']} data-recording={recording}>
-      {voiceStarted || demo ? (
+      {showActivity && (
         <>
           <div className={styles['voice-wave-row']}>
             <span className={styles['voice-light']} />
@@ -48,6 +49,12 @@ export function VoiceDock({
           <small>
             {demo ? (
               '画面由真实游戏状态驱动'
+            ) : !voice.microphoneOn ? (
+              starting ? (
+                '正在申请麦克风权限'
+              ) : (
+                '角色对白会自动播放'
+              )
             ) : recording ? (
               <>
                 松开 <kbd className={styles['talk-key']}>空格</kbd> 发送
@@ -62,14 +69,19 @@ export function VoiceDock({
             )}
           </small>
         </>
-      ) : (
+      )}
+      {!voice.microphoneOn && !demo && (
         <>
           <button
             className={styles['start-voice']}
             onClick={() => void voice.start()}
-            disabled={!connected}
+            disabled={!connected || starting}
           >
-            {voice.status === 'error' ? '重新连接语音' : '开启语音会话'}
+            {starting
+              ? '正在连接麦克风'
+              : voice.microphoneProblem
+                ? '重新连接语音'
+                : '开启语音会话'}
             <span>→</span>
           </button>
           <small>允许麦克风后，按住空格说话</small>

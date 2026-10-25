@@ -60,7 +60,7 @@ func LoadFS(source fs.FS) (*Catalog, error) {
 			return nil, err
 		}
 		if !validID.MatchString(npc.ID) || path.Base(path.Dir(file)) != npc.ID ||
-			!hasText(npc.Name, npc.Room, npc.Portrait, npc.Voice.Profile, npc.Intro, npc.Return, npc.Reject, npc.ExposedReply) ||
+			!hasText(npc.Name, npc.Room, npc.Portrait, npc.Voice.Profile, npc.Voice.ProviderVoiceID, npc.Intro, npc.Return, npc.Reject, npc.ExposedReply) ||
 			len(npc.Traits) == 0 || !hasText(npc.Traits...) || !hasText(npc.Aliases...) {
 			return nil, fmt.Errorf("NPC 配置不完整或目录 ID 不符: %s", file)
 		}

@@ -6,25 +6,14 @@ import { Application, Assets, Sprite } from 'pixi.js';
 import { atmosphereFilter } from '../effects/atmosphere';
 import type { GameState } from '@/shared/types/game';
 import { ArrivalBackdrop } from '@/scene/arrival';
+import { StoryArt } from '@/scene/story_art';
 
 export function Scene({ state }: { state: GameState }) {
   if (state.sceneKey === 'mini_arrival') return <ArrivalBackdrop />;
   if (state.sceneKey) {
-    return <StoryBackdrop state={state} />;
+    return <StoryArt state={state} />;
   }
   return <LegacyScene state={state} />;
-}
-
-function StoryBackdrop({ state }: { state: GameState }) {
-  return (
-    <div className={cx(styles['scene-art'], styles['scene-art--story'])}>
-      <div className={styles['story-backdrop']}>
-        <span>灯影寺 · 第一夜</span>
-        <strong>{state.sceneName || '灯影寺'}</strong>
-        <p>{state.sceneText || '先看清声源，再走下一步。'}</p>
-      </div>
-    </div>
-  );
 }
 
 function LegacyScene({ state }: { state: GameState }) {

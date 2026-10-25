@@ -1,10 +1,11 @@
 import { useCallback, useRef } from 'react';
-import type { VoiceStatus, VoiceAnswer } from './types';
+import type { VoiceStatus, VoiceAnswer } from '@/features/voice/types';
 import type { SpeechEvent } from '@/shared/types/game';
-import { createPCMPlayer } from './pcmPlayer';
+import { createPCMPlayer } from '@/features/voice/pcmPlayer';
 
 export function useSpeechOutput(
   enabled: { current: boolean },
+  microphone: { current: boolean },
   sound: { current: boolean },
   setStatus: (status: VoiceStatus) => void,
   audio: { current: AudioContext | null },
@@ -26,12 +27,12 @@ export function useSpeechOutput(
         const turn = generation.current;
         player.current = createPCMPlayer(audio.current, event.sampleRate || 0, () => {
           if (turn !== generation.current) return;
-          setStatus(enabled.current ? 'listening' : 'idle');
+          setStatus(microphone.current ? 'listening' : 'idle');
         });
         void audio.current.resume().catch(() => {
           if (turn !== generation.current) return;
           stop();
-          onProblem('浏览器未能启动音频播放，请重新开启语音会话。');
+          onProblem('浏览器未能启动音频播放，请检查声音设置后重试。');
         });
       } else if (event.kind === 'audio' && player.current) {
         if (!event.pcm) throw new Error('灵矽返回了空的音频片段。');
@@ -41,7 +42,7 @@ export function useSpeechOutput(
         setStatus('speaking');
       }
     },
-    [enabled, sound, setStatus, audio, stop, onProblem],
+    [enabled, microphone, sound, setStatus, audio, stop, onProblem],
   );
 
   const speak = useCallback(

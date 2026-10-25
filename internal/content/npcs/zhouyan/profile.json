@@ -1,0 +1,29 @@
+{
+  "id": "zhouyan",
+  "name": "周砚",
+  "aliases": [
+    "周砚（门外）",
+    "周砚（身旁）"
+  ],
+  "room": "gate",
+  "portrait": "zhouyan",
+  "voice": {
+    "profile": "zhouyan_thoughtful_male",
+    "providerVoiceId": "03f5f7eb7ed344d69af8a1c6ede55f4a"
+  },
+  "traits": [
+    "理性",
+    "熟悉古建筑",
+    "习惯看门轴和梁架"
+  ],
+  "knowledge": [
+    "住东院灯房，折叠修缮图放在灯座下；紧张时仍尝试解释结构。"
+  ],
+  "intro": "先看梁架，再看灯。",
+  "return": "先看梁架，再看灯。",
+  "reject": "先留在手边。眼前的事还没有弄清楚。",
+  "exposureThreshold": 0,
+  "exposedReply": "先看清眼前，再决定下一步。",
+  "dialogueRules": [],
+  "exchanges": []
+}

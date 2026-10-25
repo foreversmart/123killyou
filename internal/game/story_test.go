@@ -68,6 +68,7 @@ func TestMiniScriptCanReachDawnFromSafeChoices(t *testing.T) {
 	applyStory(t, engine, &state, "跟同伴去偷听住持")
 	applyStory(t, engine, &state, "模仿猫叫")
 	applyStory(t, engine, &state, "不开门等待真正的五更")
+	applyStory(t, engine, &state, "继续听")
 	applyStory(t, engine, &state, "坐大巴回家")
 
 	if state.SceneKey != "mini_ending" || !state.Flags["story_finished"] || state.Flags["story_dead"] {
@@ -150,7 +151,9 @@ func TestMiniScriptSkinDoubleCanBeCalmedByTheReadScripture(t *testing.T) {
 		t.Fatalf("吃粥后没有进入换皮同伴分支: scene=%s flags=%v", state.SceneKey, state.Flags)
 	}
 	applyStory(t, engine, &state, "我不吹灭红烛")
-	applyStory(t, engine, &state, "朗读清心静神经")
+	for _, command := range []string{"朗读清心静神经", "继续念经", "继续念经", "继续念经", "继续听", "继续听"} {
+		applyStory(t, engine, &state, command)
+	}
 	if state.SceneKey != "mini_dawn_trap" || !state.Flags["double_calm"] {
 		t.Fatalf("清心偈没有安抚换皮同伴: scene=%s flags=%v", state.SceneKey, state.Flags)
 	}
@@ -218,7 +221,7 @@ func TestMiniScriptDawnMiscountSpeaksBeforeDanger(t *testing.T) {
 	} {
 		applyStory(t, engine, &state, command)
 	}
-	if state.Dialogue.Speaker != "换皮同行人" || !state.Flags["fake_dawn_knocks"] {
+	if state.Dialogue.Speaker != miniDoubleName(&state)+"（门外）" || !state.Flags["fake_dawn_knocks"] {
 		t.Fatalf("误判五更没有先出现假人三敲对白: %+v flags=%v", state.Dialogue, state.Flags)
 	}
 }

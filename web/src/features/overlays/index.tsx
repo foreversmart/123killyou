@@ -7,6 +7,7 @@ import { BagPanel } from './bag_panel';
 import { HelpPanel } from './help_panel';
 import { SettingsPanel } from './settings_panel';
 import { LedgerPanel } from './ledger_panel';
+import { StoryMap } from './story_map';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
@@ -15,7 +16,7 @@ export function Overlays({ state, soundOn }: { state: GameState; soundOn: boolea
   if (!state.overlay) return null;
   const item = state.inventory.find((item) => item.id === state.focusItem);
   const panels = {
-    map: <MapPanel room={state.room} />,
+    map: state.sceneKey ? <StoryMap state={state} /> : <MapPanel room={state.room} />,
     ledger: <LedgerPanel />,
     item: item ? <ItemDetails item={item} /> : null,
     journal: <JournalPanel state={state} />,

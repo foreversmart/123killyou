@@ -1,0 +1,39 @@
+.figure {
+  --fabric: #756f58;
+  --fabric-light: #a9a083;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(3px 5px 3px #0004);
+}
+.figure[data-character='linlan'] {
+  --fabric: #af9e77;
+  --fabric-light: #e4d4ac;
+}
+.figure[data-character='zhouyan'] {
+  --fabric: #42615f;
+  --fabric-light: #8ca89c;
+}
+.figure[data-character='xuzhi'] {
+  --fabric: #8c5f55;
+  --fabric-light: #c7a18f;
+}
+.figure[data-character='huipu'] {
+  --fabric: #584a43;
+  --fabric-light: #b39772;
+}
+.figure[data-character='shangong'] {
+  --fabric: #525c51;
+  --fabric-light: #9b9a7c;
+}
+.figure[data-character='player'] {
+  --fabric: #4a5260;
+  --fabric-light: #929f9a;
+}
+.portrait {
+  overflow: hidden;
+  background: radial-gradient(ellipse at 60% 20%, #b2ac91, #4a5045);
+}
+.eerie {
+  filter: drop-shadow(4px 1px 0 #3002) saturate(0.6);
+}

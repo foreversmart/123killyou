@@ -1,0 +1,29 @@
+{
+  "id": "linlan",
+  "name": "林岚",
+  "aliases": [
+    "林岚（门外）",
+    "林岚（身旁）"
+  ],
+  "room": "gate",
+  "portrait": "linlan",
+  "voice": {
+    "profile": "linlan_lively_female",
+    "providerVoiceId": "e1dd0f75cad64290a1172dff48103694"
+  },
+  "traits": [
+    "说话快",
+    "爱摄影",
+    "怕时检查相机盖"
+  ],
+  "knowledge": [
+    "住东院听房，带相机；相机盖挂在铜铃旁。"
+  ],
+  "intro": "晴天来古寺，照片肯定好看。",
+  "return": "晴天来古寺，照片肯定好看。",
+  "reject": "先留在手边。眼前的事还没有弄清楚。",
+  "exposureThreshold": 0,
+  "exposedReply": "先看清眼前，再决定下一步。",
+  "dialogueRules": [],
+  "exchanges": []
+}

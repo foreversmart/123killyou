@@ -3,7 +3,9 @@ package sqlite
 import "nightwatch/internal/session"
 
 func (t transaction) RecordEvent(runID string, event session.Event) error {
-	_, err := t.tx.Exec("INSERT INTO events(run_id,event_id,revision) VALUES(?,?,?)", runID, event.ID, event.Revision)
+	// Events are milestones within a run. Relighting a candle or retrying a
+	// dangerous choice may set the same flag again; preserve its first revision.
+	_, err := t.tx.Exec("INSERT INTO events(run_id,event_id,revision) VALUES(?,?,?) ON CONFLICT(run_id,event_id) DO NOTHING", runID, event.ID, event.Revision)
 	return err
 }
 func (t transaction) AppendMemory(runID string, m session.Memory) error {

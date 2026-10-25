@@ -24,35 +24,43 @@ func prepareLinx(catalog *content.Catalog) (session.DialogueProvider, error) {
 		DeviceID: os.Getenv("LINX_DEVICE_ID"), KeeperAgent: os.Getenv("LINX_KEEPER_AGENT_ID"),
 		RequestLimit: 20 * time.Second,
 	})
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
 	defer cancel()
-	// Always refresh the exact named test agent so {{game_context}} is present.
-	keeper, _ := catalog.NPC("keeper")
-	agentID, err := client.EnsureAgent(ctx, linx.AgentSpec{
-		Name: "1024-keeper", AssistantName: keeper.Name, VoiceID: keeper.Voice.ProviderVoiceID,
-		SystemPrompt: keeper.Prompt + "\n\n后端会通过 {{game_context}} 提供当前事实和本轮结算结果。",
-	})
-	if err != nil {
-		return nil, fmt.Errorf("灵矽测试智能体准备失败: %w", err)
+	voices := map[string]string{"narrator": catalog.Narrator().Voice.ProviderVoiceID}
+	for _, npc := range catalog.NPCs() {
+		voices[npc.ID] = npc.Voice.ProviderVoiceID
 	}
-	if configured := os.Getenv("LINX_KEEPER_AGENT_ID"); configured != "" && configured != agentID {
-		return nil, errors.New("LINX_KEEPER_AGENT_ID 与 1024-keeper 不一致，停止设备绑定")
+	if err := client.ValidateVoices(ctx, voices); err != nil {
+		return nil, fmt.Errorf("灵矽角色音色校验失败: %w", err)
+	}
+	roles := make(map[string]string, len(voices))
+	for _, npc := range catalog.NPCs() {
+		agentID, err := client.EnsureAgent(ctx, linx.AgentSpec{
+			Name: "1024-" + npc.ID, AssistantName: npc.Name, VoiceID: npc.Voice.ProviderVoiceID,
+			SystemPrompt: npc.Prompt + "\n\n后端会通过 {{game_context}} 提供当前事实和本轮结算结果。",
+		})
+		if err != nil {
+			return nil, fmt.Errorf("灵矽角色 %s 准备失败: %w", npc.ID, err)
+		}
+		roles[npc.ID] = agentID
 	}
 	narrator := catalog.Narrator()
 	narratorID, err := client.EnsureAgent(ctx, linx.AgentSpec{
-		Name: "1024-narrator", AssistantName: narrator.Name, VoiceID: narrator.Voice.ProviderVoiceID,
-		SystemPrompt: narrator.Prompt,
+		Name: "1024-narrator", AssistantName: narrator.Name, VoiceID: narrator.Voice.ProviderVoiceID, SystemPrompt: narrator.Prompt,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("灵矽旁白智能体准备失败: %w", err)
 	}
-	if configured := os.Getenv("LINX_NARRATOR_AGENT_ID"); configured != "" && configured != narratorID {
-		return nil, errors.New("LINX_NARRATOR_AGENT_ID 与 1024-narrator 不一致")
+	roles["narrator"] = narratorID
+	for role, variable := range map[string]string{"keeper": "LINX_KEEPER_AGENT_ID", "narrator": "LINX_NARRATOR_AGENT_ID"} {
+		if configured := os.Getenv(variable); configured != "" && configured != roles[role] {
+			return nil, fmt.Errorf("%s 与 1024-%s 不一致", variable, role)
+		}
 	}
-	client.SetAgents(agentID, narratorID)
+	client.SetRoleAgents(roles)
 	if err := client.PrepareDevice(ctx); err != nil {
 		return nil, fmt.Errorf("灵矽虚拟设备准备失败: %w", err)
 	}
-	log.Print("灵矽虚拟设备已完成 OTA 和 1024-keeper 绑定；1024-narrator 已准备，等待实际云端回合验证")
+	log.Printf("灵矽虚拟设备完成 OTA 与 1024-keeper 绑定；%d 个独立角色音色已校验并准备，等待实际云端回合验证", len(roles))
 	return client, nil
 }

@@ -5,6 +5,7 @@ import { PlayerStatus } from '@/features/hud/player_status';
 import { Inventory } from '@/features/inventory/inventory';
 import { DialoguePanel } from '@/features/dialogue/dialogue_panel';
 import { CommandPanel } from '@/features/debug/command_panel';
+import { SceneSkip } from '@/features/debug/scene_skip';
 import { ActionNotice } from '@/shared/ui/action_notice';
 import { ProblemNotice } from '@/shared/ui/problem_notice';
 import { LoadingScreen } from '@/shared/ui/loading_screen';
@@ -15,6 +16,7 @@ import styles from './style.module.css';
 export default function Game() {
   const game = useGameController();
   const debug = new URLSearchParams(location.search).has('debug');
+  const sceneSkipEnabled = import.meta.env.DEV || debug;
   const {
     state,
     error,
@@ -36,7 +38,13 @@ export default function Game() {
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
       <section className={styles['game-shell']} aria-label="第一夜，语音密室逃脱">
-        <PlayerStatus state={state} demo={demo} voiceStarted={voiceStarted} connected={connected} />
+        <PlayerStatus
+          state={state}
+          demo={demo}
+          voiceStarted={voiceStarted}
+          playbackOn={voice.playbackOn}
+          connected={connected}
+        />
         <Room state={state} phase={roomPhase} onAction={voice.submit} interactive={connected}>
           <Overlays state={state} soundOn={voice.soundOn} />
           {opening && <StartChoices busy={selecting} onBegin={begin} onResume={resume} />}
@@ -53,8 +61,9 @@ export default function Game() {
         />
       </section>
       <div className={styles['outside-caption']}>
-        <span>第一夜 · 交互原型</span>
-        <span>固定视角 / 按住空格说话 / 剧情暂定</span>
+        <span>红烛无声 · 灯影寺</span>
+        {sceneSkipEnabled && <SceneSkip onSkip={() => voice.submit('调试跳到下一剧情场景')} />}
+        <span>第一视角 / 道具微光 / 按住空格说话</span>
       </div>
       <ProblemNotice message={voice.problem} />
       <ProblemNotice message={error} />

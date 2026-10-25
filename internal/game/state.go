@@ -33,30 +33,33 @@ type Effect struct {
 }
 
 type State struct {
-	ID         string          `json:"id"`
-	RunID      string          `json:"runId"`
-	SavedAt    string          `json:"savedAt"`
-	Revision   int             `json:"revision"`
-	StoryMode  bool            `json:"storyMode"`
-	SceneKey   string          `json:"sceneKey"`
-	SceneName  string          `json:"sceneName"`
-	SceneText  string          `json:"sceneText"`
-	SceneProps []string        `json:"sceneProps"`
-	Actors     []SceneActor    `json:"actors"`
-	Room       string          `json:"room"`
-	RoomName   string          `json:"roomName"`
-	Devotion   int             `json:"devotion"`
-	Inventory  []Item          `json:"inventory"`
-	Clues      []string        `json:"clues"`
-	Flags      map[string]bool `json:"flags"`
-	Overlay    string          `json:"overlay"`
-	FocusItem  string          `json:"focusItem"`
-	Paused     bool            `json:"paused"`
-	Caught     bool            `json:"caught"`
-	Dialogue   Dialogue        `json:"dialogue"`
-	LastHeard  string          `json:"lastHeard"`
-	LastAction string          `json:"lastAction"`
-	Effect     Effect          `json:"effect"`
+	ID           string          `json:"id"`
+	RunID        string          `json:"runId"`
+	SavedAt      string          `json:"savedAt"`
+	Revision     int             `json:"revision"`
+	StoryMode    bool            `json:"storyMode"`
+	SceneKey     string          `json:"sceneKey"`
+	ShotKey      string          `json:"shotKey"`
+	DialogueNext string          `json:"dialogueNext"`
+	RetryScene   string          `json:"retryScene,omitempty"`
+	SceneName    string          `json:"sceneName"`
+	SceneText    string          `json:"sceneText"`
+	SceneProps   []string        `json:"sceneProps"`
+	Actors       []SceneActor    `json:"actors"`
+	Room         string          `json:"room"`
+	RoomName     string          `json:"roomName"`
+	Devotion     int             `json:"devotion"`
+	Inventory    []Item          `json:"inventory"`
+	Clues        []string        `json:"clues"`
+	Flags        map[string]bool `json:"flags"`
+	Overlay      string          `json:"overlay"`
+	FocusItem    string          `json:"focusItem"`
+	Paused       bool            `json:"paused"`
+	Caught       bool            `json:"caught"`
+	Dialogue     Dialogue        `json:"dialogue"`
+	LastHeard    string          `json:"lastHeard"`
+	LastAction   string          `json:"lastAction"`
+	Effect       Effect          `json:"effect"`
 }
 
 type Result struct {

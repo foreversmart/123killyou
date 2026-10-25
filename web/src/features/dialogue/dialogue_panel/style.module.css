@@ -88,3 +88,20 @@
     transform: translateY(0);
   }
 }
+.speaker-name small {
+  padding: 0.15cqw 0.4cqw;
+  font-size: 0.6cqw;
+  letter-spacing: 0.1em;
+  border: 1px solid #9d986c40;
+  color: #a4b6a2;
+}
+.inner {
+  border-top-color: #687b72;
+}
+.inner .speaker-name {
+  color: #b9d0bf;
+}
+.inner .dialogue-text {
+  color: #d3e0d4;
+  font-style: italic;
+}

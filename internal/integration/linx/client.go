@@ -33,6 +33,7 @@ type Config struct {
 	OTAURL        string
 	KeeperAgent   string
 	NarratorAgent string
+	RoleAgents    map[string]string
 	RequestLimit  time.Duration
 }
 
@@ -64,6 +65,11 @@ type Client struct {
 }
 
 func New(config Config) *Client {
+	roles := make(map[string]string, len(config.RoleAgents))
+	for role, id := range config.RoleAgents {
+		roles[role] = id
+	}
+	config.RoleAgents = roles
 	if config.APIBase == "" {
 		config.APIBase = DefaultAPIBase
 	}
@@ -91,6 +97,8 @@ func (c *Client) SetAgents(keeper, narrator string) {
 		defer c.mu.Unlock()
 		c.config.KeeperAgent = strings.TrimSpace(keeper)
 		c.config.NarratorAgent = strings.TrimSpace(narrator)
+		c.config.RoleAgents["keeper"] = c.config.KeeperAgent
+		c.config.RoleAgents["narrator"] = c.config.NarratorAgent
 	}
 }
 
