@@ -24,7 +24,7 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 	if miniHasAny(text, "检查门缝", "看门眼", "观察门外", "看门闩") {
 		return "inspect", miniInner(state, "门缝红蜡还是完整的。门眼里只有被月光切开的空走廊；四敲之后没有脚步，也没有人回答。"), true
 	}
-	return "story", miniInner(state, "四下敲门后没有回答。我没有马上出声，只听见自己的呼吸贴着门板回来。"), true
+	return e.storyConversation(state, text)
 }
 
 func miniPersonName(person string) string {
@@ -87,7 +87,7 @@ func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bo
 	if miniHasAny(text, "留在房间", "不出去", "不跟") {
 		return "story", miniInner(state, "我留在红烛旁。门外的人没有催我，只在另一扇房门边停下脚步，像是在等我先开门。"), true
 	}
-	return "story", miniInner(state, "先核对私物和声音。三敲只说明有人声称自己是人，不能替门外的人证明身份。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
@@ -137,7 +137,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 		intent, speak := e.storyDeath(state, "我跑进另一条黑廊。回声把脚步送回慧普身后，路竟然折回来了。")
 		return intent, speak, true
 	}
-	return "story", miniInner(state, "半掩房门里传来撕裂声。我贴着墙，把手电光压低；先看清里面的手和地面，别碰到脚边的花瓶。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) breakMiniVase(state *State) (string, string, bool) {

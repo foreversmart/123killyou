@@ -147,7 +147,13 @@ func (s *Service) command(ctx context.Context, id, runID, requestID, text string
 			return result, nil
 		}
 	}
-	return s.attachSpeech(ctx, result, audioKey{id, runID, requestID}, providerAudio), nil
+	result = s.attachSpeech(ctx, result, audioKey{id, runID, requestID}, providerAudio)
+	if plan.BufferedDialogue {
+		if err := s.replaySpeech(ctx, result, emit); err != nil {
+			return result, err
+		}
+	}
+	return result, nil
 }
 func (s *Service) recordProgress(tx Transaction, before, next game.State, text, intent, speak string) error {
 	for key, value := range next.Flags {

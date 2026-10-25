@@ -60,6 +60,9 @@ func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 		intent, speak := e.storyDeath(state, "我跟着同行人跨出门槛。走廊尽头的月光变成肉色，门在身后合上了。")
 		return intent, speak, true
 	}
-	miniShot(state, "double_candle")
-	return "story", miniDialogue(state, miniDoubleName(state), "你还点着它？外面的东西会顺着红光找来。先把烛吹灭，我们在黑里等一会儿。"), true
+	if miniContinue(text) {
+		miniShot(state, "double_candle")
+		return "story", miniDialogue(state, miniDoubleName(state), "你还点着它？外面的东西会顺着红光找来。先把烛吹灭，我们在黑里等一会儿。"), true
+	}
+	return e.storyConversation(state, text)
 }

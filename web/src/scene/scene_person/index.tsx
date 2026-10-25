@@ -6,6 +6,7 @@ import { storyAssets } from '@/shared/lib/story_assets';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 import { BackFigure } from './back_figure';
+import { canShowScenePerson } from './visibility';
 
 export function ScenePerson({
   actor,
@@ -22,6 +23,7 @@ export function ScenePerson({
   sceneKey?: string;
   flags?: Record<string, boolean>;
 }) {
+  if (!canShowScenePerson(actor)) return null;
   const id = actor.portrait || actor.id;
   const disguised = actor.id.includes('double');
   const calm = disguised && pose === 'double_calm';
@@ -112,7 +114,6 @@ function getCharacterAsset(
   if (sceneKey === 'mini_refectory') return poseMap.seatedDining;
   if (sceneKey === 'mini_dawn' && shotKey === 'dawn_gate' && poseMap.capRemoved)
     return poseMap.capRemoved;
-  if (sceneKey === 'mini_listen' && flags.skin_seen && poseMap.revealed) return poseMap.revealed;
-  if (sceneKey === 'mini_dawn' && poseMap.tired) return poseMap.tired;
+  // Expression portraits belong in the dialogue panel, not in full-body staging.
   return poseMap.standing;
 }

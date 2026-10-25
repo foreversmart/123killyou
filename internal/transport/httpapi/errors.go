@@ -12,6 +12,8 @@ import (
 
 func publicError(err error) (int, string) {
 	switch {
+	case errors.Is(err, session.ErrDialogueRepeated):
+		return http.StatusServiceUnavailable, session.ErrDialogueRepeated.Error()
 	case errors.Is(err, session.ErrLinxUnavailable):
 		return http.StatusServiceUnavailable, session.ErrLinxUnavailable.Error()
 	case errors.Is(err, session.ErrSession):

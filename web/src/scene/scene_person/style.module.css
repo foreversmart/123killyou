@@ -44,7 +44,6 @@
 }
 .speaking {
   filter: drop-shadow(0 0 6px #f7d48250);
-  z-index: 4;
 }
 .speaking .label {
   border-color: #edd39a;

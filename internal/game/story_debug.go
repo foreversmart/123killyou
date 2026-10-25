@@ -129,7 +129,7 @@ func miniDebugOpening(state *State) string {
 	case "mini_register":
 		return miniDialogue(state, "陆沉", "四位施主，先把名字写清楚。钥匙只开各自的房，通行凭收好；背面那句‘只许去，不许问’，夜里认路时再看。")
 	case "mini_refectory":
-		return miniDialogue(state, "陆沉", "粥、素饼和热水都在，想吃什么由施主自己决定。")
+		return miniDialogue(state, "陆沉", "粥、馒头、咸菜和本地素菜都在，想吃什么由施主自己决定。")
 	case "mini_corridor_candle":
 		return miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。")
 	case "mini_room":

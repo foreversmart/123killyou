@@ -65,5 +65,5 @@ func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
 		miniShot(state, "oracle_question")
 		return "story", miniDialogue(state, "神公", "我听清了，你只求回自己的房间。封条已经解开；把这一问定住，再把杯筊掷下去。"), true
 	}
-	return "story", miniDialogue(state, "神公", "慧普的脚步还没到这里。先想清你求的是什么，我不会替你掷。"), true
+	return e.storyConversation(state, text)
 }

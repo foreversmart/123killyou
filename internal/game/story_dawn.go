@@ -28,7 +28,7 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 		miniSetFlag(state, "name_echo_heard")
 		return "story", miniDialogue(state, "你（门外回声）", "是我。你怎么还不开门？"), true
 	}
-	return "story", miniInner(state, "五声更锣停下后，另一声才从更远的地方过来。窗外仍然很黑，我得自己分清声源。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
@@ -68,5 +68,5 @@ func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
 		miniShot(state, "dawn_gate")
 		return "dialogue", miniDialogue(state, "陆沉", "住持的事，先别在山门问。五更后门会开，下山时别回头数灯。"), true
 	}
-	return "story", miniInner(state, "林岚、周砚、许栀都在。衣服完整，眼下却都有一层疲倦。四个人，终于又站在同一片晨光里。"), true
+	return e.storyConversation(state, text)
 }

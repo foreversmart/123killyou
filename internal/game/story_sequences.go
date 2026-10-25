@@ -23,7 +23,12 @@ func miniSequence(state *State, name string, lines []miniLine) string {
 }
 
 func miniContinue(text string) bool {
-	return miniHasAny(text, "继续听", "下一句", "听大家说话", "听他们", "继续对话")
+	switch text {
+	case "继续听", "下一句", "听大家说话", "听他们", "继续对话":
+		return true
+	default:
+		return false
+	}
 }
 
 var registerLines = []miniLine{
@@ -34,10 +39,10 @@ var registerLines = []miniLine{
 	{"陆沉", "先叫我，等我应了再开门。没有必要，今晚不要一个人出门。", "register_luggage"},
 }
 var refectoryLines = []miniLine{
-	{"周砚", "这里有一缕纤维……不像米油。", "refectory_porridge"},
-	{"陆沉", "是给远客的照顾。僧人守自己的戒，客人可以按自己的习惯来。", "refectory_lamp"},
+	{"周砚", "等一下，粥里好像有肉！和尚庙不是应该都吃素吗，为什么会有肉？", "refectory_porridge"},
+	{"陆沉", miniGuestMealExplanation, "refectory_lamp"},
 	{"林岚", "听起来像是好意。不过，好意也该先问清楚。", "refectory_table"},
-	{"许栀", "先吃这个垫一垫。粥是什么、谁送来的，等问明白了再决定。", "refectory_bread"},
+	{"许栀", "先拿个馒头，再夹点咸菜和笋干。粥里的肉是谁送来的，等问明白了再决定。", "refectory_bread"},
 }
 var corridorLines = []miniLine{
 	{"林岚", "寺里……真的有需要防的东西？", "corridor_candles"},

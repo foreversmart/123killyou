@@ -51,7 +51,7 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	if Normalize(text) == "调试跳到下一剧情场景" {
 		return e.skipMiniScene(state)
 	}
-	if state.StoryMode && miniHasAny(Normalize(text), "重听当前对白", "重听这句", "再说一遍") {
+	if state.StoryMode && miniReplayRequest(Normalize(text)) {
 		return "replay", state.Dialogue.Text
 	}
 	state.DialogueNext = ""
