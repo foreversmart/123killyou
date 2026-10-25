@@ -202,6 +202,38 @@ func (c *Client) JudgeOracle(ctx context.Context, input game.OracleJudgeRequest)
 	}, nil
 }
 
+func (c *Client) JudgeOption(ctx context.Context, input game.OptionJudgeRequest) (game.OptionJudgeResult, error) {
+	criteria := map[string]string{"none": "玩家发言与所有选项都不匹配，无法安全代选。"}
+	for _, option := range input.Options {
+		criteria[option.ID] = option.Description + "（执行命令：" + option.Command + "）"
+	}
+	questions := map[string]question{
+		"option": {
+			Type:         "choice",
+			Instructions: "根据语音转写内容判断玩家想执行哪个当前选项。只能选择给出的选项 ID，若无法确定必须选择 none，不要创造新操作。",
+			Criteria:     criteria,
+		},
+	}
+	state := fmt.Sprintf("场景：%s\n当前对白：%s\n玩家语音转写：%s\n可选操作：%s", input.Scene, input.Dialogue, input.PlayerText, optionSummary(input.Options))
+	out, err := c.call(ctx, request{Model: "jev-latest", State: state, Questions: questions})
+	if err != nil {
+		return game.OptionJudgeResult{}, err
+	}
+	answer, ok := out.Answers["option"]
+	if !ok || strings.TrimSpace(answer.Choice) == "" {
+		return game.OptionJudgeResult{}, fmt.Errorf("jev option response has no choice")
+	}
+	return game.OptionJudgeResult{Choice: strings.TrimSpace(answer.Choice), Confidence: answer.Confidence}, nil
+}
+
+func optionSummary(options []game.StoryOption) string {
+	items := make([]string, 0, len(options))
+	for _, option := range options {
+		items = append(items, option.ID+"："+option.Description)
+	}
+	return strings.Join(items, "；")
+}
+
 func (c *Client) JudgeRoomAction(ctx context.Context, input game.RoomActionRequest) (game.RoomActionResult, error) {
 	state := fmt.Sprintf("场景：%s\n镜头：%s\n当前画面：%s\n红烛已点燃：%t\n玩家原话：%s", input.Scene, input.Shot, input.SceneText, input.CandleLit, input.PlayerText)
 	questions := map[string]question{
