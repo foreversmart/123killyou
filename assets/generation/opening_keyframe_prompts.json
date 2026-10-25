@@ -1,0 +1,182 @@
+{
+  "purpose": "《红烛无声》完整18秒真人片头的当前视频参考图规范",
+  "storySource": "story/mini_script.md",
+  "generator": "built-in image_gen",
+  "status": "verified",
+  "videoStatus": "generated_pending_user_review",
+  "videoPromptSet": "assets/generation/opening_video_prompt.md",
+  "sharedDirection": "同一真人演员、同一寺庙的完全黑夜；门边听声、双眼极近景、回廊逃跑、侧倒贴地。参考图供一次完整生成约18秒视频使用，不拆段生成，不以静态图推拉代替表演。",
+  "exteriorLighting": "Exterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.",
+  "assets": [
+    {
+      "id": "opening_door_listening",
+      "name": "开场镜头·林岚贴门听声",
+      "path": "assets/video/opening/door_listening.png",
+      "kind": "video_keyframe",
+      "references": [],
+      "prompt": "Use case: photorealistic-natural.\nAsset type: ONE cinematic 16:9 live-action reference still for the opening of the Chinese folk-horror film/game 《红烛无声》. This is the master casting, wardrobe and lighting reference for all subsequent stills.\nPrimary request: a convincingly REAL photographed Chinese actress, age about 27, in a physical Chinese temple guest room at night, listening at a slightly open timber door. The viewer is her unseen companion standing close beside and a little behind her; adult eye-level subjective proximity, natural 40mm cinema lens, intimate waist-up framing. No viewer face or viewer body visible.\nActor: an ordinary young adult Chinese woman with a naturally proportioned oval face, subtly lifted outer eye corners, normal dark-brown irises, slightly uneven natural eyebrows, unretouched skin pores and a little perspiration at the temple. Chin-length black side-parted bob with a few flyaway hairs, no glam styling or heavy makeup. She wears a worn dark charcoal cotton travel jacket over a muted gray shirt, a plain black camera strap, and a small black mirrorless camera resting against her lower chest. She is a real human performer in a photographed film, not an illustration translated into a wax doll.\nAction/composition: she occupies the left-middle of the wide frame in a three-quarter side profile, one anatomically correct hand braced against the near edge of a thick old wooden door at right, fingers quietly tightening. Her ear is close to the narrow open gap, lips slightly parted, eyes concentrating into the dark passage, shoulders subtly tense. The expression is a held breath and uncertainty, not a posed scream. Only one natural hand needs to be visible, attached correctly to her arm. The door is ajar just enough to reveal a strip of the same real timber night corridor with a dim warm practical eave lamp, weathered stone tiles, wood columns and a little cool outdoor light. The doorway and hand must be spatially coherent.\nA SINGLE short deep-red wax candle, with a small natural flame in a tarnished bronze saucer holder, sits on a physical wooden table in the lower left foreground. The candle is softly out of focus but clearly one lit red candle. Its restrained light grazes fingers and part of her cheek; very weak dark neutral outdoor spill at the door gap. Real exposure falloff, readable deep brown shadows, practical mixed lighting, realistic skin subsurface detail without excessive sheen. Maintained old timber, real Chinese latticework, aged plaster, worn stone, ordinary temple guest lodging, no fantasy architecture.\nPhotographic medium: completely live-action psychological horror cinema, tactile real material, natural lens depth of field, modest optical softness at edges, subtle organic film grain and muted color, sober underexposed night photography with sufficient facial detail. A candid moment of acting caught during motion, believable human asymmetry, no beauty campaign look.\nOutput ONE full-bleed opaque landscape 16:9 photograph, no montage or panels. No text, title, writing on plaques, subtitles, logos, watermarks, black bars or border. No monster, pursuer, human silhouette in the corridor, abnormal reflection, blood, injury, funeral decorations or plot spoilers. No anime, drawing, painted texture, game render, 3D render, plastic skin, enormous shiny doll eyes, fake CGI hair, heavy teal-orange LUT, artificial fog, god rays, neon or over-sharpening.\nExterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.",
+      "usage": "片头首镜；锁定真人演员、深色旅行外套、相机、门边动作与烛光，门外为完全黑夜。",
+      "status": "verified",
+      "transparentBackground": false
+    },
+    {
+      "id": "opening_lin_lan_eyes",
+      "name": "开场镜头·林岚惊惧双眼",
+      "path": "assets/video/opening/lin_lan_eyes.png",
+      "kind": "video_keyframe",
+      "references": ["assets/video/opening/door_listening.png"],
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE landscape 16:9 extreme eye close-up live-action cinema reference frame for shot 2 of 《红烛无声》.\nInput image 1 role: ONLY the precise identity of the real Chinese actress, her natural eyes/eyebrows/skin and black bob, and the physical warm candle versus cool temple-night lighting. This is a reference for a NEW SHOT, not a request to retain its door composition. Preserve this exact actress; do not beautify, recast, or convert her into CGI.\nPrimary request: the instant she turns away from the temple door and notices something just behind her unseen companion. The viewer is very close in front of her. An aggressive cinematic EXTREME CLOSE-UP of BOTH EYES: eyebrows and both eyes dominate practically the whole horizontal frame. Crop out her mouth, lower nose, chin, shoulders, almost all forehead and nearly all hair. Her two eyes and eyeline must occupy at least 75 percent of the image width. Only a little upper nose bridge is visible. Not a normal face portrait.\nPerformance: a believable sudden fright caught in a fraction of a second. Her gaze darts just past the viewer toward an unseen thing; lower eyelids tighten, eyebrows draw slightly up and inward, upper lids lift naturally. A little moistness at the lower lash line and tiny temple sweat. Normal dark-brown human irises and normal pupil sizes, anatomically natural eyes, unretouched pores and individual real eyelashes. Fear comes from the gaze and very close camera, not an exaggerated fixed scream or digitally enormous eyes. There are no figures or supernatural shapes reflected in the eyes, only one or two small ordinary warm practical-light catchlights, never sparkling stars.\nPhotography: same convincingly live-action actress in the same real night location as the reference; 100mm macro cinema lens, razor sharp focus on her eye planes, natural edge falloff. A subdued warm candle edge on one side of her face, desaturated cool shadow on the other, sober Chinese folk-horror photography. Genuine fine skin texture and human asymmetry, slight optical grain, no glamour retouching or plastic gloss. Opaque full-bleed wide 16:9 shot, no panels or collage.\nNo text, subtitles, title, UI, border, watermark or black bars. No anime eyes, illustration, wax doll, videogame render, artificial starbursts, glowing pupils, extra eyes, tears streaming down cheeks, wounds, blood, monsters or plot spoilers.",
+      "usage": "同一位真人演员的双眼极近景；用于受惊偏转目光，不作静止头像。",
+      "status": "verified",
+      "transparentBackground": false
+    },
+    {
+      "id": "opening_corridor_running",
+      "name": "开场镜头·回廊踉跄逃跑",
+      "path": "assets/video/opening/corridor_running.png",
+      "kind": "video_keyframe",
+      "references": ["assets/video/opening/door_listening.png"],
+      "prompt": "Use case: identity-preserve.\nAsset type: ONE full-bleed landscape 16:9 photographed action reference still for shot 3, subjective escape into the temple corridor in 《红烛无声》.\nInput image 1 role: the exact real actress, chin-length side-parted black bob, worn charcoal cotton jacket, gray shirt, small black camera and strap; also the real timber doorway and temple-night lighting. Preserve her human identity, clothes and the physical realism. This is a NEW CAMERA POSITION, now following her out into the same corridor, not a copy of her listening pose.\nScene/action: the viewer is her unseen companion, hurrying after her from the guest-room doorway. She has just pulled the viewer out and is now two quick steps ahead, running away from camera, seen in three-quarter back view near the center-left, slightly turning her head back enough to give a glimpse of the SAME cheek and black bob. Candid mid-stride, shoulders forward, weight really shifting, one arm swinging naturally, clothes and short hair moving from the hurried turn. Her camera rests by her hip on its strap. Not a fashion runway pose or a smiling portrait. No reaching hand in the foreground and no additional people.\nLocation: the ordinary covered Chinese Buddhist temple passage suggested outside the reference doorway. A finite, believable night corridor: weathered dark-brown wooden guest-room doors and Chinese lattice windows along the LEFT wall, chunky timber pillars on stone bases along the RIGHT open side, gray stone paving, a small shadowed courtyard with tree and gray clay tiles outside the right pillars. The near left doorway behind the viewer casts only a little candle warmth onto the threshold. Two small warm amber practical eave lamps along the passage, limited light islands; no rows of new red lanterns. The same aged wood, plaster and stone as the reference. Normal inhabitable real architecture, no fantasy, infinite tunnel or abandoned ruin.\nCamera/framing: subjective adult eye height about 1.5 metres, natural 32mm cinema lens, camera just inside the passage looking along the direction of running, a few degrees of natural handheld lean but not a fall yet. Frame the woman's figure from head to near ankles, leave visible stone floor and pillars to establish the escape path. She occupies less than one third of frame width; the corridor should remain clearly legible. Capture physical movement with slight localized blur at a swinging sleeve, heel and nearby frame edge; actress body and main building structure remain focused enough for video reference. The viewer's face, body, feet and camera equipment never appear.\nPhotographic style: completely REAL LIVE-ACTION HORROR FILM STILL from a practical location, natural skin glimpse, tactile real jacket fabric and flyaway hair, convincingly imperfect aged wood and real stone pores, near-black midnight shadows mixed with very limited amber lamplight. No glossy CGI, fake game lighting or painted contours, no excessive teal grade. Real low-light exposure with readable shadows, modest lens softness and subtle fine grain. Frightened urgency, no visible threat.\nNo ghost, monster, pursuer, silhouette, blood, injury, bodies, ritual decorations, fog machine clouds, text, signage letters, title, subtitles, logo, watermark, black bars, panels or collage. One actress only. No cartoon, illustration, 3D render, wax skin or motion smear across the entire image.\nExterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.\nPreserve her ordinary black travel backpack visible from behind.",
+      "usage": "第一人称跟随林岚逃跑；相同外套、相机和夜间寺院，庭院沉黑，仅局部廊灯照明。",
+      "status": "verified",
+      "transparentBackground": false
+    },
+    {
+      "id": "opening_corridor_fallen",
+      "name": "开场镜头·回廊跌倒贴地",
+      "path": "assets/video/opening/corridor_fallen.png",
+      "kind": "video_end_frame",
+      "references": ["assets/video/opening/corridor_running.png"],
+      "prompt": "Use case: photorealistic-natural.\nAsset type: ONE live-action subjective fallen-view END FRAME for shot 4 of the Chinese folk-horror opening 《红烛无声》, landscape 16:9.\nInput image 1 role: ONLY the exact physical corridor, its geometry, doors, pillars, stone bases, damp stone paving, courtyard and practical night lighting. Generate a new camera view of this SAME SET from the floor after the unseen viewer trips. The actress in the reference has continued ahead and is completely outside the new frame. Do not copy her or show any person.\nPrimary request: a person's eyes have dropped onto their RIGHT SIDE after a stumbling run. A physically plausible camera only 8 to 12 centimetres above the stone, very close to the base of a near right timber pillar. Strong approximately 45-degree CLOCKWISE CAMERA ROLL: normally vertical wood columns run dramatically diagonal across the photograph. The whole world appears tilted because the camera/body has fallen; no actual building is bent or slanted. This is explicitly a canted ground-level fallen-person POV, not an upright low-angle architecture photograph or a crop from the standing reference.\nPreserve real architecture from the reference: old guest-room wooden doors and lattice windows along one wall, stout timber pillars on rounded stone bases along the opposite open courtyard side, gray worn slightly damp stone paving, limited warm amber eave lamps, shadowed tree and gray-tiled roof outside. Keep finite believable corridor space and coherent vanishing direction. No adding doors, long tunnels, new furniture, costumes or decorations.\nComposition: coarse real stone paving extremely near the lens dominates about two thirds of the image, one narrow near patch of stone and a worn timber/stone pillar base is in crisp focus. Familiar door bottoms and the passage recede diagonally into a softly defocused background; a couple of distant warm lamp glows hang at a slant near the image edge. The camera is clearly at a human face's fallen height, giving a vulnerable physical closeness to the ground. No empty triangles at the frame corners, no decorative frame, no rotation of a rectangular picture pasted onto black. Render this new physical viewpoint fully to the edges.\nPhotographic medium: genuinely photographed real Chinese temple at night, tactile irregular stone pores and joints, natural slightly damp highlights, aged brown timber, realistic shallow optical focus of a 28-35mm lens this close to the ground, dark slate-blue ambient night and small warm practical lamps. Real sober psychological-horror cinema exposure with sufficient near-ground detail, subtle film grain, natural lens softness. The impact has just ended; this still is momentarily settled and readable rather than a complete motion-blur smear.\nNo people, actress, human silhouettes, hands, arms, legs, shoes, protagonist face/body, reflection of anyone or a visible camera. No pursuer, monster, blood, wound, injury, dead person or death implication. No floating viewpoint, 360-degree rotation, warped building, game CG, painted texture, illustration, glossy plastic, neon, artificial fog, text, title, UI, logo, watermark, panels or black bars.\nExterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.",
+      "usage": "同一回廊侧倒后的贴地终幅；低机位、明显倾斜，近处石纹可读，外部庭院近黑，无人物或死亡暗示。",
+      "status": "verified",
+      "transparentBackground": false
+    }
+  ],
+  "titleReference": {
+    "id": "opening_title",
+    "path": "assets/video/opening/title_card.png",
+    "promptSet": "assets/generation/opening_title_prompt.json"
+  },
+  "referenceOrder": [
+    {
+      "index": 1,
+      "id": "opening_corridor_fallen",
+      "path": "assets/video/opening/corridor_fallen.png"
+    },
+    {
+      "index": 2,
+      "id": "opening_title",
+      "path": "assets/video/opening/title_card.png"
+    }
+  ],
+  "videoPlan": {
+    "totalSeconds": 18,
+    "generationTasks": 1,
+    "style": "完全真人实拍",
+    "approximateShotSeconds": [4, 3, 4, 4, 3],
+    "transition": "渐暗到黑，再渐亮；约半秒，切换速度均匀",
+    "transitionSound": "每次渐暗起音清楚突出的低沉厚重寺庙铜钟，明显高于配乐与念经，余音跨镜头；前四镜台词先说完，片名女声在末次钟声余音中出现",
+    "chant": "众僧低声念经贯穿全部画面、黑场和片名，始终不断",
+    "closingVoice": {
+      "trigger": "毛笔片名亮起后",
+      "speaker": "疲惫、气息不稳的女人，身份不明，画外音",
+      "text": "快...快走..."
+    },
+    "utterances": [
+      {
+        "shot": 1,
+        "speaker": "男主角，画外，同一近处男声",
+        "text": "看到什么了？",
+        "delivery": "压低声音、略害怕，尾音发虚"
+      },
+      {
+        "shot": 2,
+        "speaker": "林岚",
+        "text": "后面...后面！",
+        "delivery": "第一遍气息卡住，第二遍更急、更害怕"
+      },
+      {
+        "shot": 3,
+        "speaker": "林岚",
+        "text": "跑！",
+        "delivery": "奔跑中短促催促，接急喘"
+      },
+      {
+        "shot": 4,
+        "speaker": "男主角，画外，同一近处男声",
+        "text": "拉我...",
+        "delivery": "撞击后混在喘息里，勉强挤出、发颤"
+      },
+      {
+        "shot": 5,
+        "speaker": "身份不明的疲惫女人，画外",
+        "text": "快...快走...",
+        "delivery": "疲惫虚弱，换气后继续催促"
+      }
+    ],
+    "voiceDirection": "五句指定普通话每句在对应镜头只出现一次，声音随现场动作与呼吸；前四镜台词先于各自镜尾钟声起音，片名女声在最后钟声余音中进入；经声全程不断。",
+    "transitionTiming": {
+      "totalIncludesTransitions": true,
+      "boundariesSeconds": [4, 7, 11, 15],
+      "approximateDurationSeconds": 0.5,
+      "blackHold": "只短暂经过纯黑，不额外增加黑场时长"
+    },
+    "shotDefinitions": [
+      {
+        "shot": 1,
+        "rangeSeconds": [0, 4],
+        "entry": "图1的门内侧脸与手，主角在林岚身后略偏左",
+        "action": "盯门缝、侧耳、指尖收紧，男声问话后她开始回头",
+        "exit": "目光离开门缝，动作中渐暗",
+        "reference": 1
+      },
+      {
+        "shot": 2,
+        "rangeSeconds": [4, 7],
+        "entry": "图2双眼极近景，嘴不入画",
+        "action": "目光越过主角、短促吸气、小幅逼近与后退，女声说话",
+        "exit": "抓衣袖带向门外的动作以画外衣料声及视线带动承接渐暗",
+        "reference": 2
+      },
+      {
+        "shot": 3,
+        "rangeSeconds": [7, 11],
+        "entry": "已在图3同一回廊跟跑，林岚领先一两步",
+        "action": "林岚短暂回头催促再向前跑，相机与背包自然摆动，左门右柱",
+        "exit": "仍在同方向前进中渐暗",
+        "reference": 3
+      },
+      {
+        "shot": 4,
+        "rangeSeconds": [11, 15],
+        "entry": "承接同方向奔跑，不重新站定",
+        "action": "高度下降、侧倒、一次撞击、短暂失焦、近地重新清楚，男声求助",
+        "exit": "图4约十厘米贴地斜视角，微小余动与喘息中渐暗",
+        "reference": 4
+      },
+      {
+        "shot": 5,
+        "rangeSeconds": [15, 18],
+        "entry": "纯黑后图5毛笔四字渐亮",
+        "action": "片名稳定后疲惫女声说话，经声与钟尾音延续",
+        "exit": "片名稳定到结束，女声完整说完",
+        "reference": 5
+      }
+    ],
+    "continuity": {
+      "viewpoint": "同一成年男主角第一人称，男声在镜头附近，不展示主角面容或第三人称身体",
+      "actor": "唯一可见演员林岚，身份、发型、服装、相机与背包保持参考一致",
+      "geography": "客房门内到同一回廊；回廊左门格窗、右柱与黑暗庭院，第三第四镜同方向",
+      "eyeCloseup": "第二镜始终眉眼极近景，嘴保持画外，不为口型退成头像",
+      "grabHandoff": "抓袖带出门放在第二镜末尾到黑场衔接中，以衣料声和视线牵动表达，第三镜已进入回廊跟跑",
+      "fall": "一次明确下降、侧倒和撞击；不是外部拍摄身体摔倒或站着随机摇晃"
+    }
+  },
+  "localOnlyReferences": [
+    "assets/video/opening/door_listening.png",
+    "assets/video/opening/lin_lan_eyes.png",
+    "assets/video/opening/corridor_running.png"
+  ],
+  "submissionMode": "不含人物的场景与片名参考图，虚构真人演员由文字描述生成"
+}

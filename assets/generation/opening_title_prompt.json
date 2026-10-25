@@ -1,0 +1,11 @@
+{
+  "id": "opening_title",
+  "name": "开场片名·粗粝毛笔红字",
+  "path": "assets/video/opening/title_card.png",
+  "kind": "video_title",
+  "generator": "built-in image_gen",
+  "status": "verified",
+  "text": "红烛无声",
+  "transparentBackground": false,
+  "prompt": "Use case: logo-brand. Asset type: finished Chinese horror movie opening title card and exact typography reference for a video generator. Create ONE landscape 16:9 title card on a perfectly solid pure black background. The only visible text is the four simplified Chinese characters, written exactly and in this order: 红烛无声. Exactly four characters, no other letters or subtitles. Center them in one horizontal line occupying about 68 percent of canvas width, leaving generous black space on every side. Typography: authentic bold, wild, rough handwritten Chinese calligraphy with a large heavily loaded traditional brush; thick forceful irregular strokes, bold masses of ink alternating with deliberate dry-brush drag and visible feibai / flying-white gaps in the strokes, ragged bristle edges and forceful tapered brush ends. Each character is correctly constructed, readable, and individually hand written with confident energy, subtly irregular baseline. Make it feel like an austere, oppressive Chinese folk-horror film title painted by a real calligrapher. Flat muted cinnabar red ink, near #A52320, with black dry-brush gaps; strong legibility against pure black, no glow. This MUST look like real rough brush calligraphy, never a computer Songti/Ming/serif/Heiti/font with a distressed filter. No metallic material, beveling, 3D embossing, neon, shadows, gradients, flames, blood drips, splashes outside the glyphs, illustrations, paper background, border, logo or watermark. Output a fully opaque final raster title card."
+}

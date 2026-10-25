@@ -551,6 +551,106 @@
         "storyBeats": ["02", "12"],
         "purpose": "通行凭的道具栏与正反面调查底图；不再与残页共用图片"
       }
+    },
+    {
+      "id": "opening_door_listening",
+      "name": "开场镜头·林岚贴门听声",
+      "path": "assets/video/opening/door_listening.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1716181,
+      "sha256": "c9cc4a32a588baa6f9e799f5f5a032bcee6ef220ca5b2aa096a95237d21fec5b",
+      "status": "verified",
+      "kind": "video_keyframe",
+      "promptSet": "assets/generation/opening_keyframe_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "opening"
+        ],
+        "purpose": "片头首镜；锁定真人演员、深色旅行外套、相机、门边动作与烛光，门外为完全黑夜。"
+      }
+    },
+    {
+      "id": "opening_lin_lan_eyes",
+      "name": "开场镜头·林岚惊惧双眼",
+      "path": "assets/video/opening/lin_lan_eyes.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2183376,
+      "sha256": "90bd712d603aea8ea067a0b9084c9ff6c5240b5cf2a6c49e9cd3fab4c00fa5b0",
+      "status": "verified",
+      "kind": "video_keyframe",
+      "promptSet": "assets/generation/opening_keyframe_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "opening"
+        ],
+        "purpose": "同一位真人演员的双眼极近景；用于受惊偏转目光，不作静止头像。"
+      }
+    },
+    {
+      "id": "opening_corridor_running",
+      "name": "开场镜头·回廊踉跄逃跑",
+      "path": "assets/video/opening/corridor_running.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1669331,
+      "sha256": "5beb57a2414e4077fefa9756b883cb985f8958080810c66f877344233bea597e",
+      "status": "verified",
+      "kind": "video_keyframe",
+      "promptSet": "assets/generation/opening_keyframe_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "opening"
+        ],
+        "purpose": "第一人称跟随林岚逃跑；相同外套、相机和夜间寺院，庭院沉黑，仅局部廊灯照明。"
+      }
+    },
+    {
+      "id": "opening_corridor_fallen",
+      "name": "开场镜头·回廊跌倒贴地",
+      "path": "assets/video/opening/corridor_fallen.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1885487,
+      "sha256": "84b5dd78ae2017d51a7a21c9b837d4ca0c8d6065602fb205032eb1d5bd23e054",
+      "status": "verified",
+      "kind": "video_end_frame",
+      "promptSet": "assets/generation/opening_keyframe_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "opening"
+        ],
+        "purpose": "同一回廊侧倒后的贴地终幅；低机位、明显倾斜，近处石纹可读，外部庭院近黑，无人物或死亡暗示。"
+      }
+    },
+    {
+      "id": "opening_title",
+      "name": "开场片名·粗粝毛笔红字",
+      "path": "assets/video/opening/title_card.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 770554,
+      "sha256": "9e579fd302e9848a14d54ae54481720c3c89d5b029846a5fe5d9b565eaf9ab34",
+      "status": "verified",
+      "kind": "video_title",
+      "promptSet": "assets/generation/opening_title_prompt.json",
+      "usage": {
+        "storyBeats": [
+          "opening"
+        ],
+        "purpose": "最后纯黑片名的准确四字和粗粝毛笔造型参考；不用于真人场景风格。"
+      }
     }
   ],
   "storySource": "story/mini_script.md",
@@ -558,5 +658,17 @@
   "runtimeIntegration": {
     "status": "not_integrated",
     "currentDemoGuide": "docs/design/assets-and-slicing.md"
-  }
+  },
+  "media": [
+    {
+      "id": "opening_video",
+      "path": "assets/video/opening/opening.mp4",
+      "kind": "video",
+      "bytes": 14539688,
+      "sha256": "4abffee3c32fbf164d50a95de6977f1d4fee7d8164a6925c35951ca5a6ddb593",
+      "durationSeconds": 18.048,
+      "requestedSeconds": 18,
+      "status": "generated_pending_user_review"
+    }
+  ]
 }
