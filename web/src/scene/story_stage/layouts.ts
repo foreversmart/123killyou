@@ -47,7 +47,7 @@ export const shotTitles: Record<string, string> = {
   register_camera_bell: '听房门边 · 铜铃余音',
   register_ribbon: '入住须知 · 蓝色发圈',
   refectory_table: '同一张饭桌',
-  refectory_bread: '饭桌边 · 掰开的素饼',
+  refectory_bread: '饭桌边 · 热馒头与本地素菜',
   refectory_porridge: '勺底的肉纤维',
   refectory_lamp: '斋堂灯下 · 碗签与木勺',
   refectory_curtain: '长明灯后的半张脸',

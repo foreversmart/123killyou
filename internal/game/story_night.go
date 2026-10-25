@@ -21,7 +21,7 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 		miniSetFlag(state, "corridor_seen")
 		return "inspect", miniDialogue(state, "周砚", "四扇房门依次写着‘听、灯、纸、门’。钟楼门上的锁刚才响了一下，像有人在里面确认时辰。"), true
 	}
-	return "story", miniDialogue(state, "陆沉", "二更到了。各位施主，先把门关好，早些休息；五更才接近天亮。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
@@ -77,7 +77,7 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		}
 		return "sleep", miniObserve(state, message), true
 	}
-	return "story", miniSystem(state, "没有确认下一步。可以说‘点燃红烛’、‘看寺史’或‘看经文’。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
@@ -106,5 +106,5 @@ func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
 	if miniHasAny(text, "想一想", "怎么办", "保持冷静") {
 		return "story", miniInner(state, "陆沉说过，火不能灭……我得冷静下来。"), true
 	}
-	return "clarify", miniSystem(state, "没有确认下一步行动。可以说‘看烛芯’、‘听声音’或‘续燃红烛’。"), true
+	return e.storyConversation(state, text)
 }

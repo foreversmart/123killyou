@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { RoomPhase } from '@/scene/room/useRoomTransition';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
+import { travelParty } from './party';
 
 type TravelBeat = {
   id: string;
@@ -120,27 +121,34 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
           </div>
           <div className={styles.path} aria-hidden="true" />
           <div className={styles.walkers} aria-hidden="true">
-            <img
-              className={`${styles.walker} ${styles.keeper}`}
-              src={storyAssets.characterPoses.luchen.lantern}
-              alt="陆沉提灯"
-            />
-            <img
-              className={styles.walker}
-              src={storyAssets.characterPoses.linlan.standing}
-              alt="林岚"
-            />
-            <img
-              className={styles.walker}
-              src={storyAssets.characterPoses.zhouyan.standing}
-              alt="周砚"
-            />
-            <img
-              className={styles.walker}
-              src={storyAssets.characterPoses.xuzhi.standing}
-              alt="许栀"
-            />
-            <span className={`${styles.walker} ${styles.player}`} aria-label="主角第一视角" />
+            {travelParty(sceneKey).map((person, index) => (
+              <div
+                key={person.id}
+                className={styles.traveler}
+                data-traveler={person.id}
+                data-waiting={person.waiting}
+                style={
+                  {
+                    left: `${person.x}%`,
+                    top: `${person.y}%`,
+                    height: `${person.height}%`,
+                    zIndex: Math.round(person.y),
+                    '--delay': `${index * -0.13}s`,
+                    '--facing': person.facing === 'left' ? -1 : 1,
+                  } as CSSProperties
+                }
+              >
+                <img
+                  className={styles.walker}
+                  src={
+                    person.id === 'luchen'
+                      ? storyAssets.characterPoses.luchen.lantern
+                      : storyAssets.characters[person.id]
+                  }
+                  alt={person.name}
+                />
+              </div>
+            ))}
           </div>
         </>
       )}

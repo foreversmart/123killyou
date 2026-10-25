@@ -24,7 +24,7 @@ func miniSceneActors(key string) []SceneActor {
 			actor("player", "你", "游客·主角", "斋堂东侧饭桌", "player", "端着粥碗"),
 			actor("linlan", "林岚", "摄影爱好者", "饭桌左侧", "", "观察油花"),
 			actor("zhouyan", "周砚", "古建筑爱好者", "饭桌对面", "", "检查碗签"),
-			actor("xuzhi", "许栀", "同行游客", "饭桌右侧", "", "拿着素饼"),
+			actor("xuzhi", "许栀", "同行游客", "饭桌右侧", "", "拿着馒头"),
 			actor("luchen", "陆沉", "守夜人和尚", "斋堂门帘外", "keeper", "解释供食"),
 			actor("huipu", "慧普", "灯影寺住持", "帘后长明灯旁", "", "只露半张脸"),
 		},

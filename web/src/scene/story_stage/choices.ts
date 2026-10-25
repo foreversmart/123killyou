@@ -15,7 +15,7 @@ export function sceneChoices(state: GameState): StoryChoice[] {
       return [
         c('暂不吃肉粥', '我拒绝吃肉粥'),
         c('尝一口肉粥', '我吃肉粥'),
-        c('先劝大家都换素饼', '劝大家不要吃粥'),
+        c('劝大家换馒头和素菜', '劝大家不要吃粥'),
         c('让所有人吃粥', '让所有人吃粥', 'quiet'),
         c('决定好了，离开斋堂', '吃完晚膳'),
       ];

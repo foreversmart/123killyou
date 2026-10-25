@@ -44,11 +44,11 @@ func (e *Engine) storyInspection(state *State, text string) (string, string, boo
 		answer, shot = "折叠修缮图压在灯房灯座下。偏殿的位置被旧折痕遮住了一角，像是有人反复展开过。", "register_drag_mark"
 	case miniHasAny(text, "看发圈", "查看发圈", "看蓝色发圈"):
 		answer, shot = "蓝色发圈夹着入住须知的一角。纸张和发圈一起藏在许栀的房牌后面。", "register_ribbon"
-	case miniHasAny(text, "看热水", "查看热水", "看素饼", "看腌笋"):
+	case miniHasAny(text, "看热水", "查看热水", "看馒头", "查看馒头", "看咸菜", "查看咸菜", "看素菜", "查看素菜", "看本地菜", "看笋干", "看香菇青菜"):
 		if state.SceneKey != "mini_refectory" {
 			return "", "", false
 		}
-		answer = "素饼、热水和腌笋放在桌子右手边。它们没有肉味，先拿这些也够吃一顿晚膳。"
+		answer = "桌中央有一笼热馒头、一碟咸菜，还有本地笋干和香菇青菜。它们都是素的，配热水也够吃一顿晚膳，不必勉强喝那碗粥。"
 	case miniHasAny(text, "看施食记", "查看施食记", "看碗签"):
 		if state.SceneKey != "mini_refectory" {
 			return "", "", false

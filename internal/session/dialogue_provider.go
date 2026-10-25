@@ -41,6 +41,7 @@ type DialogueProvider interface {
 }
 
 var ErrLinxUnavailable = errors.New("灵矽暂不可用，本轮操作未完成，请稍后重试。")
+var ErrDialogueRepeated = errors.New("这次回答重复了上一句，没有回答你的问题。请换个说法再问一次。")
 
 type DialogueStatus struct {
 	State       string `json:"state"`
