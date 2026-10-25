@@ -290,4 +290,4 @@
 | 10—11 换皮与假天亮 | 换皮同行人使用对应人物的 `double_scratching`；`room_false_dawn.webp` 固定窗外仍黑的事实，短芯红烛和门外声源不提前显示实体。                                              |
 | 12 返程            | `corridor_dawn.webp` → `gate_dawn.webp` → `bus_departure.webp`，晨光、行李、旧匾和后视镜按过渡镜头依次出现。                                                             |
 
-片头视频和关键帧保留在 `assets/video/opening/` 供后续可跳过的片头使用；它不改变第一幕 `mini_arrival` 的直接启动契约，也不替代首夜分镜。
+片头视频和关键帧保留在 `assets/video/opening/`；第一幕右下角的“片头回放”使用运行时 `opening/opening.mp4` 与片名海报，默认不自动播放，不改变 `mini_arrival` 的直接启动契约，也不替代首夜分镜。

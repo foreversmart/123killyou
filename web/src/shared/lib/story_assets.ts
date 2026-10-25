@@ -164,6 +164,10 @@ export const storyAssets = {
   },
   native: { scenes, characters, props },
   props,
+  video: {
+    opening: `${root}/opening/opening.mp4`,
+    titleCard: `${root}/opening/title_card.png`,
+  },
   items: {
     key: scenes.registrationCopperKey,
     page: props.tornPage,

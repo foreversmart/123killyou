@@ -1,6 +1,7 @@
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
+import openingStyles from './opening_reel.module.css';
 import temple from './temple.module.css';
 import people from './people.module.css';
 import interaction from './interaction.module.css';
@@ -31,6 +32,17 @@ export function ArrivalBackdrop() {
         alt=""
         aria-hidden="true"
       />
+      <details className={openingStyles.reel}>
+        <summary>片头回放</summary>
+        <video
+          className={openingStyles.video}
+          src={storyAssets.video.opening}
+          poster={storyAssets.video.titleCard}
+          controls
+          preload="metadata"
+          aria-label="灯影寺片头回放"
+        />
+      </details>
       <div className={styles.tree}>
         <i />
         <i />
