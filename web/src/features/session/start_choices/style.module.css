@@ -1,141 +1,29 @@
-.choices {
-  position: absolute;
-  z-index: 6;
-  top: 14%;
-  right: 3%;
-  width: 27%;
-  padding: 1.25cqw;
-  border: 1px solid #af8e56;
-  color: #f5e8cb;
-  background: #26352deb;
-  box-shadow: 0 8px 32px #17282235;
-}
-.choices > span {
-  font-size: 0.7cqw;
-  letter-spacing: 0.2em;
-  color: #d4c49f;
-}
-.choices h2 {
-  font-size: 1.2cqw;
-  margin: 0.6em 0;
-}
-.choices p {
-  font-size: 0.8cqw;
-  line-height: 1.8;
-  margin-bottom: 1em;
-}
-.choices button {
-  display: block;
-  width: 100%;
-  padding: 0.65em;
-  font: inherit;
-  font-size: 0.85cqw;
-  color: #282e22;
-  background: #ead6a5;
-  border: 1px solid #e2cfa0;
-  cursor: pointer;
-}
-.choices .resume {
-  margin-top: 0.6em;
-  background: transparent;
-  color: #f5e8cb;
-}
-.choices button:disabled {
-  cursor: wait;
-  opacity: 0.6;
-}
-.choices button:focus-visible {
-  outline: 2px solid #fff5c6;
-  outline-offset: 3px;
-}
-
 .openingScreen {
   position: absolute;
-  z-index: 7;
-  inset: 0;
+  z-index: 20;
+  inset: 4px;
   overflow: hidden;
   background: #050605;
 }
-
-.titleCard {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.86;
-  animation: title-breathe 5s ease-in-out infinite alternate;
-}
-
-.titleVeil {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 45% 48%, transparent 0 28%, #05060572 72%),
-    linear-gradient(90deg, #050605d9 0 38%, transparent 75%),
-    linear-gradient(0deg, #050605e8, transparent 42%);
-}
-
-.openingScreen .choices {
-  z-index: 1;
-}
-
-.reel {
-  position: absolute;
-  z-index: 6;
-  inset: 0;
-  overflow: hidden;
-  color: #f5e8cb;
-  background: #080b0a;
-}
-
 .video {
-  position: absolute;
-  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #080b0a;
+  background: #050605;
 }
-
-.reelOverlay {
+.journeyVeil {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2cqw;
-  padding: 2.2cqw 3cqw 1.8cqw;
-  background: linear-gradient(0deg, #080b0af2, #080b0ab8 65%, transparent);
-  pointer-events: none;
-}
-
-.reelOverlay p {
-  margin: 0;
-  color: #d4c49f;
-  font-size: 0.8cqw;
-  line-height: 1.7;
-}
-
-.journey {
-  position: absolute;
-  z-index: 6;
   inset: 0;
-  overflow: hidden;
-  color: #ead8ad;
-  background: #18231e;
+  pointer-events: none;
+  background: linear-gradient(0deg, #050605b8, transparent 30%, #05060518);
 }
-
 .journeyScene {
   position: absolute;
   inset: 0;
   overflow: hidden;
   background: #18231e;
 }
-
 .journeyScene img {
   position: absolute;
   inset: 0;
@@ -143,16 +31,13 @@
   height: 100%;
   object-fit: cover;
 }
-
 .journeyRoad {
   animation: road-drift 3.9s ease both;
 }
-
 .journeyGate {
   opacity: 0;
   animation: gate-arrive 3.9s ease 1.7s both;
 }
-
 .journeyGlow {
   position: absolute;
   inset: 0;
@@ -160,65 +45,38 @@
   mix-blend-mode: screen;
   animation: road-glow 3.9s ease both;
 }
-
-.journeyOverlay {
+.startPrompt {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: grid;
-  gap: 0.3cqw;
-  padding: 2.2cqw 3cqw 1.8cqw;
-  background: linear-gradient(0deg, #101b1df2, #101b1d99 65%, transparent);
-  text-shadow: 0 1px 3px #000;
+  z-index: 1;
+  left: 50%;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5cqw;
+  width: min(90%, 560px);
+  transform: translateX(-50%);
+  color: #f5e8cb;
+  text-align: center;
+  text-shadow: 0 2px 12px #000;
 }
-
-.journeyOverlay > span {
-  display: block;
+.startPrompt span {
   color: #d4c49f;
-  font-size: 0.7cqw;
-  letter-spacing: 0.2em;
+  font-size: clamp(10px, 0.72cqw, 14px);
+  letter-spacing: 0.22em;
 }
-
-.journeyOverlay h2 {
-  margin: 0.35em 0 0;
-  font-family: 'Songti SC', 'STSong', serif;
-  font-size: clamp(18px, 1.6cqw, 29px);
-  font-weight: 500;
+.startPrompt strong {
+  color: #f1d69d;
+  font-size: clamp(18px, 2cqw, 30px);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  animation: prompt-breathe 2.2s ease-in-out infinite;
 }
-
-.journeyOverlay p {
-  margin: 0.25em 0 0.6em;
-  color: #d4c49f;
-  font-size: 0.8cqw;
-  line-height: 1.7;
+.startPrompt small {
+  color: #c4b99e;
+  font-size: clamp(10px, 0.7cqw, 13px);
+  letter-spacing: 0.12em;
 }
-
-.reelOverlay button,
-.journeyOverlay button {
-  pointer-events: auto;
-  justify-self: start;
-  min-width: 10em;
-  padding: 0.65em 1.1em;
-  font: inherit;
-  font-size: 0.85cqw;
-  color: #282e22;
-  background: #ead6a5;
-  border: 1px solid #e2cfa0;
-  cursor: pointer;
-}
-
-.reelOverlay button:focus-visible,
-.journeyOverlay button:focus-visible {
-  outline: 2px solid #fff5c6;
-  outline-offset: 3px;
-}
-
-.journeyOverlay button:disabled {
-  cursor: wait;
-  opacity: 0.6;
-}
-
 @keyframes road-drift {
   from {
     opacity: 0.25;
@@ -229,7 +87,6 @@
     transform: scale(1) translateX(-2%);
   }
 }
-
 @keyframes gate-arrive {
   from {
     opacity: 0;
@@ -240,7 +97,6 @@
     transform: scale(1);
   }
 }
-
 @keyframes road-glow {
   from {
     opacity: 0.2;
@@ -251,26 +107,24 @@
     transform: translateX(15%);
   }
 }
-
-@keyframes title-breathe {
-  from {
-    transform: scale(1);
-    filter: saturate(0.82) brightness(0.8);
+@keyframes prompt-breathe {
+  0%,
+  100% {
+    opacity: 0.76;
+    text-shadow: 0 2px 12px #000;
   }
-  to {
-    transform: scale(1.04);
-    filter: saturate(1) brightness(1);
+  50% {
+    opacity: 1;
+    text-shadow: 0 2px 18px #d4a96366;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .journeyRoad,
   .journeyGate,
   .journeyGlow,
-  .titleCard {
+  .startPrompt strong {
     animation: none;
   }
-
   .journeyGate {
     opacity: 1;
   }
