@@ -69,7 +69,14 @@ export function StoryStage({
               alt=""
               aria-hidden="true"
             />
-            {state.shotKey === 'register_rooms' || state.shotKey === 'register_luggage' ? (
+            {[
+              'register_key_tags',
+              'register_rooms',
+              'register_drag_mark',
+              'register_camera_bell',
+              'register_ribbon',
+              'register_luggage',
+            ].includes(state.shotKey || '') ? (
               <div className={styles.registrationTags} aria-hidden="true">
                 <span>听</span>
                 <span>灯</span>

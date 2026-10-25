@@ -8,20 +8,20 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 		miniSetFlag(state, "red_candle_held")
 		miniShot(state, "corridor_candles")
 		e.grantStoryItems(state, "candle")
-		return "story", miniDialogue(state, "陆沉", "火不能灭。红烛守住的是你自己的影子。三更以前别出门，经文在桌上，心定了脚下才不乱。"), true
+		return "story", miniDialogue(state, "陆沉", "火不能灭。三更以前先留在房里，红烛守住的是你自己的影子。经文在桌上，心先定下来，脚下才不会乱。"), true
 	}
 	if miniHasAny(text, "回房", "去我的房间", "进门房", "回自己的房", "回偏房") {
 		if !state.Flags["red_candle_held"] {
 			return "blocked", miniDialogue(state, "陆沉", "你的红烛还在这里。拿稳，再回自己的房间。"), true
 		}
 		e.setMiniScene(state, "mini_room")
-		return "move", miniInner(state, "我回到写着‘门’的偏房。桌上是寺史册和《清心静神经》，红烛还没有点。"), true
+		return "move", miniInner(state, "我回到写着‘门’的偏房。关门声落下，桌上是寺史册和《清心静神经》，红烛还没有点。"), true
 	}
 	if miniHasAny(text, "看看房牌", "看偏房", "看走廊", "观察回廊") {
 		miniSetFlag(state, "corridor_seen")
-		return "inspect", miniDialogue(state, "周砚", "四扇房门依次写着‘听、灯、纸、门’。封闭钟楼门后刚才有金属碰响，像有人在里面数更。"), true
+		return "inspect", miniDialogue(state, "周砚", "四扇房门依次写着‘听、灯、纸、门’。钟楼门上的锁刚才响了一下，像有人在里面确认时辰。"), true
 	}
-	return "story", miniDialogue(state, "陆沉", "各位施主，二更到了。拿好红烛，回房早些休息；五更天亮再做早课。"), true
+	return "story", miniDialogue(state, "陆沉", "二更到了。各位施主，先把门关好，早些休息；五更才接近天亮。"), true
 }
 
 func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
@@ -31,7 +31,7 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		}
 		miniSetFlag(state, "red_candle_lit")
 		miniShot(state, "room_candle")
-		return "story", miniInner(state, "红烛亮了。火焰只照清眼前这一小块地方，不会替你认出门外的人。"), true
+		return "story", miniInner(state, "火柴先照亮桌角的寺史册，烛芯随后稳稳立住。红烛只照清眼前这一小块地方，不会替我认出门外的人。"), true
 	}
 	if miniHasAny(text, "看寺史", "读寺史", "查看历史", "查看寺庙历史", "看历史册", "翻阅寺史") {
 		miniSetFlag(state, "history_read")
@@ -43,10 +43,10 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		miniSetFlag(state, "mind_script_learned")
 		miniShot(state, "room_scripture")
 		miniClue(state, "清心静神经末页：心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后")
-		return "inspect", miniInner(state, "末页写着：‘心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后。’我把四句偈记在心里。"), true
+		return "inspect", miniInner(state, "薄蓝封皮翻到末页，四句短偈一行行落在烛光里。我把它们记在心里，等真正需要时再念。"), true
 	}
 	if miniHasAny(text, "看看红烛", "看烛芯", "看蜡泪", "观察窗外", "看看窗外") {
-		return "inspect", miniInner(state, "红烛蜡面有指甲般的划痕。窗外只看见回廊灯线，月光正在一点点爬上窗纸。"), true
+		return "inspect", miniInner(state, "烛面有指甲般的划痕。过了一会儿，月光沿着回廊移到窗纸边，外面的灯线被切成一段一段。"), true
 	}
 	if miniHasAny(text, "睡觉", "睡下", "入睡", "躺下", "闭眼") {
 		if !state.Flags["red_candle_lit"] {
@@ -71,10 +71,10 @@ func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
 		state.Flags["red_candle_lit"] = true
 		miniSetFlag(state, "candle_relit")
 		e.setMiniScene(state, "mini_four_knocks")
-		return "story", miniInner(state, "红烛重新亮了。拖行声退到廊尾，四下敲门却跟着月光到了门前。我不能急着开门。"), true
+		return "story", miniInner(state, "火光先照出门闩上的水痕，烛芯才重新立起。拖行声退到廊尾，四下敲门却跟着月光到了门前；我不能急着开门。"), true
 	}
 	if miniHasAny(text, "看红烛", "看烛芯", "看门外", "听声音") {
-		return "inspect", miniInner(state, "红烛已经熄灭，蜡泪凝成黑红色。门外有湿重的呼吸，还有一声指甲刮门；我不敢把脸贴近门缝。"), true
+		return "inspect", miniInner(state, "烛芯已经黑了，蜡泪沿烛台凝成黑红色。门外的呼吸贴近门板，拖行声停下后，才响起一声指甲刮门。"), true
 	}
-	return "story", miniInner(state, "我记得陆沉说过：火不能灭。先看烛芯，再听门外。"), true
+	return "story", miniInner(state, "我记得陆沉说过，火不能灭。先看烛芯，再听门外，别急着碰门闩。"), true
 }

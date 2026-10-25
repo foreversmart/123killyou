@@ -75,7 +75,8 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 		miniSetFlag(state, "checked_in")
 		e.grantStoryItems(state, "key", "permit", "page", "beads")
 		e.setMiniScene(state, "mini_register")
-		return "move", miniDialogue(state, "陆沉", "四位施主把名字写在灯下。钥匙只开各自的房，通行凭收好，背面写着‘只许去，不许问’。"), true
+		miniShot(state, "register_key_tags")
+		return "move", miniDialogue(state, "陆沉", "四位施主，先把名字写清楚。钥匙只开各自的房，通行凭收好；背面那句‘只许去，不许问’，夜里认路时再看。"), true
 	}
 	return "story", miniInner(state, "阳光正好，树影却把旧匾切成一段一段。先看看山门，还是先登记入住？"), true
 }
@@ -89,24 +90,24 @@ func (e *Engine) arrivalIntro(state *State) string {
 	case !state.Flags["arrival_intro_linlan"]:
 		miniSetFlag(state, "arrival_intro_linlan")
 		miniShot(state, "arrival_linlan")
-		return miniDialogue(state, "林岚", "晴天来古寺，照片肯定好看。要是晚上也这么安静，我就拍一组灯影。")
+		return miniDialogue(state, "林岚", "今天的光真好。等天黑，要是这里还这么安静，我想拍一组灯影。")
 	case !state.Flags["arrival_intro_zhouyan"]:
 		miniSetFlag(state, "arrival_intro_zhouyan")
 		miniShot(state, "arrival_zhouyan")
-		return miniDialogue(state, "周砚", "先看梁架，再看灯。网页只拍了正殿，没拍偏房。")
+		return miniDialogue(state, "周砚", "先别急着拍正殿。网页上的照片只拍到前院，我想看看偏房这边的梁是不是后来补过的。")
 	case !state.Flags["arrival_intro_xuzhi"]:
 		miniSetFlag(state, "arrival_intro_xuzhi")
 		miniShot(state, "arrival_xuzhi")
-		return miniDialogue(state, "许栀", "今天只安排吃饭和睡觉，谁也不许临时加探险。")
+		return miniDialogue(state, "许栀", "我们先把东西放好，再吃饭、睡觉，好吗？今天谁也别临时加探险。")
 	case !state.Flags["arrival_intro_luchen"]:
 		miniSetFlag(state, "arrival_intro_luchen")
 		miniShot(state, "arrival_luchen")
-		return miniDialogue(state, "陆沉", "四位施主，行李放在登记桌旁。名字写在灯下，夜里听见钟，先数声，再听是谁。")
+		return miniDialogue(state, "陆沉", "四位施主，行李先放在灯下。名字写清楚，钥匙才好交。夜里若听见钟，先数声，再听它从哪里来。")
 	default:
 		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_inner")
 		state.DialogueNext = "自动登记入住"
-		return miniInner(state, "车门气阀声慢慢停了。鸟鸣、树叶和远处一声不合时宜的低钟混在一起——先登记入住，别把安静当成安全。")
+		return miniInner(state, "车门气阀声慢慢停了。鸟鸣、树叶和远处一声低钟混在一起。先登记入住，别把这份安静当成安全。")
 	}
 }
 
@@ -122,19 +123,19 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 		miniSetFlag(state, "luggage_placed")
 		miniShot(state, "register_luggage")
 		state.DialogueNext = "自动去斋堂"
-		return "story", miniDialogue(state, "许栀", "行李已经放在各自房里。桌上留下残页和念珠，红烛等晚膳后再领。"), true
+		return "story", miniDialogue(state, "许栀", "行李先放到门边吧。残页和念珠留在桌上，红烛等晚膳后再领。"), true
 	}
 	if miniHasAny(text, "看登记簿", "看看登记", "看房牌", "看残页", "查看通行凭") {
 		miniSetFlag(state, "registration_seen")
 		miniClue(state, "东院四间偏房分别标为听、灯、纸、门；登记簿边角有被反复划掉的旧名字")
-		return "inspect", miniDialogue(state, "周砚", "四把房牌分别是‘听、灯、纸、门’。这条拖痕不像普通修缮，先别用手摸。"), true
+		return "inspect", miniDialogue(state, "周砚", "四把房牌是‘听、灯、纸、门’。这道拖痕从偏殿过来，先看就好，别用手摸。"), true
 	}
 	if miniHasAny(text, "去斋堂", "去斋房", "去吃饭", "晚膳", "晚饭", "吃晚饭", "自动去斋堂") {
 		e.setMiniScene(state, "mini_refectory")
-		return "move", miniDialogue(state, "陆沉", "先去斋堂。粥和素饼都在，想吃什么由施主自己决定。"), true
+		return "move", miniDialogue(state, "陆沉", "先去斋堂。粥、素饼和热水都在，想吃什么由施主自己决定。"), true
 	}
 	if miniHasAny(text, "谁是守夜人", "你是谁", "为什么不能出门") {
-		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘，只替这里看门、记名。夜里没有必要，不要出门。"), true
+		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘，只替这里看门、记名。夜里要出门，先叫我；没有必要，就留在房里。"), true
 	}
 	return "story", miniInner(state, "名字已经写下，登记簿边角那些被划掉的旧名却像还没干。接下来去斋堂。"), true
 }
@@ -157,7 +158,7 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 		state.Flags["meal_all_ate"] = false
 		state.Flags["skin_double_present"] = false
 		e.setMiniScene(state, "mini_corridor_candle")
-		return "move", miniDialogue(state, "陆沉", "各位施主先用素饼和热水。晚膳收了，跟我回东院，每人领一支红烛。"), true
+		return "move", miniDialogue(state, "陆沉", "先用素饼和热水垫一垫。晚膳收了跟我回东院，每人领一支红烛。"), true
 	}
 	if miniHasAny(text, "吃不吃粥", "要不要吃粥") {
 		for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
@@ -169,27 +170,27 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 	if miniHasAny(text, "谁供的肉", "谁送的肉", "肉从哪里", "问住持", "看帘后", "听帘后") {
 		if miniHasAny(text, "问住持", "看帘后", "听帘后") {
 			miniShot(state, "refectory_curtain")
-			return "dialogue", miniDialogue(state, "慧普", "吃下我的，寺里会记得你。远客难得来一趟，不必拘泥僧人的戒。"), true
+			return "dialogue", miniDialogue(state, "慧普", "吃下我的，寺里会记得你。远客难得来一趟，先别拘泥僧人的戒。"), true
 		}
-		return "dialogue", miniDialogue(state, "陆沉", "供处记在施食簿上。先看你们自己愿不愿意，素饼和热水都够。"), true
+		return "dialogue", miniDialogue(state, "陆沉", "供处记在施食簿上。先看你们自己愿不愿意；素饼和热水都够，没人替你们选。"), true
 	}
 	if miniHasAny(text, "看粥", "看看粥", "查看碗", "闻粥", "查看粥碗", "看木勺", "搅动粥", "搅动肉粥") {
 		miniShot(state, "refectory_porridge")
 		miniSetFlag(state, "porridge_seen")
 		miniClue(state, "斋堂四碗粥表面油花不散，勺底能看见肉纤维；陆沉说僧人不吃，游客可自行选择")
-		return "inspect", miniDialogue(state, "周砚", "这不是米油，勺底有肉纤维。陆沉说僧人不吃，游客可以自行选择；素饼和热水在右手边。"), true
+		return "inspect", miniDialogue(state, "周砚", "这里有一缕纤维……不像米油。碗签和施食记还没看清，先别急着下结论。"), true
 	}
 	if miniHasAny(text, "大家都吃", "全都吃", "让所有人吃", "都喝粥") {
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			miniChooseMeal(state, person, "ate")
 		}
-		return "story", miniDialogue(state, "林岚", "既然大家都吃，我也试一碗。"), true
+		return "story", miniDialogue(state, "林岚", "既然大家都吃，我也先尝一口。粥还热着，慢点喝。"), true
 	}
 	if miniHasAny(text, "劝大家不吃", "劝大家不要吃", "大家都不吃", "全都不吃") {
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			miniChooseMeal(state, person, "refused")
 		}
-		return "story", miniDialogue(state, "许栀", "那就先吃素饼。问清楚之前，我不碰这碗粥。"), true
+		return "story", miniDialogue(state, "许栀", "那就先吃素饼。问清楚之前，这碗粥先放着。"), true
 	}
 	if miniHasAny(text, "林岚", "周砚", "许栀") {
 		person := ""
@@ -208,7 +209,7 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 			choice = "ate"
 		}
 		if person == "zhouyan" && choice == "ate" && !state.Flags["bowl_tags_seen"] {
-			return "dialogue", miniDialogue(state, "周砚", "先等一下。我想看清碗签和施食记，来历不清的东西不能只凭一句照顾游客。"), true
+			return "dialogue", miniDialogue(state, "周砚", "先等一下。我想看清碗签和施食记，来历不清的东西，不能只凭一句‘照顾远客’。"), true
 		}
 		miniChooseMeal(state, person, choice)
 		return "story", miniMealReply(state, person, choice), true
@@ -219,15 +220,15 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 	}
 	if miniHasAny(text, "我不吃", "我拒绝", "我换素饼", "先不喝") {
 		miniChooseMeal(state, "player", "refused")
-		return "story", miniDialogue(state, "陆沉", "素饼和热水在你手边。饥饿不等于必须喝这碗。"), true
+		return "story", miniDialogue(state, "陆沉", "素饼和热水在你手边。饿了就先吃这个，不必勉强喝粥。"), true
 	}
 	if miniHasAny(text, "我吃", "我喝", "我尝一口", "吃肉粥") {
 		miniChooseMeal(state, "player", "ate")
-		return "story", miniDialogue(state, "陆沉", "慢一点喝。粥还热着。"), true
+		return "story", miniDialogue(state, "陆沉", "慢一点，粥还热着。先尝一口，再决定要不要继续。"), true
 	}
 	if miniHasAny(text, "吃完", "晚膳结束", "离开斋堂", "回回廊", "回房") {
 		if !state.Flags["meal_player_ate"] && !state.Flags["meal_player_refused"] && !state.Flags["meal_player_deferred"] {
-			return "clarify", miniDialogue(state, "陆沉", "你这碗还没动。吃、换素饼，还是先放着？想好了，我们再回东院。"), true
+			return "clarify", miniDialogue(state, "陆沉", "你的碗还没动。吃、换素饼，还是先放着？想好了，我们再回东院。"), true
 		}
 		for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
 			if !state.Flags["meal_"+person+"_ate"] && !state.Flags["meal_"+person+"_refused"] && !state.Flags["meal_"+person+"_deferred"] {
@@ -238,7 +239,7 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 		state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
 		state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 		e.setMiniScene(state, "mini_corridor_candle")
-		return "move", miniDialogue(state, "陆沉", "晚膳结束。跟我走回东院，路上每人领一支红烛。"), true
+		return "move", miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。"), true
 	}
-	return "story", miniDialogue(state, "陆沉", "给远客的照顾，僧人自己不吃肉。你可以吃，也可以拿素饼和热水。"), true
+	return "story", miniDialogue(state, "陆沉", "这是给远客的照顾。僧人守自己的戒，客人可以按自己的习惯来；素饼和热水也在手边。"), true
 }
