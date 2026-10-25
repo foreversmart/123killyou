@@ -1,0 +1,147 @@
+.interaction {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.heading {
+  position: absolute;
+  top: 5%;
+  left: 4%;
+  padding-left: 1cqw;
+  color: #324b3a;
+  border-left: 0.18cqw solid #6c7c4c;
+  text-shadow: 0 1px 0 #fff6;
+}
+
+.heading > span {
+  font-size: clamp(10px, 0.7cqw, 13px);
+  letter-spacing: 0.15cqw;
+}
+
+.heading h2 {
+  margin: 0.4cqw 0;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: clamp(15px, 1.35cqw, 24px);
+  font-weight: 600;
+  letter-spacing: 0.1cqw;
+}
+
+.heading p {
+  margin: 0;
+  font-size: clamp(9px, 0.7cqw, 13px);
+  letter-spacing: 0.04cqw;
+}
+
+.hotspot {
+  position: absolute;
+  left: 48%;
+  top: 44%;
+  display: grid;
+  width: 3cqw;
+  height: 3cqw;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #f9efd1;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.hotspot[data-prop='cat'] {
+  left: 54%;
+  top: 84%;
+}
+
+.hotspot[data-prop='plaque'] {
+  left: 83%;
+  top: 46%;
+}
+
+.hotspot i {
+  width: 0.6cqw;
+  height: 0.6cqw;
+  border: 1px solid #fff3b3;
+  border-radius: 50%;
+  background: #fff6c3;
+  box-shadow:
+    0 0 0.6cqw #fffacb,
+    0 0 1.4cqw 0.3cqw #ffeaa690;
+  animation: glimmer 2.8s ease-in-out infinite;
+}
+
+.hotspot span {
+  position: absolute;
+  bottom: 100%;
+  padding: 0.35cqw 0.65cqw;
+  border: 1px solid #dbcb9d;
+  background: #344638eb;
+  font-size: clamp(9px, 0.65cqw, 12px);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.hotspot:hover span,
+.hotspot:focus-visible span {
+  opacity: 1;
+}
+
+.hotspot:focus-visible {
+  border-radius: 50%;
+  outline: 1px solid #fff4c4;
+}
+
+.actions {
+  position: absolute;
+  right: 3%;
+  bottom: 7%;
+  display: flex;
+  gap: 0.6cqw;
+  pointer-events: auto;
+}
+
+.actions button {
+  min-height: 2.5cqw;
+  padding: 0.6cqw 0.9cqw;
+  border: 1px solid #f7e9bcbb;
+  border-radius: 0.2cqw;
+  background: #eae0bedb;
+  color: #344936;
+  box-shadow: 0 0.25cqw 0.65cqw #34463226;
+  font: inherit;
+  font-size: clamp(10px, 0.75cqw, 14px);
+  cursor: pointer;
+}
+
+.actions button:last-child {
+  background: #354c3dec;
+  color: #fff1c7;
+}
+
+.actions button:focus-visible,
+.actions button:hover:not(:disabled) {
+  outline: 1px solid #fff3bd;
+  box-shadow: 0 0 1cqw #fff5c077;
+}
+
+.actions button:disabled,
+.hotspot:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@keyframes glimmer {
+  50% {
+    opacity: 0.55;
+    transform: scale(0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot i {
+    animation: none;
+  }
+}

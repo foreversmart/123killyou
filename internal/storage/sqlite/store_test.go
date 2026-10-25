@@ -69,41 +69,6 @@ func TestSaveSurvivesRestartAndDeduplicatesOldRequest(t *testing.T) {
 	}
 }
 
-func TestResumeReplacesLegacyRoomDemoAutosave(t *testing.T) {
-	s := newFixture(t)
-	legacy := createGame(t, s)
-	legacy.SceneKey = ""
-	legacy.SceneName = ""
-	legacy.SceneText = ""
-	legacy.SceneProps = nil
-	legacy.StoryMode = false
-	legacy.Room = "corridor"
-	legacy.RoomName = "走廊"
-	legacy.Revision = 80
-	raw, err := json.Marshal(session.Snapshot{Version: session.StateVersion, StoryVersion: session.StoryVersion, State: legacy})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := s.db.Exec("UPDATE runs SET state_json=? WHERE id=?", raw, legacy.RunID); err != nil {
-		t.Fatal(err)
-	}
-
-	resumed, err := s.Resume()
-	if err != nil {
-		t.Fatal(err)
-	}
-	if resumed.ID == legacy.ID || resumed.RunID == legacy.RunID {
-		t.Fatal("旧 Demo 自动存档没有切换到新的一局")
-	}
-	if resumed.SceneKey != "mini_arrival" || resumed.Room != "gate" || resumed.Revision != 1 {
-		t.Fatalf("恢复后不是浓缩剧情起点: %+v", resumed)
-	}
-	autosave, err := s.Resume()
-	if err != nil || autosave.ID != resumed.ID || autosave.RunID != resumed.RunID {
-		t.Fatalf("自动存档没有指向新剧情: %+v, %v", autosave, err)
-	}
-}
-
 func TestCheckpointRestoresWorldMemoryAndFencesOldRun(t *testing.T) {
 	s := newFixture(t)
 	start := createGame(t, s)

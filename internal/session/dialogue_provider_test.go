@@ -41,6 +41,7 @@ func TestDialogueProviderOnlyChangesNPCWordingAfterLocalSettlement(t *testing.T)
 	}
 	provider := &fakeDialogueProvider{text: "云端回应，但规则仍归后端。"}
 	service := session.New(repo, game.NewEngine(catalog), provider)
+	seedRuleSave(t, repo, service, catalog)
 	state, err := service.Resume()
 	if err != nil {
 		t.Fatal(err)
@@ -69,6 +70,7 @@ func TestDialogueProviderFailureDoesNotEmitLocalNPCReplyOrCommitTurn(t *testing.
 	}
 	provider := &fakeDialogueProvider{err: errors.New("temporary linx failure")}
 	service := session.New(repo, game.NewEngine(catalog), provider)
+	seedRuleSave(t, repo, service, catalog)
 	state, err := service.Resume()
 	if err != nil {
 		t.Fatal(err)

@@ -5,6 +5,16 @@ export interface Item {
   description: string;
 }
 
+export interface SceneActor {
+  id: string;
+  name: string;
+  role: string;
+  position: string;
+  portrait: string;
+  status: string;
+  visible: boolean;
+}
+
 export interface GameState {
   id: string;
   runId: string;
@@ -15,6 +25,7 @@ export interface GameState {
   sceneName?: string;
   sceneText?: string;
   sceneProps?: string[];
+  actors?: SceneActor[];
   room: 'watch' | 'corridor' | 'gate' | 'register' | 'refectory' | 'room_door';
   roomName: string;
   devotion: number;

@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { setTimeout } from 'node:timers/promises';
+import { hasOpeningContract, isOpeningState } from './dev-contract.mjs';
 
 const children = [];
 let closing = false;
@@ -47,7 +48,7 @@ async function health() {
   }
 }
 const existingHealth = await health();
-if (existingHealth && existingHealth.story !== 'mini_script') {
+if (existingHealth && !hasOpeningContract(existingHealth)) {
   staleService = true;
 } else if (!existingHealth) {
   launch('go', ['run', './cmd/server']);
@@ -55,21 +56,20 @@ if (existingHealth && existingHealth.story !== 'mini_script') {
 for (let attempt = 0; attempt < 240 && !closing; attempt++) {
   if (staleService) break;
   const currentHealth = await health();
-  if (currentHealth?.story === 'mini_script') {
+  if (hasOpeningContract(currentHealth)) {
     try {
-      const resume = await fetch('http://127.0.0.1:8787/api/sessions/resume', {
-        method: 'POST',
+      const opening = await fetch('http://127.0.0.1:8787/api/story/opening', {
         signal: AbortSignal.timeout(1200),
       });
-      if (resume.ok) {
-        const state = await resume.json();
-        if (typeof state.sceneKey === 'string' && state.sceneKey.startsWith('mini_')) {
+      if (opening.ok) {
+        const state = await opening.json();
+        if (isOpeningState(state)) {
           ready = true;
           break;
         }
       }
     } catch {
-      /* The backend may still be finishing its startup transaction. */
+      /* Wait until the backend can serve the real opening. No save is touched. */
     }
   }
   await setTimeout(500);

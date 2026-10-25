@@ -1,0 +1,145 @@
+.temple-gate {
+  position: absolute;
+  top: 19%;
+  left: 46%;
+  width: 37%;
+  height: 56%;
+}
+
+.roof {
+  position: absolute;
+  inset: 0 -7% 57%;
+  background: repeating-linear-gradient(90deg, #424e42 0 0.5cqw, #63705c 0.55cqw 0.75cqw);
+  clip-path: polygon(
+    0 85%,
+    12% 78%,
+    21% 56%,
+    41% 43%,
+    50% 22%,
+    59% 43%,
+    79% 56%,
+    88% 78%,
+    100% 85%,
+    95% 100%,
+    5% 100%
+  );
+  filter: drop-shadow(0 0.5cqw 0.2cqw #283b33);
+}
+
+.roof-edge {
+  position: absolute;
+  inset: 40% -3% 54%;
+  background: #435044;
+  border-bottom: 0.2cqw solid #797a5b;
+}
+
+.gate-wall {
+  position: absolute;
+  inset: 46% 5% 0;
+  background: linear-gradient(90deg, #a8aa8d, #ded0a4 15%, #dfcfa6 85%, #a8aa8d);
+}
+
+.gate-door {
+  position: absolute;
+  inset: 48% 26% 0;
+  background: linear-gradient(#273c32, #3a4736 70%, #8f9471);
+  box-shadow: inset 0 0 1cqw #1c2b24;
+}
+
+.gate-column,
+.gate-column-right {
+  position: absolute;
+  inset: 45% auto 0 22%;
+  width: 5%;
+  background: linear-gradient(90deg, #654d3c, #976e4b, #73513c);
+}
+
+.gate-column-right {
+  left: 73%;
+}
+
+.plaque {
+  position: absolute;
+  top: 43%;
+  left: 33%;
+  width: 35%;
+  padding: 0.25cqw 0;
+  border: 0.16cqw solid #a58b50;
+  background: #3b4030;
+  color: #e2cc89;
+  text-align: center;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 1.35cqw;
+  letter-spacing: 0.15cqw;
+  box-shadow: 0 0.3cqw 0.5cqw #1e302c66;
+}
+
+.old-plaque {
+  position: absolute;
+  top: 38%;
+  right: -3%;
+  padding: 0.55cqw 0.3cqw;
+  writing-mode: vertical-rl;
+  background: #81785b;
+  color: #c4b58a;
+  border: 1px solid #a69c76;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 0.82cqw;
+  letter-spacing: 0.13cqw;
+  transform: rotate(6deg);
+}
+
+.gate-steps {
+  position: absolute;
+  inset: 97% 14% -14%;
+  background: repeating-linear-gradient(#a7a489 0 25%, #d8ccab 25% 33%);
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+}
+
+.bell {
+  position: absolute;
+  top: 38%;
+  left: 47.3%;
+  width: 1.3cqw;
+  height: 2.4cqw;
+  border-top: 1.2cqw solid #66593a;
+}
+
+.bell i {
+  display: block;
+  height: 1.2cqw;
+  border: 1px solid #a38a48;
+  border-radius: 50% 50% 10% 10%;
+  background: linear-gradient(90deg, #98834e, #dcc588, #8c7743);
+  box-shadow: 0 0.15cqw 0 #5a5134;
+}
+
+.direction-sign {
+  position: absolute;
+  top: 46%;
+  left: 27%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqw;
+  padding: 0.4cqw 0.6cqw;
+  border: 0.13cqw solid #77754f;
+  color: #f4e8bd;
+  background: #657553;
+  font-size: clamp(9px, 0.7cqw, 13px);
+  transform: rotate(-4deg);
+}
+
+.direction-sign::after {
+  position: absolute;
+  top: 100%;
+  left: 45%;
+  width: 0.35cqw;
+  height: 4cqw;
+  background: #727454;
+  content: '';
+}
+
+.direction-sign small {
+  color: #ded6ad;
+  font-size: clamp(8px, 0.5cqw, 10px);
+}

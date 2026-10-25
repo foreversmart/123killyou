@@ -53,7 +53,7 @@ export function PlayerStatus({
               : undefined
           }
         >
-          {connected ? (state.savedAt ? '进度已保存' : '本地原型') : '服务重连中'}
+          {!state.id ? '旅程尚未开始' : connected ? '进度已保存' : '服务重连中'}
         </small>
       </div>
     </header>

@@ -8,6 +8,7 @@ import { CommandPanel } from '@/features/debug/command_panel';
 import { ActionNotice } from '@/shared/ui/action_notice';
 import { ProblemNotice } from '@/shared/ui/problem_notice';
 import { LoadingScreen } from '@/shared/ui/loading_screen';
+import { StartChoices } from '@/features/session/start_choices';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
@@ -26,20 +27,19 @@ export default function Game() {
     showNotice,
     tour,
     voiceStarted,
-    act,
+    opening,
+    selecting,
+    begin,
+    resume,
   } = game;
   if (!state) return <LoadingScreen error={error} />;
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
       <section className={styles['game-shell']} aria-label="第一夜，语音密室逃脱">
         <PlayerStatus state={state} demo={demo} voiceStarted={voiceStarted} connected={connected} />
-        <Room
-          state={state}
-          phase={roomPhase}
-          onAction={async (command) => void (await act(command))}
-          interactive={connected}
-        >
+        <Room state={state} phase={roomPhase} onAction={voice.submit} interactive={connected}>
           <Overlays state={state} soundOn={voice.soundOn} />
+          {opening && <StartChoices busy={selecting} onBegin={begin} onResume={resume} />}
           {showNotice && <ActionNotice text={notice} />}
         </Room>
         <Inventory state={state} />

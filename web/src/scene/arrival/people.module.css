@@ -1,0 +1,225 @@
+.person {
+  --clothes: #e3d9b7;
+  position: absolute;
+  bottom: 20%;
+  left: 31%;
+  width: 15%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.person[data-person='zhouyan'] {
+  --clothes: #718c83;
+  left: 78%;
+  bottom: 22%;
+}
+
+.person[data-person='xuzhi'] {
+  --clothes: #9d7a6a;
+  left: 43%;
+  bottom: 5%;
+}
+
+.person[data-person='luchen'] {
+  --clothes: #9b9273;
+  left: 65%;
+  bottom: 28%;
+}
+
+.figure {
+  position: relative;
+  width: 3.8cqw;
+  height: 7.5cqw;
+  margin: auto;
+  filter: drop-shadow(0.6cqw 0.65cqw 0.2cqw #4a573c44);
+}
+
+.head {
+  position: absolute;
+  top: 0;
+  left: 33%;
+  width: 37%;
+  height: 26%;
+  border-radius: 45% 45% 42% 42%;
+  background: linear-gradient(#3c3f32 0 28%, #c2a788 29%);
+  transform: rotate(-5deg);
+}
+
+.body {
+  position: absolute;
+  inset: 26% 8% 5%;
+  border-radius: 28% 28% 10% 10%;
+  background: linear-gradient(100deg, #0002, transparent 30%), var(--clothes);
+  clip-path: polygon(
+    27% 0,
+    73% 0,
+    100% 51%,
+    85% 57%,
+    78% 27%,
+    78% 100%,
+    55% 100%,
+    50% 68%,
+    45% 100%,
+    22% 100%,
+    22% 27%,
+    15% 57%,
+    0 51%
+  );
+}
+
+.person[data-person='luchen'] .head {
+  background: linear-gradient(115deg, #d5bd96, #ac9677);
+}
+
+.person[data-person='luchen'] .body {
+  border-radius: 28% 28% 0 0;
+  clip-path: polygon(
+    27% 0,
+    73% 0,
+    100% 70%,
+    83% 74%,
+    77% 34%,
+    92% 100%,
+    8% 100%,
+    23% 34%,
+    17% 74%,
+    0 70%
+  );
+}
+
+.person[data-person='xuzhi'] .head {
+  box-shadow: 0.35cqw 0.25cqw 0 -0.1cqw #406d9a;
+}
+
+.person[data-person='zhouyan'] .head {
+  transform: rotate(-18deg);
+}
+
+.accessory {
+  position: absolute;
+  top: 40%;
+  right: -18%;
+  padding: 0.2cqw 0.25cqw;
+  border: 1px solid #5c625146;
+  color: #e4dbbd;
+  background: #3e4d41;
+  font-size: clamp(8px, 0.58cqw, 11px);
+  white-space: nowrap;
+  transform: rotate(-7deg);
+}
+
+.person[data-person='linlan'] .accessory {
+  top: 25%;
+  right: 0;
+  padding: 0.3cqw;
+  border-radius: 0.2cqw;
+  background: #353d36;
+  transform: rotate(8deg);
+}
+
+.person[data-person='luchen'] .accessory {
+  top: 48%;
+  right: -26%;
+  font-size: clamp(8px, 0.5cqw, 10px);
+  background: #746a51;
+}
+
+.name-tag {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15cqw;
+  max-width: 100%;
+  margin-top: -0.1cqw;
+  padding: 0.35cqw 0.6cqw;
+  border: 1px solid #fbf0cd9c;
+  background: #f2e8cbdc;
+  color: #364637;
+  box-shadow: 0 0.25cqw 0.4cqw #50604622;
+}
+
+.name-tag b {
+  font-size: clamp(10px, 0.85cqw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.12cqw;
+}
+
+.name-tag span {
+  font-size: clamp(8px, 0.57cqw, 11px);
+  white-space: nowrap;
+}
+
+.registration-desk {
+  position: absolute;
+  z-index: 1;
+  left: 59%;
+  top: 66%;
+  width: 11%;
+  height: 10%;
+  border-top: 0.5cqw solid #9e8053;
+  background: linear-gradient(90deg, #62583c 10%, transparent 10% 90%, #62583c 90%);
+}
+
+.registration-desk span {
+  position: absolute;
+  top: -1.3cqw;
+  left: 20%;
+  padding: 0.15cqw 0.6cqw;
+  color: #6c5739;
+  background: #dec58c;
+  border: 1px solid #aa8e5d;
+  font-size: 0.56cqw;
+  transform: rotate(-4deg);
+}
+
+.registration-desk i {
+  position: absolute;
+  top: -1.5cqw;
+  right: 7%;
+  width: 0.45cqw;
+  height: 1.2cqw;
+  border: 1px solid #655a3e;
+  border-radius: 30%;
+  background: #e5cc83;
+}
+
+.luggage-cart {
+  position: absolute;
+  left: 32%;
+  top: 77%;
+  width: 8%;
+  height: 11%;
+  border-bottom: 0.22cqw solid #727362;
+  transform: rotate(-3deg);
+}
+
+.luggage-cart i {
+  position: absolute;
+  bottom: 0;
+  width: 35%;
+  height: 76%;
+  border: 0.13cqw solid #424e45;
+  border-radius: 0.3cqw 0.3cqw 0 0;
+  background: #77806a;
+  box-shadow: inset 0.25cqw 0 0 #fff2;
+}
+
+.luggage-cart i:nth-child(2) {
+  left: 27%;
+  bottom: 20%;
+  height: 90%;
+  background: #9e8062;
+}
+
+.luggage-cart i:nth-child(3) {
+  left: 53%;
+  height: 70%;
+  background: #526c69;
+}
+
+.luggage-cart i:nth-child(4) {
+  left: 78%;
+  width: 32%;
+  height: 53%;
+  background: #ac9970;
+}

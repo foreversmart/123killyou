@@ -15,6 +15,7 @@ type fixture struct {
 	*session.Service
 	db         *sql.DB
 	repository *Repository
+	catalog    *content.Catalog
 }
 
 func openFixture(path string) (*fixture, error) {
@@ -27,7 +28,7 @@ func openFixture(path string) (*fixture, error) {
 		repo.Close()
 		return nil, err
 	}
-	return &fixture{session.New(repo, game.NewEngine(catalog), testVoice{}), repo.db, repo}, nil
+	return &fixture{Service: session.New(repo, game.NewEngine(catalog), testVoice{}), db: repo.db, repository: repo, catalog: catalog}, nil
 }
 
 // Protocol double for rule/storage tests; never used by the running server.

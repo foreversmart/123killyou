@@ -41,7 +41,9 @@ func audioService(t *testing.T, p session.DialogueProvider) *session.Service {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return session.New(repo, game.NewEngine(catalog), p)
+	service := session.New(repo, game.NewEngine(catalog), p)
+	seedRuleSave(t, repo, service, catalog)
+	return service
 }
 
 func TestConcurrentTransportRetriesMakeOneCloudCall(t *testing.T) {

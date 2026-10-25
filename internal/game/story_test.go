@@ -155,3 +155,70 @@ func TestMiniScriptSkinDoubleCanBeCalmedByTheReadScripture(t *testing.T) {
 		t.Fatalf("清心偈没有安抚换皮同伴: scene=%s flags=%v", state.SceneKey, state.Flags)
 	}
 }
+
+func TestMiniScriptKeepsSceneActorsAndInnerVoice(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-staging")
+	if len(state.Actors) < 5 || state.Actors[1].Name != "林岚" {
+		t.Fatalf("山门没有完整演员站位: %+v", state.Actors)
+	}
+	applyStory(t, engine, &state, "登记入住")
+	applyStory(t, engine, &state, "去斋堂")
+	applyStory(t, engine, &state, "我不吃肉粥")
+	applyStory(t, engine, &state, "吃完晚膳")
+	applyStory(t, engine, &state, "拿红烛")
+	applyStory(t, engine, &state, "回房")
+	applyStory(t, engine, &state, "点燃红烛")
+	if state.Dialogue.Speaker != "你·心声" {
+		t.Fatalf("点烛没有使用主角内心独白: %+v", state.Dialogue)
+	}
+	if len(state.Actors) != 2 || state.Actors[0].Position != "门房矮桌前" {
+		t.Fatalf("门房演员站位不完整: %+v", state.Actors)
+	}
+}
+
+func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-arrival")
+	for index, want := range []string{"林岚", "周砚", "许栀", "陆沉", "你·心声"} {
+		intent, _ := engine.Apply(&state, map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听"}[index])
+		if intent != "story" || state.Dialogue.Speaker != want {
+			t.Fatalf("第一话第 %d 句说话者错误: intent=%s dialogue=%+v", index+1, intent, state.Dialogue)
+		}
+	}
+	if !state.Flags["arrival_intro_done"] {
+		t.Fatal("第一话结束后没有记录完成状态")
+	}
+}
+
+func TestMiniScriptRequiresObservedAnimalCall(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-sounds")
+	for _, command := range []string{
+		"登记入住", "去斋堂", "我不吃", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
+		"续燃红烛", "不开门", "跟同伴去偷听",
+	} {
+		applyStory(t, engine, &state, command)
+	}
+	if _, speak := engine.Apply(&state, "检查猫食碟"); state.Dialogue.Speaker != "你·心声" || speak == "" {
+		t.Fatalf("检查猫食碟没有产生内心调查: %+v", state.Dialogue)
+	}
+	intent, _ := engine.Apply(&state, "模仿猫叫")
+	if intent == "clarify" || !state.Flags["animal_call_passed"] {
+		t.Fatalf("听过猫叫后仍不能模仿: intent=%s flags=%v", intent, state.Flags)
+	}
+}
+
+func TestMiniScriptDawnMiscountSpeaksBeforeDanger(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-dawn-trap")
+	for _, command := range []string{
+		"登记入住", "去斋堂", "我不吃", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
+		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把钟声算作第六声",
+	} {
+		applyStory(t, engine, &state, command)
+	}
+	if state.Dialogue.Speaker != "换皮同行人" || !state.Flags["fake_dawn_knocks"] {
+		t.Fatalf("误判五更没有先出现假人三敲对白: %+v flags=%v", state.Dialogue, state.Flags)
+	}
+}

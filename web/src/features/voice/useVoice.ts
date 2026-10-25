@@ -96,11 +96,12 @@ export function useVoice(
   );
 
   const start = useCallback(async () => {
-    if (!mounted.current || initializing.current || wanted.current) return;
+    if (wanted.current) return true;
+    if (!mounted.current || initializing.current) return false;
     if (!window.isSecureContext) {
       setStatus('error');
       setProblem('麦克风需要可信的 HTTPS 或本机 localhost 地址；局域网 HTTP 地址不能开启语音。');
-      return;
+      return false;
     }
     initializing.current = true;
     setStatus('starting');
@@ -117,19 +118,19 @@ export function useVoice(
       });
       if (!mounted.current) {
         stream.getTracks().forEach((track) => track.stop());
-        return;
+        return false;
       }
       media.current = stream;
       if (!audio.current) audio.current = new AudioContext({ sampleRate: 16000 });
       await audio.current.resume();
-      if (!mounted.current) return;
+      if (!mounted.current) return false;
       const input = attachAudioInput(audio.current, stream, ambient.current, sound.current);
       analyser.current = input.analyser;
       ambient.current = input.ambient;
       microphone.current = await prepareMicrophone(audio.current, stream);
       if (!mounted.current) {
         microphone.current.dispose();
-        return;
+        return false;
       }
       capture.current = createPushToTalk({
         open: () => transcription.current(),
@@ -146,6 +147,7 @@ export function useVoice(
       });
       wanted.current = true;
       setStatus('listening');
+      return true;
     } catch (cause) {
       wanted.current = false;
       setStatus('error');
@@ -156,6 +158,7 @@ export function useVoice(
           ? '麦克风未获授权，请检查浏览器权限。'
           : '无法启动麦克风，请检查设备是否可用。',
       );
+      return false;
     } finally {
       initializing.current = false;
     }
@@ -201,5 +204,14 @@ export function useVoice(
     return Math.min(1, Math.sqrt(sum / data.length) * 5);
   }, []);
 
-  return { status, problem, caption, start, submit, level, soundOn, setSoundOn };
+  return {
+    status,
+    problem,
+    caption,
+    start,
+    submit,
+    level,
+    soundOn,
+    setSoundOn,
+  };
 }

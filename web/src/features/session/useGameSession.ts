@@ -1,85 +1,76 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { GameResult, GameState, TurnControls } from '@/shared/types/game';
-
+import type { GameState, TurnControls } from '@/shared/types/game';
 import { json } from './api';
 import { commandStream } from './commandStream';
 import { recognitionStream } from './recognitionStream';
+import { createSessionEntry } from './sessionEntry';
+import { useSessionStream } from './useSessionStream';
 
 export function useGameSession() {
   const [state, setState] = useState<GameState | null>(null);
-  const [connected, setConnected] = useState(false);
   const [error, setError] = useState('');
+  const [selecting, setSelecting] = useState(false);
   const current = useRef<GameState | null>(null);
-  const socket = useRef<WebSocket | null>(null);
+  const entry = useRef(createSessionEntry());
+  const mounted = useRef(true);
   const acceptState = useCallback((next: GameState) => {
-    if (!next?.id) return;
     const previous = current.current;
-    if (previous && (next.id !== previous.id || next.revision < previous.revision)) return;
+    if (!next?.id || !previous || next.id !== previous.id || next.revision < previous.revision)
+      return;
     current.current = next;
     setState(next);
   }, []);
+  const streaming = useSessionStream(state?.id, acceptState, setError);
 
   useEffect(() => {
+    mounted.current = true;
     let stopped = false;
     let retry: ReturnType<typeof setTimeout>;
-    const connect = () => {
-      if (stopped || !current.current) return;
-      const ws = new WebSocket(
-        `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/api/sessions/${current.current.id}/stream`,
-      );
-      socket.current = ws;
-      ws.onopen = () => {
-        if (!stopped) {
-          setConnected(true);
-          setError('');
-        }
-      };
-      ws.onmessage = (event) => {
-        if (stopped || socket.current !== ws) return;
-        try {
-          const result = JSON.parse(event.data) as GameResult;
-          acceptState(result.state);
-        } catch {
-          setError('收到的游戏状态不完整，正在等待重连。');
-        }
-      };
-      ws.onclose = () => {
-        if (stopped || socket.current !== ws) return;
-        setConnected(false);
-        retry = setTimeout(connect, 1800);
-      };
-      ws.onerror = () => ws.close();
-    };
     const boot = async () => {
       try {
-        // The backend owns the autosave slot; a fresh browser needs no storage token.
-        const snapshot = await json<GameState>('/api/sessions/resume', {
-          method: 'POST',
-        });
-        if (stopped) return;
+        const snapshot = await entry.current.opening();
+        if (stopped || current.current?.id) return;
         current.current = snapshot;
         setState(snapshot);
         setError('');
-        connect();
       } catch (cause) {
-        if (!stopped) {
-          setError(cause instanceof Error ? cause.message : '无法读取本地存档。');
-          retry = setTimeout(() => void boot(), 1800);
-        }
+        if (stopped) return;
+        setError(cause instanceof Error ? cause.message : '无法加载第一幕。');
+        retry = setTimeout(() => void boot(), 1800);
       }
     };
     void boot();
     return () => {
       stopped = true;
+      mounted.current = false;
       clearTimeout(retry);
-      socket.current?.close();
     };
-  }, [acceptState]);
+  }, []);
+
+  const enter = useCallback(async (mode: 'new' | 'resume' = 'new') => {
+    if (current.current?.id) return current.current;
+    setSelecting(true);
+    setError('');
+    try {
+      const snapshot = await entry.current.enter(mode);
+      if (mounted.current && !current.current?.id) {
+        current.current = snapshot;
+        setState(snapshot);
+      }
+      return current.current?.id ? current.current : snapshot;
+    } catch (cause) {
+      if (mounted.current)
+        setError(cause instanceof Error ? cause.message : '无法开始旅程，请重试。');
+      throw cause;
+    } finally {
+      if (mounted.current) setSelecting(false);
+    }
+  }, []);
 
   const send = useCallback(
     async (text: string, controls: Partial<TurnControls> = {}) => {
-      const origin = current.current;
-      if (!origin) throw new Error('房间还没有准备好，请稍等。');
+      const origin = await enter();
+      controls.signal?.throwIfAborted();
       const command = { runId: origin.runId, requestId: crypto.randomUUID(), text };
       try {
         return await commandStream(
@@ -94,16 +85,26 @@ export function useGameSession() {
         throw cause;
       }
     },
-    [acceptState],
+    [acceptState, enter],
   );
 
   const openTranscription = useCallback(() => {
     const origin = current.current;
-    if (!origin) throw new Error('房间还没有准备好，请稍等。');
+    if (!origin?.id) throw new Error('请先开始旅程或继续上次进度。');
     return recognitionStream(
       `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/api/sessions/${origin.id}/recognition`,
       origin.runId,
     );
   }, []);
-  return { state, connected, error, send, openTranscription };
+  const opening = Boolean(state && !state.id);
+  return {
+    state,
+    connected: !selecting && (opening || streaming),
+    opening,
+    selecting,
+    error,
+    enter,
+    send,
+    openTranscription,
+  };
 }

@@ -6,43 +6,27 @@ type Engine struct{ content *content.Catalog }
 
 func NewEngine(catalog *content.Catalog) *Engine { return &Engine{content: catalog} }
 func (e *Engine) Initial(id string) State {
-	world := e.content.World()
-	profile, _ := e.content.NPC(world.InitialNPC)
-	inventory := []Item{}
-	for _, id := range world.StartingItems {
-		item, _ := e.content.Item(id)
-		inventory = append(inventory, Item(item))
+	state := State{
+		ID:        id,
+		Revision:  1,
+		Devotion:  e.content.World().InitialDevotion,
+		Inventory: []Item{},
+		Clues:     []string{},
+		Flags:     map[string]bool{},
+		Effect:    Effect{Kind: "none"},
 	}
-	return State{
-		ID:         id,
-		Revision:   1,
-		SceneKey:   "mini_arrival",
-		SceneName:  "晴天下午·灯影寺山门",
-		SceneText:  "阳光从大巴车窗斜进来，灯影寺的山门在树影中一明一暗。",
-		SceneProps: []string{"大巴", "灯影寺山门", "明照寺旧匾", "山门铜铃", "晒太阳的花猫"},
-		// Keep the legacy room fields for compatibility with non-story rule
-		// tests; the client renders the mini scene from SceneKey immediately.
-		Room:       world.InitialRoom,
-		RoomName:   world.InitialRoomName,
-		Devotion:   world.InitialDevotion,
-		Inventory:  inventory,
-		Clues:      []string{},
-		Flags:      map[string]bool{},
-		Dialogue:   Dialogue{Speaker: profile.Name, Text: profile.Intro, Portrait: profile.Portrait},
-		LastAction: "说出你的行动，房间会回应。",
-		Effect:     Effect{Kind: "none"},
-	}
+	e.StartMiniStory(&state)
+	return state
 }
 
-// StartMiniStory positions a newly created browser session at the first
-// mini-script scene. Initial remains compatible with the legacy rule tests and
-// checkpoint fixtures, while the public session resume path uses this explicit
-// story start location.
+// StartMiniStory applies the complete opening scene, including its room and
+// narrator, so every new-game entry point starts at the same story position.
 func (e *Engine) StartMiniStory(state *State) {
 	if state == nil {
 		return
 	}
-	state.StoryMode = false
+	state.StoryMode = true
+	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
 	state.Dialogue = Dialogue{
 		Speaker: "旁白",
@@ -84,6 +68,11 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	return e.dialogue(state, text)
 }
 func (e *Engine) NPCForDialogue(state State) (string, bool) {
+	if state.SceneKey != "" && state.Dialogue.Speaker == "陆沉" && state.Dialogue.Portrait == "keeper" {
+		// The mini-script stages 陆沉 across the gate, register desk and
+		// corridor, while the legacy catalog keeps him in the watch room.
+		return "keeper", true
+	}
 	for _, npc := range e.content.NPCs() {
 		if npc.Room == state.Room && npc.Name == state.Dialogue.Speaker && npc.Portrait == state.Dialogue.Portrait {
 			return npc.ID, true

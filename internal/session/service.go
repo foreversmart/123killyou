@@ -50,35 +50,21 @@ func (s *Service) Create() (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error { var e error; state, e = s.create(tx); return e })
 	return
 }
+
+// Opening previews a new game's first scene without creating a session or
+// changing the player's automatic save.
+func (s *Service) Opening() game.State { return s.engine.Initial("") }
+
 func (s *Service) Resume() (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error {
 		var e error
 		state, e = tx.AutoSave()
 		if errors.Is(e, ErrSession) {
-			// Keep the legacy rule-test/session contract for a brand-new slot.
-			// Existing development saves are migrated below, where the story
-			// scene is explicitly placed at the temple gate.
 			state, e = s.create(tx)
-		} else if e == nil && state.SceneKey == "" {
-			// Development saves created before the mini-script had no scene
-			// state. Rebuild the auto slot so npm run dev opens the current
-			// story instead of resuming the retired room demo.
-			state, e = s.createStory(tx)
 		}
 		return e
 	})
 	return
-}
-
-func (s *Service) createStory(tx Transaction) (game.State, error) {
-	state, err := s.create(tx)
-	if err == nil {
-		s.engine.StartMiniStory(&state)
-		// create() has already persisted the initial snapshot. Replace it with
-		// the story-positioned state so the next resume sees the same scene.
-		err = tx.SaveState(state)
-	}
-	return state, err
 }
 func (s *Service) Snapshot(id string) (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error { var e error; state, e = tx.Current(id); return e })

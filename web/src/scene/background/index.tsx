@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Application, Assets, Sprite } from 'pixi.js';
 import { atmosphereFilter } from '../effects/atmosphere';
 import type { GameState } from '@/shared/types/game';
+import { ArrivalBackdrop } from '@/scene/arrival';
 
 export function Scene({ state }: { state: GameState }) {
+  if (state.sceneKey === 'mini_arrival') return <ArrivalBackdrop />;
   if (state.sceneKey) {
     return <StoryBackdrop state={state} />;
   }

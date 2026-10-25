@@ -6,13 +6,22 @@ import { useDemoTour } from './useDemoTour';
 import type { GameResult, TurnControls } from '@/shared/types/game';
 
 export function useGameController() {
-  const { state: incomingState, error, connected, send, openTranscription } = useGameSession();
+  const {
+    state: incomingState,
+    error,
+    connected,
+    opening,
+    selecting,
+    enter,
+    send,
+    openTranscription,
+  } = useGameSession();
   const { state, phase: roomPhase } = useRoomTransition(incomingState);
   const [notice, setNotice] = useState('');
   const [systemNotice, setSystemNotice] = useState(false);
   const latestAction = useRef(0);
   const act = useCallback(
-    async (text: string, controls?: TurnControls) => {
+    async (text: string, controls?: Partial<TurnControls>) => {
       const action = ++latestAction.current;
       let announced = false;
       const announce = (result: GameResult) => {
@@ -33,7 +42,10 @@ export function useGameController() {
           setNotice(result.state.lastAction);
         else setNotice('');
       };
-      const { result, streamed } = await send(text, { ...controls, onAction: announce });
+      const { result, streamed } = await send(text, {
+        ...controls,
+        onAction: announce,
+      });
       if (action !== latestAction.current) return '';
       announce(result);
       const textReply = result.speak?.trim() || result.state.lastAction?.trim() || '';
@@ -41,7 +53,34 @@ export function useGameController() {
     },
     [send],
   );
-  const voice = useVoice(act, openTranscription);
+  const voiceSession = useVoice(act, openTranscription);
+  const startVoice = useCallback(async () => {
+    try {
+      await enter();
+      const started = await voiceSession.start();
+      if (started && opening) await voiceSession.submit('听第一话');
+      return started;
+    } catch {
+      // Session failures are displayed by useGameSession.
+      return false;
+    }
+  }, [enter, opening, voiceSession.start, voiceSession.submit]);
+  const voice = { ...voiceSession, start: startVoice };
+  const begin = useCallback(async () => {
+    try {
+      await enter();
+      await voiceSession.submit('听第一话');
+    } catch {
+      // Keep the opening choices available when the server cannot start a session.
+    }
+  }, [enter, voiceSession.submit]);
+  const resume = useCallback(async () => {
+    try {
+      await enter('resume');
+    } catch {
+      // Keep the opening choices available so the player can retry.
+    }
+  }, [enter]);
   const voiceStarted = !['idle', 'unsupported', 'error'].includes(voice.status);
 
   useEffect(() => {
@@ -63,6 +102,10 @@ export function useGameController() {
     state,
     error,
     connected,
+    opening,
+    selecting,
+    begin,
+    resume,
     voice,
     voiceStarted,
     roomPhase,

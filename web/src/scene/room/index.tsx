@@ -26,17 +26,29 @@ export function Room({
       aria-busy={phase !== 'idle'}
     >
       <Scene state={state} />
-      <div className={styles['scene-shading']} />
+      <div
+        className={cx(
+          styles['scene-shading'],
+          state.sceneKey === 'mini_arrival' && styles['scene-shading--daylight'],
+        )}
+      />
       <StoryScene state={state} onAction={onAction} interactive={interactive} />
       {children}
-      <div className={styles['scene-caption']}>
+      <div
+        className={cx(
+          styles['scene-caption'],
+          state.sceneKey === 'mini_arrival' && styles['scene-caption--daylight'],
+        )}
+      >
         <span className={styles['caption-line']} />
         <span>
-          {state.sceneKey
-            ? '先看清声源，再走下一步'
-            : state.room === 'watch'
-              ? '有人在等你的回答'
-              : '不要惊动长廊里的寂静'}
+          {state.sceneKey === 'mini_arrival'
+            ? '车门气阀渐息，树叶和鸟鸣仍在耳边'
+            : state.sceneKey
+              ? '先看清声源，再走下一步'
+              : state.room === 'watch'
+                ? '有人在等你的回答'
+                : '不要惊动长廊里的寂静'}
         </span>
         <span className={styles['caption-line']} />
       </div>
