@@ -7,6 +7,8 @@ import type { useVoice } from '@/features/voice/useVoice';
 const PLAYBACK_ADVANCE_DELAY_MS = 1400;
 const SCRIPTURE_ADVANCE_DELAY_MS = 1800;
 const SILENT_ADVANCE_DELAY_MS = 4000;
+const FOUR_KNOCKS_AUTO_ADVANCE = '自动进入三敲';
+const FOUR_KNOCKS_AUTO_ADVANCE_DELAY_MS = 5000;
 const AUTOMATIC_SAFE_ACTIONS = new Set([
   '自动登记入住',
   '自动放好行李',
@@ -36,11 +38,13 @@ export function useStoryPlayback(
     const key = `${state.id}:${state.runId}:${state.revision}:${next}`;
     if (submitted.current === key) return;
     const delay =
-      AUTOMATIC_SAFE_ACTIONS.has(next) || next.startsWith('自动') || !voice.playbackOn
-        ? SILENT_ADVANCE_DELAY_MS
-        : next === '继续念经'
-          ? SCRIPTURE_ADVANCE_DELAY_MS
-          : PLAYBACK_ADVANCE_DELAY_MS;
+      next === FOUR_KNOCKS_AUTO_ADVANCE
+        ? FOUR_KNOCKS_AUTO_ADVANCE_DELAY_MS
+        : AUTOMATIC_SAFE_ACTIONS.has(next) || next.startsWith('自动') || !voice.playbackOn
+          ? SILENT_ADVANCE_DELAY_MS
+          : next === '继续念经'
+            ? SCRIPTURE_ADVANCE_DELAY_MS
+            : PLAYBACK_ADVANCE_DELAY_MS;
     const timer = setTimeout(() => {
       submitted.current = key;
       void voice.submit(next);

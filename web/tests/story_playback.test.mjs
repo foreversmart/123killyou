@@ -58,6 +58,14 @@ test('未开启播放时，安全的 NPC 串联仍会等待后自动提交', asy
   f.runtime.dispose();
 });
 
+test('四敲空门静默五秒后自动进入三敲', async () => {
+  const f = await fixture();
+  f.render({ ...f.state, sceneKey: 'mini_four_knocks', dialogueNext: '自动进入三敲' });
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, ['自动进入三敲']);
+  f.runtime.dispose();
+});
+
 test('说话、录音、暂停、道具阅读、死亡或播放错误期间不自动触发下一动作', async () => {
   for (const override of [
     { voice: { status: 'speaking' } },

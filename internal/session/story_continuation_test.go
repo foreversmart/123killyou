@@ -8,7 +8,10 @@ import (
 	"strings"
 	"testing"
 
+	"nightwatch/internal/content"
+	"nightwatch/internal/game"
 	"nightwatch/internal/session"
+	"nightwatch/internal/storage/sqlite"
 )
 
 func arrivalHandoff(t *testing.T, service *session.Service) (stateID, runID string) {
@@ -126,5 +129,100 @@ func TestStoryDangerConversationDoesNotResumePendingScripture(t *testing.T) {
 	}
 	if strings.Contains(provider.seen.GameContext, "已保留既定安全串联") {
 		t.Fatal("危险场景不应收到安全串联提示")
+	}
+}
+
+func TestStoryRoomVoiceFallbackCommitsObjectActionWithoutConversation(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		text string
+		flag string
+		shot string
+	}{
+		{name: "history", text: "翻翻四史", flag: "history_read", shot: "room_history"},
+		{name: "scripture", text: "看桌上的经书", flag: "mind_script_learned", shot: "room_scripture"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			provider := &fakeDialogueProvider{}
+			service, state := storyConversationService(t, provider)
+			for turn := 0; state.SceneKey != "mini_room"; turn++ {
+				if turn > 5 {
+					t.Fatal("未进入门房")
+				}
+				result, err := service.Command(state.ID, state.RunID, fmt.Sprintf("room-skip-%d", turn), "调试跳到下一剧情场景")
+				if err != nil {
+					t.Fatal(err)
+				}
+				state = result.State
+			}
+			result, err := service.Command(state.ID, state.RunID, "room-fallback", tt.text)
+			if err != nil || result.Intent != "inspect" || result.Speak != "" {
+				t.Fatalf("门房物件语音没有作为动作提交: result=%+v err=%v", result, err)
+			}
+			if result.State.SceneKey != "mini_room" || result.State.ShotKey != tt.shot || !result.State.Flags[tt.flag] {
+				t.Fatalf("门房物件动作状态错误: %+v", result.State)
+			}
+			if provider.calls != 0 {
+				t.Fatalf("物件语音不应创建 NPC 对话: calls=%d", provider.calls)
+			}
+		})
+	}
+}
+
+type roomActionJudgeProvider struct {
+	fakeDialogueProvider
+	calls int
+}
+
+func (p *roomActionJudgeProvider) JudgeMeal(context.Context, game.MealJudgeRequest) (game.MealJudgeResult, error) {
+	return game.MealJudgeResult{}, nil
+}
+
+func (p *roomActionJudgeProvider) JudgeOracle(context.Context, game.OracleJudgeRequest) (game.OracleJudgeResult, error) {
+	return game.OracleJudgeResult{}, nil
+}
+
+func (p *roomActionJudgeProvider) JudgeRoomAction(_ context.Context, _ game.RoomActionRequest) (game.RoomActionResult, error) {
+	p.calls++
+	return game.RoomActionResult{Action: game.RoomActionScripture, Confidence: 0.95}, nil
+}
+
+func TestStoryRoomVoiceFallbackReusesOneJEVDecisionAcrossPlanAndCommit(t *testing.T) {
+	repo, err := sqlite.Open(":memory:")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+	catalog, err := content.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	provider := &roomActionJudgeProvider{}
+	engine := game.NewEngine(catalog)
+	engine.SetStoryJudge(provider)
+	service := session.New(repo, engine, provider)
+	state, err := service.Create()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for turn := 0; state.SceneKey != "mini_room"; turn++ {
+		if turn > 5 {
+			t.Fatal("未进入门房")
+		}
+		result, err := service.Command(state.ID, state.RunID, fmt.Sprintf("room-jev-skip-%d", turn), "调试跳到下一剧情场景")
+		if err != nil {
+			t.Fatal(err)
+		}
+		state = result.State
+	}
+	result, err := service.Command(state.ID, state.RunID, "room-jev-fallback", "桌边那本蓝皮书")
+	if err != nil || result.Intent != "inspect" || result.State.ShotKey != "room_scripture" || !result.State.Flags["mind_script_learned"] {
+		t.Fatalf("JEV 门房兜底未提交经书动作: result=%+v err=%v", result, err)
+	}
+	if provider.calls != 1 {
+		t.Fatalf("plan/commit 重复调用 JEV: calls=%d", provider.calls)
+	}
+	if provider.fakeDialogueProvider.calls != 0 {
+		t.Fatalf("物件兜底错误创建了 NPC 对话: calls=%d", provider.fakeDialogueProvider.calls)
 	}
 }

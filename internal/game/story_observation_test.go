@@ -59,6 +59,40 @@ func TestOpeningGreatScriptureShowsItsFourVerses(t *testing.T) {
 	}
 }
 
+func TestRoomVoiceFallbackUsesVisibleObjectsAndActions(t *testing.T) {
+	e := newStoryTestEngine(t)
+	for _, tt := range []struct {
+		name     string
+		text     string
+		shot     string
+		intent   string
+		scene    string
+		wantClue string
+	}{
+		{name: "candle", text: "再看一眼烛火", shot: "room_candle_detail", intent: "inspect", scene: "mini_room"},
+		{name: "history homophone", text: "翻翻四史", shot: "room_history", intent: "inspect", scene: "mini_room", wantClue: "游客版寺史"},
+		{name: "scripture", text: "看看桌上的经书", shot: "room_scripture", intent: "inspect", scene: "mini_room", wantClue: "大念处经末页"},
+		{name: "sleep", text: "躺下歇一会儿", shot: "wake_candle", intent: "sleep", scene: "mini_room"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			s := e.Initial("room-voice-fallback")
+			e.setMiniScene(&s, tt.scene)
+			s.Flags["red_candle_held"] = true
+			s.Flags["red_candle_lit"] = true
+			intent, speak := e.Apply(&s, tt.text)
+			if intent != tt.intent || speak != "" {
+				t.Fatalf("物件语音没有执行门房动作: intent=%q speak=%q state=%+v", intent, speak, s)
+			}
+			if s.ShotKey != tt.shot || s.Dialogue != (Dialogue{}) {
+				t.Fatalf("物件语音没有回到对应镜头: shot=%q dialogue=%+v", s.ShotKey, s.Dialogue)
+			}
+			if tt.wantClue != "" && !strings.Contains(strings.Join(s.Clues, "、"), tt.wantClue) {
+				t.Fatalf("物件语音没有记录对应线索: clues=%v", s.Clues)
+			}
+		})
+	}
+}
+
 func TestDoorInvestigationReturnsToTheRequestedSoundOrObject(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("focus")
@@ -77,6 +111,30 @@ func TestDoorInvestigationReturnsToTheRequestedSoundOrObject(t *testing.T) {
 		if s.ShotKey != want || s.SceneKey != "mini_four_knocks" || s.Flags["four_knocks_survived"] || s.Flags["story_dead"] {
 			t.Fatalf("调查改变开门判断或未切回指定焦点: command=%s state=%+v", command, s)
 		}
+	}
+}
+
+func TestFourKnocksQuietWindowAdvancesToThreeKnocks(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("four-knocks-quiet-window")
+	e.setMiniScene(&s, "mini_four_knocks")
+	if s.DialogueNext != fourKnocksAutoAdvance {
+		t.Fatalf("空门场景应安排静默后自动进入三敲: next=%q", s.DialogueNext)
+	}
+
+	intent, speak := e.Apply(&s, fourKnocksAutoAdvance)
+	if intent != "story" || speak == "" || s.SceneKey != "mini_three_knocks" || !s.Flags["four_knocks_survived"] {
+		t.Fatalf("静默窗口结束后未进入三敲: intent=%s speak=%q scene=%s flags=%v", intent, speak, s.SceneKey, s.Flags)
+	}
+}
+
+func TestFourKnocksListeningResetsQuietWindow(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("four-knocks-listen")
+	e.setMiniScene(&s, "mini_four_knocks")
+	e.Apply(&s, "听门外")
+	if s.SceneKey != "mini_four_knocks" || s.ShotKey != "four_knocks" || s.DialogueNext != fourKnocksAutoAdvance {
+		t.Fatalf("重听空门后应重新等待自动转场: %+v", s)
 	}
 }
 

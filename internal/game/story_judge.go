@@ -79,6 +79,38 @@ type OptionJudge interface {
 	JudgeOption(context.Context, OptionJudgeRequest) (OptionJudgeResult, error)
 }
 
+// RoomAction identifies one of the four visible actions in the fifth scene.
+// The game still owns the action's state changes; JEV only maps an otherwise
+// unmatched utterance to the closest visible option.
+type RoomAction string
+
+const (
+	RoomActionCandle    RoomAction = "candle"
+	RoomActionHistory   RoomAction = "history"
+	RoomActionScripture RoomAction = "scripture"
+	RoomActionSleep     RoomAction = "sleep"
+)
+
+type RoomActionRequest struct {
+	PlayerText string `json:"playerText"`
+	Scene      string `json:"scene"`
+	SceneText  string `json:"sceneText"`
+	Shot       string `json:"shot"`
+	CandleLit  bool   `json:"candleLit"`
+}
+
+type RoomActionResult struct {
+	Action     RoomAction `json:"action"`
+	Confidence float64    `json:"confidence,omitempty"`
+}
+
+// RoomActionJudge is optional so existing story judges can continue to settle
+// meal and oracle decisions. The room classifier is consulted only for an
+// unmatched fifth-scene utterance.
+type RoomActionJudge interface {
+	JudgeRoomAction(context.Context, RoomActionRequest) (RoomActionResult, error)
+}
+
 // StoryJudge is intentionally optional. The deterministic story rules remain
 // authoritative when the service is not configured or the remote request
 // fails.
@@ -88,8 +120,11 @@ type StoryJudge interface {
 }
 
 type StoryDecision struct {
-	Meal   *MealJudgeResult
-	Oracle *OracleJudgeResult
+	Meal                   *MealJudgeResult
+	Oracle                 *OracleJudgeResult
+	RoomAction             *RoomActionResult
+	RoomActionAttempted    bool
+	RoomActionNeedsClarify bool
 }
 
 func (e *Engine) SetStoryJudge(judge StoryJudge) {
@@ -133,7 +168,31 @@ func (e *Engine) PrepareStoryDecision(ctx context.Context, state State, text, hi
 			decision.Oracle = &result
 		}
 	}
+	if roomJudge, ok := e.storyJudge.(RoomActionJudge); ok && state.SceneKey == "mini_room" && !roomExplicitCommand(text) {
+		decision.RoomActionAttempted = true
+		result, err := roomJudge.JudgeRoomAction(ctx, RoomActionRequest{
+			PlayerText: text,
+			Scene:      state.SceneName,
+			SceneText:  state.SceneText,
+			Shot:       state.ShotKey,
+			CandleLit:  state.Flags["red_candle_lit"],
+		})
+		if err == nil && validRoomAction(result.Action) && result.Confidence >= 0.55 {
+			decision.RoomAction = &result
+		} else {
+			decision.RoomActionNeedsClarify = true
+		}
+	}
 	return decision
+}
+
+func validRoomAction(action RoomAction) bool {
+	switch action {
+	case RoomActionCandle, RoomActionHistory, RoomActionScripture, RoomActionSleep:
+		return true
+	default:
+		return false
+	}
 }
 
 func (e *Engine) PrepareOptionDecision(ctx context.Context, state State, text string) *OptionJudgeResult {
