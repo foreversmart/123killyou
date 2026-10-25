@@ -23,7 +23,12 @@ export function DialoguePanel({
   connected: boolean;
   onTour: () => Promise<void>;
 }) {
-  const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
+  const mealEating = state.sceneKey === 'mini_refectory' && state.shotKey === 'refectory_eating';
+  const dialogue = mealEating
+    ? { speaker: '', text: '', portrait: '' }
+    : voice.caption?.text
+      ? voice.caption
+      : state.dialogue;
   const hasDialogue = Boolean(dialogue.text.trim());
   const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker, state);
   const hasPortrait =

@@ -23,7 +23,7 @@ func miniMealChoice(text string) (string, bool) {
 	if text == "暂缓" || text == "先等等" || text == "先不喝" || text == "暂缓吃粥" {
 		return "deferred", true
 	}
-	vegetables := miniHasAny(text, "馒头", "咸菜", "素菜", "笋干", "香菇青菜")
+	vegetables := miniHasAny(text, "馒头", "咸菜", "素菜", "素食", "吃素", "笋干", "香菇青菜")
 	porridge := miniHasAny(text, "粥", "肉")
 	if vegetables && !porridge && (strings.HasPrefix(text, "吃") || strings.HasPrefix(text, "换")) {
 		return "refused", true

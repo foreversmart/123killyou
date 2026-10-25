@@ -58,9 +58,9 @@ export function hookRuntime() {
           });
         }
       },
-      setTimeout(callback) {
+      setTimeout(callback, delay = 0) {
         const id = ++nextTimer;
-        timers.set(id, callback);
+        timers.set(id, { callback, delay });
         return id;
       },
       clearTimeout: (id) => timers.delete(id),
@@ -74,10 +74,13 @@ export function hookRuntime() {
     flushTimers() {
       const pending = [...timers.values()];
       timers.clear();
-      pending.forEach((callback) => callback());
+      pending.forEach(({ callback }) => callback());
     },
     get pendingTimers() {
       return timers.size;
+    },
+    get pendingDelays() {
+      return [...timers.values()].map(({ delay }) => delay);
     },
     dispose() {
       slots.forEach((slot) => slot?.cleanup?.());

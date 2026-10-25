@@ -24,6 +24,7 @@ export function StoryStage({
   onAction: (command: string) => Promise<void>;
 }) {
   const layout = sceneLayout(state);
+  const mealEating = state.sceneKey === 'mini_refectory' && state.shotKey === 'refectory_eating';
   const authored = Boolean(authoredScene(state));
   const enabled =
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
@@ -37,7 +38,12 @@ export function StoryStage({
       (speaker.startsWith(actor.name) || (speaker.includes('门外') && actor.id !== 'player')),
   );
   return (
-    <div className={styles.stage} data-scene={state.sceneKey} data-shot={state.shotKey || ''}>
+    <div
+      className={styles.stage}
+      data-scene={state.sceneKey}
+      data-shot={state.shotKey || ''}
+      data-meal-animation={mealEating ? 'active' : undefined}
+    >
       <SceneHeading
         chapter={layout.chapter}
         title={shotTitles[state.shotKey || ''] || layout.title}
@@ -160,7 +166,7 @@ export function StoryStage({
           {speaker} · 声音从门外传来
         </div>
       )}
-      {state.sceneKey === 'mini_refectory' && (
+      {state.sceneKey === 'mini_refectory' && !mealEating && (
         <MealDiscussion state={state} enabled={enabled} onAction={onAction} />
       )}
       <StoryReading shot={state.shotKey || ''} />
@@ -185,22 +191,24 @@ export function StoryStage({
         </div>
       )}
       {state.sceneKey === 'mini_death' && <DeathFeedback state={state} />}
-      <div className={styles.choices} aria-label="接下来的行动">
-        <span className={styles.thought}>接下来……</span>
-        <div>
-          {sceneChoices(state).map((choice) => (
-            <button
-              type="button"
-              key={choice.command}
-              disabled={!enabled}
-              data-tone={choice.tone}
-              onClick={() => void onAction(choice.command)}
-            >
-              {choice.thought}
-            </button>
-          ))}
+      {!mealEating && (
+        <div className={styles.choices} aria-label="接下来的行动">
+          <span className={styles.thought}>接下来……</span>
+          <div>
+            {sceneChoices(state).map((choice) => (
+              <button
+                type="button"
+                key={choice.command}
+                disabled={!enabled}
+                data-tone={choice.tone}
+                onClick={() => void onAction(choice.command)}
+              >
+                {choice.thought}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

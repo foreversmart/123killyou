@@ -41,6 +41,13 @@ export function ScenePerson({
       data-concealed={actor.position.includes('帘后')}
       data-stone={actor.id === 'shangong' && pose === 'oracle_stone'}
       data-calm={calm}
+      data-meal={
+        sceneKey === 'mini_refectory' &&
+        pose === 'refectory_eating' &&
+        ['player', 'linlan', 'zhouyan', 'xuzhi'].includes(actor.id)
+          ? 'true'
+          : undefined
+      }
       aria-label={`${actor.name}，${actor.position}，${actor.status}${speaking ? '，正在说话' : ''}`}
       style={
         {

@@ -6,6 +6,13 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 	return e.storyRefectoryWithDecision(state, text, nil)
 }
 
+func (e *Engine) startVegetarianMeal(state *State, speaker, text string) string {
+	miniShot(state, "refectory_eating")
+	miniSetFlag(state, "refectory_eating_shown")
+	state.DialogueNext = "自动离开斋堂"
+	return miniDialogue(state, speaker, text)
+}
+
 func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *MealJudgeResult) (string, string, bool) {
 	if miniContinue(text) || miniHasAny(text, "听晚膳对白") {
 		speak := miniSequence(state, "refectory_intro", refectoryLines)
@@ -139,7 +146,11 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 			replies = append(replies, miniPersonName(person)+"：“"+reply+"”")
 		}
 		if len(replies) > 0 {
-			return "story", miniDialogue(state, firstSpeaker, strings.Join(replies, " ")), true
+			speak := strings.Join(replies, " ")
+			if state.Flags["meal_player_refused"] {
+				return "story", e.startVegetarianMeal(state, firstSpeaker, speak), true
+			}
+			return "story", miniDialogue(state, firstSpeaker, speak), true
 		}
 	}
 	if judged != nil {
@@ -150,7 +161,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 			miniChooseMeal(state, person, "refused")
 		}
 		miniSetFlag(state, "persuasion_success")
-		return "story", miniDialogue(state, "许栀", "那就先吃素饼。问清楚之前，这碗粥先放着。"), true
+		return "story", e.startVegetarianMeal(state, "许栀", "那就先吃馒头和素菜。问清楚之前，这碗粥先放着。"), true
 	}
 	choice, explicitMeal := miniMealChoice(text)
 	if explicitMeal && miniHasAny(text, "林岚", "周砚", "许栀") {
@@ -170,7 +181,11 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		if choice == "refused" && miniHasAny(text, "劝", "别吃", "不要吃") {
 			miniSetFlag(state, "persuasion_success")
 		}
-		return "story", miniMealReply(state, person, choice), true
+		speak := miniMealReply(state, person, choice)
+		if person == "player" && choice == "refused" {
+			return "story", e.startVegetarianMeal(state, state.Dialogue.Speaker, speak), true
+		}
+		return "story", speak, true
 	}
 	if explicitMeal && choice == "deferred" {
 		miniChooseMeal(state, "player", "deferred")
@@ -178,7 +193,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 	}
 	if explicitMeal && choice == "refused" {
 		miniChooseMeal(state, "player", "refused")
-		return "story", miniDialogue(state, "陆沉", "馒头和热水在你手边。饿了就先吃这个，不必勉强喝粥。"), true
+		return "story", e.startVegetarianMeal(state, "陆沉", "馒头和热水在你手边。饿了就先吃这个，不必勉强喝粥。"), true
 	}
 	if explicitMeal && choice == "ate" {
 		miniChooseMeal(state, "player", "ate")
