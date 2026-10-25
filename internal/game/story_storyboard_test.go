@@ -61,11 +61,14 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 		t.Fatal("演出对白替玩家做了吃粥选择")
 	}
 	storyCommands(e, &s, "劝大家不吃", "吃完晚膳")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"陆沉", "陆沉", "林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
 		t.Fatalf("回廊说话者: %v", got)
 	}
 	if s.ShotKey != "corridor_two_gongs" || s.Flags["red_candle_held"] {
 		t.Fatal("更锣与领烛时序错误")
+	}
+	if s.Dialogue.Text != "各位施主，两更天到了，请各位早些休息吧。五更天我们会起来做早课，有空的话，可以前来观摩。" {
+		t.Fatalf("二更对白未落在房门前: %q", s.Dialogue.Text)
 	}
 }
 
@@ -170,10 +173,10 @@ func TestStoryboardOracleWeightedCastAndSafeRetry(t *testing.T) {
 		ate     bool
 		roll    int
 		success bool
-	}{{false, 50, true}, {true, 50, false}, {true, 20, true}} {
+	}{{false, 50, true}, {true, 60, false}, {true, 20, true}} {
 		e, s := storyAtListen(t, tt.ate)
 		e.storyRoll = func() int { return tt.roll }
-		storyCommands(e, &s, "跑向大殿", "救我")
+		storyCommands(e, &s, "跑向大殿", "救我", "可能是风，也可能是我拿得不稳，我会先稳住手")
 		if s.Flags["cup_cast_counted"] {
 			t.Fatal("求救代替玩家掷杯筊")
 		}
@@ -199,7 +202,7 @@ func TestStoryboardOracleWeightedCastAndSafeRetry(t *testing.T) {
 
 func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 	e, s := storyAtListen(t, false)
-	storyCommands(e, &s, "模仿鸟叫", "把钟声算作第六声")
+	storyCommands(e, &s, "模仿鸟叫", "把锣声算作第六声")
 	if !strings.HasSuffix(s.Dialogue.Speaker, "（门外）") || s.ShotKey != "dawn_knocks" {
 		t.Fatal("假晓未定位声源")
 	}
@@ -217,7 +220,7 @@ func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 		}
 	}
 	drainMiniDialogue(t, e, &s)
-	if s.ShotKey != "dawn_gate" || s.RoomName != "灯影寺山门" {
+	if s.ShotKey != "dawn_gate" || s.RoomName != "红烛寺山门" {
 		t.Fatal("没有随送客镜头走到山门")
 	}
 	for _, actor := range s.Actors {

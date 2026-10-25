@@ -22,7 +22,7 @@ export function ArrivalBackdrop() {
       className={styles.arrival}
       data-authored="true"
       role="img"
-      aria-label="晴天下午，大巴停在灯影寺山门前。四位游客下车，带着行李望向古朴山门；花猫在石阶旁晒太阳。"
+      aria-label="晴天下午，大巴停在红烛寺山门前。四位游客下车，带着行李望向古朴山门；花猫在石阶旁晒太阳。"
     >
       <div className={styles.sun} />
       <div className={styles['distant-hills']} />
@@ -43,7 +43,7 @@ export function ArrivalBackdrop() {
           poster={storyAssets.video.titleCard}
           controls
           preload="metadata"
-          aria-label="灯影寺片头回放"
+          aria-label="红烛寺片头回放"
         />
       </details>
       <div className={styles.tree}>
@@ -60,7 +60,7 @@ export function ArrivalBackdrop() {
           <span>车门</span>
         </div>
         <div className={styles['bus-stripe']} />
-        <span className={styles['bus-number']}>灯影寺</span>
+        <span className={styles['bus-number']}>红烛寺</span>
         <div className={styles.wheel} />
       </div>
       <div className={temple['temple-gate']} data-asset-gate="true">
@@ -70,7 +70,7 @@ export function ArrivalBackdrop() {
         <div className={temple['gate-door']} />
         <div className={temple['gate-column']} />
         <div className={temple['gate-column-right']} />
-        <div className={temple.plaque}>灯影寺</div>
+        <div className={temple.plaque}>红烛寺</div>
         <div className={temple['old-plaque']}>明照寺</div>
         <div className={temple['gate-steps']} />
       </div>
@@ -160,10 +160,10 @@ export function ArrivalInteraction({
 }) {
   const disabled = !enabled || state.paused || state.caught;
   return (
-    <div className={interaction.interaction} aria-label="第一幕：大巴抵达灯影寺">
+    <div className={interaction.interaction} aria-label="第一幕：大巴抵达红烛寺">
       <SceneHeading
         chapter="第一幕 · 晴天下午"
-        title="01 · 大巴抵达灯影寺"
+        title="01 · 大巴抵达红烛寺"
         description="周末，四个人，一次说好的散心。"
       />
       {hotspots.map((prop) => (

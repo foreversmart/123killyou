@@ -1,6 +1,6 @@
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
-import { DoorDetail, CandleDetail, ShadowDetail } from './detail_art';
+import { DoorDetail, ShadowDetail } from './detail_art';
 import { DragMarkDetail, BowlTagDetail } from './evidence_art';
 import { OracleCups } from './oracle_cups';
 import styles from './style.module.css';
@@ -24,17 +24,11 @@ export function StoryObservation({ state }: { state: GameState }) {
   const shot = state.shotKey || '';
   const closeup = closeups[shot];
   const latch = ['room_latch', 'wake_door', 'four_peephole'].includes(shot);
-  const candle = [
-    'room_candle',
-    'room_candle_detail',
-    'wake_candle',
-    'wake_candle_detail',
-  ].includes(shot);
   const shadow = ['double_enter', 'double_candle', 'double_exit'].includes(shot);
   const drag = shot === 'register_drag_mark';
   const bowlTags = shot === 'refectory_porridge' && Boolean(state.flags.bowl_tags_seen);
   const cups = ['oracle_cast', 'oracle_stone', 'oracle_rescue'].includes(shot);
-  if (!closeup && !latch && !candle && !shadow && !drag && !bowlTags && !cups) return null;
+  if (!closeup && !latch && !shadow && !drag && !bowlTags && !cups) return null;
   return (
     <figure className={styles.closeup} data-observation={shot} key={shot}>
       <figcaption>
@@ -43,13 +37,11 @@ export function StoryObservation({ state }: { state: GameState }) {
             ? '地砖上的杯面'
             : latch
               ? '门内侧'
-              : candle
-                ? '烛台前'
-                : drag
-                  ? '灯房门边'
-                  : bowlTags
-                    ? '施食记与碗签'
-                    : '烛光边缘')}
+              : drag
+                ? '灯房门边'
+                : bowlTags
+                  ? '施食记与碗签'
+                  : '烛光边缘')}
       </figcaption>
       {cups ? (
         <OracleCups flags={state.flags} falling={shot === 'oracle_cast'} />
@@ -61,8 +53,6 @@ export function StoryObservation({ state }: { state: GameState }) {
         <img src={closeup.asset} alt={closeup.title} />
       ) : latch ? (
         <DoorDetail wet={shot === 'wake_door'} peephole={shot === 'four_peephole'} />
-      ) : candle ? (
-        <CandleDetail lit={Boolean(state.flags.red_candle_lit)} />
       ) : (
         <ShadowDetail seam={shot === 'double_exit'} />
       )}

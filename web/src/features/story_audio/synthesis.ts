@@ -59,10 +59,11 @@ export function playStoryCue(
     sources.push(source);
   };
   if (cue.kind === 'gong') {
-    tone(208, 0.85, 0.12);
-    tone(337, 0.7, 0.05);
-    tone(551, 0.5, 0.035);
-    noise(0.3, 0.2, 900);
+    const duration = cue.duration || 1.1;
+    tone(208, duration * 0.77, 0.12);
+    tone(337, duration * 0.64, 0.05);
+    tone(551, duration * 0.45, 0.035);
+    noise(Math.min(0.3, duration * 0.27), 0.2, 900);
   }
   if (cue.kind === 'bell') {
     tone(93, 3.2, 0.13);

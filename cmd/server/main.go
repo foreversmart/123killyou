@@ -12,6 +12,7 @@ import (
 
 	"nightwatch/internal/content"
 	"nightwatch/internal/game"
+	"nightwatch/internal/integration/jev"
 	"nightwatch/internal/session"
 	"nightwatch/internal/storage/sqlite"
 	"nightwatch/internal/transport/httpapi"
@@ -39,6 +40,16 @@ func main() {
 	}
 	defer repository.Close()
 	engine := game.NewEngine(catalog)
+	if apiKey := os.Getenv("JEV_API_KEY"); apiKey != "" {
+		base := os.Getenv("JEV_API_BASE")
+		if base == "" {
+			base = jev.DefaultAPIBase
+		}
+		engine.SetStoryJudge(jev.New(jev.Config{APIKey: apiKey, APIBase: base}))
+		log.Printf("JEV 判定已启用：%s", base)
+	} else {
+		log.Printf("未配置 JEV_API_KEY，斋房劝说与神公虔诚判断使用本地规则兜底")
+	}
 	dialogueProvider, err := prepareLinx(catalog)
 	if err != nil {
 		log.Fatalf("灵矽为必需依赖，游戏服务未启动：%v", err)

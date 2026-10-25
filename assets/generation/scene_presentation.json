@@ -17,7 +17,7 @@
     "arrival": {
       "path": "assets/scenes/bus/bus_arrival.png",
       "plaque": {
-        "text": "灯影寺",
+        "text": "红烛寺",
         "x": 1110,
         "y": 235,
         "fontSize": 32,
@@ -43,7 +43,7 @@
       "learnedOnlyAfterReading": true
     },
     "history": {
-      "cover": "灯影寺简史",
+      "cover": "红烛寺简史",
       "body": ["七年前方丈顾怀山于方丈室圆寂，灯灭即成佛。"],
       "missingField": "验身"
     },
@@ -59,11 +59,11 @@
     "busTicket": {
       "reusePaper": "assets/props/permit/inventory.png",
       "title": "乘车票",
-      "route": "灯影寺接驳车"
+      "route": "红烛寺接驳车"
     },
     "booking": {
       "presentation": "使用纸面/手机预约UI文字视图，不新增可领取道具或品牌设备",
-      "title": "灯影寺住宿预约",
+      "title": "红烛寺住宿预约",
       "partySize": 4
     }
   },

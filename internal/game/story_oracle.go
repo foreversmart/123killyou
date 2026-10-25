@@ -3,6 +3,43 @@ package game
 import "math/rand/v2"
 
 func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
+	return e.storyOracleWithDecision(state, text, nil)
+}
+
+func (e *Engine) storyOracleWithDecision(state *State, text string, judged *OracleJudgeResult) (string, string, bool) {
+	if judged != nil && state.Flags["oracle_sincerity_question"] && !state.Flags["oracle_sincerity_judged"] {
+		state.Flags["oracle_sincerity_judged"] = true
+		state.Flags["oracle_sincere"] = judged.Sincere
+		state.OracleSincerityScore = int(judged.Score + 0.5)
+		if state.OracleSincerityScore == 0 && judged.Sincere {
+			state.OracleSincerityScore = 100
+		}
+		state.Flags["oracle_sincerity_score"] = state.OracleSincerityScore >= 50
+		delete(state.Flags, "oracle_sincerity_question")
+		if judged.Sincere {
+			return "story", miniDialogue(state, "神公", "红烛的火苗晃动，既有风，也看施主的手是否稳。你的回答还算虔诚。想好了，再掷杯筊。"), true
+		}
+		return "story", miniDialogue(state, "神公", "风没有变，手却先乱了。先把心定住，再决定要不要掷杯筊。"), true
+	}
+	if state.Flags["oracle_sincerity_question"] && judged == nil && !miniContinue(text) && !miniHasAny(text, "掷杯", "投杯", "掷筊") {
+		sincere := miniHasAny(text, "风", "稳", "小心", "虔诚", "诚心", "都有", "可能") && !miniHasAny(text, "不知道", "随便", "无所谓")
+		state.Flags["oracle_sincerity_judged"] = true
+		state.Flags["oracle_sincere"] = sincere
+		if sincere {
+			state.OracleSincerityScore = 100
+		} else {
+			state.OracleSincerityScore = 0
+		}
+		state.Flags["oracle_sincerity_score"] = sincere
+		delete(state.Flags, "oracle_sincerity_question")
+		if sincere {
+			return "story", miniDialogue(state, "神公", "你答得还算诚实。风和手都要看清，想好了，再掷杯筊。"), true
+		}
+		return "story", miniDialogue(state, "神公", "先别敷衍。把心定住，再决定要不要掷杯筊。"), true
+	}
+	if state.Flags["oracle_sincerity_question"] {
+		return "clarify", miniDialogue(state, "神公", "先回答红烛火苗的问题，再决定是否掷杯筊。"), true
+	}
 	if miniContinue(text) || miniHasAny(text, "跟神公回房", "跟着灯回房") {
 		switch state.ShotKey {
 		case "oracle_cast":
@@ -46,8 +83,19 @@ func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
 			roll = e.storyRoll()
 		}
 		threshold := 70
-		if state.Flags["meal_player_ate"] {
+		if state.Flags["oracle_sincerity_judged"] {
+			threshold = 20 + state.Devotion/2 + state.OracleSincerityScore/4
+			if state.Flags["meal_player_ate"] {
+				threshold -= 20
+			}
+		} else if state.Flags["meal_player_ate"] {
 			threshold = 35
+		}
+		if threshold < 10 {
+			threshold = 10
+		}
+		if threshold > 90 {
+			threshold = 90
 		}
 		if roll < threshold {
 			miniSetFlag(state, "cup_roll_sacred")
@@ -62,8 +110,9 @@ func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
 	}
 	if miniHasAny(text, "求神公", "救我", "带我回房", "我想回自己的房间", "确认求回门房") {
 		miniSetFlag(state, "oracle_question")
+		miniSetFlag(state, "oracle_sincerity_question")
 		miniShot(state, "oracle_question")
-		return "story", miniDialogue(state, "神公", "我听清了，你只求回自己的房间。封条已经解开；把这一问定住，再把杯筊掷下去。"), true
+		return "story", miniDialogue(state, "神公", "我听清了，你只求回自己的房间。先回答我：红烛的火苗晃动是有风嘛？还是因为施主拿得不稳呢？"), true
 	}
 	return e.storyConversation(state, text)
 }

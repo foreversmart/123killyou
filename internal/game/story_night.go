@@ -8,7 +8,7 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 		miniSetFlag(state, "red_candle_held")
 		miniShot(state, "corridor_candles")
 		e.grantStoryItems(state, "candle")
-		return "story", miniDialogue(state, "陆沉", "火不能灭。三更以前先留在房里，红烛守住的是你自己的影子。经文在桌上，心先定下来，脚下才不会乱。"), true
+		return "story", miniDialogue(state, "陆沉", "红烛先拿稳。进房后务必点起来，红烛可以驱除邪祟；经文在桌上，心里担心害怕时就读几页，定定心神。"), true
 	}
 	if miniHasAny(text, "回房", "去我的房间", "进门房", "回自己的房", "回偏房") {
 		if !state.Flags["red_candle_held"] {

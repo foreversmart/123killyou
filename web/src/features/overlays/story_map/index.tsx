@@ -7,7 +7,7 @@ export function StoryMap({ state }: { state: GameState }) {
   const east = /room|wake|knocks|double|dawn_trap|corridor|listen/.test(key);
   return (
     <PaperPanel className={styles.map}>
-      <small>灯影寺 · 你走过的院落</small>
+      <small>红烛寺 · 你走过的院落</small>
       <h2>循着灯线认路</h2>
       <div className={styles.drawing}>
         <div className={styles.hall} data-current={key === 'mini_oracle'}>
@@ -48,7 +48,7 @@ export function StoryMap({ state }: { state: GameState }) {
         </div>
         <div className={styles.path} />
         <div className={styles.gate} data-current={/arrival|dawn$|ending/.test(key)}>
-          灯影寺山门<span>大巴停靠处</span>
+          红烛寺山门<span>大巴停靠处</span>
         </div>
       </div>
       <p>现在：{state.sceneName || state.roomName}</p>

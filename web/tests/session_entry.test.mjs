@@ -63,7 +63,7 @@ test('dev 拒绝旧服务和任何后续场景，不把 mini 前缀当作第一�
     storyMode: true,
     sceneKey: 'mini_arrival',
     room: 'gate',
-    sceneText: '大巴停在灯影寺山门前。',
+    sceneText: '大巴停在红烛寺山门前。',
     dialogue: { speaker: '', text: '' },
   };
   assert.equal(isOpeningState(opening), true);

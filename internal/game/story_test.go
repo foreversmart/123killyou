@@ -65,7 +65,7 @@ func TestMiniScriptCanReachDawnFromSafeChoices(t *testing.T) {
 		t.Fatalf("睡下后未进入三声锣场景: %s", state.SceneKey)
 	}
 	applyStory(t, engine, &state, "续燃红烛")
-	applyStory(t, engine, &state, "不开门并问是谁")
+	applyStory(t, engine, &state, "不开门")
 	applyStory(t, engine, &state, "跟同伴去偷听住持")
 	applyStory(t, engine, &state, "模仿猫叫")
 	applyStory(t, engine, &state, "不开门等待真正的五更")
@@ -270,7 +270,7 @@ func TestMiniScriptDawnMiscountSpeaksBeforeDanger(t *testing.T) {
 	state := engine.Initial("story-dawn-trap")
 	for _, command := range []string{
 		"登记入住", "去斋堂", "我不吃", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
-		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把钟声算作第六声",
+		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把锣声算作第六声",
 	} {
 		applyStory(t, engine, &state, command)
 	}

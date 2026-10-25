@@ -23,9 +23,9 @@ export function StoryReading({ shot }: { shot: string }) {
         {page
           ? '入住须知 · 残页'
           : permit
-            ? '灯影寺 · 外客凭据'
+            ? '红烛寺 · 外客凭据'
             : history
-              ? '灯影寺 · 游客版'
+              ? '红烛寺 · 游客版'
               : '门房案头 · 末页短偈'}
       </small>
       <h3>{page ? '夜间须知' : permit ? '通行凭' : history ? '明照旧事' : '清心静神经'}</h3>
@@ -38,7 +38,7 @@ export function StoryReading({ shot }: { shot: string }) {
       ) : permit ? (
         <>
           <p>只许去，不许问。</p>
-          <div className={styles.seal}>灯影寺</div>
+          <div className={styles.seal}>红烛寺</div>
         </>
       ) : history ? (
         <>

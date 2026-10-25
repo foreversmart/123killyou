@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { VoiceStatus } from '@/features/voice/types';
 import { cueDuration, cueSignature, storyCues } from './cues';
+import {
+  NIGHT_BACKGROUND_MUSIC,
+  NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+  shouldPlayNightBackground,
+} from './music';
 import { playStoryCue } from './synthesis';
 
 export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus) {
@@ -10,6 +15,10 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
   const played = useRef(new Set<string>());
   const finishTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const volumeNode = useRef<GainNode | null>(null);
+  const music = useRef<HTMLAudioElement | null>(null);
+  const musicTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const musicRunId = useRef('');
+  const musicStarted = useRef(false);
   const [unlocked, setUnlocked] = useState(false);
   const [busy, setBusy] = useState(false);
   useEffect(() => {
@@ -26,6 +35,7 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
       document.removeEventListener('pointerdown', unlock);
       document.removeEventListener('keydown', unlock);
       clearTimeout(finishTimer.current);
+      clearTimeout(musicTimer.current);
       sources.current.forEach((source) => {
         try {
           source.stop();
@@ -33,9 +43,73 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
           /* Already ended. */
         }
       });
+      music.current?.pause();
+      music.current = null;
       void context.current?.close();
     };
   }, []);
+
+  const nightBackgroundActive = shouldPlayNightBackground(state);
+  const nightRunId = state?.runId || '';
+  useEffect(() => {
+    if (!nightBackgroundActive) {
+      clearTimeout(musicTimer.current);
+      musicTimer.current = undefined;
+      musicStarted.current = false;
+      musicRunId.current = '';
+      if (music.current) {
+        music.current.pause();
+        music.current.currentTime = 0;
+      }
+      return;
+    }
+
+    if (musicRunId.current !== nightRunId) {
+      clearTimeout(musicTimer.current);
+      musicTimer.current = undefined;
+      musicStarted.current = false;
+      musicRunId.current = nightRunId;
+      if (music.current) {
+        music.current.pause();
+        music.current.currentTime = 0;
+      }
+    }
+
+    if (!unlocked || state?.paused) {
+      clearTimeout(musicTimer.current);
+      musicTimer.current = undefined;
+      music.current?.pause();
+      return;
+    }
+
+    if (!music.current && typeof Audio !== 'undefined') {
+      const player = new Audio(NIGHT_BACKGROUND_MUSIC);
+      player.loop = true;
+      player.preload = 'auto';
+      player.volume = 0.22;
+      music.current = player;
+    }
+    if (!music.current) return;
+
+    if (musicStarted.current) {
+      if (music.current.paused) void music.current.play().catch(() => {});
+      return;
+    }
+    if (musicTimer.current) return;
+
+    musicTimer.current = setTimeout(() => {
+      musicTimer.current = undefined;
+      if (!music.current || state?.paused) return;
+      void music.current.play().then(
+        () => {
+          musicStarted.current = true;
+        },
+        () => {
+          musicStarted.current = false;
+        },
+      );
+    }, NIGHT_BACKGROUND_MUSIC_DELAY_MS);
+  }, [nightBackgroundActive, nightRunId, state?.paused, unlocked]);
   const signature = state ? cueSignature(state) : '';
   useEffect(
     () => () => {
