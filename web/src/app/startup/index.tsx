@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserCheck } from '@/features/startup/browser_check';
 import { BrowserRequirements } from '@/features/startup/browser_requirements';
+import { VoiceSetup } from '@/features/startup/voice_setup';
 import type { HtmlCanvasSupport } from '@/shared/lib/htmlCanvas';
 import { LoadingScreen } from '@/shared/ui/loading_screen';
 
@@ -8,6 +9,7 @@ const Game = lazy(() => import('@/app/game'));
 
 export default function Startup() {
   const [support, setSupport] = useState<HtmlCanvasSupport | null>(null);
+  const [voiceReady, setVoiceReady] = useState(false);
 
   useEffect(() => {
     // Retry blocked startup on return; a passed check must not restart an active game.
@@ -21,10 +23,11 @@ export default function Startup() {
 
   if (!support) return <BrowserCheck onComplete={setSupport} />;
   if (!support.supported) return <BrowserRequirements support={support} />;
+  if (!voiceReady) return <VoiceSetup onComplete={() => setVoiceReady(true)} />;
 
   return (
     <Suspense fallback={<LoadingScreen error="" />}>
-      <Game />
+      <Game voiceReady={voiceReady} />
     </Suspense>
   );
 }
