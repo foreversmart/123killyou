@@ -72,7 +72,7 @@ func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text strin
 		if intent, speak, ok := e.system(state, text); ok {
 			return intent, speak
 		}
-		if intent, speak, ok := e.story(state, text); ok {
+		if intent, speak, ok := e.story(state, text, decision); ok {
 			return intent, speak
 		}
 	}
