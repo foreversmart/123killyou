@@ -79,6 +79,26 @@ func TestSilentRefectoryHandoffDefaultsToVegetarianMeal(t *testing.T) {
 	}
 }
 
+func TestAutomaticMealClosurePreservesExplicitPorridgeChoice(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("auto-meal-choice")
+	e.Apply(&s, "登记入住")
+	e.Apply(&s, "去斋堂")
+	e.Apply(&s, "我吃粥")
+	if !s.Flags["meal_player_ate"] {
+		t.Fatalf("明确吃粥没有记录: %v", s.Flags)
+	}
+	e.Apply(&s, "继续听")
+	advanceScriptedLines(t, e, &s)
+	if s.DialogueNext != "自动结束晚膳" {
+		t.Fatalf("斋堂安全对白没有进入自动收束: %q", s.DialogueNext)
+	}
+	e.Apply(&s, s.DialogueNext)
+	if !s.Flags["meal_player_ate"] || !s.Flags["skin_double_present"] || s.Flags["meal_player_deferred"] {
+		t.Fatalf("自动收束覆盖了明确吃粥选择: %v", s.Flags)
+	}
+}
+
 func TestPlayerInvestigationCancelsPendingSafeHandoff(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("auto-cancel")

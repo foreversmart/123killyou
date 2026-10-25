@@ -32,7 +32,7 @@ export function sceneChoices(state: GameState): StoryChoice[] {
           state.flags.red_candle_lit ? '看烛芯' : '点燃红烛',
         ),
         c('翻翻寺史', '查看寺庙历史'),
-        c('读一遍桌上的经书', '阅读清心静神经'),
+        c('读一遍桌上的经书', '阅读大念处经'),
         c('躺下歇一会儿', '睡下'),
       ];
     case 'mini_wake_three_gongs':
@@ -75,14 +75,14 @@ export function sceneChoices(state: GameState): StoryChoice[] {
         ];
       if (state.flags.double_refused_candle || shot === 'double_exit')
         return [
-          c('朗读经书中的四句', '朗读清心静神经'),
+          c('朗读经书中的四句', '朗读大念处经'),
           c('我不跟出去，把门关上', '关上房门不跟出去'),
           c('我跟他出去看一眼', '跟出去', 'quiet'),
         ];
       return [
         c('拒绝吹灭红烛', '我不吹灭红烛'),
         c('吹灭红烛', '吹灭红烛', 'quiet'),
-        c('先念起清心偈', '朗读清心静神经'),
+        c('先念起大念处经', '朗读大念处经'),
       ];
     case 'mini_dawn_trap':
       return [

@@ -15,7 +15,7 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 			return "blocked", miniDialogue(state, "陆沉", "你的红烛还在这里。拿稳，再回自己的房间。"), true
 		}
 		e.setMiniScene(state, "mini_room")
-		return "move", miniObserve(state, "门闩扣紧。矮桌上摊着寺史册和薄蓝经书，未点燃的红烛立在桌角，窗外回廊渐暗。"), true
+		return "move", miniObserve(state, "门闩扣紧。矮桌上摊着寺史册和《大念处经》，未点燃的红烛立在桌角，窗外回廊渐暗。"), true
 	}
 	if miniHasAny(text, "看看房牌", "看偏房", "看走廊", "观察回廊") {
 		miniSetFlag(state, "corridor_seen")
@@ -39,11 +39,11 @@ func (e *Engine) storyRoom(state *State, text string) (string, string, bool) {
 		miniClue(state, "游客版寺史写着顾怀山七年前圆寂成佛，但验身一栏被撕掉")
 		return "inspect", miniObserve(state, "游客寺史册摊在‘七年前方丈顾怀山于方丈室圆寂，灯灭即成佛’一页。‘验身’一栏只剩一排整齐的纸齿。"), true
 	}
-	if miniHasAny(text, "读经", "看经文", "清心静神", "翻开经书", "朗读经文") {
+	if miniHasAny(text, "读经", "看经文", "大念处经", "翻开经书", "朗读经文") {
 		miniSetFlag(state, "mind_script_learned")
 		miniShot(state, "room_scripture")
-		miniClue(state, "清心静神经末页：心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后")
-		return "inspect", miniObserve(state, "薄蓝经书翻到末页。烛光照着四句短偈：心不逐声，眼不随影；一念既起，归于清明；灯在我前，门在我后。"), true
+		miniClue(state, "大念处经末页：观身如身、观受如受、观心如心、观法如法")
+		return "inspect", miniObserve(state, "《大念处经》翻到末页。烛光照着四句经文：观身如身、观受如受、观心如心、观法如法。"), true
 	}
 	if miniHasAny(text, "观察窗外", "看看窗外") {
 		miniShot(state, "room_window")

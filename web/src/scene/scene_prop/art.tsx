@@ -28,7 +28,7 @@ export function PropArt({
           <path d="M27 18l8 58" stroke="#c4bca0" strokeWidth="2" strokeDasharray="3 4" />
           <rect x="46" y="24" width="35" height="40" fill="#dfd1aa" transform="rotate(-7 62 44)" />
           <text x="64" y="48" fontSize="11" textAnchor="middle" fill="#4d554a">
-            {name.includes('经') ? '清心经' : name.includes('史') ? '寺史' : '登记簿'}
+            {name.includes('经') ? '大念处经' : name.includes('史') ? '寺史' : '登记簿'}
           </text>
         </>
       )}

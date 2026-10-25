@@ -2,7 +2,7 @@ package game
 
 import "fmt"
 
-var miniScripture = []string{"心不逐声，眼不随影。", "一念既起，归于清明。", "灯在我前。", "门在我后。"}
+var miniScripture = []string{"观身如身。", "观受如受。", "观心如心。", "观法如法。"}
 
 func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 	if state.Flags["double_calm"] && (miniContinue(text) || miniHasAny(text, "睡下", "闭眼")) {
@@ -23,7 +23,7 @@ func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 		intent, speak := e.storyDeath(state, "红烛熄灭。熟悉的脸在黑暗里贴近，门闩在耳边断裂。")
 		return intent, speak, true
 	}
-	if miniHasAny(text, "朗读清心", "念清心", "读清心", "朗读经文", "继续念经", "心不逐声", "一念既起", "灯在我前", "门在我后") {
+	if miniHasAny(text, "朗读大念处", "念大念处", "读大念处", "朗读经文", "继续念经", "观身如身", "观受如受", "观心如心", "观法如法") {
 		if !state.Flags["mind_script_learned"] {
 			miniSetFlag(state, "double_frenzy")
 			miniShot(state, "double_frenzy")
@@ -39,7 +39,7 @@ func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 					miniSetFlag(state, "double_calm")
 					state.DialogueNext = "继续听"
 				}
-				return "story", miniDialogue(state, "你", line), true
+				return "story", miniDialogue(state, "赵熙", line), true
 			}
 		}
 		return "story", miniObserve(state, "同行人伏在床脚，红烛仍亮着，抓挠声没有再响。"), true

@@ -59,7 +59,7 @@ func TestMiniScriptCanReachDawnFromSafeChoices(t *testing.T) {
 	applyStory(t, engine, &state, "拿红烛")
 	applyStory(t, engine, &state, "回自己的房间")
 	applyStory(t, engine, &state, "点燃红烛")
-	applyStory(t, engine, &state, "阅读清心静神经")
+	applyStory(t, engine, &state, "阅读大念处经")
 	applyStory(t, engine, &state, "睡下")
 	if state.SceneKey != "mini_wake_three_gongs" {
 		t.Fatalf("睡下后未进入三声锣场景: %s", state.SceneKey)
@@ -139,7 +139,7 @@ func TestMiniScriptSkinDoubleCanBeCalmedByTheReadScripture(t *testing.T) {
 		"拿红烛",
 		"回房",
 		"点燃红烛",
-		"阅读清心静神经",
+		"阅读大念处经",
 		"睡下",
 		"续燃红烛",
 		"不开门",
@@ -152,11 +152,11 @@ func TestMiniScriptSkinDoubleCanBeCalmedByTheReadScripture(t *testing.T) {
 		t.Fatalf("吃粥后没有进入换皮同伴分支: scene=%s flags=%v", state.SceneKey, state.Flags)
 	}
 	applyStory(t, engine, &state, "我不吹灭红烛")
-	for _, command := range []string{"朗读清心静神经", "继续念经", "继续念经", "继续念经", "继续听", "继续听"} {
+	for _, command := range []string{"朗读大念处经", "继续念经", "继续念经", "继续念经", "继续听", "继续听"} {
 		applyStory(t, engine, &state, command)
 	}
 	if state.SceneKey != "mini_dawn_trap" || !state.Flags["double_calm"] {
-		t.Fatalf("清心偈没有安抚换皮同伴: scene=%s flags=%v", state.SceneKey, state.Flags)
+		t.Fatalf("大念处经没有安抚换皮同伴: scene=%s flags=%v", state.SceneKey, state.Flags)
 	}
 }
 
@@ -184,7 +184,7 @@ func TestMiniScriptKeepsSceneActorsWithoutNarratingCandleAction(t *testing.T) {
 func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival")
-	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "你·心声"} {
+	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "赵熙·心声"} {
 		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听", 5: "继续听", 6: "继续听"}
 		intent, _ := engine.Apply(&state, commands[index])
 		if intent != "story" || state.Dialogue.Speaker != want {

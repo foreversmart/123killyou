@@ -50,7 +50,7 @@ func TestStoryUnmatchedSpeechUsesFreshNPCResponseAndRecentContext(t *testing.T) 
 	if len(events) < 3 || events[0].Speaker != "林岚" || events[1].Text != provider.text || !result.HasAudio {
 		t.Fatal("生成后的回答没有以角色自己的声音播出")
 	}
-	if !reflect.DeepEqual(result.State.Flags, before.Flags) || result.State.SceneKey != before.SceneKey || result.State.ShotKey != before.ShotKey || result.State.Devotion != before.Devotion || result.State.DialogueNext != "" {
+	if !reflect.DeepEqual(result.State.Flags, before.Flags) || result.State.SceneKey != before.SceneKey || result.State.ShotKey != before.ShotKey || result.State.Devotion != before.Devotion || result.State.DialogueNext != before.DialogueNext {
 		t.Fatal("闲聊推进了故事")
 	}
 	provider.text = "我没听懂你说的那个词。你是想问相机吗？"

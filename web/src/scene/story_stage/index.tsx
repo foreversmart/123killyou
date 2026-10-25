@@ -177,13 +177,11 @@ export function StoryStage({
       )}
       {state.shotKey?.startsWith('double_scripture_') && (
         <div className={styles.scripture} aria-label="念诵进度">
-          {['心不逐声，眼不随影', '一念既起，归于清明', '灯在我前', '门在我后'].map(
-            (line, index) => (
-              <span key={line} data-read={index < Number(state.shotKey?.split('_').at(-1))}>
-                {line}
-              </span>
-            ),
-          )}
+          {['观身如身', '观受如受', '观心如心', '观法如法'].map((line, index) => (
+            <span key={line} data-read={index < Number(state.shotKey?.split('_').at(-1))}>
+              {line}
+            </span>
+          ))}
         </div>
       )}
       {state.sceneKey === 'mini_death' && <DeathFeedback state={state} />}

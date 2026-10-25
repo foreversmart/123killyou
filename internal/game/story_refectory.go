@@ -36,17 +36,23 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 					miniChooseMeal(state, person, "refused")
 				}
 				miniSetFlag(state, "meal_default_refused")
+				state.Flags["meal_all_ate"] = false
+				state.Flags["skin_double_present"] = false
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
 				return "story", miniDialogue(state, "许栀", "大家都决定不吃肉粥，那就先吃馒头和素菜。碗勺声先响起来，等想清楚了再说。"), true
 			}
 			if anyAte {
+				state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
+				state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
 				return "story", miniDialogue(state, "许栀", "有人想吃就慢慢吃，不吃肉粥的就夹些馒头和素菜。大家都照自己的选择来。"), true
 			}
+			state.Flags["meal_all_ate"] = false
+			state.Flags["skin_double_present"] = false
 			miniShot(state, "refectory_table")
 			miniSetFlag(state, "refectory_eating_shown")
 			state.DialogueNext = "自动离开斋堂"
@@ -60,10 +66,17 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 			}
 		}
 		miniSetFlag(state, "meal_done")
-		state.Flags["meal_all_ate"] = false
-		state.Flags["skin_double_present"] = false
+		// Automatic closure only settles people who have not answered. Preserve
+		// explicit meal choices so eating the porridge still controls the later
+		// double route, even when the player asks an unrelated question first.
+		state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
+		state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 		e.setMiniScene(state, "mini_corridor_candle")
-		return "move", miniDialogue(state, "陆沉", "先用馒头、咸菜和本地素菜垫一垫。晚膳收了跟我回东院，每人领一支红烛。"), true
+		transition := "先用馒头、咸菜和本地素菜垫一垫。晚膳收了跟我回东院，每人领一支红烛。"
+		if state.Flags["meal_player_ate"] || state.Flags["meal_linlan_ate"] || state.Flags["meal_zhouyan_ate"] || state.Flags["meal_xuzhi_ate"] {
+			transition = "晚膳收了，各位按自己的选择收好碗。跟我回东院，每人领一支红烛。"
+		}
+		return "move", miniDialogue(state, "陆沉", transition), true
 	}
 	if miniHasAny(text, "吃不吃粥", "要不要吃粥") {
 		for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {

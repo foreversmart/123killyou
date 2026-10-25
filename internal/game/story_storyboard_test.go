@@ -36,14 +36,14 @@ func storyAtListen(t *testing.T, meat bool) (*Engine, State) {
 	} else {
 		e.Apply(&s, "劝大家不要吃粥")
 	}
-	storyCommands(e, &s, "吃完晚膳", "拿红烛", "回房", "点燃红烛", "阅读清心静神经", "睡下", "续燃红烛", "不开门", "跟同伴去偷听")
+	storyCommands(e, &s, "吃完晚膳", "拿红烛", "回房", "点燃红烛", "阅读大念处经", "睡下", "续燃红烛", "不开门", "跟同伴去偷听")
 	return e, s
 }
 
 func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("staged")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "你·心声"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "赵熙·心声"}) {
 		t.Fatalf("山门说话者: %v", got)
 	}
 	e.Apply(&s, "登记入住")
@@ -82,6 +82,31 @@ func TestStoryboardDoorSourcesAreNotVisibleOrProvenByNarration(t *testing.T) {
 				t.Fatalf("%s提前显示了门外人物: %+v", scene, actor)
 			}
 		}
+	}
+}
+
+func TestThreeKnocksCompanionsCallZhaoXiWithTheirOwnWarning(t *testing.T) {
+	for _, tt := range []struct {
+		id, want string
+	}{
+		{"linlan", "喂，赵熙还在吗？我刚从窗缝看见住持进了周砚的房，那边好像有人在挪东西。"},
+		{"zhouyan", "喂，赵熙，你还在吗？我刚看见慧普进了许栀的房，她的门响了一下，你听见了吗？"},
+		{"xuzhi", "喂，赵熙，你还醒着吗？我有点害怕。我刚听见了外面有拖动的声音，像是重物拖过地板，你听见了吗？要不要跟我来看一下？"},
+	} {
+		t.Run(tt.id, func(t *testing.T) {
+			e := newStoryTestEngine(t)
+			s := e.Initial("three-knocks-dialogue")
+			for _, id := range []string{"linlan", "zhouyan", "xuzhi"} {
+				if id != tt.id {
+					s.Flags["meal_"+id+"_ate"] = true
+				}
+			}
+			e.setMiniScene(&s, "mini_three_knocks")
+			intent, speak := e.Apply(&s, "继续听")
+			if intent != "story" || speak != tt.want || s.Dialogue.Text != tt.want {
+				t.Fatalf("三敲同行台词不匹配: intent=%s speak=%q dialogue=%+v", intent, speak, s.Dialogue)
+			}
+		})
 	}
 }
 
@@ -140,7 +165,7 @@ func TestStoryboardFourScriptureLinesCannotBeSkippedAndReplayIsHarmless(t *testi
 	if s.Dialogue.Speaker != miniDoubleName(&s) || s.DialogueNext != "" {
 		t.Fatal("假同伴没有用模仿者身份提灭烛要求")
 	}
-	e.Apply(&s, "朗读清心静神经")
+	e.Apply(&s, "朗读大念处经")
 	if s.Flags["double_calm"] {
 		t.Fatal("一句输入跳过了四句经文")
 	}

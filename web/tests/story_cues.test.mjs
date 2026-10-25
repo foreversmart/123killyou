@@ -292,7 +292,7 @@ test('七名角色与旁白各有明确且不同的云端声线，内心独白�
       ),
     ),
   );
-  assert.equal(profiles[0].name, '你·心声');
+  assert.equal(profiles[0].name, '赵熙·心声');
   assert.ok(profiles[0].aliases.includes('内心独白'));
   assert.deepEqual(
     profiles.slice(0, 7).map((profile) => profile.id),
