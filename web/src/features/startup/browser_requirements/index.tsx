@@ -28,7 +28,7 @@ export function BrowserRequirements({ support }: { support: HtmlCanvasSupport })
         <header className={styles['card-header']}>
           <span className={styles['wordmark']}>
             <Icon kind="seal" />
-            第一夜
+            红烛无声
           </span>
           <span className={styles['status-badge']}>画面能力检测未通过</span>
         </header>
@@ -109,7 +109,7 @@ export function BrowserRequirements({ support }: { support: HtmlCanvasSupport })
             )}
           </details>
         </div>
-        <footer className={styles['card-footer']}>固定视角 · 全程语音 · 第一夜</footer>
+        <footer className={styles['card-footer']}>固定视角 · 全程语音 · 红烛无声</footer>
       </section>
     </main>
   );

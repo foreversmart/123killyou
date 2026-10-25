@@ -5,35 +5,6 @@
   pointer-events: none;
 }
 
-.heading {
-  position: absolute;
-  top: 5%;
-  left: 4%;
-  padding-left: 1cqw;
-  color: #324b3a;
-  border-left: 0.18cqw solid #6c7c4c;
-  text-shadow: 0 1px 0 #fff6;
-}
-
-.heading > span {
-  font-size: clamp(10px, 0.7cqw, 13px);
-  letter-spacing: 0.15cqw;
-}
-
-.heading h2 {
-  margin: 0.4cqw 0;
-  font-family: 'Songti SC', 'STSong', serif;
-  font-size: clamp(15px, 1.35cqw, 24px);
-  font-weight: 600;
-  letter-spacing: 0.1cqw;
-}
-
-.heading p {
-  margin: 0;
-  font-size: clamp(9px, 0.7cqw, 13px);
-  letter-spacing: 0.04cqw;
-}
-
 .hotspot {
   position: absolute;
   left: 48%;

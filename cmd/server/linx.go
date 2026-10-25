@@ -34,6 +34,7 @@ func prepareLinx(catalog *content.Catalog) (session.DialogueProvider, error) {
 		return nil, fmt.Errorf("灵矽角色音色校验失败: %w", err)
 	}
 	roles := make(map[string]string, len(voices))
+	// Sync prompts and runtime settings, while preserving existing console voices.
 	for _, npc := range catalog.NPCs() {
 		agentID, err := client.EnsureAgent(ctx, linx.AgentSpec{
 			Name: "1024-" + npc.ID, AssistantName: npc.Name, VoiceID: npc.Voice.ProviderVoiceID,

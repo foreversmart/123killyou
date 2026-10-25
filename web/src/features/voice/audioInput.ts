@@ -2,7 +2,6 @@ export function attachAudioInput(
   context: AudioContext,
   stream: MediaStream,
   ambient: GainNode | null,
-  soundOn: boolean,
 ) {
   const analyser = context.createAnalyser();
   analyser.fftSize = 256;
@@ -19,7 +18,7 @@ export function attachAudioInput(
     filter.type = 'lowpass';
     filter.frequency.value = 260;
     ambient = context.createGain();
-    ambient.gain.value = soundOn ? 0.018 : 0;
+    ambient.gain.value = 0.018;
     source.connect(filter).connect(ambient).connect(context.destination);
     source.start();
   }

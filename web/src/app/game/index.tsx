@@ -37,7 +37,7 @@ export default function Game() {
   if (!state) return <LoadingScreen error={error} />;
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
-      <section className={styles['game-shell']} aria-label="第一夜，语音密室逃脱">
+      <section className={styles['game-shell']} aria-label="红烛无声，语音密室逃脱">
         <PlayerStatus
           state={state}
           demo={demo}
@@ -46,7 +46,7 @@ export default function Game() {
           connected={connected}
         />
         <Room state={state} phase={roomPhase} onAction={voice.submit} interactive={connected}>
-          <Overlays state={state} soundOn={voice.soundOn} />
+          <Overlays state={state} />
           {opening && <StartChoices busy={selecting} onBegin={begin} onResume={resume} />}
           {showNotice && <ActionNotice text={notice} />}
         </Room>

@@ -4,7 +4,7 @@ import type { VoiceStatus } from '@/features/voice/types';
 import { cueDuration, cueSignature, storyCues } from './cues';
 import { playStoryCue } from './synthesis';
 
-export function useStorySound(state: GameState | null, soundOn: boolean, voiceStatus: VoiceStatus) {
+export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus) {
   const context = useRef<AudioContext | null>(null);
   const sources = useRef<AudioScheduledSourceNode[]>([]);
   const played = useRef(new Set<string>());
@@ -54,7 +54,7 @@ export function useStorySound(state: GameState | null, soundOn: boolean, voiceSt
     [signature],
   );
   useEffect(() => {
-    if (!soundOn || state?.paused) {
+    if (state?.paused) {
       clearTimeout(finishTimer.current);
       volumeNode.current?.disconnect();
       sources.current.forEach((source) => {
@@ -104,6 +104,6 @@ export function useStorySound(state: GameState | null, soundOn: boolean, voiceSt
       setBusy(false);
       volume.disconnect();
     }, duration * 1000);
-  }, [signature, soundOn, unlocked, state?.paused, voiceStatus]);
+  }, [signature, unlocked, state?.paused, voiceStatus]);
   return busy;
 }

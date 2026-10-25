@@ -36,9 +36,7 @@ export function useStoryPlayback(
     const key = `${state.id}:${state.runId}:${state.revision}:${next}`;
     if (submitted.current === key) return;
     const delay =
-      AUTOMATIC_SAFE_ACTIONS.has(next) ||
-      next.startsWith('自动') ||
-      !(voice.soundOn && voice.playbackOn)
+      AUTOMATIC_SAFE_ACTIONS.has(next) || next.startsWith('自动') || !voice.playbackOn
         ? SILENT_ADVANCE_DELAY_MS
         : next === '继续念经'
           ? SCRIPTURE_ADVANCE_DELAY_MS
@@ -60,7 +58,6 @@ export function useStoryPlayback(
     voice.status,
     voice.playbackProblem,
     voice.playbackOn,
-    voice.soundOn,
     voice.submit,
   ]);
 }

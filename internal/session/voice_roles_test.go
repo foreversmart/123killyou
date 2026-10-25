@@ -39,6 +39,7 @@ func TestSystemNarrationAndRuleAuthoredNPCLinesUseTheirOwnRoles(t *testing.T) {
 		{"把红烛给守夜人", "", "keeper"},
 		{"把铜钥匙给守夜人", "", "keeper"},
 		{"重新开始", "", ""},
+		{"重置进度", "系统设置", ""},
 	} {
 		t.Run(test.text, func(t *testing.T) {
 			p := &roleProvider{}

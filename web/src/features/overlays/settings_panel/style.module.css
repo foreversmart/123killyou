@@ -1,23 +1,21 @@
 .settings-sheet {
   width: 55%;
 }
-.sound-setting {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.reset-setting {
   border-top: 1px solid #8d77534d;
   border-bottom: 1px solid #8d77534d;
   padding: 1.2cqw 0;
   margin-top: 1.5cqw;
   font-size: 1.35cqw;
 }
-.sound-setting strong {
-  font-size: 1.1cqw;
+.reset-setting h3 {
+  margin: 0;
+  font-size: 1.35cqw;
   font-weight: 400;
-  color: #756138;
 }
-
-.settings-sheet > p:not([data-paper-instruction]) {
+.reset-setting p {
+  margin: 0.55cqw 0 0;
+  color: #62543c;
   font-size: 1.15cqw;
   line-height: 2;
 }
