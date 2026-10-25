@@ -9,6 +9,8 @@ import { OracleArt } from '@/scene/story_art/oracle';
 import { DawnGateArt, DepartureArt } from '@/scene/story_art/departure';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
+import { AuthoredScene } from '@/scene/authored_scene';
+import { authoredScene } from '@/scene/authored_scene/scenes';
 
 const descriptions: Record<string, string> = {
   mini_register:
@@ -35,6 +37,8 @@ const descriptions: Record<string, string> = {
 
 export function StoryArt({ state }: { state: GameState }) {
   const id = useId().replaceAll(':', '');
+  const authored = authoredScene(state);
+  if (authored) return <AuthoredScene composition={authored} />;
   const key = state.sceneKey || '';
   const shot = state.shotKey || '';
   const environment = () => {

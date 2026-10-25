@@ -1,0 +1,15 @@
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #14272c;
+}
+.scene svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.scene image {
+  display: block;
+}
