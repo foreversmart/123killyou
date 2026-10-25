@@ -87,8 +87,8 @@ export function sceneChoices(state: GameState): StoryChoice[] {
     case 'mini_dawn_trap':
       return [
         c('留在房内等待', '不开门等待真正的五更'),
-        c('把刚才那段声音再听一遍', '重听五更和钟声'),
-        c('将末尾钟声算作第六声', '把钟声算作第六声', 'quiet'),
+        c('把刚才那段声音再听一遍', '重听五更和锣声'),
+        c('将末尾锣声算作第六声', '把锣声算作第六声', 'quiet'),
         c('打开房门', '开门', 'quiet'),
       ];
     case 'mini_dawn':

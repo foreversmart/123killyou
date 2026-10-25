@@ -35,7 +35,7 @@ func (e *Engine) StartMiniStory(state *State) {
 	state.StoryMode = true
 	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
-	miniObserve(state, "阳光从车窗斜进来，大巴停在红烛寺山门前。车门打开，鸟鸣穿过树叶，登记桌就在檐下。")
+	miniObserve(state, "大巴停稳后，你走下车站到山门前。鸟鸣穿过树叶，陆沉从门内迎来，四只小旅行包已经放在檐下靠墙处。")
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
@@ -65,6 +65,17 @@ func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text strin
 	}
 	state.DialogueNext = ""
 	text = Normalize(text)
+	// Four knocks are a special sound-only danger scene. Once global controls
+	// have been handled, every remaining utterance must be judged by the scene
+	// itself so the generic action clarifier cannot invent a system reply.
+	if state.StoryMode && state.SceneKey == "mini_four_knocks" {
+		if intent, speak, ok := e.system(state, text); ok {
+			return intent, speak
+		}
+		if intent, speak, ok := e.story(state, text, decision); ok {
+			return intent, speak
+		}
+	}
 	if message, clarify := ActionClarification(text); clarify {
 		return "clarify", feedback(state, message)
 	}

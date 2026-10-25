@@ -218,17 +218,17 @@
       }
     },
     "bread": {
-      "path": "../../props/flatbread/scene.png",
+      "path": "../../props/steamed_buns/scene.png",
       "width": 1254,
       "height": 1254,
       "hasAlpha": true,
-      "bytes": 1372374,
-      "sha256": "fd6021a89f3e007d545dc0b0205d72de388718306a563e41681bcf3804509629",
+      "bytes": 1704617,
+      "sha256": "edb624c861df3b2bb75c69db1dcc773297dec4fa470bec17f79860bc37c6f85e",
       "sourceFrame": {
-        "x": 50,
-        "y": 292,
-        "width": 1155,
-        "height": 722
+        "x": 26,
+        "y": 229,
+        "width": 1208,
+        "height": 920
       }
     },
     "water": {
@@ -272,6 +272,48 @@
         "width": 1189,
         "height": 1167
       }
+    },
+    "lu_chen": {
+      "path": "../../characters/lu_chen/standing_reception.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1693254,
+      "sha256": "57762bf29688d2682f24bd4e9cb3fedeb03305d5404ff02e8cbd7a56af4f6392",
+      "sourceFrame": {
+        "x": 230,
+        "y": 11,
+        "width": 607,
+        "height": 1516
+      }
+    },
+    "pickles": {
+      "path": "../../props/pickled_vegetables/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1473763,
+      "sha256": "683f841621400de39a2ad774a94f26f8c8963c987dbe74e4c481216983780c3c",
+      "sourceFrame": {
+        "x": 41,
+        "y": 292,
+        "width": 1178,
+        "height": 749
+      }
+    },
+    "local_vegetables": {
+      "path": "../../props/mushroom_greens/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1484363,
+      "sha256": "5004237b849d132466f2defbdafda23f90b3a95aa470f8e68527958bf9f7cf1c",
+      "sourceFrame": {
+        "x": 35,
+        "y": 284,
+        "width": 1188,
+        "height": 773
+      }
     }
   },
   "layers": [
@@ -290,10 +332,10 @@
       "id": "lin_lan",
       "sprite": "lin_lan",
       "rect": {
-        "x": 416.832,
-        "y": 232,
-        "width": 376.335,
-        "height": 575
+        "x": 352.921,
+        "y": 270,
+        "width": 314.158,
+        "height": 480
       },
       "zIndex": 10,
       "scaleMode": "uniform",
@@ -306,10 +348,10 @@
       "id": "zhou_yan",
       "sprite": "zhou_yan",
       "rect": {
-        "x": 634.093,
-        "y": 232,
-        "width": 391.814,
-        "height": 575
+        "x": 636.46,
+        "y": 270,
+        "width": 327.08,
+        "height": 480
       },
       "zIndex": 10,
       "scaleMode": "uniform",
@@ -322,10 +364,10 @@
       "id": "xu_zhi",
       "sprite": "xu_zhi",
       "rect": {
-        "x": 897.236,
-        "y": 232,
-        "width": 365.528,
-        "height": 575
+        "x": 932.432,
+        "y": 270,
+        "width": 305.136,
+        "height": 480
       },
       "zIndex": 10,
       "scaleMode": "uniform",
@@ -477,17 +519,6 @@
       }
     },
     {
-      "id": "bread",
-      "sprite": "bread",
-      "rect": {
-        "x": 1220,
-        "y": 680,
-        "width": 171,
-        "height": 110
-      },
-      "zIndex": 31
-    },
-    {
       "id": "water",
       "sprite": "water",
       "rect": {
@@ -519,6 +550,55 @@
         "height": 125
       },
       "zIndex": 32
+    },
+    {
+      "id": "lu_chen",
+      "sprite": "lu_chen",
+      "rect": {
+        "x": 1370.106,
+        "y": 200,
+        "width": 200.198,
+        "height": 500
+      },
+      "zIndex": 16,
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "bread",
+      "sprite": "bread",
+      "rect": {
+        "x": 90,
+        "y": 665,
+        "width": 155,
+        "height": 118.04635761589404
+      },
+      "zIndex": 34
+    },
+    {
+      "id": "pickles",
+      "sprite": "pickles",
+      "rect": {
+        "x": 440,
+        "y": 680,
+        "width": 85,
+        "height": 54.044991511035654
+      },
+      "zIndex": 34
+    },
+    {
+      "id": "local_vegetables",
+      "sprite": "local_vegetables",
+      "rect": {
+        "x": 1210,
+        "y": 666,
+        "width": 160,
+        "height": 104.10774410774411
+      },
+      "zIndex": 34
     }
   ],
   "labels": [
@@ -574,6 +654,7 @@
   "notes": [
     "四只碗分别绑定四人的meal_choices；拒绝或暂缓仍显示满碗，吃后才切食用后状态，不从一人的选择推断全员。",
     "前景桌遮住人物下半身；帘后存在图是含布纹的局部替换层，只放入原帘的左侧板内。",
-    "调查肉纤维改用bowl_inspect.png近景，不将调查近景叠在另一个完整碗上。"
+    "调查肉纤维改用bowl_inspect.png近景，不将调查近景叠在另一个完整碗上。",
+    "三位同伴按后方三把椅子的中心分开坐，陆沉在右侧帘外解释供食；登记接待站姿只用作平静回应，不以缺席人物的声音替代可见站位。"
   ]
 }

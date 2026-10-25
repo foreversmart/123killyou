@@ -59,23 +59,6 @@
   pointer-events: none;
   filter: drop-shadow(0 0.3cqw 0.3cqw #130f0d88);
 }
-.registrationTags {
-  position: absolute;
-  z-index: 5;
-  top: 17.6%;
-  left: 67.1%;
-  display: grid;
-  grid-template-columns: repeat(4, 2.4%);
-  column-gap: 1.43%;
-  width: 12.7%;
-  height: 12%;
-  pointer-events: none;
-  color: #483420;
-  font-family: 'Songti SC', 'STSong', serif;
-  font-size: clamp(9px, 1.1cqw, 18px);
-  text-align: center;
-  align-items: center;
-}
 .choices {
   position: absolute;
   z-index: 7;

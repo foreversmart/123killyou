@@ -245,7 +245,9 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": ["08"],
+        "storyBeats": [
+          "08"
+        ],
         "purpose": "回廊·灯房半掩"
       },
       "sourceFrame": {
@@ -269,7 +271,9 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": ["08"],
+        "storyBeats": [
+          "08"
+        ],
         "purpose": "回廊·纸房半掩"
       },
       "sourceFrame": {
@@ -277,6 +281,34 @@
         "y": 0,
         "width": 1672,
         "height": 941
+      }
+    },
+    "actor_lu_chen_offering": {
+      "path": "../../characters/lu_chen/offering_candle.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1770415,
+      "sha256": "a71dbe81a7dc430e349d0dd0c25fea6043ba56dc87d98f226e7e713dbf8285cb",
+      "sourceFrame": {
+        "x": 221,
+        "y": 5,
+        "width": 618,
+        "height": 1528
+      }
+    },
+    "actor_lu_chen_reception": {
+      "path": "../../characters/lu_chen/standing_reception.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1693254,
+      "sha256": "57762bf29688d2682f24bd4e9cb3fedeb03305d5404ff02e8cbd7a56af4f6392",
+      "sourceFrame": {
+        "x": 230,
+        "y": 11,
+        "width": 607,
+        "height": 1516
       }
     }
   },
@@ -424,10 +456,10 @@
       "id": "actor_lu_chen",
       "sprite": "actor_lu_chen",
       "rect": {
-        "x": 775.553,
-        "y": 181,
-        "width": 278.895,
-        "height": 700
+        "x": 1088,
+        "y": 221,
+        "width": 245,
+        "height": 660
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -443,10 +475,10 @@
       "id": "actor_shen_gong",
       "sprite": "actor_shen_gong",
       "rect": {
-        "x": 785.457,
-        "y": 181,
-        "width": 259.085,
-        "height": 700
+        "x": 835,
+        "y": 261,
+        "width": 220,
+        "height": 620
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -462,10 +494,10 @@
       "id": "actor_lin_lan",
       "sprite": "actor_lin_lan",
       "rect": {
-        "x": 786.534,
-        "y": 181,
-        "width": 256.932,
-        "height": 700
+        "x": 420,
+        "y": 271,
+        "width": 224,
+        "height": 610
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -481,10 +513,10 @@
       "id": "actor_zhou_yan",
       "sprite": "actor_zhou_yan",
       "rect": {
-        "x": 798.566,
-        "y": 181,
-        "width": 232.869,
-        "height": 700
+        "x": 675,
+        "y": 301,
+        "width": 192,
+        "height": 580
       },
       "zIndex": 20,
       "visibleWhen": {
@@ -500,10 +532,10 @@
       "id": "actor_xu_zhi",
       "sprite": "actor_xu_zhi",
       "rect": {
-        "x": 798.957,
-        "y": 181,
-        "width": 232.086,
-        "height": 700
+        "x": 925,
+        "y": 286,
+        "width": 202,
+        "height": 595
       },
       "zIndex": 20,
       "visibleWhen": {

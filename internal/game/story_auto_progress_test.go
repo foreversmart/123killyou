@@ -28,11 +28,11 @@ func TestSafeStorySegmentsExposeTimedNpcHandoffs(t *testing.T) {
 	}
 
 	advanceScriptedLines(t, e, &s)
-	if s.DialogueNext != "自动放好行李" || s.ShotKey != "register_luggage" {
-		t.Fatalf("登记对白后没有自动放行李: shot=%s next=%q", s.ShotKey, s.DialogueNext)
+	if s.DialogueNext != "自动放好行李" || s.ShotKey != "register_key_tags" {
+		t.Fatalf("登记对白后没有完成钥匙房牌交接: shot=%s next=%q", s.ShotKey, s.DialogueNext)
 	}
 	e.Apply(&s, s.DialogueNext)
-	if s.DialogueNext != "自动去斋堂" || !s.Flags["luggage_placed"] {
+	if s.DialogueNext != "自动去斋堂" || s.ShotKey != "register_luggage" || !s.Flags["luggage_placed"] {
 		t.Fatalf("放行李没有接到斋堂: next=%q flags=%v", s.DialogueNext, s.Flags)
 	}
 	e.Apply(&s, s.DialogueNext)

@@ -61,7 +61,7 @@ func (e *Engine) storyInspection(state *State, text string) (string, string, boo
 		if state.SceneKey == "mini_arrival" {
 			return "dialogue", miniDialogue(state, "陆沉", "寺里回声多。知道自己在回答什么，比回答谁更要紧。"), true
 		}
-		return "clarify", miniSystem(state, "寺内用更锣报时。可以说‘重听钟声’，再根据声源和天色判断。"), true
+		return "clarify", miniSystem(state, "寺内用更锣报时。可以说‘重听锣声’，再根据声源和天色判断。"), true
 	default:
 		return "", "", false
 	}

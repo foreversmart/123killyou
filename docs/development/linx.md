@@ -21,7 +21,7 @@
 
 1. 在根目录 `.env` 配置 `LINX_API_KEY`，其余变量可使用 `.env.example` 的默认值。
 2. 运行 `npm run dev`。
-3. 启动先通过 `GET /v1/voices` 校验配置中的初始音色 ID，再按精确名称准备 `1024-keeper`、`1024-player`、`1024-linlan`、`1024-zhouyan`、`1024-xuzhi`、`1024-huipu`、`1024-shangong` 和 `1024-narrator`，同步游戏提示词与运行参数。音色只在创建智能体时初始化，已有智能体保留灵矽后台保存的音色，重启不覆盖。
+3. 启动先通过 `GET /v1/voices` 校验配置中的初始音色 ID，再按精确名称准备 `1024-keeper`、`1024-player`、`1024-linlan`、`1024-zhouyan`、`1024-xuzhi`、`1024-huipu`、`1024-shangong` 和 `1024-narrator`，同步游戏提示词与角色名称。音色和大模型配置只在创建新智能体时使用初始值；已有智能体保留灵矽后台保存的音色、大模型及参数，重启不覆盖。
 4. 创建或读取 `.local/linx/device.json`，持久化虚拟 MAC 和 UUID v4。文件权限为 `0600`，目录被 Git 忽略；设备身份不发送到网页。
 5. 向 OTA 接口上报身份。未绑定时使用六位激活码调用管理 API 绑定到 `1024-keeper`，再重新 OTA；预注册自动绑定的设备直接使用 OTA 结果。
 6. 查询该智能体的设备列表核对绑定，保留 OTA 返回的 WebSocket URL / token 于内存。

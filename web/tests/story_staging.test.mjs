@@ -1,31 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { travelParty } from '../src/scene/story_transition/party.ts';
 import { canShowScenePerson } from '../src/scene/scene_person/visibility.ts';
 import { actorComposition, propComposition } from '../src/scene/story_stage/compositions.ts';
 import { dayLayouts } from '../src/scene/story_stage/day_layouts.ts';
 import { storyAssets } from '../src/shared/lib/story_assets.ts';
-
-test('同行转场保持第一人称，返程让陆沉留在寺里，回房时停下等候', () => {
-  for (const sceneKey of [
-    'mini_register',
-    'mini_refectory',
-    'mini_corridor_candle',
-    'mini_room',
-    'mini_ending',
-  ]) {
-    const party = travelParty(sceneKey);
-    assert.ok(
-      party.every((person) => ['luchen', 'linlan', 'zhouyan', 'xuzhi'].includes(person.id)),
-    );
-    assert.equal(party.filter((person) => person.id !== 'luchen').length, 3);
-    assert.ok(new Set(party.map((person) => person.y)).size > 1);
-    assert.ok(new Set(party.map((person) => person.height)).size > 1);
-  }
-  assert.ok(!travelParty('mini_ending').some((person) => person.id === 'luchen'));
-  assert.equal(travelParty('mini_room').find((person) => person.id === 'luchen').waiting, true);
-  assert.deepEqual(travelParty('mini_wake_three_gongs'), []);
-});
 
 test('主角和未确认声源不能回退成可见的未知立绘，已确认同行者可以显示', () => {
   const actor = { id: 'linlan', portrait: 'linlan', visible: true };

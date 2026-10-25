@@ -3,6 +3,7 @@ package game
 import (
 	"encoding/json"
 	"os"
+	"strings"
 	"testing"
 	"testing/fstest"
 
@@ -64,7 +65,7 @@ func TestMiniScriptCanReachDawnFromSafeChoices(t *testing.T) {
 		t.Fatalf("睡下后未进入三声锣场景: %s", state.SceneKey)
 	}
 	applyStory(t, engine, &state, "续燃红烛")
-	applyStory(t, engine, &state, "不开门并问是谁")
+	applyStory(t, engine, &state, "不开门")
 	applyStory(t, engine, &state, "跟同伴去偷听住持")
 	applyStory(t, engine, &state, "模仿猫叫")
 	applyStory(t, engine, &state, "不开门等待真正的五更")
@@ -195,6 +196,57 @@ func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
 	}
 }
 
+func TestMiniScriptArrivalInvitationGoesToRegistrationRoom(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-arrival-invitation")
+	var lines []string
+	for index, command := range []string{"听第一话", "继续听", "继续听", "继续听", "继续听", "继续听", "继续听"} {
+		intent, _ := engine.Apply(&state, command)
+		if intent != "story" {
+			t.Fatalf("第一话第 %d 句没有作为剧情对白返回: intent=%s", index+1, intent)
+		}
+		lines = append(lines, state.Dialogue.Text)
+	}
+	joined := strings.Join(lines, "\n")
+	for _, forbidden := range []string{"夜里听见钟声", "先数声", "从哪里来"} {
+		if strings.Contains(joined, forbidden) {
+			t.Fatalf("第一话仍包含已移除的夜间数钟提示 %q: %s", forbidden, joined)
+		}
+	}
+	if !strings.Contains(lines[5], "登记室") || !strings.Contains(lines[5], "分配房间") {
+		t.Fatalf("陆沉没有邀请队伍前往登记室并分配房间: %q", lines[5])
+	}
+}
+
+func TestMiniScriptRegistrationOnlyExplainsKeyCare(t *testing.T) {
+	engine := newStoryTestEngine(t)
+	state := engine.Initial("story-registration-dialogue")
+	engine.Apply(&state, "登记入住")
+	if state.SceneKey != "mini_register" {
+		t.Fatalf("登记入住没有进入登记室: scene=%s", state.SceneKey)
+	}
+	lines := []string{state.Dialogue.Text}
+	for index, command := range []string{"听入住对白", "继续听", "继续听", "继续听", "继续听", "继续听"} {
+		intent, _ := engine.Apply(&state, command)
+		if intent != "story" {
+			t.Fatalf("登记室对白第 %d 句没有作为剧情对白返回: intent=%s", index+1, intent)
+		}
+		lines = append(lines, state.Dialogue.Text)
+		if state.DialogueNext == "" {
+			break
+		}
+	}
+	joined := strings.Join(lines, "\n")
+	for _, forbidden := range []string{"通行凭", "只许去", "夜里认路", "晚上要是想喝水", "自己出来取"} {
+		if strings.Contains(joined, forbidden) {
+			t.Fatalf("登记室对白仍包含已移除内容 %q: %s", forbidden, joined)
+		}
+	}
+	if !strings.Contains(joined, "钥匙") || !strings.Contains(joined, "妥善保管") {
+		t.Fatalf("登记室对白没有交代钥匙保管: %s", joined)
+	}
+}
+
 func TestMiniScriptRequiresObservedAnimalCall(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-sounds")
@@ -218,7 +270,7 @@ func TestMiniScriptDawnMiscountSpeaksBeforeDanger(t *testing.T) {
 	state := engine.Initial("story-dawn-trap")
 	for _, command := range []string{
 		"登记入住", "去斋堂", "我不吃", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
-		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把钟声算作第六声",
+		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把锣声算作第六声",
 	} {
 		applyStory(t, engine, &state, command)
 	}

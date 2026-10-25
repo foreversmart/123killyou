@@ -2,39 +2,32 @@ import type { GameState } from '@/shared/types/game';
 import { StoryObservation } from '@/scene/story_observation';
 import { storyAssets } from '@/shared/lib/story_assets';
 import { SceneHeading } from '@/scene/scene_heading';
+import { AuthoredScene } from '@/scene/authored_scene';
+import { composeLayout } from '@/scene/authored_scene/compose';
+import type { AuthoredLayout } from '@/scene/authored_scene/types';
+import gateLayout from '../../../../assets/scenes/temple_gate/layout.json';
 import styles from './style.module.css';
-import artwork from './artwork.module.css';
 import openingStyles from './opening_reel.module.css';
-import temple from './temple.module.css';
-import people from './people.module.css';
 import interaction from './interaction.module.css';
 
-const visitors = [
-  { id: 'linlan', name: '林岚' },
-  { id: 'zhouyan', name: '周砚' },
-  { id: 'xuzhi', name: '许栀' },
-  { id: 'luchen', name: '陆沉' },
-];
+// Gameplay begins after stepping off the bus. The opening end card keeps its
+// own bus interior; all gate props and people share this exterior coordinate space.
+const arrivalComposition = composeLayout(gateLayout as unknown as AuthoredLayout, 'temple_gate', {
+  time: 'afternoon',
+  bags: true,
+  cat: true,
+  companions: true,
+  keeper: true,
+});
 
 export function ArrivalBackdrop() {
   return (
     <div
       className={styles.arrival}
-      data-authored="true"
       role="img"
-      aria-label="晴天下午，大巴停在红烛寺山门前。四位游客下车，带着行李望向古朴山门；花猫在石阶旁晒太阳。"
+      aria-label="下车后站在红烛寺山门前，三位同伴在石阶旁等候，陆沉从门内迎来；花猫与行李放在地面上。"
     >
-      <div className={styles.sun} />
-      <div className={styles['distant-hills']} />
-      <div className={styles['temple-wall']} />
-      <div className={styles['stone-court']} />
-      <div className={styles['tree-shadow']} />
-      <img
-        className={styles['asset-gate']}
-        src={storyAssets.scenes.busArrival}
-        alt=""
-        aria-hidden="true"
-      />
+      <AuthoredScene composition={arrivalComposition} />
       <details className={openingStyles.reel}>
         <summary>片头回放</summary>
         <video
@@ -46,103 +39,6 @@ export function ArrivalBackdrop() {
           aria-label="红烛寺片头回放"
         />
       </details>
-      <div className={styles.tree}>
-        <i />
-        <i />
-        <i />
-      </div>
-      <div className={styles.bus}>
-        <span className={styles['bus-route']}>周末 · 山寺接驳</span>
-        <div className={styles['bus-window']} />
-        <div className={styles['bus-door']}>
-          <i />
-          <i />
-          <span>车门</span>
-        </div>
-        <div className={styles['bus-stripe']} />
-        <span className={styles['bus-number']}>红烛寺</span>
-        <div className={styles.wheel} />
-      </div>
-      <div className={temple['temple-gate']} data-asset-gate="true">
-        <div className={temple.roof} />
-        <div className={temple['roof-edge']} />
-        <div className={temple['gate-wall']} />
-        <div className={temple['gate-door']} />
-        <div className={temple['gate-column']} />
-        <div className={temple['gate-column-right']} />
-        <div className={temple.plaque}>红烛寺</div>
-        <div className={temple['old-plaque']}>明照寺</div>
-        <div className={temple['gate-steps']} />
-      </div>
-      <div className={temple.bell} aria-hidden="true">
-        <i />
-      </div>
-      <div className={temple['direction-sign']}>
-        <span>香客登记 →</span>
-        <small>接驳车停靠处</small>
-      </div>
-      <div className={people['luggage-cart']} aria-hidden="true">
-        <i />
-        <i />
-        <i />
-        <i />
-      </div>
-      <div className={people['registration-desk']}>
-        <span>登记簿</span>
-        <i />
-      </div>
-      {visitors.map((person) => (
-        <div
-          className={people.person}
-          data-person={person.id}
-          key={person.id}
-          role="img"
-          aria-label={person.name}
-        >
-          <div className={people.figure} data-asset={person.id}>
-            <img
-              className={people['asset-figure']}
-              src={storyAssets.characters[person.id as keyof typeof storyAssets.characters]}
-              alt=""
-              aria-hidden="true"
-            />
-            <i className={people.head} />
-            <i className={people.body} />
-          </div>
-        </div>
-      ))}
-      <img
-        className={people.assetBags}
-        src={storyAssets.props.travelBags}
-        alt=""
-        aria-hidden="true"
-      />
-      <img
-        className={people.assetDrawing}
-        src={storyAssets.props.repairDrawing}
-        alt=""
-        aria-hidden="true"
-      />
-      <img
-        className={people.assetNotice}
-        src={storyAssets.props.blueTieNotice}
-        alt=""
-        aria-hidden="true"
-      />
-      <div className={styles.cat} aria-hidden="true">
-        <i />
-        <i />
-      </div>
-      <img
-        className={artwork.assetCat}
-        src={storyAssets.props.catResting}
-        alt=""
-        aria-hidden="true"
-      />
-      <div className={styles['door-step']}>
-        <span>你 · 车门台阶</span>
-      </div>
-      <div className={styles['sun-rays']} />
     </div>
   );
 }

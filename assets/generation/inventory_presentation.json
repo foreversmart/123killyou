@@ -1,6 +1,6 @@
 {
   "purpose": "五件正式物品图的显示与准确文字叠加",
-  "runtimeIntegration": "not_integrated",
+  "runtimeIntegration": "integrated",
   "coordinateSpace": "normalized_original_square_canvas",
   "rules": [
     "同一高清透明PNG供道具栏、背包与物品详情共用；保持比例完整显示，不裁掉轮廓。",

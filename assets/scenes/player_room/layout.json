@@ -315,6 +315,48 @@
         "width": 961,
         "height": 1447
       }
+    },
+    "calm_lin_lan": {
+      "path": "../../characters/lin_lan/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1977946,
+      "sha256": "2c168614a1304be9c1b25788b694177d46acdc453346721ac50aeedd9ca0acf0",
+      "sourceFrame": {
+        "x": 48,
+        "y": 185,
+        "width": 976,
+        "height": 1186
+      }
+    },
+    "calm_zhou_yan": {
+      "path": "../../characters/zhou_yan/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1700606,
+      "sha256": "79e98ca07fdd30d3a50e2bf064f467f5308741f36236b77a5d4213e749bbf203",
+      "sourceFrame": {
+        "x": 46,
+        "y": 340,
+        "width": 948,
+        "height": 964
+      }
+    },
+    "calm_xu_zhi": {
+      "path": "../../characters/xu_zhi/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2075160,
+      "sha256": "35c6c456b5b3fbea33e19a4675cb43b0095252fb7ed1b5e9583ea088f181c4be",
+      "sourceFrame": {
+        "x": 59,
+        "y": 137,
+        "width": 955,
+        "height": 1260
+      }
     }
   },
   "layers": [
@@ -644,6 +686,51 @@
       "visibleWhen": {
         "actor": "intrusion"
       }
+    },
+    {
+      "id": "calm_lin_lan",
+      "sprite": "calm_lin_lan",
+      "rect": {
+        "x": 380,
+        "y": 520,
+        "width": 333.2883642495784,
+        "height": 405
+      },
+      "zIndex": 22,
+      "visibleWhen": {
+        "actor": "lin_lan_calm"
+      },
+      "filter": "brightness(.68) saturate(.78)"
+    },
+    {
+      "id": "calm_zhou_yan",
+      "sprite": "calm_zhou_yan",
+      "rect": {
+        "x": 380,
+        "y": 520,
+        "width": 398.2780082987552,
+        "height": 405
+      },
+      "zIndex": 22,
+      "visibleWhen": {
+        "actor": "zhou_yan_calm"
+      },
+      "filter": "brightness(.68) saturate(.78)"
+    },
+    {
+      "id": "calm_xu_zhi",
+      "sprite": "calm_xu_zhi",
+      "rect": {
+        "x": 380,
+        "y": 520,
+        "width": 306.9642857142857,
+        "height": 405
+      },
+      "zIndex": 22,
+      "visibleWhen": {
+        "actor": "xu_zhi_calm"
+      },
+      "filter": "brightness(.68) saturate(.78)"
     }
   ],
   "labels": [],

@@ -44,19 +44,16 @@ function registrationScene(state: GameState): SceneComposition {
     ].includes(state.shotKey || ''),
   };
   const composition = composeLayout(registrationLayout as never, 'registration', selection);
-  const actorPreview = (
-    registrationLayout as typeof registrationLayout & {
-      actorPreview?: {
-        sourceFrame: { x: number; y: number; width: number; height: number };
-        rect: { x: number; y: number; width: number; height: number };
-        zIndex: number;
-      };
-    }
-  ).actorPreview;
+  const writing = state.shotKey === 'register_desk';
+  const actorPreview = writing
+    ? registrationLayout.writingPreview
+    : registrationLayout.actorPreview;
   if (!actorPreview) return composition;
   const actor: SceneLayer = {
     id: 'actor_lu_chen',
-    src: '/art/story/characters/lu_chen/standing_reception.webp',
+    src: writing
+      ? '/art/story/characters/lu_chen/writing_ledger.webp'
+      : '/art/story/characters/lu_chen/standing_reception.webp',
     imageWidth: 1024,
     imageHeight: 1536,
     frame: actorPreview.sourceFrame,
@@ -66,7 +63,26 @@ function registrationScene(state: GameState): SceneComposition {
   };
   return {
     ...composition,
-    layers: [...composition.layers, actor].sort((a, b) => a.zIndex - b.zIndex),
+    layers: [
+      ...composition.layers,
+      actor,
+      ...(writing
+        ? [
+            {
+              ...actor,
+              id: 'writing_brush',
+              zIndex: 35,
+              clipRect: { x: 715, y: 620, width: 93, height: 100 },
+            },
+            {
+              ...actor,
+              id: 'writing_palm',
+              zIndex: 35,
+              clipRect: { x: 1070, y: 620, width: 135, height: 100 },
+            },
+          ]
+        : []),
+    ].sort((a, b) => a.zIndex - b.zIndex),
     labels: composition.labels,
   };
 }
@@ -80,19 +96,19 @@ function refectoryScene(state: GameState): SceneComposition {
     huiPu: true,
   };
   const composition = composeLayout(diningLayout as never, 'dining_hall', selection);
-  const keeper: SceneLayer = {
-    id: 'actor_lu_chen_refectory',
-    src: '/art/story/characters/lu_chen/standing_lantern.webp',
-    imageWidth: 1024,
-    imageHeight: 1536,
-    frame: { x: 0, y: 0, width: 1024, height: 1536 },
-    rect: { x: 1300, y: 285, width: 320, height: 480 },
-    zIndex: 12,
-    actorId: 'luchen',
+  const actors: Record<string, string> = {
+    lin_lan: 'linlan',
+    zhou_yan: 'zhouyan',
+    xu_zhi: 'xuzhi',
+    lu_chen: 'luchen',
+    curtain_presence: 'huipu',
   };
   return {
     ...composition,
-    layers: [...composition.layers, keeper].sort((a, b) => a.zIndex - b.zIndex),
+    layers: composition.layers.map((layer) => ({
+      ...layer,
+      actorId: actors[layer.id],
+    })),
   };
 }
 
