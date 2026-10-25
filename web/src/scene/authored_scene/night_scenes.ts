@@ -49,19 +49,20 @@ export function nightScene(state: GameState): SceneComposition | undefined {
     candle,
     door:
       death || ['double_exit', 'double_frenzy'].includes(state.shotKey || '') ? 'open' : 'closed',
-    actor: death ? 'intrusion' : identity ? `${identity}${revealed ? '' : '_familiar'}` : 'none',
+    actor: death
+      ? 'intrusion'
+      : identity
+        ? `${identity}${state.shotKey === 'double_calm' ? '_calm' : revealed ? '' : '_familiar'}`
+        : 'none',
   });
   for (const layer of composition.layers) {
     if (layer.id === 'intrusion') layer.actorId = 'evil';
-    if (layer.id.startsWith('familiar_') || layer.id.startsWith('double_')) {
+    if (
+      layer.id.startsWith('familiar_') ||
+      layer.id.startsWith('double_') ||
+      layer.id.startsWith('calm_')
+    ) {
       layer.actorId = 'skin_double';
-      if (state.shotKey === 'double_calm') {
-        // A full-size body lies beside the bed; do not turn a standing sprite
-        // into a tiny person to simulate distance or lying down.
-        layer.rect = { x: 290, y: 405, width: layer.rect.width, height: 730 };
-        layer.rotation = -90;
-        layer.clipRect = { x: 105, y: 735, width: 735, height: 206 };
-      }
     }
   }
   return composition;

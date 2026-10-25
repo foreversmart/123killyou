@@ -92,7 +92,7 @@ export const nightLayouts: Record<string, StageLayout> = {
   },
   mini_dawn_trap: {
     ...room,
-    chapter: '11 · 五更与一声钟',
+    chapter: '11 · 五更与远处一声锣',
     title: '窗外，还是黑的',
     atmosphere: '近处的震响停后，远处又拖来一声漫长的余音。',
   },

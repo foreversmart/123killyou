@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-25",
+  "date": "2026-10-26",
   "status": "current",
   "generator": "built-in image_gen",
   "styleReferences": [
@@ -1454,7 +1454,7 @@
         "storyBeats": [
           "01"
         ],
-        "purpose": "大巴·午后抵达"
+        "purpose": "仅用于片头结束后的车内等待画面；正式抵达场景下车后使用山门外机位。"
       }
     },
     {
@@ -1786,36 +1786,6 @@
           "minY": 227,
           "maxX": 1185,
           "maxY": 1129
-        }
-      }
-    },
-    {
-      "id": "flatbread",
-      "name": "素饼",
-      "kind": "prop",
-      "path": "assets/props/flatbread/scene.png",
-      "width": 1254,
-      "height": 1254,
-      "format": "png",
-      "hasAlpha": true,
-      "bytes": 1372374,
-      "sha256": "fd6021a89f3e007d545dc0b0205d72de388718306a563e41681bcf3804509629",
-      "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
-      "usage": {
-        "storyBeats": [
-          "03"
-        ],
-        "purpose": "素饼"
-      },
-      "alphaCheck": {
-        "transparentPixels": 917425,
-        "nearOpaquePixels": 636085,
-        "silhouetteBounds": {
-          "minX": 50,
-          "minY": 292,
-          "maxX": 1204,
-          "maxY": 1013
         }
       }
     },
@@ -3152,12 +3122,244 @@
         ],
         "purpose": "最后纯黑片名的准确四字和粗粝毛笔造型参考；不用于真人场景风格。"
       }
+    },
+    {
+      "id": "lin_lan_slumped_calm",
+      "name": "林岚·安静跪伏",
+      "path": "assets/characters/lin_lan/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1977946,
+      "sha256": "2c168614a1304be9c1b25788b694177d46acdc453346721ac50aeedd9ca0acf0",
+      "status": "verified",
+      "kind": "character_pose",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
+      }
+    },
+    {
+      "id": "zhou_yan_slumped_calm",
+      "name": "周砚·安静跪伏",
+      "path": "assets/characters/zhou_yan/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1700606,
+      "sha256": "79e98ca07fdd30d3a50e2bf064f467f5308741f36236b77a5d4213e749bbf203",
+      "status": "verified",
+      "kind": "character_pose",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
+      }
+    },
+    {
+      "id": "xu_zhi_slumped_calm",
+      "name": "许栀·安静跪伏",
+      "path": "assets/characters/xu_zhi/slumped_calm.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2075160,
+      "sha256": "35c6c456b5b3fbea33e19a4675cb43b0095252fb7ed1b5e9583ea088f181c4be",
+      "status": "verified",
+      "kind": "character_pose",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
+      }
+    },
+    {
+      "id": "steamed_buns",
+      "name": "热馒头蒸笼",
+      "path": "assets/props/steamed_buns/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1704617,
+      "sha256": "edb624c861df3b2bb75c69db1dcc773297dec4fa470bec17f79860bc37c6f85e",
+      "status": "verified",
+      "kind": "prop",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
+      }
+    },
+    {
+      "id": "pickled_vegetables",
+      "name": "咸菜",
+      "path": "assets/props/pickled_vegetables/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1473763,
+      "sha256": "683f841621400de39a2ad774a94f26f8c8963c987dbe74e4c481216983780c3c",
+      "status": "verified",
+      "kind": "prop",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
+      }
+    },
+    {
+      "id": "mushroom_greens",
+      "name": "香菇青菜",
+      "path": "assets/props/mushroom_greens/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1484363,
+      "sha256": "5004237b849d132466f2defbdafda23f90b3a95aa470f8e68527958bf9f7cf1c",
+      "status": "verified",
+      "kind": "prop",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
+      }
+    },
+    {
+      "id": "drag_marks",
+      "name": "回廊拖痕近景",
+      "path": "assets/details/drag_marks.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2620955,
+      "sha256": "7f898f818cc8b796fcaf887faf0cac509d97102bb4c9e38c019477c94d358ec3",
+      "status": "verified",
+      "kind": "observation_detail",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "02"
+        ],
+        "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
+      }
+    },
+    {
+      "id": "door_latch_wet",
+      "name": "门闩湿痕近景",
+      "path": "assets/details/door_latch_wet.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1781470,
+      "sha256": "9271e288c5ea112f3ce9f4d9f4fa4e20c4ce134c9ccc1f4c1ee5822370800e52",
+      "status": "verified",
+      "kind": "observation_detail",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "10"
+        ],
+        "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
+      }
+    },
+    {
+      "id": "broken_shadow",
+      "name": "残缺影子近景",
+      "path": "assets/details/broken_shadow.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1889109,
+      "sha256": "0a9f4d44e8c58434883e28490412a08fb30d5f00577ce74e8c7af365504a41eb",
+      "status": "verified",
+      "kind": "observation_detail",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
+      }
+    },
+    {
+      "id": "lu_chen_writing_ledger",
+      "name": "陆沉·案后登记",
+      "path": "assets/characters/lu_chen/writing_ledger.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1794555,
+      "sha256": "b4b3be7ae6eb7f6004d2a96cf056968f0921d34d38134b2247a7fa0ff8530ee3",
+      "status": "verified",
+      "kind": "character_pose",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "02"
+        ],
+        "purpose": "登记分镜专用俯身书写姿态，右手毛笔、左手压纸；纸本与桌面由登记处分层提供。"
+      }
+    },
+    {
+      "id": "lu_chen_offering_candle",
+      "name": "陆沉·递出红烛",
+      "path": "assets/characters/lu_chen/offering_candle.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1770415,
+      "sha256": "a71dbe81a7dc430e349d0dd0c25fea6043ba56dc87d98f226e7e713dbf8285cb",
+      "status": "verified",
+      "kind": "character_pose",
+      "promptSet": "assets/generation/production_manifest.json",
+      "generator": "built-in image_gen",
+      "usage": {
+        "storyBeats": [
+          "04"
+        ],
+        "purpose": "晚膳后发烛分镜，右手递出未燃红烛、左臂抱烛盒；不是提灯噤声的复用姿态。"
+      }
     }
   ],
   "storySource": "story/mini_script.md",
   "usageGuide": "assets/generation/asset_usage.md",
   "runtimeIntegration": {
-    "status": "not_integrated",
+    "status": "integrated",
     "currentDemoGuide": "docs/design/assets-and-slicing.md"
   },
   "media": [

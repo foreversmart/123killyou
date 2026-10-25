@@ -1,6 +1,6 @@
 # 《红烛无声》素材目录
 
-日期：2026-10-25。当前归档 **117 张现用图片**，由内置 image_gen 生成。剧情依据为 [mini_script.md](../../story/mini_script.md)，美术依据为[风格参考](../references/style_reference/README.md)。当前素材尚未接入游戏。
+日期：2026-10-26。当前素材与专用姿态、菜品、物件近景由内置 image_gen 生成，归档见下表。剧情依据为 [mini_script.md](../../story/mini_script.md)，美术依据为[风格参考](../references/style_reference/README.md)。场景组合已接入游戏，正式显示由后端状态和七份定位配置共同决定。
 
 [素材用途](asset_usage.md)说明已有素材的使用边界；[完整流程制作清单](production_manifest.json)记录各幕所需图像、参考、提示词与当前完成状态。清单中的 verified 表示原图已生成并检查。首夜十二幕的图像状态已补齐，人物等比、叠加和遮挡配置已核对。
 
@@ -69,7 +69,6 @@
 | 手电                      | [inventory.png](../props/flashlight/inventory.png)                              | 1254 × 1254，透明 | 手电                                                                                       |
 | 慧普·帘后轮廓             | [curtain_presence.png](../characters/hui_pu/curtain_presence.png)               | 1295 × 1215，透明 | 慧普·帘后轮廓                                                                              |
 | 斋碗·食用后               | [bowl_empty.png](../props/porridge/bowl_empty.png)                              | 1254 × 1254，透明 | 斋碗·食用后                                                                                |
-| 素饼                      | [scene.png](../props/flatbread/scene.png)                                       | 1254 × 1254，透明 | 素饼                                                                                       |
 | 肉粥·勺底纤维调查         | [bowl_inspect.png](../props/porridge/bowl_inspect.png)                          | 1254 × 1254，透明 | 肉粥·勺底纤维调查                                                                          |
 | 木勺                      | [spoon.png](../props/porridge/spoon.png)                                        | 1254 × 1254，透明 | 木勺                                                                                       |
 | 热水                      | [scene.png](../props/hot_water/scene.png)                                       | 1254 × 1254，透明 | 热水                                                                                       |
@@ -123,6 +122,17 @@
 | 登记处·下午·permit_stack  | [permit_stack.png](../scenes/registration/props/permit_stack.png)               | 1672 × 941，透明  | 独立透明场景图层                                                                           |
 | 登记处·下午·permit_single | [permit_single.png](../scenes/registration/props/permit_single.png)             | 1672 × 941，透明  | 独立透明场景图层                                                                           |
 | 登记处·下午·room_tag      | [room_tag.png](../scenes/registration/props/room_tag.png)                       | 1672 × 941，透明  | 独立透明场景图层                                                                           |
+| 林岚·安静跪伏 | [slumped_calm.png](../characters/lin_lan/slumped_calm.png) | 1024 × 1536，透明 | 安抚后伏在床脚，保留本人衣着与相机；不旋转站姿代替 |
+| 周砚·安静跪伏 | [slumped_calm.png](../characters/zhou_yan/slumped_calm.png) | 1024 × 1536，透明 | 安抚后低头跪伏，保留深蓝外衣与挎包 |
+| 许栀·安静跪伏 | [slumped_calm.png](../characters/xu_zhi/slumped_calm.png) | 1024 × 1536，透明 | 安抚后低头跪伏，保留短圆脸、平刘海和灰绿开衫 |
+| 热馒头蒸笼 | [scene.png](../props/steamed_buns/scene.png) | 1254 × 1254，透明 | 斋堂替代肉粥的素食，独立蒸笼与白面馒头 |
+| 咸菜 | [scene.png](../props/pickled_vegetables/scene.png) | 1254 × 1254，透明 | 斋堂桌面独立小碟素菜 |
+| 香菇青菜 | [scene.png](../props/mushroom_greens/scene.png) | 1254 × 1254，透明 | 斋堂桌面独立盘装素菜 |
+| 回廊拖痕近景 | [drag_marks.png](../details/drag_marks.png) | 1536 × 1024 | 旧石板拖擦痕的观察画面 |
+| 门闩湿痕近景 | [door_latch_wet.png](../details/door_latch_wet.png) | 1536 × 1024 | 同一门房门闩、门缝红蜡与湿痕观察 |
+| 残缺影子近景 | [broken_shadow.png](../details/broken_shadow.png) | 1536 × 1024 | 烛光照地时投影边缘缺口的观察 |
+| 陆沉·案后登记 | [writing_ledger.png](../characters/lu_chen/writing_ledger.png) | 1024 × 1536，透明 | 登记分镜专用俯身书写姿态，右手毛笔、左手压纸；纸本与桌面由登记处分层提供。 |
+| 陆沉·递出红烛 | [offering_candle.png](../characters/lu_chen/offering_candle.png) | 1024 × 1536，透明 | 晚膳后发烛分镜，右手递出未燃红烛、左臂抱烛盒；不是提灯噤声的复用姿态。 |
 
 ## 文件与生成规范
 
@@ -133,13 +143,13 @@
 - [物品图说明](../props/README.md)、[物品提示词](inventory_prompts.json)和[显示与文字配置](inventory_presentation.json)记录背包与调查图。
 - [头像展示规则](portrait_presentation.json)规定共用未知黑影、问号叠加与称呼边界；以玩家已见外貌决定头像，不提前暴露真假。
 - [普通头像提示词](portrait_prompts.json)、[人物定型提示词](character_prompts.json)、[场景提示词](scene_prompts.json)与[登记处图层提示词](registration_layer_prompts.json)保存对应素材的当前规范。
-- 原图归档在 assets/；生成完毕不代表游戏已经接入。领取、放置、转场与存档仍由后端真实状态驱动。
+- 原图归档在 assets/，网页读取 web/public/art/story/ 对应 WebP。领取、放置、转场与存档由后端真实状态驱动。
 
 ## 场景组合与状态
 
 [十二幕用途与接入边界](asset_usage.md)、[场景展示配置](scene_presentation.json)与七个场景目录中的 layout.json 共同记录固定机位、取样、位置、遮挡和切换。人物严格按原始宽高比等比缩放。回廊半掩门使用完整午夜底图，铜铃、花瓶与私人物件独立叠加。
 
-文本内容与程序效果已列入展示配置；正式游戏、语音事件与存档接入仍由实现任务完成。[开场短片](opening_video_prompt.md)使用独立的电影质感规范。
+正式游戏按后端场景与旗标选择组合，语音事件与存档由会话层维护。到达正片使用山门外机位，车内只用于片头结束等待；房间转场使用黑场与环境图，不以正面站姿立绘模拟行走。斋堂使用真实馒头、咸菜和香菇青菜透明素材；调查使用对应物件近景。[开场短片](opening_video_prompt.md)使用独立的电影质感规范。
 
 ## 完整真人片头
 

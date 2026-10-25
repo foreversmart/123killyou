@@ -7,8 +7,8 @@
 
 .hotspot {
   position: absolute;
-  left: 48%;
-  top: 44%;
+  left: 76%;
+  top: 32%;
   display: grid;
   width: 3cqw;
   height: 3cqw;
@@ -22,13 +22,13 @@
 }
 
 .hotspot[data-prop='cat'] {
-  left: 54%;
-  top: 84%;
+  left: 26%;
+  top: 85%;
 }
 
 .hotspot[data-prop='plaque'] {
-  left: 83%;
-  top: 46%;
+  left: 67%;
+  top: 17%;
 }
 
 .hotspot i {

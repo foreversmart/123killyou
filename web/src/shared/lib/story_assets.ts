@@ -118,7 +118,9 @@ const props = {
   repairDrawing: prop('repair_drawing/inventory'),
   bambooShoots: prop('bamboo_shoots/scene'),
   blueTieNotice: prop('blue_tie_notice/scene'),
-  flatbread: prop('flatbread/scene'),
+  steamedBuns: prop('steamed_buns/scene'),
+  pickledVegetables: prop('pickled_vegetables/scene'),
+  mushroomGreens: prop('mushroom_greens/scene'),
   hotWater: prop('hot_water/scene'),
   candleBurning: scene('player_room/props/candle_burning'),
   candleExtinguished: scene('player_room/props/candle_extinguished'),
@@ -148,6 +150,11 @@ const props = {
 } as const;
 
 export const storyAssets = {
+  details: {
+    dragMarks: `${root}/details/drag_marks.webp`,
+    doorLatchWet: `${root}/details/door_latch_wet.webp`,
+    brokenShadow: `${root}/details/broken_shadow.webp`,
+  },
   scenes,
   characters,
   characterPoses,

@@ -56,7 +56,9 @@ function courtyardScene(state: GameState): SceneComposition {
       ? 'dawn'
       : state.sceneKey === 'mini_register'
         ? 'afternoon'
-        : 'dusk';
+        : ['corridor_warning', 'corridor_two_gongs'].includes(state.shotKey || '')
+          ? 'night'
+          : 'dusk';
   const selection: Selection = {
     time,
     vase: state.flags.vase_broken ? 'broken' : 'intact',
@@ -65,7 +67,38 @@ function courtyardScene(state: GameState): SceneComposition {
   };
   const result = composeLayout(authored(courtyardLayout), 'east_courtyard', selection);
   const wanted = state.shotKey === 'corridor_candles' ? 'luchen' : actorForCourtyard(state);
-  return withActors(result, authored(courtyardLayout), 'east_courtyard', state, wanted);
+  const composition = withActors(
+    result,
+    authored(courtyardLayout),
+    'east_courtyard',
+    state,
+    wanted,
+  );
+  for (const layer of composition.layers) {
+    if (!layer.actorId) continue;
+    layer.filter =
+      time === 'night'
+        ? 'brightness(.58) saturate(.65)'
+        : time === 'dusk'
+          ? 'brightness(.8) saturate(.82)'
+          : undefined;
+    if (layer.actorId !== 'luchen') continue;
+    const sprite =
+      time === 'afternoon' || time === 'dawn'
+        ? courtyardLayout.sprites.actor_lu_chen_reception
+        : state.shotKey === 'corridor_candles'
+          ? courtyardLayout.sprites.actor_lu_chen_offering
+          : undefined;
+    if (!sprite) continue;
+    layer.src = runtimeSource('east_courtyard', sprite.path);
+    layer.imageWidth = sprite.width;
+    layer.imageHeight = sprite.height;
+    layer.frame = sprite.sourceFrame;
+    const center = layer.rect.x + layer.rect.width / 2;
+    layer.rect.width = (layer.rect.height * layer.frame.width) / layer.frame.height;
+    layer.rect.x = center - layer.rect.width / 2;
+  }
+  return composition;
 }
 
 function actorForCourtyard(state: GameState): string | undefined {
@@ -85,7 +118,7 @@ function actorForCourtyard(state: GameState): string | undefined {
 
 function listenScene(state: GameState): SceneComposition {
   const result = composeLayout(authored(guestRoomLayout), 'guest_room', {
-    hui: state.flags.vase_broken ? 'turn' : 'rear',
+    hui: !state.flags.skin_seen ? 'hidden' : state.flags.vase_broken ? 'turn' : 'rear',
   });
   const layers = result.layers.map((layer) =>
     layer.id === 'victim_detail' && !state.flags.skin_seen
@@ -118,6 +151,7 @@ function gateScene(_state: GameState): SceneComposition {
     bags: true,
     cat: false,
     companions: true,
+    keeper: true,
   });
 }
 
@@ -190,6 +224,7 @@ function actorLayer(layout: AuthoredLayout, directory: string, actor: SceneActor
       rect: { ...layer.rect },
       zIndex: layer.zIndex,
       clipRect: layer.clipRect,
+      filter: layer.filter,
     },
   ];
 }

@@ -10,7 +10,8 @@ import (
 
 // EnsureAgent finds or creates one named agent. Names are exact so a test
 // agent cannot accidentally mutate another user's agent with a similar name.
-// VoiceID applies only on creation; existing voices are managed in the console.
+// VoiceID and ModelID apply only on creation; existing voice/model settings are
+// managed in the console and must survive a server restart.
 func (c *Client) EnsureAgent(ctx context.Context, spec AgentSpec) (string, error) {
 	if !c.Configured() {
 		return "", errors.New("linx api key is not configured")
@@ -64,15 +65,12 @@ func (c *Client) EnsureAgent(ctx context.Context, spec AgentSpec) (string, error
 }
 
 func (c *Client) updateAgent(ctx context.Context, id string, spec AgentSpec) error {
-	// Omitted fields retain their remote values. Never write ttsVoiceId here,
-	// including when a local profile specifies a voice for initial creation.
+	// Only synchronize game-owned identity and prompt fields. Deliberately omit
+	// ttsVoiceId, llmModelId, memory/intent model fields, and extra.llm so
+	// console-side voice and model tuning survives every restart.
 	body := map[string]any{
 		"assistantName": spec.AssistantName,
-		"llmModelId":    spec.ModelID, "memModelId": "Memory_nomem", "systemPrompt": spec.SystemPrompt,
-		"extra": map[string]any{
-			"disable_greeting": true,
-			"llm":              map[string]any{"temperature": 0.65, "top_p": 0.85, "max_tokens": 256},
-		},
+		"systemPrompt":  spec.SystemPrompt,
 	}
 	return c.request(ctx, http.MethodPut, "/xiaozhi/agent/"+id, body, nil)
 }
