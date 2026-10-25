@@ -58,10 +58,19 @@ test('未开启播放时，安全的 NPC 串联仍会等待后自动提交', asy
   f.runtime.dispose();
 });
 
-test('斋堂吃饭镜头保留约七秒后才自动回东院', async () => {
+test('斋堂吃饭镜头保留约五秒后先确认收碗', async () => {
   const f = await fixture();
   f.render({ ...f.state, dialogueNext: '自动离开斋堂' });
-  assert.deepEqual(f.runtime.pendingDelays, [7000]);
+  assert.deepEqual(f.runtime.pendingDelays, [5000]);
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, ['自动离开斋堂']);
+  f.runtime.dispose();
+});
+
+test('同行者确认吃完后快速交给守夜人带队', async () => {
+  const f = await fixture();
+  f.render({ ...f.state, dialogueNext: '自动离开斋堂', flags: { refectory_meal_finished: true } });
+  assert.deepEqual(f.runtime.pendingDelays, [1400]);
   f.runtime.flushTimers();
   assert.deepEqual(f.submitted, ['自动离开斋堂']);
   f.runtime.dispose();

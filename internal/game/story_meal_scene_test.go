@@ -74,7 +74,7 @@ func TestRefectoryVegetarianFoodCanBeInspectedAndChosen(t *testing.T) {
 	if !s.Flags["meal_player_refused"] || s.Flags["meal_player_ate"] {
 		t.Fatalf("换馒头仍结算肉缘: %v", s.Flags)
 	}
-	storyCommands(e, &s, "劝许栀别吃粥，换馒头", "吃完晚膳")
+	storyCommands(e, &s, "劝许栀别吃粥，换馒头", "吃完晚膳", "自动离开斋堂", "自动离开斋堂")
 	if !s.Flags["meal_xuzhi_refused"] || s.SceneKey != "mini_corridor_candle" || s.Flags["skin_double_present"] {
 		t.Fatalf("素食晚膳没有保持安全后续: scene=%s flags=%v", s.SceneKey, s.Flags)
 	}

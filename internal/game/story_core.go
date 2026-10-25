@@ -77,7 +77,7 @@ func (e *Engine) storyArrival(state *State, text string) (string, string, bool) 
 	if miniHasAny(text, "登记入住", "办理入住", "登记", "报到", "写名字", "放行李", "自动登记入住") {
 		e.setMiniScene(state, "mini_register")
 		miniShot(state, "register_desk")
-		return "move", miniDialogue(state, "陆沉", "四位施主，远道而来辛苦了。请随我去登记室，把各位的名字登记好，再分配房间。"), true
+		return "move", miniDialogue(state, "陆沉", "登记室的名册已经备好，请各位先把行李放在门边。"), true
 	}
 	return e.storyConversation(state, text)
 }
@@ -116,7 +116,7 @@ func (e *Engine) arrivalIntro(state *State) string {
 		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_inner")
 		state.DialogueNext = "自动登记入住"
-		return miniInner(state, "别把这份安静当成安全。")
+		return miniDialogue(state, "陆沉", "登记室的门已经打开，大家跟紧。")
 	}
 }
 

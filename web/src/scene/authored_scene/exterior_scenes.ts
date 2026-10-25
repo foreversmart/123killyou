@@ -23,7 +23,6 @@ export function exteriorScene(state: GameState): SceneComposition | undefined {
         [
           'register_key_tags',
           'register_rooms',
-          'register_drag_mark',
           'register_camera_bell',
           'register_ribbon',
           'register_luggage',

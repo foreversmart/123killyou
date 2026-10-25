@@ -16,7 +16,6 @@ export function dayScene(state: GameState): SceneComposition | undefined {
     const courtyardShot = [
       'register_key_tags',
       'register_rooms',
-      'register_drag_mark',
       'register_camera_bell',
       'register_ribbon',
       'register_luggage',
@@ -62,11 +61,26 @@ function registrationScene(state: GameState): SceneComposition {
     actorId: 'luchen',
     motion: writing ? 'write' : 'idle',
   };
+  const dragObserver: SceneLayer | undefined =
+    state.shotKey === 'register_drag_mark'
+      ? {
+          id: 'actor_zhou_yan_registration',
+          src: '/art/story/characters/zhou_yan/standing.webp',
+          imageWidth: 1024,
+          imageHeight: 1536,
+          frame: { x: 0, y: 0, width: 1024, height: 1536 },
+          rect: { x: 1130, y: 120, width: 330, height: 900 },
+          zIndex: 12,
+          actorId: 'zhouyan',
+          motion: 'idle',
+        }
+      : undefined;
   return {
     ...composition,
     layers: [
       ...composition.layers,
       actor,
+      ...(dragObserver ? [dragObserver] : []),
       ...(writing
         ? [
             {
