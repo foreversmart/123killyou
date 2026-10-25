@@ -120,7 +120,7 @@ func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bo
 		miniSetFlag(state, "bird_call_heard")
 		e.setMiniScene(state, "mini_listen")
 		if state.Flags["companion_present"] {
-			return "move", miniDialogue(state, miniCompanionName(state), "别踩中间的砖，沿着墙走……你听，猫食碟那边叫了一声，鸟笼也响了。半掩房门里像是皮革被慢慢撕开。"), true
+			return "move", miniDialogue(state, miniCompanionName(state), "你听，好像有什么东西被撕开的声音。"), true
 		}
 		return "move", miniObserve(state, "视线贴着墙向半掩房门移动。猫食碟旁有短促的猫叫，鸟笼传来短鸣；皮革撕裂声从门里传出。"), true
 	}
