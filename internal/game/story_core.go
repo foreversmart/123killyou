@@ -31,7 +31,7 @@ func (e *Engine) story(state *State, text string, decision StoryDecision) (strin
 	case "mini_corridor_candle":
 		return e.storyCandleCorridor(state, text)
 	case "mini_room":
-		return e.storyRoom(state, text)
+		return e.storyRoom(state, text, decision)
 	case "mini_wake_three_gongs":
 		return e.storyWake(state, text)
 	case "mini_four_knocks":

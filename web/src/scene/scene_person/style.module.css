@@ -12,6 +12,36 @@
     top 0.8s ease,
     filter 0.4s;
 }
+.person[data-motion='idle'] {
+  animation: person-idle 5.8s ease-in-out infinite;
+}
+.person[data-motion='walk'] {
+  animation: person-walk 1.9s ease-in-out infinite;
+}
+.person[data-motion='run'] {
+  animation: person-run 0.62s ease-in-out infinite;
+}
+.person[data-motion='write'] {
+  animation: person-write 1.8s ease-in-out infinite;
+}
+.person[data-motion='eat'] {
+  animation: person-eat 3.1s ease-in-out infinite;
+}
+.person[data-motion='turn'] {
+  animation: person-turn 3.8s ease-in-out infinite;
+}
+.person[data-actor='linlan'] {
+  animation-delay: -1.1s;
+}
+.person[data-actor='zhouyan'] {
+  animation-delay: -1.8s;
+}
+.person[data-actor='xuzhi'] {
+  animation-delay: -2.6s;
+}
+.person[data-actor='luchen'] {
+  animation-delay: -0.6s;
+}
 .body {
   width: 100%;
   height: 100%;
@@ -59,9 +89,75 @@
     opacity: 0.3;
   }
 }
+@keyframes person-idle {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translateY(0) rotate(0deg);
+  }
+  45% {
+    transform: translate(-50%, -100%) translateY(-0.55%) rotate(0.18deg);
+  }
+}
+@keyframes person-walk {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -100%) translate(0.45%, -0.7%) rotate(-0.45deg);
+  }
+  75% {
+    transform: translate(-50%, -100%) translate(-0.45%, -0.7%) rotate(0.45deg);
+  }
+}
+@keyframes person-run {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translate(-0.6%, 0) rotate(-1deg);
+  }
+  50% {
+    transform: translate(-50%, -100%) translate(0.8%, -1.4%) rotate(1.2deg);
+  }
+}
+@keyframes person-write {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translateY(0) rotate(0deg);
+  }
+  35% {
+    transform: translate(-50%, -100%) translate(0.3%, -0.25%) rotate(-0.35deg);
+  }
+  70% {
+    transform: translate(-50%, -100%) translate(-0.2%, 0.1%) rotate(0.25deg);
+  }
+}
+@keyframes person-eat {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) translateY(0) rotate(0deg);
+  }
+  42% {
+    transform: translate(-50%, -100%) translateY(0.45%) rotate(-0.18deg);
+  }
+  66% {
+    transform: translate(-50%, -100%) translateY(-0.25%) rotate(0.15deg);
+  }
+}
+@keyframes person-turn {
+  0%,
+  100% {
+    transform: translate(-50%, -100%) rotate(-0.4deg);
+  }
+  50% {
+    transform: translate(-50%, -100%) rotate(1.2deg);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .person {
     transition: none;
+  }
+  .person[data-motion] {
+    animation: none;
   }
   .speaking i {
     animation: none;

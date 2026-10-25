@@ -104,17 +104,26 @@ func (s *Service) command(ctx context.Context, id, runID, requestID, text string
 		next.Revision++
 		next.LastHeard = text
 		next.Effect = game.Effect{Kind: "none"}
-		intent, speak, handled, err := s.control(tx, &next, before, text)
+		actionText := text
+		decision := plan.StoryDecision
+		if plan.FallbackCommand != "" {
+			actionText = plan.FallbackCommand
+			decision = game.StoryDecision{}
+		}
+		intent, speak, handled, err := s.control(tx, &next, before, actionText)
 		if err != nil {
 			return err
 		}
 		if !handled {
-			intent, speak = s.engine.ApplyWithDecision(ctx, &next, text, plan.StoryDecision)
+			intent, speak = s.engine.ApplyWithDecision(ctx, &next, actionText, decision)
 			if plan.Dialogue && providerReply != "" && intent == "dialogue" && !next.Caught {
 				speak = providerReply
 				next.Dialogue.Text = providerReply
 				next.LastAction = providerReply
 			}
+		}
+		next.LastHeard = text
+		if !handled || plan.FallbackCommand != "" {
 			if err := s.recordProgress(tx, before, next, text, intent, speak); err != nil {
 				return err
 			}

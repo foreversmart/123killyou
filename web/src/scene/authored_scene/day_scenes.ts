@@ -60,6 +60,7 @@ function registrationScene(state: GameState): SceneComposition {
     rect: actorPreview.rect,
     zIndex: actorPreview.zIndex,
     actorId: 'luchen',
+    motion: writing ? 'write' : 'idle',
   };
   return {
     ...composition,
@@ -73,12 +74,14 @@ function registrationScene(state: GameState): SceneComposition {
               id: 'writing_brush',
               zIndex: 35,
               clipRect: { x: 715, y: 620, width: 93, height: 100 },
+              motion: 'write_hand' as const,
             },
             {
               ...actor,
               id: 'writing_palm',
               zIndex: 35,
               clipRect: { x: 1070, y: 620, width: 135, height: 100 },
+              motion: 'write_hand' as const,
             },
           ]
         : []),
@@ -105,10 +108,18 @@ function refectoryScene(state: GameState): SceneComposition {
   };
   return {
     ...composition,
-    layers: composition.layers.map((layer) => ({
-      ...layer,
-      actorId: actors[layer.id],
-    })),
+    layers: composition.layers.map((layer) => {
+      const actorId = actors[layer.id];
+      const isMealLayer = /^(linLan|zhouYan|xuZhi|player)_(full|empty)$/.test(layer.id);
+      return {
+        ...layer,
+        ...(actorId
+          ? { actorId, motion: actorId === 'huipu' ? ('idle' as const) : ('eat' as const) }
+          : isMealLayer
+            ? { motion: 'eat' as const }
+            : {}),
+      };
+    }),
   };
 }
 

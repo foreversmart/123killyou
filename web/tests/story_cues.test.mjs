@@ -215,6 +215,33 @@ test('客观调查直接播放所在位置的环境声，动物声可主动复�
   assert.notEqual(cueSignature(original), cueSignature({ ...original, revision: 2 }));
 });
 
+test('死亡结算先播放鬼扑杀音效，再保留来源环境声', () => {
+  const fourKnocks = storyCues(
+    state('death_mini_four_knocks', {
+      sceneKey: 'mini_death',
+      retryScene: 'mini_four_knocks',
+    }),
+  );
+  assert.deepEqual(
+    fourKnocks.map((cue) => cue.kind),
+    ['death', 'door'],
+  );
+  assert.equal(fourKnocks[0].at, 0);
+  assert.equal(fourKnocks[1].at, 0.62);
+  assert.equal(cueDuration(fourKnocks[0]), 1.2);
+
+  const oracle = storyCues(
+    state('death_mini_oracle', {
+      sceneKey: 'mini_death',
+      retryScene: 'mini_oracle',
+    }),
+  );
+  assert.deepEqual(
+    oracle.map((cue) => cue.kind),
+    ['death', 'step'],
+  );
+});
+
 test('杯筊画面忠实显示服务端的一平一凸、两平和两凸，落地声分别对应两片', () => {
   assert.deepEqual(oracleFaces({ cup_roll_sacred: true }), ['flat', 'curved']);
   assert.deepEqual(oracleFaces({ cup_roll_laugh: true }), ['flat', 'flat']);

@@ -1,4 +1,5 @@
 import type { GameState } from '@/shared/types/game';
+import { DeathFigure } from '@/scene/scene_person/death_figure';
 import styles from './style.module.css';
 
 const sourceNames: Record<string, string> = {
@@ -29,9 +30,16 @@ function deathMessage(state: GameState): string {
 }
 
 export function DeathFeedback({ state }: { state: GameState }) {
+  const figurePose = state.retryScene === 'mini_four_knocks' ? 'death_mini_four_knocks' : undefined;
   return (
     <section className={styles.feedback} role="alert" aria-live="assertive" aria-label="死亡结算">
       <div className={styles['blood-vignette']} aria-hidden="true" />
+      <div className={styles['kill-sequence']} aria-hidden="true">
+        <div className={styles['death-figure']}>
+          <DeathFigure pose={figurePose} />
+        </div>
+        <div className={styles['impact-flash']} />
+      </div>
       <div className={styles['blood-scratch']} aria-hidden="true">
         <i />
         <i />

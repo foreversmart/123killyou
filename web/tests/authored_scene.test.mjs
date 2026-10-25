@@ -74,6 +74,32 @@ test('白天接待、登记写字、黄昏发烛分别使用相应动作，晚�
   assert.equal(new Set(dining.layers.map((layer) => layer.id)).size, dining.layers.length);
 });
 
+test('场景人物使用与当前动作匹配的微动，背景和静物不会跟着人物一起晃动', () => {
+  const writing = authoredScene(state('mini_register', 'register_desk'));
+  assert.equal(writing.layers.find((layer) => layer.id === 'actor_lu_chen').motion, 'write');
+  assert.ok(
+    writing.layers
+      .filter((layer) => layer.id.startsWith('writing_'))
+      .every((layer) => layer.motion === 'write_hand'),
+  );
+
+  const dining = authoredScene(state('mini_refectory'));
+  assert.equal(dining.layers.find((layer) => layer.id === 'background').motion, undefined);
+  assert.equal(dining.layers.find((layer) => layer.id === 'linLan_full').motion, 'eat');
+  assert.equal(dining.layers.find((layer) => layer.id === 'lin_lan').motion, 'eat');
+
+  const corridor = authoredScene(
+    state('mini_corridor_candle', 'corridor_candles', {}, [{ id: 'luchen', visible: true }]),
+  );
+  assert.equal(corridor.layers.find((layer) => layer.actorId === 'luchen').motion, 'walk');
+
+  const gate = authoredScene(state('mini_dawn', 'dawn_gate'));
+  assert.equal(gate.layers.find((layer) => layer.id === 'lin_lan').motion, 'walk');
+
+  const death = authoredScene(state('mini_death', 'death_mini_four_knocks'));
+  assert.equal(death.layers.find((layer) => layer.id === 'intrusion').motion, 'run');
+});
+
 test('当前素材清单的新姿态、菜品与调查近景均有可加载的运行时文件', () => {
   const catalog = JSON.parse(readFileSync('assets/generation/asset_catalog.json', 'utf8'));
   const entries = catalog.assets.filter((asset) =>

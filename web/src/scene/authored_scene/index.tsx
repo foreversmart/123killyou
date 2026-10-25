@@ -52,31 +52,52 @@ function Layer({ layer }: { layer: SceneLayer }) {
   const centerY = rect.y + rect.height / 2;
   return (
     <g
-      data-layer={layer.id}
-      data-actor-id={layer.actorId || undefined}
-      transform={layer.rotation ? `rotate(${layer.rotation} ${centerX} ${centerY})` : undefined}
-      clipPath={layer.clipRect ? `url(#clip-${layer.id})` : undefined}
-      style={layer.filter ? { filter: layer.filter } : undefined}
+      data-layer-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
+      data-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
+      data-actor-id={layer.actorId || inferActorId(layer.id) || undefined}
     >
-      <svg
-        x={rect.x}
-        y={rect.y}
-        width={rect.width}
-        height={rect.height}
-        viewBox={`${frame.x} ${frame.y} ${frame.width} ${frame.height}`}
-        preserveAspectRatio="none"
+      <g
+        data-layer={layer.id}
+        transform={layer.rotation ? `rotate(${layer.rotation} ${centerX} ${centerY})` : undefined}
+        clipPath={layer.clipRect ? `url(#clip-${layer.id})` : undefined}
+        style={layer.filter ? { filter: layer.filter } : undefined}
       >
-        <image
-          href={layer.src}
-          x={0}
-          y={0}
-          width={layer.imageWidth}
-          height={layer.imageHeight}
+        <svg
+          x={rect.x}
+          y={rect.y}
+          width={rect.width}
+          height={rect.height}
+          viewBox={`${frame.x} ${frame.y} ${frame.width} ${frame.height}`}
           preserveAspectRatio="none"
-        />
-      </svg>
+        >
+          <image
+            href={layer.src}
+            x={0}
+            y={0}
+            width={layer.imageWidth}
+            height={layer.imageHeight}
+            preserveAspectRatio="none"
+          />
+        </svg>
+      </g>
     </g>
   );
+}
+
+function inferActorId(layerId: string): string | undefined {
+  const match = layerId.match(/(?:actor_)?(lin_lan|zhou_yan|xu_zhi|lu_chen|shangong|huipu)/);
+  return match?.[1];
+}
+
+function inferMotion(
+  layerId: string,
+  actorId?: string,
+): NonNullable<SceneLayer['motion']> | undefined {
+  const id = actorId || inferActorId(layerId);
+  if (!id) return undefined;
+  if (layerId.includes('writing')) return 'write_hand';
+  if (layerId.includes('full') || layerId.includes('empty')) return 'eat';
+  return 'idle';
 }
 
 export function hasAuthoredScene(composition: SceneComposition | undefined): boolean {
