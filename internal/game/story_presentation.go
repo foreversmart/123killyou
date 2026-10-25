@@ -11,6 +11,11 @@ func (e *Engine) setMiniScene(state *State, key string) {
 	switch key {
 	case "mini_arrival", "mini_register", "mini_refectory", "mini_corridor_candle", "mini_listen", "mini_oracle", "mini_double", "mini_dawn":
 		state.DialogueNext = "继续听"
+	case "mini_four_knocks":
+		// The empty-door shot has no spoken line to advance it. Give the
+		// client an explicit quiet-window command so an idle player reaches
+		// the following three-knock scene after a short, visible pause.
+		state.DialogueNext = fourKnocksAutoAdvance
 	}
 	state.SceneName = scene.name
 	state.SceneText = scene.text

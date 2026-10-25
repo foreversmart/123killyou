@@ -1,6 +1,11 @@
 package game
 
+const fourKnocksAutoAdvance = "自动进入三敲"
+
 func (e *Engine) storyFourKnocks(state *State, text string) (string, string, bool) {
+	if text == fourKnocksAutoAdvance {
+		return e.advanceAfterFourKnocks(state)
+	}
 	// Refusals and questions about opening are still words spoken through the
 	// door. Only the concise "不开门" choice is allowed to advance the scene.
 	if miniHasAny(text, "不要开门", "别开门", "不打开门", "不要打开门", "不该开门", "不该打开门", "要不要开门", "要不要打开门", "开不打开门") {
@@ -18,29 +23,40 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 	if miniHasAny(text, "问是谁", "回答姓名", "说出名字", "和门外说话", "与门外对话", "继续和鬼说话", "喊话", "喂", "有人吗", "谁") {
 		return e.silentFourKnocksUtterance(state)
 	}
-	if miniHasAny(text, "不开门", "不回答", "等待三敲", "听门") {
-		miniSetFlag(state, "four_knocks_survived")
-		e.setMiniScene(state, "mini_three_knocks")
-		if allCompanionsAte(state) {
-			miniObserve(state, "四敲后留下一段寂静，轻笑从门后退远。走廊另一端响起三下敲门，没有脚步靠近门前。")
-			return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
-		}
-		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
+	if miniHasAny(text, "不开门", "不回答", "等待三敲") {
+		return e.advanceAfterFourKnocks(state)
 	}
 	if miniHasAny(text, "检查门缝", "看门眼", "观察门外", "看门闩") {
 		miniShot(state, "four_peephole")
+		scheduleFourKnocksAutoAdvance(state)
 		return "inspect", miniObserve(state, "门缝红蜡完整。门眼里只有被月光切开的空走廊，四敲之后没有脚步，没有人影。"), true
 	}
-	if miniHasAny(text, "听声音", "听敲门") {
+	if miniHasAny(text, "听声音", "听敲门", "听门", "听门外", "再听听门外") {
 		miniShot(state, "four_knocks")
+		scheduleFourKnocksAutoAdvance(state)
 		return "inspect", miniObserve(state, "四下敲门先后落在门板上，间隔相同。余震散去后，门外没有回答。"), true
 	}
 	if miniHasAny(text, "保持安静") {
+		scheduleFourKnocksAutoAdvance(state)
 		return "inspect", miniObserve(state, "四下敲门的余震已经散去。门外没有回答，呼吸声在门板近处回响。"), true
 	}
 	// Any other sentence is still speech at the door. Do not fall through to
 	// storyConversation, which would invent a system or NPC reply here.
 	return e.silentFourKnocksUtterance(state)
+}
+
+func scheduleFourKnocksAutoAdvance(state *State) {
+	state.DialogueNext = fourKnocksAutoAdvance
+}
+
+func (e *Engine) advanceAfterFourKnocks(state *State) (string, string, bool) {
+	miniSetFlag(state, "four_knocks_survived")
+	e.setMiniScene(state, "mini_three_knocks")
+	if allCompanionsAte(state) {
+		miniObserve(state, "四敲后留下一段寂静，轻笑从门后退远。走廊另一端响起三下敲门，没有脚步靠近门前。")
+		return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
+	}
+	return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
 }
 
 func (e *Engine) silentFourKnocksUtterance(state *State) (string, string, bool) {

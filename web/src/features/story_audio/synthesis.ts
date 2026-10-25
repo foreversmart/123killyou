@@ -87,6 +87,14 @@ export function playStoryCue(
     noise(0.35, 0.5, 180);
     tone(87, 0.3, 0.14);
   }
+  if (cue.kind === 'death') {
+    // A short low growl, tearing rush and blunt impact mark the ghost's lunge.
+    noise(1.2, 0.5, 130);
+    noise(0.68, 0.3, 1900, false);
+    tone(74, 0.86, 0.16);
+    tone(42, 1.05, 0.1, 0.08);
+    tone(220, 0.18, 0.08, 0.34);
+  }
   if (cue.kind === 'cat') {
     const voice = context.createOscillator();
     const volume = context.createGain();
