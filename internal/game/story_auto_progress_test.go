@@ -51,16 +51,23 @@ func TestSilentRefectoryHandoffDefaultsToVegetarianMeal(t *testing.T) {
 		t.Fatalf("斋堂无响应仍播出了帘后支线或没有自动收束: speaker=%s next=%q", s.Dialogue.Speaker, s.DialogueNext)
 	}
 	e.Apply(&s, s.DialogueNext)
-	if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
-		t.Fatalf("默认晚膳没有回到回廊: scene=%s flags=%v", s.SceneKey, s.Flags)
+	if s.SceneKey != "mini_refectory" || s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" {
+		t.Fatalf("无响应晚膳没有先播放用膳镜头: scene=%s shot=%s next=%q flags=%v", s.SceneKey, s.ShotKey, s.DialogueNext, s.Flags)
+	}
+	if s.Dialogue.Speaker != "许栀" || !strings.Contains(s.Dialogue.Text, "不") || !strings.Contains(s.Dialogue.Text, "素菜") {
+		t.Fatalf("无响应时没有由NPC说明不吃肉粥: %+v", s.Dialogue)
 	}
 	for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
-		if !s.Flags["meal_"+person+"_deferred"] || s.Flags["meal_"+person+"_ate"] {
-			t.Fatalf("无响应晚膳没有默认暂缓: person=%s flags=%v", person, s.Flags)
+		if !s.Flags["meal_"+person+"_refused"] || s.Flags["meal_"+person+"_ate"] {
+			t.Fatalf("无响应晚膳没有默认不吃肉粥: person=%s flags=%v", person, s.Flags)
 		}
 	}
 	if s.Flags["skin_double_present"] {
 		t.Fatal("无响应晚膳不应开启吃粥换皮支线")
+	}
+	e.Apply(&s, s.DialogueNext)
+	if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
+		t.Fatalf("默认晚膳没有回到回廊: scene=%s flags=%v", s.SceneKey, s.Flags)
 	}
 
 	// The corridor is the last safe handoff. Its scripted warning still plays,

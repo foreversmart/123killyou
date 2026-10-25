@@ -9,6 +9,7 @@ type TravelBeat = {
   title: string;
   kind: 'walk' | 'sleep';
   backdrop: string;
+  interlude?: string;
   durationMs?: number;
 };
 
@@ -22,9 +23,11 @@ const travelBeats: Record<string, TravelBeat> = {
   },
   mini_refectory: {
     id: 'register_walk_refectory',
-    title: '穿过长廊去斋堂',
+    title: '经过红竹寺大殿，走向斋堂',
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardAfternoon,
+    interlude: storyAssets.scenes.mainHallAfternoon,
+    durationMs: 2600,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
@@ -80,6 +83,14 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
       aria-live="polite"
     >
       <img className={styles.backdrop} src={beat.backdrop} alt="" aria-hidden="true" />
+      {beat.interlude && (
+        <img
+          className={styles.interludeBackdrop}
+          src={beat.interlude}
+          alt="红竹寺大殿"
+          aria-hidden="true"
+        />
+      )}
       <div className={styles.shade} aria-hidden="true" />
       <div className={styles.copy}>
         <strong>{beat.title}</strong>

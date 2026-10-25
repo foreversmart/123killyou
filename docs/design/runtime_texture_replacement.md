@@ -25,6 +25,7 @@
 | --- | --- | --- |
 | `web/public/art/story/scenes/temple_gate.webp` | `assets/scenes/temple_gate/gate_afternoon.png` | 抵达山门、到达页 |
 | `web/public/art/story/scenes/registration.webp` | `assets/scenes/registration/registration_afternoon.png` | 登记处背景 |
+| `web/public/art/story/scenes/main_hall/hall_afternoon.webp` | `assets/scenes/main_hall/hall_afternoon.png` | 去斋堂途中经过红竹寺大殿的午后过渡画面 |
 | `web/public/art/story/scenes/east_courtyard.webp` | `assets/scenes/east_courtyard/corridor_afternoon.png` | 东院回廊背景 |
 | `web/public/art/story/scenes/player_room.webp` | `assets/scenes/player_room/room_candlelit.png` | 门房亮烛背景 |
 | `web/public/art/story/scenes/registration_desk.webp` | `assets/scenes/registration/desk_foreground.png` | 登记桌前景 |

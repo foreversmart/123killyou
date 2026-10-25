@@ -39,10 +39,10 @@ var registerLines = []miniLine{
 	{"陆沉", "这是各位的钥匙，请各位施主妥善保管就好了。房牌都对应好了，行李可以放到各自门边。", "register_key_tags"},
 }
 var refectoryLines = []miniLine{
-	{"周砚", "等一下，粥里好像有肉！和尚庙不是应该都吃素吗，为什么会有肉？", "refectory_porridge"},
-	{"陆沉", miniGuestMealExplanation, "refectory_lamp"},
-	{"林岚", "听起来像是好意。不过，好意也该先问清楚。", "refectory_table"},
-	{"许栀", "先拿个馒头，再夹点咸菜和笋干。粥里的肉是谁送来的，等问明白了再决定。", "refectory_bread"},
+	{"周砚", "等一下，粥里好像有肉。斋堂平日吃素，大家想不想吃这一碗？先问问彼此，再动勺子。", "refectory_porridge"},
+	{"陆沉", miniGuestMealExplanation + "我站在门边，不替各位决定。", "refectory_lamp"},
+	{"林岚", "我有点想尝，但又不想只凭香味做决定。你可以分别问问我们，谁愿意吃、谁想换馒头。", "refectory_table"},
+	{"许栀", "馒头、咸菜和笋干都在手边。想吃肉粥就说一声，不想吃也没关系，先把自己的想法问清楚。", "refectory_bread"},
 }
 var corridorLines = []miniLine{
 	{"陆沉", "晚膳后跟我回房。路上每人一支红烛，晚上回到房里必须点燃，红烛可以驱除邪祟，别让火在房里熄了。", "corridor_candles"},

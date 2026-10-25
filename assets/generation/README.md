@@ -58,6 +58,7 @@
 | 山门·晨光                 | [gate_dawn.png](../scenes/temple_gate/gate_dawn.png)                            | 1672 × 941        | 山门·晨光                                                                                  |
 | 大巴·午后抵达             | [bus_arrival.png](../scenes/bus/bus_arrival.png)                                | 1672 × 941        | 大巴·午后抵达                                                                              |
 | 大雄宝殿·夜间入口         | [hall_night.png](../scenes/main_hall/hall_night.png)                            | 1672 × 941        | 大雄宝殿·夜间入口                                                                          |
+| 大雄宝殿·午后经过           | [hall_afternoon.png](../scenes/main_hall/hall_afternoon.png)                    | 2944 × 1270       | 去斋堂途中经过红竹寺大殿的过渡画面；运行时按 16:9 容器裁切显示                         |
 | 偏房·门隙观察             | [room_night.png](../scenes/guest_room/room_night.png)                           | 1672 × 941        | 偏房·门隙观察                                                                              |
 | 大巴·晨间返程             | [bus_departure.png](../scenes/bus/bus_departure.png)                            | 1672 × 941        | 大巴·晨间返程                                                                              |
 | 门眼·空回廊               | [peephole_empty.png](../scenes/player_room/peephole_empty.png)                  | 1672 × 941        | 门眼·空回廊                                                                                |

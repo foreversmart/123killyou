@@ -27,6 +27,7 @@ const scenes = {
   eastCourtyardPaperAjar: scene('east_courtyard/corridor_paper_ajar'),
   diningHall: scene('dining_hall/dining_sunset'),
   diningTable: scene('dining_hall/table_foreground'),
+  mainHallAfternoon: scene('main_hall/hall_afternoon'),
   guestRoomNight: scene('guest_room/room_night'),
   mainHallNight: scene('main_hall/hall_night'),
   shrineNight: scene('east_shrine/shrine_night'),

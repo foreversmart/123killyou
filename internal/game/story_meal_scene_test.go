@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRefectoryServesFullVegetarianTableBeforeMeatDiscovery(t *testing.T) {
+func TestRefectoryOpensWithNpcMealDiscussionBeforeChoices(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("meal-menu")
 	storyCommands(e, &s, "登记入住", "去斋堂")
@@ -20,12 +20,15 @@ func TestRefectoryServesFullVegetarianTableBeforeMeatDiscovery(t *testing.T) {
 	}
 
 	e.Apply(&s, "继续听")
-	if s.Dialogue.Speaker != "周砚" || !strings.Contains(s.Dialogue.Text, "粥里好像有肉") || !strings.Contains(s.Dialogue.Text, "吃素") {
-		t.Fatalf("没有由同行者突然发现并质疑: %+v", s.Dialogue)
+	if s.Dialogue.Speaker != "周砚" || !strings.Contains(s.Dialogue.Text, "粥里好像有肉") || !strings.Contains(s.Dialogue.Text, "想不想吃") {
+		t.Fatalf("没有由同行者讨论是否吃肉粥并邀请大家决定: %+v", s.Dialogue)
+	}
+	if strings.Contains(s.Dialogue.Text, "为什么会有肉") || strings.Contains(s.Dialogue.Text, "和尚庙不是应该") {
+		t.Fatalf("晚膳开场仍把讨论写成质疑寺庙: %s", s.Dialogue.Text)
 	}
 	e.Apply(&s, "继续听")
-	if s.Dialogue.Speaker != "陆沉" {
-		t.Fatalf("供荤解释没有由守夜人作出: %+v", s.Dialogue)
+	if s.Dialogue.Speaker != "陆沉" || !strings.Contains(s.Dialogue.Text, "门边") {
+		t.Fatalf("陆沉没有在边上说明选择: %+v", s.Dialogue)
 	}
 	for _, fact := range []string{"外来客", "吃不惯", "斋饭", "僧人自己不吃肉"} {
 		if !strings.Contains(s.Dialogue.Text, fact) {
