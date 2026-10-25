@@ -62,6 +62,31 @@ func TestDoorInvestigationReturnsToTheRequestedSoundOrObject(t *testing.T) {
 	}
 }
 
+func TestFourKnocksSpeechStaysSilentAndLowersDevotion(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("four-knocks-speech")
+	e.setMiniScene(&s, "mini_four_knocks")
+	s.Devotion = 10
+
+	for _, command := range []string{"问是谁", "我不该说话", "不要打开门"} {
+		intent, speak := e.Apply(&s, command)
+		if intent != "inspect" || speak != "" || s.Dialogue != (Dialogue{}) {
+			t.Fatalf("四敲开口不应生成交谈对象: command=%q intent=%s speak=%q dialogue=%+v", command, intent, speak, s.Dialogue)
+		}
+		if s.SceneKey != "mini_four_knocks" || s.Flags["four_knocks_survived"] {
+			t.Fatalf("四敲开口不应推进场景: command=%q scene=%s flags=%v", command, s.SceneKey, s.Flags)
+		}
+	}
+	if s.Devotion != 4 || s.GhostDialogueTurns != 3 || !s.Flags["ghost_dialogue_started"] {
+		t.Fatalf("四敲每句开口都应扣虔诚度: devotion=%d turns=%d flags=%v", s.Devotion, s.GhostDialogueTurns, s.Flags)
+	}
+
+	intent, _ := e.Apply(&s, "不开门")
+	if intent != "story" || s.SceneKey != "mini_three_knocks" {
+		t.Fatalf("明确不开门才应进入三敲: intent=%s scene=%s", intent, s.SceneKey)
+	}
+}
+
 func TestSilentStoryReplayKeepsTheObservationAndDoesNotRestoreOldSpeech(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("silent-replay")

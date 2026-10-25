@@ -51,6 +51,17 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	}
 	state.DialogueNext = ""
 	text = Normalize(text)
+	// Four knocks are a special sound-only danger scene. Once global controls
+	// have been handled, every remaining utterance must be judged by the scene
+	// itself so the generic action clarifier cannot invent a system reply.
+	if state.StoryMode && state.SceneKey == "mini_four_knocks" {
+		if intent, speak, ok := e.system(state, text); ok {
+			return intent, speak
+		}
+		if intent, speak, ok := e.story(state, text); ok {
+			return intent, speak
+		}
+	}
 	if message, clarify := ActionClarification(text); clarify {
 		return "clarify", feedback(state, message)
 	}

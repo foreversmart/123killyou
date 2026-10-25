@@ -1,23 +1,24 @@
 package game
 
 func (e *Engine) storyFourKnocks(state *State, text string) (string, string, bool) {
-	if miniHasAny(text, "回答姓名", "说出名字", "和门外说话", "与门外对话", "继续和鬼说话") {
-		recordGhostDialogue(state)
-		miniSetFlag(state, "name_echo_heard")
-		if !state.Flags["red_candle_lit"] {
-			intent, speak := e.storyDeath(state, "姓名从门外被原样复述。门缝没有红光，影子从缝里挤了进来。")
-			return intent, speak, true
-		}
-		return "story", miniDialogue(state, "你（门外回声）", "是我。你怎么不回答？"), true
+	// Refusals and questions about opening are still words spoken through the
+	// door. Only the concise "不开门" choice is allowed to advance the scene.
+	if miniHasAny(text, "不要开门", "别开门", "不打开门", "不要打开门", "不该开门", "不该打开门", "要不要开门", "要不要打开门", "开不打开门") {
+		return e.silentFourKnocksUtterance(state)
 	}
 	if miniHasAny(text, "开门") && !miniHasAny(text, "不开门") {
 		intent, speak := e.storyDeath(state, "门闩被拉开。门外同行人的后背没有皮肤，一只手伸进门内。")
 		return intent, speak, true
 	}
-	if miniHasAny(text, "不开门", "问是谁", "听门") {
-		if miniHasAny(text, "问是谁") {
-			recordGhostDialogue(state)
-		}
+	// The four knocks are a one-way warning. Speaking through the door never
+	// produces a responder, echo, laugh, or clarification; every utterance is
+	// instead recorded as the player's growing guilt. Keep this branch before
+	// the safe "不开门" choice so combined commands such as "不开门并问是谁"
+	// are still treated as speech.
+	if miniHasAny(text, "问是谁", "回答姓名", "说出名字", "和门外说话", "与门外对话", "继续和鬼说话", "喊话", "喂", "有人吗", "谁") {
+		return e.silentFourKnocksUtterance(state)
+	}
+	if miniHasAny(text, "不开门", "不回答", "等待三敲", "听门") {
 		miniSetFlag(state, "four_knocks_survived")
 		e.setMiniScene(state, "mini_three_knocks")
 		if allCompanionsAte(state) {
@@ -37,7 +38,14 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 	if miniHasAny(text, "保持安静") {
 		return "inspect", miniObserve(state, "四下敲门的余震已经散去。门外没有回答，呼吸声在门板近处回响。"), true
 	}
-	return e.storyConversation(state, text)
+	// Any other sentence is still speech at the door. Do not fall through to
+	// storyConversation, which would invent a system or NPC reply here.
+	return e.silentFourKnocksUtterance(state)
+}
+
+func (e *Engine) silentFourKnocksUtterance(state *State) (string, string, bool) {
+	recordGhostDialogue(state)
+	return "inspect", miniObserve(state, "门外没有任何反应。四下敲门后的走廊仍然空着。"), true
 }
 
 func miniPersonName(person string) string {
