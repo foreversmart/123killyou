@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { RoomPhase } from '@/scene/room/useRoomTransition';
+import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
 
 type TravelBeat = {
@@ -9,6 +10,7 @@ type TravelBeat = {
   detail: string;
   landmark: string;
   kind: 'walk' | 'sleep';
+  backdrop: string;
 };
 
 const travelBeats: Record<string, TravelBeat> = {
@@ -18,6 +20,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '守夜人提灯走在前面，三位同伴带着行李跟上。',
     landmark: '山门石阶 · 铜铃 · 晒太阳的花猫',
     kind: 'walk',
+    backdrop: storyAssets.scenes.eastCourtyardAfternoon,
   },
   mini_refectory: {
     id: 'register_walk_refectory',
@@ -25,6 +28,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '檐灯一盏盏亮起，脚步声沿着旧拖痕传向饭堂。',
     landmark: '东院回廊 · 封闭钟楼门 · 夕阳格窗',
     kind: 'walk',
+    backdrop: storyAssets.scenes.eastCourtyardAfternoon,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
@@ -32,6 +36,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '陆沉收起斋碗，抱着烛盒走在前方，大家回到东院再逐人领取红烛。',
     landmark: '斋堂后门 · 檐灯 · 四间偏房',
     kind: 'walk',
+    backdrop: storyAssets.scenes.eastCourtyardDusk,
   },
   mini_room: {
     id: 'corridor_return_room',
@@ -39,6 +44,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '陆沉停在回廊中央，四个人在各自的房门前散开。',
     landmark: '听 · 灯 · 纸 · 门',
     kind: 'walk',
+    backdrop: storyAssets.scenes.eastCourtyardNight,
   },
   mini_wake_three_gongs: {
     id: 'room_sleep_blackout',
@@ -46,6 +52,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '更锣从远处传来，寺史册和经文沉入烛影，门外没有人影。',
     landmark: '烛芯 · 寺史册 · 清心静神经',
     kind: 'sleep',
+    backdrop: storyAssets.scenes.playerRoom,
   },
   mini_ending: {
     id: 'dawn_walk_bus',
@@ -53,6 +60,7 @@ const travelBeats: Record<string, TravelBeat> = {
     detail: '三位同伴提起行李，陆沉在门内收回通行凭，花猫停在旧匾下目送。',
     landmark: '东院石阶 · 明照寺旧匾 · 晨雾公路',
     kind: 'walk',
+    backdrop: storyAssets.scenes.templeGateDawn,
   },
 };
 
@@ -75,6 +83,22 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
   if (!beat || state.flags.debug_scene_skipped) return null;
   return (
     <div className={styles.transition} data-transition={beat.id} role="status" aria-live="polite">
+      <img
+        src={beat.backdrop}
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          zIndex: 0,
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          opacity: 0.3,
+          filter: 'saturate(0.7) brightness(0.68)',
+        }}
+      />
       <div className={styles.sky} aria-hidden="true" />
       {beat.kind === 'sleep' ? (
         <div className={styles.sleepScene} aria-hidden="true">

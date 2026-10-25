@@ -54,21 +54,12 @@ export function StoryArt({ state }: { state: GameState }) {
     return <BedroomArt id={id} state={state} />;
   };
 
-  const assetScene =
-    key === 'mini_register'
-      ? storyAssets.scenes.registration
-      : key === 'mini_corridor_candle' || (key === 'mini_dawn' && shot !== 'dawn_gate')
-        ? storyAssets.scenes.eastCourtyard
-        : key === 'mini_room' ||
-            key === 'mini_four_knocks' ||
-            key === 'mini_three_knocks' ||
-            key === 'mini_double'
-          ? state.flags.red_candle_lit
-            ? storyAssets.scenes.playerRoom
-            : undefined
-          : undefined;
+  const assetScene = selectSceneAsset(key, shot, state.flags);
 
-  const roomAsset = assetScene === storyAssets.scenes.playerRoom;
+  const roomAsset =
+    assetScene === storyAssets.scenes.playerRoom ||
+    assetScene === storyAssets.scenes.playerRoomMoonlit ||
+    assetScene === storyAssets.scenes.playerRoomFalseDawn;
   return (
     <div className={styles.art} data-scene-art={key} data-shot-art={shot}>
       <svg
@@ -86,7 +77,7 @@ export function StoryArt({ state }: { state: GameState }) {
               y="0"
               width="1000"
               height="600"
-              preserveAspectRatio="none"
+              preserveAspectRatio="xMidYMid slice"
               aria-hidden="true"
             />
             {key === 'mini_corridor_candle' && (
@@ -101,4 +92,33 @@ export function StoryArt({ state }: { state: GameState }) {
       </svg>
     </div>
   );
+}
+
+function selectSceneAsset(
+  key: string,
+  shot: string,
+  flags: Record<string, boolean>,
+): string | undefined {
+  if (key === 'mini_register') return storyAssets.scenes.registration;
+  if (key === 'mini_refectory') return storyAssets.scenes.diningHall;
+  if (key === 'mini_corridor_candle')
+    return shot === 'corridor_warning' || shot === 'corridor_two_gongs'
+      ? storyAssets.scenes.eastCourtyardNight
+      : storyAssets.scenes.eastCourtyardDusk;
+  if (key === 'mini_listen') return storyAssets.scenes.guestRoomNight;
+  if (key === 'mini_oracle') return storyAssets.scenes.shrineNight;
+  if (key === 'mini_dawn')
+    return shot === 'dawn_gate'
+      ? storyAssets.scenes.templeGateDawn
+      : storyAssets.scenes.eastCourtyardDawn;
+  if (key === 'mini_ending') return storyAssets.scenes.busDeparture;
+  if (key === 'mini_dawn_trap') return storyAssets.scenes.playerRoomFalseDawn;
+  if (key === 'mini_wake_three_gongs') return storyAssets.scenes.playerRoomMoonlit;
+  if (key === 'mini_four_knocks') return storyAssets.scenes.peepholeEmpty;
+  if (key === 'mini_death') return storyAssets.scenes.playerRoomMoonlit;
+  if (key === 'mini_room' || key === 'mini_three_knocks' || key === 'mini_double')
+    return flags.red_candle_lit
+      ? storyAssets.scenes.playerRoom
+      : storyAssets.scenes.playerRoomMoonlit;
+  return undefined;
 }

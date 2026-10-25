@@ -109,8 +109,26 @@
   opacity: 0.94;
   filter: saturate(0.9) contrast(0.96);
 }
+.arrival[data-authored='true'] .sun,
+.arrival[data-authored='true'] .distant-hills,
+.arrival[data-authored='true'] .temple-wall,
+.arrival[data-authored='true'] .stone-court,
+.arrival[data-authored='true'] .tree-shadow,
+.arrival[data-authored='true'] .tree,
+.arrival[data-authored='true'] .bus,
+.arrival[data-authored='true'] .temple-gate,
+.arrival[data-authored='true'] .bell,
+.arrival[data-authored='true'] .direction-sign,
+.arrival[data-authored='true'] .luggage-cart,
+.arrival[data-authored='true'] .registration-desk,
+.arrival[data-authored='true'] .cat,
+.arrival[data-authored='true'] .door-step,
+.arrival[data-authored='true'] .sun-rays {
+  display: none;
+}
 
 .bus {
+  display: none;
   position: absolute;
   top: 17%;
   left: -18%;
