@@ -13,8 +13,8 @@ import { StartChoices } from '@/features/session/start_choices';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
-export default function Game() {
-  const game = useGameController();
+export default function Game({ voiceReady }: { voiceReady?: boolean }) {
+  const game = useGameController({ voiceReady });
   const debug = new URLSearchParams(location.search).has('debug');
   const sceneSkipEnabled = import.meta.env.DEV || debug;
   const {
@@ -29,10 +29,9 @@ export default function Game() {
     showNotice,
     tour,
     voiceStarted,
-    opening,
+    openingFlow,
     selecting,
-    begin,
-    resume,
+    setOpeningReady,
   } = game;
   if (!state) return <LoadingScreen error={error} />;
   return (
@@ -47,7 +46,6 @@ export default function Game() {
         />
         <Room state={state} phase={roomPhase} onAction={voice.submit} interactive={connected}>
           <Overlays state={state} />
-          {opening && <StartChoices busy={selecting} onBegin={begin} onResume={resume} />}
           {showNotice && <ActionNotice text={notice} />}
         </Room>
         <Inventory state={state} />
@@ -59,6 +57,9 @@ export default function Game() {
           connected={connected}
           onTour={tour}
         />
+        {openingFlow && (
+          <StartChoices busy={selecting} voiceActive={voiceStarted} onReady={setOpeningReady} />
+        )}
       </section>
       <div className={styles['outside-caption']}>
         <span>红烛无声 · 红烛寺</span>

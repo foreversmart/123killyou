@@ -315,4 +315,4 @@
 | 10—11 换皮与假天亮 | 换皮同行人使用对应人物的 `double_scratching`；`room_false_dawn.webp` 固定窗外仍黑的事实，短芯红烛和门外声源不提前显示实体。                                                                                                               |
 | 12 返程            | `corridor_dawn.webp` → `gate_dawn.webp` → `bus_departure.webp`，晨光、行李、旧匾和后视镜按过渡镜头依次出现。                                                                                                                              |
 
-片头视频和关键帧保留在 `assets/video/opening/`；游戏开始界面点击“开始旅程”后自动播放运行时 `opening/opening.mp4` 与片名海报。片头结束进入约 3.9 秒的大巴山路过渡：`bus_departure.webp` 从车窗外山路开始，`bus_arrival.webp` 淡入红烛寺山门；过渡结束后才建立 `mini_arrival` 会话并播放下车对白。抵达场景内仍保留一个可选的“片头回放”入口，不能代替正式开场流程。
+片头视频和关键帧保留在 `assets/video/opening/`；游戏开始界面点击“开始旅程”后自动播放运行时 `opening/opening.mp4` 与片名海报。片头结束进入约 3.9 秒的大巴山路过渡：`bus_departure.webp` 从车窗外山路开始，`bus_arrival.webp` 淡入红烛寺山门；过渡结束后才建立 `mini_arrival` 会话并播放下车对白。片头与山路/下车过渡均使用全屏满幅舞台层，隐藏开始界面卡片；文字提示与跳过/进入按钮只作为底部叠层，不再以小框承载动画。抵达场景内仍保留一个可选的“片头回放”入口，不能代替正式开场流程。

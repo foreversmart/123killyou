@@ -8,6 +8,7 @@ import { StoryObservation } from '@/scene/story_observation';
 import { SceneHeading } from '@/scene/scene_heading';
 import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
+import { authoredScene } from '@/scene/authored_scene/scenes';
 import { sceneChoices } from './choices';
 import styles from './style.module.css';
 
@@ -21,6 +22,7 @@ export function StoryStage({
   onAction: (command: string) => Promise<void>;
 }) {
   const layout = sceneLayout(state);
+  const authored = Boolean(authoredScene(state));
   const enabled =
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
   const speaker = state.dialogue.speaker;
@@ -40,18 +42,19 @@ export function StoryStage({
         description={layout.atmosphere}
       />
       <div className={styles.staging} aria-label="人物位置与现场道具">
-        {actors.map((actor, index) => (
-          <ScenePerson
-            key={actor.id}
-            actor={actor}
-            placement={layout.actors[actor.id] || { x: 35 + index * 13, y: 74, height: 32 }}
-            speaking={speaker.startsWith(actor.name) && !speaker.includes('心声')}
-            pose={state.shotKey}
-            sceneKey={state.sceneKey}
-            flags={state.flags}
-          />
-        ))}
-        {state.sceneKey === 'mini_register' && (
+        {!authored &&
+          actors.map((actor, index) => (
+            <ScenePerson
+              key={actor.id}
+              actor={actor}
+              placement={layout.actors[actor.id] || { x: 35 + index * 13, y: 74, height: 32 }}
+              speaking={speaker.startsWith(actor.name) && !speaker.includes('心声')}
+              pose={state.shotKey}
+              sceneKey={state.sceneKey}
+              flags={state.flags}
+            />
+          ))}
+        {!authored && state.sceneKey === 'mini_register' && (
           <>
             <img
               className={styles.registrationForeground}
@@ -102,7 +105,7 @@ export function StoryStage({
             ) : null}
           </>
         )}
-        {state.sceneKey === 'mini_refectory' && (
+        {!authored && state.sceneKey === 'mini_refectory' && (
           <img
             className={styles.diningForeground}
             src={storyAssets.scenes.diningTable}
@@ -110,7 +113,7 @@ export function StoryStage({
             aria-hidden="true"
           />
         )}
-        {state.sceneKey === 'mini_oracle' && (
+        {!authored && state.sceneKey === 'mini_oracle' && (
           <img
             className={styles.shrineForeground}
             src={storyAssets.scenes.shrineTable}
@@ -118,7 +121,7 @@ export function StoryStage({
             aria-hidden="true"
           />
         )}
-        {state.sceneKey === 'mini_listen' && state.flags.skin_seen && (
+        {!authored && state.sceneKey === 'mini_listen' && state.flags.skin_seen && (
           <img
             className={styles.victimPartial}
             src={storyAssets.scenes.victimPartial}
@@ -126,19 +129,20 @@ export function StoryStage({
             aria-hidden="true"
           />
         )}
-        {layout.props.map((prop) => (
-          <SceneProp
-            key={prop.id}
-            prop={prop}
-            enabled={enabled}
-            lit={Boolean(
-              state.flags.red_candle_lit ||
-              (prop.id === 'candle' && state.sceneKey === 'mini_oracle'),
-            )}
-            onAction={onAction}
-            state={state}
-          />
-        ))}
+        {!authored &&
+          layout.props.map((prop) => (
+            <SceneProp
+              key={prop.id}
+              prop={prop}
+              enabled={enabled}
+              lit={Boolean(
+                state.flags.red_candle_lit ||
+                (prop.id === 'candle' && state.sceneKey === 'mini_oracle'),
+              )}
+              onAction={onAction}
+              state={state}
+            />
+          ))}
       </div>
       {unseenSpeaker && (
         <div className={styles.source} role="status">

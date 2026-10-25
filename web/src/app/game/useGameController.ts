@@ -7,7 +7,7 @@ import { useStoryPlayback } from './useStoryPlayback';
 import { useStorySound } from '@/features/story_audio/useStorySound';
 import type { GameResult, TurnControls } from '@/shared/types/game';
 
-export function useGameController() {
+export function useGameController({ voiceReady = false }: { voiceReady?: boolean } = {}) {
   const {
     state: incomingState,
     error,
@@ -21,10 +21,29 @@ export function useGameController() {
   const { state, phase: roomPhase } = useRoomTransition(incomingState);
   const [notice, setNotice] = useState('');
   const [systemNotice, setSystemNotice] = useState(false);
+  const [openingFlow, setOpeningFlow] = useState(true);
+  const [openingReady, setOpeningReady] = useState(false);
+  const openingGate = useRef<'video' | 'ready' | 'done'>('video');
+  const voicePriming = useRef(false);
   const latestAction = useRef(0);
   const act = useCallback(
     async (text: string, controls?: Partial<TurnControls>) => {
       const action = ++latestAction.current;
+      const gate = openingGate.current;
+      if (gate !== 'done') {
+        if (gate !== 'ready') {
+          setNotice('片头播放结束后，请说“开始游戏”。');
+          return { text: '', streamed: false, problem: '', sceneOnly: true };
+        }
+        if (!/(开始游戏|开始旅程|进入游戏)/.test(text.replace(/[“”"。，！？!?\s]/g, ''))) {
+          setNotice('请说“开始游戏”开始旅程。');
+          return { text: '', streamed: false, problem: '', sceneOnly: true };
+        }
+        openingGate.current = 'done';
+        setOpeningReady(false);
+        setOpeningFlow(false);
+        text = '听第一话';
+      }
       let announced = false;
       const announce = (result: GameResult) => {
         if (action !== latestAction.current || announced) return;
@@ -74,32 +93,37 @@ export function useGameController() {
     [send],
   );
   const voiceSession = useVoice(act, openTranscription);
+  const connectVoice = useCallback(
+    async (announce: boolean) => {
+      try {
+        const playback = voiceSession.enablePlayback();
+        await enter();
+        await playback;
+        const started = await voiceSession.start();
+        if (started && announce) await voiceSession.submit(opening ? '听第一话' : '重听当前对白');
+        return started;
+      } catch {
+        return false;
+      }
+    },
+    [enter, opening, voiceSession.enablePlayback, voiceSession.start, voiceSession.submit],
+  );
   const startVoice = useCallback(async () => {
-    try {
-      const playback = voiceSession.enablePlayback();
-      await enter();
-      await playback;
-      const started = await voiceSession.start();
-      if (started) await voiceSession.submit(opening ? '听第一话' : '重听当前对白');
-      return started;
-    } catch {
-      // Session failures are displayed by useGameSession.
-      return false;
-    }
-  }, [enter, opening, voiceSession.start, voiceSession.submit, voiceSession.enablePlayback]);
+    return connectVoice(true);
+  }, [connectVoice]);
   const voice = { ...voiceSession, start: startVoice };
+  useEffect(() => {
+    if (!voiceReady || !openingFlow || voiceSession.microphoneOn || voicePriming.current) return;
+    voicePriming.current = true;
+    void connectVoice(false).finally(() => {
+      voicePriming.current = false;
+    });
+  }, [connectVoice, openingFlow, voiceReady, voiceSession.microphoneOn]);
   const soundBusy = useStorySound(state, voice.status);
   useStoryPlayback(incomingState, voice, connected && roomPhase === 'idle' && !soundBusy);
   const begin = useCallback(async () => {
-    try {
-      const playback = voiceSession.enablePlayback();
-      await enter();
-      await playback;
-      await voiceSession.submit('听第一话');
-    } catch {
-      // Keep the opening choices available when the server cannot start a session.
-    }
-  }, [enter, voiceSession.submit, voiceSession.enablePlayback]);
+    await act('开始游戏');
+  }, [act]);
   const resume = useCallback(async () => {
     try {
       const playback = voiceSession.enablePlayback();
@@ -132,6 +156,12 @@ export function useGameController() {
     error,
     connected,
     opening,
+    openingFlow,
+    openingReady,
+    setOpeningReady: useCallback(() => {
+      openingGate.current = 'ready';
+      setOpeningReady(true);
+    }, []),
     selecting,
     begin,
     resume,

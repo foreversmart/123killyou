@@ -2,7 +2,7 @@
 
 剧情以 [mini_script.md](../../story/mini_script.md) 的首夜十二幕为准。当前图片、真实尺寸、透明通道和校验值见 [素材目录](README.md)与 [asset_catalog.json](asset_catalog.json)；逐图提示词见 [完整流程制作清单](production_manifest.json)。不同动作、时段、机位和物品状态使用语义名称，每个状态只保留一个固定路径。
 
-`assets/` 保存素材源图与组合配置，游戏从 `web/public/art/story/` 读取对应压缩素材，并依据后端场景、人物、道具和旗标决定显示状态。组合预览只检查比例、位置和遮挡，不作为玩法状态源；当前运行时结构见 [演示素材说明](../../docs/design/assets-and-slicing.md)。
+`assets/` 保存素材源图与组合配置，游戏从 `web/public/art/story/` 读取对应压缩素材，并依据后端场景、人物、道具和旗标决定显示状态。素材原图与组合配置已经接入剧情场景的运行时渲染；组合配置只负责裁切、比例、位置和遮挡，玩法状态仍由后端结算。语音分支、道具归属和存档不会由贴图层推断。组合预览只检查比例、位置和遮挡，不作为玩法状态源；当前运行时结构见 [演示素材说明](../../docs/design/assets-and-slicing.md)。
 
 ## 十二幕对应关系
 
