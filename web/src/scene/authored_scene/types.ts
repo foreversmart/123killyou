@@ -9,6 +9,8 @@ export type SceneLayer = {
   zIndex: number;
   clipRect?: Rect;
   actorId?: string;
+  /** Semantic movement used by scene-layer animation. */
+  motion?: 'idle' | 'walk' | 'run' | 'write' | 'write_hand' | 'eat' | 'turn';
   rotation?: number;
   filter?: string;
 };

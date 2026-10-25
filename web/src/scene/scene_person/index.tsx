@@ -32,10 +32,12 @@ export function ScenePerson({
       ? storyAssets.props.intrusionShadow
       : getCharacterAsset(actor, sceneKey, pose, flags);
   const useAssetCharacter = Boolean(assetCharacter);
+  const motion = characterMotion(actor, sceneKey, pose);
   return (
     <div
       className={cx(styles.person, speaking && styles.speaking)}
       data-actor={actor.id}
+      data-motion={motion}
       data-concealed={actor.position.includes('帘后')}
       data-stone={actor.id === 'shangong' && pose === 'oracle_stone'}
       data-calm={calm}
@@ -73,6 +75,22 @@ export function ScenePerson({
       </div>
     </div>
   );
+}
+
+type CharacterMotion = 'idle' | 'walk' | 'run' | 'write' | 'eat' | 'turn';
+
+/** Keep the full-body staging alive while preserving the authored pose. */
+function characterMotion(actor: SceneActor, sceneKey?: string, shotKey?: string): CharacterMotion {
+  if (sceneKey === 'mini_refectory' && actor.id !== 'huipu') return 'eat';
+  if (sceneKey === 'mini_register' && shotKey === 'register_desk' && actor.id === 'luchen')
+    return 'write';
+  if (sceneKey === 'mini_corridor_candle' && actor.id === 'luchen') return 'walk';
+  if (sceneKey === 'mini_dawn' && ['dawn_axis', 'dawn_courtyard'].includes(shotKey || ''))
+    return 'walk';
+  if (sceneKey === 'mini_death' && ['evil', 'skin_double'].includes(actor.id)) return 'run';
+  if (sceneKey === 'mini_listen' && actor.id === 'huipu' && shotKey === 'listen_vase')
+    return 'turn';
+  return 'idle';
 }
 
 function getCharacterAsset(
