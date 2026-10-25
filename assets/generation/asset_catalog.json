@@ -406,6 +406,151 @@
         "purpose": "帘后人物及尚未看清、未核实的门外发言占位；保留NPC头像框，由界面叠加问号",
         "visibilityRule": "依据玩家已见信息选择通用黑影或可见人物外貌，不依据后台真实身份暗示真假"
       }
+    },
+    {
+      "id": "inventory_key",
+      "name": "铜钥匙·物品图",
+      "kind": "inventory_item",
+      "itemId": "key",
+      "path": "assets/props/copper_key/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 598034,
+      "sha256": "424f1fb6c74ab3180fd3a3ff1bcf262b52d1a5787086cfc7e0a5482248185e2e",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1285697,
+        "nearOpaquePixels": 263430,
+        "silhouetteBounds": {
+          "minX": 137,
+          "minY": 200,
+          "maxX": 1169,
+          "maxY": 1077
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "07", "08"],
+        "purpose": "单枚铜钥匙的道具栏、背包与调查图；沿用登记处钥匙身份"
+      }
+    },
+    {
+      "id": "inventory_page",
+      "name": "残页·物品图",
+      "kind": "inventory_item",
+      "itemId": "page",
+      "path": "assets/props/torn_page/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1426298,
+      "sha256": "b68bba9513928373845af3ab462a7c34bb900a319ab9448bcb1cdfad92d23ff0",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 772022,
+        "nearOpaquePixels": 772834,
+        "silhouetteBounds": {
+          "minX": 229,
+          "minY": 108,
+          "maxX": 1056,
+          "maxY": 1156
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "05", "07", "11", "12"],
+        "purpose": "残页的道具栏与调查底图；末行警告由准确排字提供"
+      }
+    },
+    {
+      "id": "inventory_candle",
+      "name": "红烛·物品图",
+      "kind": "inventory_item",
+      "itemId": "candle",
+      "path": "assets/props/red_candle/unlit.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 713734,
+      "sha256": "13d67b9d97c4cf610552ce523c02e78a0390723d300303eba077c0e60be188e8",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1073055,
+        "nearOpaquePixels": 485995,
+        "silhouetteBounds": {
+          "minX": 333,
+          "minY": 191,
+          "maxX": 936,
+          "maxY": 1117
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["04", "05", "06", "08", "09", "10", "11"],
+        "purpose": "未点燃红烛的道具栏与调查图；不是场景中燃烧或短芯状态"
+      }
+    },
+    {
+      "id": "inventory_beads",
+      "name": "念珠·物品图",
+      "kind": "inventory_item",
+      "itemId": "beads",
+      "path": "assets/props/prayer_beads/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 851302,
+      "sha256": "1428df57f24750caec0296051f908ea99efface451f586aa922959e87fcc06b4",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 1141079,
+        "nearOpaquePixels": 384106,
+        "silhouetteBounds": {
+          "minX": 113,
+          "minY": 70,
+          "maxX": 1175,
+          "maxY": 1206
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "05", "06"],
+        "purpose": "木念珠的道具栏与调查图；保留一颗更深的珠子"
+      }
+    },
+    {
+      "id": "inventory_permit",
+      "name": "通行凭·物品图",
+      "kind": "inventory_item",
+      "itemId": "permit",
+      "path": "assets/props/permit/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1262943,
+      "sha256": "866e06c7b096b362c3bb6b691da76c102f58b6f659d2f818ba3ff23835544cdf",
+      "status": "generated",
+      "alphaCheck": {
+        "transparentPixels": 778059,
+        "nearOpaquePixels": 770592,
+        "silhouetteBounds": {
+          "minX": 233,
+          "minY": 130,
+          "maxX": 1028,
+          "maxY": 1135
+        }
+      },
+      "presentation": "assets/generation/inventory_presentation.json",
+      "usage": {
+        "storyBeats": ["02", "12"],
+        "purpose": "通行凭的道具栏与正反面调查底图；不再与残页共用图片"
+      }
     }
   ],
   "storySource": "story/mini_script.md",

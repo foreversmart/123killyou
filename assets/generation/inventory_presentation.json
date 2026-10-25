@@ -1,0 +1,194 @@
+{
+  "purpose": "五件正式物品图的显示与准确文字叠加",
+  "runtimeIntegration": "not_integrated",
+  "coordinateSpace": "normalized_original_square_canvas",
+  "rules": [
+    "同一高清透明PNG供道具栏、背包与物品详情共用；保持比例完整显示，不裁掉轮廓。",
+    "文字坐标基于原图方形画布；采用contain时将文字叠加层与整张图片一起等比定位，不能按外部容器随意放置。",
+    "物品名称、边框、底色由界面提供；纸面警告、通行凭标题与印记准确排字，图片中不绘制伪文字。",
+    "铜钥匙与通行凭在场景中的透视图继续用登记处素材，本批图片用于物品栏与调查，不互相覆盖。",
+    "红烛图只代表未点燃；持有、放置、点燃、取走与归还等归属和状态由后端驱动，不能凭空复制物品。",
+    "当前前端物品栏仍使用演示切图且固定六格；正式素材、文字视图、网页格式及更多物品展示规则待接入。"
+  ],
+  "items": [
+    {
+      "itemId": "key",
+      "name": "铜钥匙",
+      "catalogId": "inventory_key",
+      "image": "assets/props/copper_key/inventory.png",
+      "state": "default",
+      "display": {
+        "sourceFrame": {
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254
+        },
+        "objectFit": "contain",
+        "preserveAspectRatio": true
+      },
+      "referenceOnly": "assets/scenes/registration/props/copper_key.png"
+    },
+    {
+      "itemId": "page",
+      "name": "残页",
+      "catalogId": "inventory_page",
+      "image": "assets/props/torn_page/inventory.png",
+      "state": "default",
+      "display": {
+        "sourceFrame": {
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254
+        },
+        "objectFit": "contain",
+        "preserveAspectRatio": true
+      },
+      "referenceOnly": "assets/scenes/player_room/room_candlelit.png",
+      "views": [
+        {
+          "id": "inspect",
+          "overlays": [
+            {
+              "id": "warning",
+              "text": "钟响之后，\n不要回答自己的名字。",
+              "center": {
+                "x": 0.5,
+                "y": 0.73
+              },
+              "fontFamily": "serif",
+              "fontSizeRatio": 0.042,
+              "color": "#44382a",
+              "lineHeight": 1.6,
+              "align": "center"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "itemId": "candle",
+      "name": "红烛",
+      "catalogId": "inventory_candle",
+      "image": "assets/props/red_candle/unlit.png",
+      "state": "unlit",
+      "display": {
+        "sourceFrame": {
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254
+        },
+        "objectFit": "contain",
+        "preserveAspectRatio": true
+      },
+      "referenceOnly": "assets/scenes/player_room/room_candlelit.png"
+    },
+    {
+      "itemId": "beads",
+      "name": "念珠",
+      "catalogId": "inventory_beads",
+      "image": "assets/props/prayer_beads/inventory.png",
+      "state": "default",
+      "display": {
+        "sourceFrame": {
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254
+        },
+        "objectFit": "contain",
+        "preserveAspectRatio": true
+      },
+      "referenceOnly": "web/public/art/item-beads.webp"
+    },
+    {
+      "itemId": "permit",
+      "name": "通行凭",
+      "catalogId": "inventory_permit",
+      "image": "assets/props/permit/inventory.png",
+      "state": "default",
+      "display": {
+        "sourceFrame": {
+          "x": 0,
+          "y": 0,
+          "width": 1254,
+          "height": 1254
+        },
+        "objectFit": "contain",
+        "preserveAspectRatio": true
+      },
+      "referenceOnly": "assets/scenes/registration/props/permit_single.png",
+      "views": [
+        {
+          "id": "front",
+          "overlays": [
+            {
+              "id": "temple",
+              "text": "灯影寺",
+              "center": {
+                "x": 0.5,
+                "y": 0.25
+              },
+              "fontFamily": "serif",
+              "fontSizeRatio": 0.034,
+              "color": "#44382a",
+              "lineHeight": 1.6,
+              "align": "center"
+            },
+            {
+              "id": "title",
+              "text": "通行凭",
+              "center": {
+                "x": 0.5,
+                "y": 0.34
+              },
+              "fontFamily": "serif",
+              "fontSizeRatio": 0.06,
+              "color": "#44382a",
+              "lineHeight": 1.6,
+              "align": "center"
+            },
+            {
+              "id": "seal",
+              "text": "灯影寺",
+              "center": {
+                "x": 0.68,
+                "y": 0.76
+              },
+              "fontFamily": "serif",
+              "fontSizeRatio": 0.027,
+              "color": "#854737",
+              "lineHeight": 1.6,
+              "align": "center",
+              "kind": "seal",
+              "widthRatio": 0.12,
+              "heightRatio": 0.15,
+              "writingMode": "vertical-rl",
+              "rotationDegrees": -5
+            }
+          ]
+        },
+        {
+          "id": "back",
+          "overlays": [
+            {
+              "id": "warning",
+              "text": "只许去，不许问",
+              "center": {
+                "x": 0.5,
+                "y": 0.52
+              },
+              "fontFamily": "serif",
+              "fontSizeRatio": 0.048,
+              "color": "#44382a",
+              "lineHeight": 1.6,
+              "align": "center"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

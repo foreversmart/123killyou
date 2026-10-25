@@ -155,7 +155,7 @@
 
 动物优先做山门花猫与必要鸟类局部。猫叫、鸟叫、敲门、更锣和钟声需要独立声音素材；图片只呈现可见声源，不用画中文字替代听辨。
 
-文本物建议生成纸张、封皮、印泥和磨损底图，精确文字由前端或排版叠加，便于保证房名、经文、警告与登记内容正确。通行凭应有独立正式图，不继续复用残页。
+文本物生成纸张、封皮、印泥和磨损底图，精确文字由前端或排版叠加，便于保证房名、经文、警告与登记内容正确。铜钥匙、残页、未点燃红烛、念珠和通行凭已有独立正式物品图，同一高清透明原图供道具栏与详情共用；通行凭与残页分开。运行中的演示仍沿用原切图，接入时更新映射。
 
 红烛在桌上、手中或神公处的归属与位置要明确，不能每幅场景自动出现一支。烛长与蜡泪随时间延续；火焰是正常暖色小光源，红蜡不等于把全室照成纯红。
 
@@ -202,7 +202,14 @@
 | 慧普·普通对话头像   | [portrait_neutral.png](../../assets/characters/hui_pu/portrait_neutral.png)               | 1254 × 1254，透明 PNG |
 | 神公·普通对话头像   | [portrait_neutral.png](../../assets/characters/shen_gong/portrait_neutral.png)            | 1254 × 1254，透明 PNG |
 | 未知人物·占位头像   | [unknown.png](../../assets/portraits/unknown.png)                                         | 1254 × 1254，透明 PNG |
+| 铜钥匙·物品图       | [inventory.png](../../assets/props/copper_key/inventory.png)                              | 1254 × 1254，透明 PNG |
+| 残页·物品图         | [inventory.png](../../assets/props/torn_page/inventory.png)                               | 1254 × 1254，透明 PNG |
+| 红烛·物品图         | [unlit.png](../../assets/props/red_candle/unlit.png)                                      | 1254 × 1254，透明 PNG |
+| 念珠·物品图         | [inventory.png](../../assets/props/prayer_beads/inventory.png)                            | 1254 × 1254，透明 PNG |
+| 通行凭·物品图       | [inventory.png](../../assets/props/permit/inventory.png)                                  | 1254 × 1254，透明 PNG |
 
-当前已具备四处场景、六名主要 NPC 的普通状态人物图、六张普通对话头像与一张未知人物占位头像。逐张素材的对应幕次、使用位置与适用状态见 [素材用途总表](../../assets/generation/asset_usage.md)。文件信息、人物生成提示词与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；慧普帘后遮挡、神公桌后坐姿及异常状态按场景派生，游戏运行素材的接入由实现任务处理。
+当前已具备四处场景、六名主要 NPC 的普通状态人物图、六张普通对话头像、一张未知人物占位头像与五张正式物品图。逐张素材的对应幕次、使用位置与适用状态见 [素材用途总表](../../assets/generation/asset_usage.md)。文件信息、人物生成提示词与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；慧普帘后遮挡、神公桌后坐姿及异常状态按场景派生，游戏运行素材的接入由实现任务处理。
 
 登记处采用干净背景、登记桌前景与独立道具分层，共八张图片；登记簿开合、通行凭纸叠与单张为不同语义状态。铜房牌复用一张空白底图，房名准确排字。叠放与坐标见 [登记处分层说明](../../assets/scenes/registration/README.md)及 [定位配置](../../assets/scenes/registration/layout.json)。素材预览已核对道具切换与桌前遮挡，正式游戏状态与存档尚未接入。
+
+物品图的用途、状态与文本排版见 [正式物品图说明](../../assets/props/README.md)和 [显示与文字配置](../../assets/generation/inventory_presentation.json)。场景透视图与物品展示图沿同一物件造型派生；红烛的归属和燃烧状态保持连续。

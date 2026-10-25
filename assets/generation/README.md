@@ -1,6 +1,6 @@
 # 《红烛无声》素材目录
 
-日期：2026-10-25。当前素材共 24 张图片，包含四处场景背景、六名主要 NPC 的普通状态人物图、六张普通对话头像、一张未知人物占位头像与七张登记处透明图层，使用内置 `image_gen` 生成。人物与场景采用写实比例的二维线描、概括色面和克制阴影；美术依据见 [风格参考](../references/style_reference/README.md)。
+日期：2026-10-25。当前素材共 29 张图片，包含四处场景背景、六名主要 NPC 的普通状态人物图、六张普通对话头像、一张未知人物占位头像、七张登记处透明图层与五张正式物品图，使用内置 `image_gen` 生成。人物与场景采用写实比例的二维线描、概括色面和克制阴影；美术依据见 [风格参考](../references/style_reference/README.md)。
 
 [素材用途总表](asset_usage.md)逐张说明对应幕次、画面位置、显示状态与仍需制作的部分，剧情以 [mini_script.md](../../story/mini_script.md) 为准。当前素材尚未接入游戏；目录中的“已生成/已采用”表示素材状态。
 
@@ -23,11 +23,17 @@
 | 慧普·普通对话头像 | [portrait_neutral.png](../characters/hui_pu/portrait_neutral.png)               | 1254 × 1254 | 方形头肩构图，普通状态，透明 PNG               |
 | 神公·普通对话头像 | [portrait_neutral.png](../characters/shen_gong/portrait_neutral.png)            | 1254 × 1254 | 方形头肩构图，普通状态，透明 PNG               |
 | 未知人物·占位头像 | [unknown.png](../portraits/unknown.png)                                         | 1254 × 1254 | 通用透明头肩黑影；问号由界面叠加，保留头像框   |
+| 铜钥匙·物品图     | [inventory.png](../props/copper_key/inventory.png)                              | 1254 × 1254 | 道具栏、背包与调查共用，透明 PNG               |
+| 残页·物品图       | [inventory.png](../props/torn_page/inventory.png)                               | 1254 × 1254 | 道具栏、背包与调查共用，透明 PNG               |
+| 红烛·物品图       | [unlit.png](../props/red_candle/unlit.png)                                      | 1254 × 1254 | 道具栏、背包与调查共用，透明 PNG               |
+| 念珠·物品图       | [inventory.png](../props/prayer_beads/inventory.png)                            | 1254 × 1254 | 道具栏、背包与调查共用，透明 PNG               |
+| 通行凭·物品图     | [inventory.png](../props/permit/inventory.png)                                  | 1254 × 1254 | 道具栏、背包与调查共用，透明 PNG               |
 
 ## 文件与生成规范
 
 - 每个素材使用唯一固定路径，生成与调整直接替换；文稿、清单与引用同步当前内容，清理废稿和被替换图片的生成缓存，不另存版本副本。
 - 不同表情、动作、时段和剧情状态用语义名称作为独立素材；同一状态的修改覆盖原文件。
+- [正式物品图说明](../props/README.md)、[物品提示词](inventory_prompts.json)和[显示与文字配置](inventory_presentation.json)记录五件物品的共用方式；残页与通行凭使用独立底图，文字准确排版。
 - [文件目录与校验信息](asset_catalog.json)记录路径、尺寸、透明通道与文件校验值。
 - [生成规范](generation_specs.json)供后续生成同一画风的角色、场景和状态变体使用。
 - [登记处分层说明](../scenes/registration/README.md)、[定位配置](../scenes/registration/layout.json)与[分层生成提示词](registration_layer_prompts.json)记录八张图片的组合方式。
