@@ -131,7 +131,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 			miniSetFlag(state, "skin_seen")
 			miniShot(state, "listen_skin")
 			state.DialogueNext = "继续听"
-			return "story", miniInner(state, "那不是衣服……我不敢再往前了。"), true
+			return "story", miniInner(state, "啊，那是什么怪物快跑"), true
 		}
 		return e.breakMiniVase(state)
 	}

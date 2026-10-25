@@ -120,11 +120,21 @@ function listenScene(state: GameState): SceneComposition {
   const result = composeLayout(authored(guestRoomLayout), 'guest_room', {
     hui: !state.flags.skin_seen ? 'hidden' : state.flags.vase_broken ? 'turn' : 'rear',
   });
-  const layers = result.layers.map((layer) =>
-    layer.id === 'victim_detail' && !state.flags.skin_seen
-      ? { ...layer, rect: { ...layer.rect, width: 0, height: 0 } }
-      : layer,
-  );
+  const layers = result.layers.map((layer) => {
+    const actorLayer = layer.id === 'hui_rear' || layer.id === 'hui_turn';
+    return {
+      ...layer,
+      ...(actorLayer
+        ? {
+            actorId: 'huipu',
+            motion: state.shotKey === 'listen_vase' ? ('turn' as const) : ('idle' as const),
+          }
+        : {}),
+      ...(layer.id === 'victim_detail' && !state.flags.skin_seen
+        ? { rect: { ...layer.rect, width: 0, height: 0 } }
+        : {}),
+    };
+  });
   return { ...result, layers };
 }
 
@@ -135,7 +145,14 @@ function oracleScene(state: GameState): SceneComposition {
     jiaobei: cupState(state),
     candle: state.flags.cup_jiao_rescue,
   });
-  return result;
+  return {
+    ...result,
+    layers: result.layers.map((layer) =>
+      layer.id.startsWith('elder_')
+        ? { ...layer, actorId: 'shangong', motion: 'idle' as const }
+        : layer,
+    ),
+  };
 }
 
 function cupState(state: GameState): string {
@@ -146,13 +163,21 @@ function cupState(state: GameState): string {
 }
 
 function gateScene(_state: GameState): SceneComposition {
-  return composeLayout(authored(templeGateLayout), 'temple_gate', {
+  const result = composeLayout(authored(templeGateLayout), 'temple_gate', {
     time: 'dawn',
     bags: true,
     cat: false,
     companions: true,
     keeper: true,
   });
+  return {
+    ...result,
+    layers: result.layers.map((layer) =>
+      ['lin_lan', 'zhou_yan', 'xu_zhi', 'lu_chen'].includes(layer.id)
+        ? { ...layer, motion: 'walk' as const }
+        : layer,
+    ),
+  };
 }
 
 /**
@@ -189,14 +214,19 @@ function withActors(
 ): SceneComposition {
   const actors = (state.actors || []).filter((actor) => actor.visible && actor.id !== 'player');
   const selected = only ? actors.filter((actor) => actor.id === only) : actors;
-  const actorLayers = selected.flatMap((actor) => actorLayer(layout, directory, actor));
+  const actorLayers = selected.flatMap((actor) => actorLayer(layout, directory, actor, state));
   return {
     ...composition,
     layers: [...composition.layers, ...actorLayers].sort((a, b) => a.zIndex - b.zIndex),
   };
 }
 
-function actorLayer(layout: AuthoredLayout, directory: string, actor: SceneActor): SceneLayer[] {
+function actorLayer(
+  layout: AuthoredLayout,
+  directory: string,
+  actor: SceneActor,
+  state: GameState,
+): SceneLayer[] {
   const id =
     actor.id === 'luchen'
       ? 'actor_lu_chen'
@@ -225,6 +255,21 @@ function actorLayer(layout: AuthoredLayout, directory: string, actor: SceneActor
       zIndex: layer.zIndex,
       clipRect: layer.clipRect,
       filter: layer.filter,
+      motion: actorMotion(state, actor.id),
     },
   ];
+}
+
+function actorMotion(state: GameState, actorId: string): NonNullable<SceneLayer['motion']> {
+  if (state.sceneKey === 'mini_corridor_candle' && actorId === 'luchen') return 'walk';
+  if (
+    state.sceneKey === 'mini_dawn' &&
+    actorId === 'luchen' &&
+    ['dawn_axis', 'dawn_courtyard'].includes(state.shotKey || '')
+  )
+    return 'walk';
+  if (state.sceneKey === 'mini_listen' && actorId === 'huipu' && state.shotKey === 'listen_vase')
+    return 'turn';
+  if (state.sceneKey === 'mini_death' && ['evil', 'skin_double'].includes(actorId)) return 'run';
+  return 'idle';
 }

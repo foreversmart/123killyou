@@ -56,13 +56,18 @@ export function nightScene(state: GameState): SceneComposition | undefined {
         : 'none',
   });
   for (const layer of composition.layers) {
-    if (layer.id === 'intrusion') layer.actorId = 'evil';
+    if (layer.id === 'intrusion') {
+      layer.actorId = 'evil';
+      layer.motion = death ? 'run' : 'idle';
+    }
     if (
       layer.id.startsWith('familiar_') ||
       layer.id.startsWith('double_') ||
       layer.id.startsWith('calm_')
     ) {
       layer.actorId = 'skin_double';
+      layer.motion =
+        death || ['double_exit', 'double_frenzy'].includes(state.shotKey || '') ? 'run' : 'idle';
     }
   }
   return composition;
