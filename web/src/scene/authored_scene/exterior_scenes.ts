@@ -18,6 +18,19 @@ const authored = (value: unknown) => value as AuthoredLayout;
  */
 export function exteriorScene(state: GameState): SceneComposition | undefined {
   switch (state.sceneKey) {
+    case 'mini_register':
+      if (
+        [
+          'register_key_tags',
+          'register_rooms',
+          'register_drag_mark',
+          'register_camera_bell',
+          'register_ribbon',
+          'register_luggage',
+        ].includes(state.shotKey || '')
+      )
+        return courtyardScene(state);
+      return undefined;
     case 'mini_corridor_candle':
       return courtyardScene(state);
     case 'mini_listen':
@@ -38,7 +51,12 @@ export function exteriorScene(state: GameState): SceneComposition | undefined {
 }
 
 function courtyardScene(state: GameState): SceneComposition {
-  const time = state.sceneKey === 'mini_dawn' ? 'dawn' : 'dusk';
+  const time =
+    state.sceneKey === 'mini_dawn'
+      ? 'dawn'
+      : state.sceneKey === 'mini_register'
+        ? 'afternoon'
+        : 'dusk';
   const selection: Selection = {
     time,
     vase: state.flags.vase_broken ? 'broken' : 'intact',
@@ -51,11 +69,17 @@ function courtyardScene(state: GameState): SceneComposition {
 }
 
 function actorForCourtyard(state: GameState): string | undefined {
+  if (state.sceneKey === 'mini_register') {
+    if (state.shotKey === 'register_camera_bell') return 'luchen';
+    if (state.shotKey === 'register_drag_mark') return 'zhouyan';
+    if (state.shotKey === 'register_ribbon') return 'xuzhi';
+  }
   if (state.sceneKey === 'mini_dawn') {
     if (state.shotKey === 'dawn_axis') return 'zhouyan';
     if (state.shotKey === 'dawn_courtyard') return 'luchen';
   }
-  if (state.shotKey === 'corridor_warning' || state.shotKey === 'corridor_two_gongs') return 'luchen';
+  if (state.shotKey === 'corridor_warning' || state.shotKey === 'corridor_two_gongs')
+    return 'luchen';
   return undefined;
 }
 
@@ -64,7 +88,9 @@ function listenScene(state: GameState): SceneComposition {
     hui: state.flags.vase_broken ? 'turn' : 'rear',
   });
   const layers = result.layers.map((layer) =>
-    layer.id === 'victim_detail' && !state.flags.skin_seen ? { ...layer, rect: { ...layer.rect, width: 0, height: 0 } } : layer,
+    layer.id === 'victim_detail' && !state.flags.skin_seen
+      ? { ...layer, rect: { ...layer.rect, width: 0, height: 0 } }
+      : layer,
   );
   return { ...result, layers };
 }
@@ -130,24 +156,40 @@ function withActors(
   const actors = (state.actors || []).filter((actor) => actor.visible && actor.id !== 'player');
   const selected = only ? actors.filter((actor) => actor.id === only) : actors;
   const actorLayers = selected.flatMap((actor) => actorLayer(layout, directory, actor));
-  return { ...composition, layers: [...composition.layers, ...actorLayers].sort((a, b) => a.zIndex - b.zIndex) };
+  return {
+    ...composition,
+    layers: [...composition.layers, ...actorLayers].sort((a, b) => a.zIndex - b.zIndex),
+  };
 }
 
 function actorLayer(layout: AuthoredLayout, directory: string, actor: SceneActor): SceneLayer[] {
-  const id = actor.id === 'luchen' ? 'actor_lu_chen' : actor.id === 'linlan' ? 'actor_lin_lan' : actor.id === 'zhouyan' ? 'actor_zhou_yan' : actor.id === 'xuzhi' ? 'actor_xu_zhi' : actor.id === 'shangong' ? 'elder_alive' : undefined;
+  const id =
+    actor.id === 'luchen'
+      ? 'actor_lu_chen'
+      : actor.id === 'linlan'
+        ? 'actor_lin_lan'
+        : actor.id === 'zhouyan'
+          ? 'actor_zhou_yan'
+          : actor.id === 'xuzhi'
+            ? 'actor_xu_zhi'
+            : actor.id === 'shangong'
+              ? 'elder_alive'
+              : undefined;
   if (!id || !layout.sprites[id]) return [];
   const layer = layout.layers.find((item) => item.id === id);
   if (!layer) return [];
   const sprite = layout.sprites[id];
-  return [{
-    id: `${id}_${actor.id}`,
-    actorId: actor.id,
-    src: runtimeSource(directory, sprite.path),
-    imageWidth: sprite.width,
-    imageHeight: sprite.height,
-    frame: sprite.sourceFrame || { x: 0, y: 0, width: sprite.width, height: sprite.height },
-    rect: { ...layer.rect },
-    zIndex: layer.zIndex,
-    clipRect: layer.clipRect,
-  }];
+  return [
+    {
+      id: `${id}_${actor.id}`,
+      actorId: actor.id,
+      src: runtimeSource(directory, sprite.path),
+      imageWidth: sprite.width,
+      imageHeight: sprite.height,
+      frame: sprite.sourceFrame || { x: 0, y: 0, width: sprite.width, height: sprite.height },
+      rect: { ...layer.rect },
+      zIndex: layer.zIndex,
+      clipRect: layer.clipRect,
+    },
+  ];
 }

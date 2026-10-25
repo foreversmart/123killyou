@@ -33,12 +33,6 @@ export type SceneComposition = {
 export type AuthoredLayout = {
   coordinateSpace: { width: number; height: number };
   defaultState?: Record<string, string | boolean>;
-  sprites: Record<string, {
-    path: string;
-    width: number;
-    height: number;
-    sourceFrame?: Rect;
-  }>;
   sprites: Record<
     string,
     {

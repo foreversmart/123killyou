@@ -12,7 +12,17 @@ type Selection = Record<string, string | boolean>;
  * the renderer must crop first, then scale the crop into its authored rect.
  */
 export function dayScene(state: GameState): SceneComposition | undefined {
-  if (state.sceneKey === 'mini_register') return registrationScene(state);
+  if (state.sceneKey === 'mini_register') {
+    const courtyardShot = [
+      'register_key_tags',
+      'register_rooms',
+      'register_drag_mark',
+      'register_camera_bell',
+      'register_ribbon',
+      'register_luggage',
+    ];
+    return courtyardShot.includes(state.shotKey || '') ? undefined : registrationScene(state);
+  }
   if (state.sceneKey === 'mini_refectory') return refectoryScene(state);
   return undefined;
 }
@@ -33,7 +43,7 @@ function registrationScene(state: GameState): SceneComposition {
       'register_luggage',
     ].includes(state.shotKey || ''),
   };
-  const composition = composeLayout(registrationLayout, 'registration', selection);
+  const composition = composeLayout(registrationLayout as never, 'registration', selection);
   const actorPreview = (
     registrationLayout as typeof registrationLayout & {
       actorPreview?: {
@@ -69,7 +79,7 @@ function refectoryScene(state: GameState): SceneComposition {
     player: mealState(state, 'player'),
     huiPu: true,
   };
-  return composeLayout(diningLayout, 'dining_hall', selection);
+  return composeLayout(diningLayout as never, 'dining_hall', selection);
 }
 
 function mealState(state: GameState, person: string): string {
