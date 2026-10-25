@@ -23,7 +23,7 @@ func TestUnmatchedStorySpeechNeverReplaysSceneOrChangesStory(t *testing.T) {
 		t.Run(scene, func(t *testing.T) {
 			s := e.Initial("unmatched")
 			e.setMiniScene(&s, scene)
-			s.Dialogue = Dialogue{Speaker: "你·心声", Text: "上一句已说完的剧情", Portrait: "player"}
+			s.Dialogue = Dialogue{Speaker: "赵熙·心声", Text: "上一句已说完的剧情", Portrait: "player"}
 			s.LastAction = s.Dialogue.Text
 			s.DialogueNext = ""
 			before := Clone(s)

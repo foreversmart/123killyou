@@ -24,7 +24,7 @@ export function BowlTagDetail() {
       <text x="48" y="94" fontSize="24" fill="#424b35" fontFamily="serif">
         远客
       </text>
-      {['林岚', '周砚', '许栀', '你'].map((name, index) => (
+      {['林岚', '周砚', '许栀', '赵熙'].map((name, index) => (
         <g key={name} transform={`translate(${153 + index * 39} 30)`}>
           <path d="M0 0h28v151H0Z" fill="#b39a67" stroke="#574d32" strokeWidth="2" />
           <text

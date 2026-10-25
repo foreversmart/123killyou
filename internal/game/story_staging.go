@@ -177,7 +177,7 @@ func syncMiniStaging(state *State) {
 }
 
 func miniVoicePortrait(speaker string) string {
-	for name, id := range map[string]string{"陆沉": "keeper", "林岚": "linlan", "周砚": "zhouyan", "许栀": "xuzhi", "慧普": "huipu", "神公": "shangong", "你": "player"} {
+	for name, id := range map[string]string{"陆沉": "keeper", "林岚": "linlan", "周砚": "zhouyan", "许栀": "xuzhi", "慧普": "huipu", "神公": "shangong", "赵熙": "player", "你": "player"} {
 		if speaker == name || strings.HasPrefix(speaker, name+"（") || strings.HasPrefix(speaker, name+"·") {
 			return id
 		}

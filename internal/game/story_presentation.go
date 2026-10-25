@@ -35,7 +35,7 @@ func miniDialogue(state *State, speaker, text string) string {
 }
 
 func miniInner(state *State, text string) string {
-	return miniDialogue(state, "你·心声", text)
+	return miniDialogue(state, "赵熙·心声", text)
 }
 
 // Observations belong to the scene and its sound sources, never the speech
