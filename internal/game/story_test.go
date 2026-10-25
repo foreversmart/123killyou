@@ -183,8 +183,9 @@ func TestMiniScriptKeepsSceneActorsWithoutNarratingCandleAction(t *testing.T) {
 func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival")
-	for index, want := range []string{"林岚", "周砚", "许栀", "陆沉", "你·心声"} {
-		intent, _ := engine.Apply(&state, map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听"}[index])
+	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "你·心声"} {
+		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听", 5: "继续听", 6: "继续听"}
+		intent, _ := engine.Apply(&state, commands[index])
 		if intent != "story" || state.Dialogue.Speaker != want {
 			t.Fatalf("第一话第 %d 句说话者错误: intent=%s dialogue=%+v", index+1, intent, state.Dialogue)
 		}

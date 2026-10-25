@@ -17,10 +17,10 @@ func TestStoryActorsKeepAuthoredWordsOwnVoiceAndReplayIdentity(t *testing.T) {
 		flags                         []string
 	}{
 		{"linlan", "林岚", "mini_arrival", "听第一话", nil},
-		{"zhouyan", "周砚", "mini_arrival", "听第一话", []string{"arrival_intro_linlan"}},
-		{"xuzhi", "许栀", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan"}},
-		{"keeper", "陆沉", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan", "arrival_intro_xuzhi"}},
-		{"player", "你·心声", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_zhouyan", "arrival_intro_xuzhi", "arrival_intro_luchen"}},
+		{"zhouyan", "周砚", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_xuzhi", "arrival_intro_weather"}},
+		{"xuzhi", "许栀", "mini_arrival", "听第一话", []string{"arrival_intro_linlan"}},
+		{"keeper", "陆沉", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_xuzhi", "arrival_intro_weather", "arrival_intro_zhouyan", "arrival_intro_luggage"}},
+		{"player", "你·心声", "mini_arrival", "听第一话", []string{"arrival_intro_linlan", "arrival_intro_xuzhi", "arrival_intro_weather", "arrival_intro_zhouyan", "arrival_intro_luggage", "arrival_intro_luchen"}},
 		{"player", "你", "mini_double", "朗读经文", []string{"mind_script_learned"}},
 		{"huipu", "慧普", "mini_refectory", "问住持", nil},
 		{"shangong", "神公", "mini_oracle", "查看杯筊规矩", nil},

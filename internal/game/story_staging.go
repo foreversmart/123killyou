@@ -11,9 +11,11 @@ var miniOpeningShots = map[string]string{
 }
 
 var miniShotDescriptions = map[string]string{
-	"arrival_linlan":       "车门气阀声慢下来。林岚挡住斜进车窗的阳光，举起相机，却没有立刻按下快门。",
-	"arrival_zhouyan":      "周砚的视线从新匾移到偏房梁架，手指停在半空，像是在比对榫口。",
-	"arrival_xuzhi":        "行李车轮卡在台阶边。许栀扶稳箱子，蓝色发圈在她指间绕了一圈。",
+	"arrival_unload":       "车门气阀声慢下来。林岚先迈下台阶，揉了揉久坐发麻的小腿，三只旅行包还在车门边。",
+	"arrival_gate_beauty":  "许栀下车后抬头看山门。新匾、檐角和树影落在她眼里，台阶边的行李还没有搬完。",
+	"arrival_weather":      "天气晴朗，山风从车门灌进来。林岚举起相机，对准月色将要升起的山门，却先没有按快门。",
+	"arrival_zhouyan":      "周砚走到新匾侧面，手指沿旧字和梁架比了比，像是在比对榫口。",
+	"arrival_luggage":      "许栀弯腰提起一只旅行包，其他行李从车门旁逐件落到檐下，蓝色发圈夹住了入住须知。",
 	"arrival_luchen":       "车门气阀声彻底停下，陆沉从登记桌后走到檐下旧灯旁，抬眼看向钟楼。",
 	"arrival_inner":        "最后一缕树影在车门边晃动，鸟鸣和远处低钟隔着山风叠在一起。",
 	"arrival_cat":          "晒太阳的花猫收起前爪，铜铃没有响，旧匾‘明照寺’从新匾侧面露出来。",

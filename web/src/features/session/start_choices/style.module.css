@@ -48,3 +48,169 @@
   outline: 2px solid #fff5c6;
   outline-offset: 3px;
 }
+
+.openingScreen {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  overflow: hidden;
+  background: #050605;
+}
+
+.titleCard {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.86;
+  animation: title-breathe 5s ease-in-out infinite alternate;
+}
+
+.titleVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 45% 48%, transparent 0 28%, #05060572 72%),
+    linear-gradient(90deg, #050605d9 0 38%, transparent 75%),
+    linear-gradient(0deg, #050605e8, transparent 42%);
+}
+
+.openingScreen .choices {
+  z-index: 1;
+}
+
+.reel {
+  top: 7%;
+  right: 4%;
+  width: min(48%, 680px);
+  padding: 0.8cqw;
+  background: #121813f2;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #080b0a;
+}
+
+.reel p,
+.journey p {
+  margin: 0.8em 0;
+  color: #d4c49f;
+  font-size: 0.8cqw;
+  line-height: 1.7;
+}
+
+.journey {
+  top: 7%;
+  right: 4%;
+  width: min(48%, 680px);
+  padding: 0.8cqw;
+  overflow: hidden;
+  background: #15221de8;
+}
+
+.journeyScene {
+  position: relative;
+  height: min(27cqw, 360px);
+  overflow: hidden;
+  border: 1px solid #c7a65b88;
+  background: #18231e;
+}
+
+.journeyScene img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.journeyRoad {
+  animation: road-drift 3.9s ease both;
+}
+
+.journeyGate {
+  opacity: 0;
+  animation: gate-arrive 3.9s ease 1.7s both;
+}
+
+.journeyGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 10%, #fff0b20e 48%, #f7dc8d42 100%);
+  mix-blend-mode: screen;
+  animation: road-glow 3.9s ease both;
+}
+
+.journey > span {
+  display: block;
+  margin-top: 0.8em;
+  color: #d4c49f;
+  font-size: 0.7cqw;
+  letter-spacing: 0.2em;
+}
+
+.journey h2 {
+  margin: 0.35em 0 0;
+}
+
+@keyframes road-drift {
+  from {
+    opacity: 0.25;
+    transform: scale(1.08) translateX(4%);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(-2%);
+  }
+}
+
+@keyframes gate-arrive {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes road-glow {
+  from {
+    opacity: 0.2;
+    transform: translateX(-25%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(15%);
+  }
+}
+
+@keyframes title-breathe {
+  from {
+    transform: scale(1);
+    filter: saturate(0.82) brightness(0.8);
+  }
+  to {
+    transform: scale(1.04);
+    filter: saturate(1) brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journeyRoad,
+  .journeyGate,
+  .journeyGlow,
+  .titleCard {
+    animation: none;
+  }
+
+  .journeyGate {
+    opacity: 1;
+  }
+}

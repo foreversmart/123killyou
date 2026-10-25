@@ -10,10 +10,10 @@ import people from './people.module.css';
 import interaction from './interaction.module.css';
 
 const visitors = [
-  { id: 'linlan', name: '林岚', place: '左侧台阶 · 举起相机', detail: '相机' },
-  { id: 'zhouyan', name: '周砚', place: '山门右侧 · 看梁架', detail: '修缮图' },
-  { id: 'xuzhi', name: '许栀', place: '行李车旁 · 蓝色发圈', detail: '旅行包' },
-  { id: 'luchen', name: '陆沉', place: '山门内侧 · 登记桌后', detail: '照尘 · 守夜人' },
+  { id: 'linlan', name: '林岚' },
+  { id: 'zhouyan', name: '周砚' },
+  { id: 'xuzhi', name: '许栀' },
+  { id: 'luchen', name: '陆沉' },
 ];
 
 export function ArrivalBackdrop() {
@@ -22,7 +22,7 @@ export function ArrivalBackdrop() {
       className={styles.arrival}
       data-authored="true"
       role="img"
-      aria-label="晴天下午，你站在大巴车门台阶。左侧林岚举起相机，许栀在行李车旁；右侧周砚看山门梁架，守夜人陆沉在灯影寺山门内的登记桌后等候。旧匾明照寺露在新匾侧面，铜铃垂在檐下，花猫在石阶旁晒太阳。"
+      aria-label="晴天下午，大巴停在灯影寺山门前。四位游客下车，带着行李望向古朴山门；花猫在石阶旁晒太阳。"
     >
       <div className={styles.sun} />
       <div className={styles['distant-hills']} />
@@ -92,7 +92,13 @@ export function ArrivalBackdrop() {
         <i />
       </div>
       {visitors.map((person) => (
-        <div className={people.person} data-person={person.id} key={person.id}>
+        <div
+          className={people.person}
+          data-person={person.id}
+          key={person.id}
+          role="img"
+          aria-label={person.name}
+        >
           <div className={people.figure} data-asset={person.id}>
             <img
               className={people['asset-figure']}
@@ -102,14 +108,27 @@ export function ArrivalBackdrop() {
             />
             <i className={people.head} />
             <i className={people.body} />
-            <span className={people.accessory}>{person.detail}</span>
-          </div>
-          <div className={people['name-tag']}>
-            <b>{person.name}</b>
-            <span>{person.place}</span>
           </div>
         </div>
       ))}
+      <img
+        className={people.assetBags}
+        src={storyAssets.props.travelBags}
+        alt=""
+        aria-hidden="true"
+      />
+      <img
+        className={people.assetDrawing}
+        src={storyAssets.props.repairDrawing}
+        alt=""
+        aria-hidden="true"
+      />
+      <img
+        className={people.assetNotice}
+        src={storyAssets.props.blueTieNotice}
+        alt=""
+        aria-hidden="true"
+      />
       <div className={styles.cat} aria-hidden="true">
         <i />
         <i />

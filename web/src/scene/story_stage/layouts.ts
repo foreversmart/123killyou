@@ -33,9 +33,11 @@ export function sceneLayout(state: GameState): StageLayout {
 }
 
 export const shotTitles: Record<string, string> = {
-  arrival_linlan: '车门边 · 相机与阳光',
+  arrival_unload: '车门台阶 · 久坐后的下车',
+  arrival_gate_beauty: '山门檐角 · 古典轮廓',
+  arrival_weather: '山风与相机 · 晚上月色',
   arrival_zhouyan: '山门梁架 · 偏房一侧',
-  arrival_xuzhi: '台阶边 · 卡住的行李车',
+  arrival_luggage: '檐下 · 搬运行李',
   arrival_luchen: '登记桌旁 · 檐下旧灯',
   arrival_inner: '车门停下 · 树影与低钟',
   arrival_cat: '山门侧 · 晒太阳的花猫',
