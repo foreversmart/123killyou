@@ -103,8 +103,12 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
       {beat.kind === 'sleep' ? (
         <div className={styles.sleepScene} aria-hidden="true">
           <span className={styles.candleFlame} />
-          <span className={styles.sleepBook}>寺史册</span>
-          <span className={styles.sleepBook}>清心静神经</span>
+          <img className={styles.sleepBook} src={storyAssets.props.historyClosed} alt="寺史册" />
+          <img
+            className={styles.sleepBook}
+            src={storyAssets.props.scriptureClosed}
+            alt="清心静神经"
+          />
           <i className={styles.gongRing} />
         </div>
       ) : (
@@ -112,15 +116,31 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
           <div className={styles.landmark} aria-hidden="true">
             <span className={styles.roof} />
             <span className={styles.lantern} />
-            <span className={styles.cat}>🐈</span>
+            <img className={styles.cat} src={storyAssets.props.catResting} alt="" />
           </div>
           <div className={styles.path} aria-hidden="true" />
           <div className={styles.walkers} aria-hidden="true">
-            <span className={`${styles.walker} ${styles.keeper}`}>陆沉</span>
-            <span className={styles.walker}>林岚</span>
-            <span className={styles.walker}>周砚</span>
-            <span className={styles.walker}>许栀</span>
-            <span className={`${styles.walker} ${styles.player}`}>你</span>
+            <img
+              className={`${styles.walker} ${styles.keeper}`}
+              src={storyAssets.characterPoses.luchen.lantern}
+              alt="陆沉提灯"
+            />
+            <img
+              className={styles.walker}
+              src={storyAssets.characterPoses.linlan.standing}
+              alt="林岚"
+            />
+            <img
+              className={styles.walker}
+              src={storyAssets.characterPoses.zhouyan.standing}
+              alt="周砚"
+            />
+            <img
+              className={styles.walker}
+              src={storyAssets.characterPoses.xuzhi.standing}
+              alt="许栀"
+            />
+            <span className={`${styles.walker} ${styles.player}`} aria-label="主角第一视角" />
           </div>
         </>
       )}

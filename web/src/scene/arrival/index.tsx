@@ -1,6 +1,7 @@
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
+import artwork from './artwork.module.css';
 import openingStyles from './opening_reel.module.css';
 import temple from './temple.module.css';
 import people from './people.module.css';
@@ -111,6 +112,12 @@ export function ArrivalBackdrop() {
         <i />
         <i />
       </div>
+      <img
+        className={artwork.assetCat}
+        src={storyAssets.props.catResting}
+        alt=""
+        aria-hidden="true"
+      />
       <div className={styles['door-step']}>
         <span>你 · 车门台阶</span>
       </div>

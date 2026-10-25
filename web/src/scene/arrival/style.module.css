@@ -109,6 +109,7 @@
   opacity: 0.94;
   filter: saturate(0.9) contrast(0.96);
 }
+
 .arrival[data-authored='true'] .sun,
 .arrival[data-authored='true'] .distant-hills,
 .arrival[data-authored='true'] .temple-wall,

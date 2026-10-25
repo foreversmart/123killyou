@@ -86,12 +86,21 @@ function getPropAsset(id: string, state: GameState, lit: boolean): string | unde
     if (state.sceneKey === 'mini_dawn_trap') return props.candleShort;
     return lit ? props.candleBurning : props.candleUnlit;
   }
-  if (id === 'matches') return '/art/story/props/matches/inventory.webp';
+  if (id === 'matches') return props.matches;
+  if (id === 'beads') return props.prayerBeads;
+  if (id === 'map') return props.repairDrawing;
+  if (id === 'notice') return props.blueTieNotice;
+  if (id === 'offering') return props.tornPage;
+  if (id === 'seal') return props.permit;
   if (id === 'history') return props.historyClosed;
   if (id === 'scripture') return props.scriptureClosed;
   if (id === 'page') return props.tornPage;
   if (id === 'lamp') return props.oilLampUnlit;
-  if (id === 'torch') return '/art/story/props/flashlight/inventory.webp';
+  if (id === 'keeper_lamp' || id === 'curtain_lamp') return props.oilLampUnlit;
+  if (id === 'torch') return props.flashlight;
+  // The tower and room plaque are painted into the authored background plates.
+  // Keep their hotspots for dialogue actions without stacking a generic SVG sign.
+  if (id === 'tower' || id === 'plaque') return undefined;
   if (id === 'latch') {
     if (state.sceneKey === 'mini_death') return props.doorBulging;
     if (state.shotKey === 'double_exit') return props.doorOpen;
