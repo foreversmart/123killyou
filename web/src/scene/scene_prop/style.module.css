@@ -18,6 +18,9 @@
   cursor: pointer;
   pointer-events: auto;
 }
+.prop--hotspot {
+  z-index: 6;
+}
 .glimmer {
   position: absolute;
   width: 0.35cqw;

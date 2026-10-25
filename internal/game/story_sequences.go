@@ -38,7 +38,6 @@ var refectoryLines = []miniLine{
 	{"陆沉", "给远客的照顾。僧人自己不吃肉，客人不必守我们的戒。", "refectory_porridge"},
 	{"林岚", "寺里连粥都讲究，听着不像坏事。不过，你还没喝，我也先等等。", "refectory_table"},
 	{"许栀", "先别急着喝，问清楚再决定。素饼还热着，不会饿着。", "refectory_table"},
-	{"慧普", "吃下我的，寺里会记得你。远客难得来一趟，不必拘泥。", "refectory_curtain"},
 }
 var corridorLines = []miniLine{
 	{"林岚", "寺里也有脏东西？我还以为，山门里最清净呢。", "corridor_warning"},

@@ -72,6 +72,14 @@
   width: 100%;
   height: 100%;
 }
+.assetCharacter {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.35cqw 0.25cqw #17231f66);
+}
 .person[data-concealed='true'] .body {
   clip-path: inset(0 10% 40% 15%);
   opacity: 0.7;

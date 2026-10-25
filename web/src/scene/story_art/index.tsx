@@ -7,6 +7,7 @@ import { BedroomArt } from '@/scene/story_art/bedroom';
 import { ListenRoomArt } from '@/scene/story_art/listen_room';
 import { OracleArt } from '@/scene/story_art/oracle';
 import { DawnGateArt, DepartureArt } from '@/scene/story_art/departure';
+import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
 
 const descriptions: Record<string, string> = {
@@ -52,6 +53,22 @@ export function StoryArt({ state }: { state: GameState }) {
     if (key === 'mini_ending') return <DepartureArt id={id} />;
     return <BedroomArt id={id} state={state} />;
   };
+
+  const assetScene =
+    key === 'mini_register'
+      ? storyAssets.scenes.registration
+      : key === 'mini_corridor_candle' || (key === 'mini_dawn' && shot !== 'dawn_gate')
+        ? storyAssets.scenes.eastCourtyard
+        : key === 'mini_room' ||
+            key === 'mini_four_knocks' ||
+            key === 'mini_three_knocks' ||
+            key === 'mini_double'
+          ? state.flags.red_candle_lit
+            ? storyAssets.scenes.playerRoom
+            : undefined
+          : undefined;
+
+  const roomAsset = assetScene === storyAssets.scenes.playerRoom;
   return (
     <div className={styles.art} data-scene-art={key} data-shot-art={shot}>
       <svg
@@ -61,7 +78,25 @@ export function StoryArt({ state }: { state: GameState }) {
         aria-label={descriptions[key] || state.sceneText}
       >
         <ArtDefs id={id} />
-        {environment()}
+        {assetScene ? (
+          <>
+            <image
+              href={assetScene}
+              x="0"
+              y="0"
+              width="1000"
+              height="600"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            />
+            {key === 'mini_corridor_candle' && (
+              <rect width="1000" height="600" fill="#102630" opacity=".46" />
+            )}
+            {roomAsset && <rect width="1000" height="600" fill="#07141b" opacity=".08" />}
+          </>
+        ) : (
+          environment()
+        )}
         {key === 'mini_death' && <rect width="1000" height="600" fill="#100c16" opacity=".38" />}
       </svg>
     </div>

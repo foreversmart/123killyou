@@ -1,4 +1,5 @@
 import type { GameState } from '@/shared/types/game';
+import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
 import temple from './temple.module.css';
 import people from './people.module.css';
@@ -23,6 +24,12 @@ export function ArrivalBackdrop() {
       <div className={styles['temple-wall']} />
       <div className={styles['stone-court']} />
       <div className={styles['tree-shadow']} />
+      <img
+        className={styles['asset-gate']}
+        src={storyAssets.scenes.templeGate}
+        alt=""
+        aria-hidden="true"
+      />
       <div className={styles.tree}>
         <i />
         <i />
@@ -40,7 +47,7 @@ export function ArrivalBackdrop() {
         <span className={styles['bus-number']}>灯影寺</span>
         <div className={styles.wheel} />
       </div>
-      <div className={temple['temple-gate']}>
+      <div className={temple['temple-gate']} data-asset-gate="true">
         <div className={temple.roof} />
         <div className={temple['roof-edge']} />
         <div className={temple['gate-wall']} />
@@ -70,7 +77,13 @@ export function ArrivalBackdrop() {
       </div>
       {visitors.map((person) => (
         <div className={people.person} data-person={person.id} key={person.id}>
-          <div className={people.figure}>
+          <div className={people.figure} data-asset={person.id}>
+            <img
+              className={people['asset-figure']}
+              src={storyAssets.characters[person.id as keyof typeof storyAssets.characters]}
+              alt=""
+              aria-hidden="true"
+            />
             <i className={people.head} />
             <i className={people.body} />
             <span className={people.accessory}>{person.detail}</span>

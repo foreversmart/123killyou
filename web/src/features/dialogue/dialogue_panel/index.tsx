@@ -3,6 +3,7 @@ import type { useVoice } from '@/features/voice/useVoice';
 import { VoiceDock } from '@/features/voice/voice_dock';
 import { PortraitCorners } from '@/shared/ui/portrait_corners';
 import { CharacterAvatar } from '@/shared/ui/character_avatar';
+import { storyAssets } from '@/shared/lib/story_assets';
 import { cx } from '@/shared/lib/cx';
 import surface from '@/shared/styles/surfaces.module.css';
 import styles from './style.module.css';
@@ -23,7 +24,9 @@ export function DialoguePanel({
   onTour: () => Promise<void>;
 }) {
   const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
-  const hasPortrait = Boolean(dialogue.portrait) && dialogue.speaker !== '系统';
+  const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker);
+  const hasPortrait =
+    (Boolean(dialogue.portrait) || Boolean(portraitAsset)) && dialogue.speaker !== '系统';
   const inner = dialogue.speaker.includes('心声');
   return (
     <footer
@@ -36,8 +39,8 @@ export function DialoguePanel({
     >
       {hasPortrait && (
         <div className={styles['speaker-portrait']} key={dialogue.portrait}>
-          {['keeper', 'player'].includes(dialogue.portrait) ? (
-            <img src={`/art/portrait-${dialogue.portrait}.webp`} alt={`${dialogue.speaker}头像`} />
+          {portraitAsset ? (
+            <img src={portraitAsset} alt={`${dialogue.speaker}头像`} />
           ) : (
             <CharacterAvatar id={dialogue.portrait} name={dialogue.speaker} portrait />
           )}
@@ -76,4 +79,21 @@ export function DialoguePanel({
       />
     </footer>
   );
+}
+
+function getPortraitAsset(id: string, speaker: string): string | null {
+  if (id === 'player') return '/art/portrait-player.webp';
+  const aliases: Record<string, keyof typeof storyAssets.portraits> = {
+    keeper: 'luchen',
+    luchen: 'luchen',
+    linlan: 'linlan',
+    zhouyan: 'zhouyan',
+    xuzhi: 'xuzhi',
+    huipu: 'huipu',
+    shangong: 'shangong',
+  };
+  const mapped = aliases[id];
+  if (mapped) return storyAssets.portraits[mapped];
+  if (speaker.includes('门外') || speaker.includes('帘后')) return storyAssets.portraits.unknown;
+  return null;
 }

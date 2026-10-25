@@ -11,6 +11,12 @@ export function sceneLayout(state: GameState): StageLayout {
     nightLayouts.mini_room;
   const props = propComposition(state, state.sceneKey === 'mini_death' ? [] : base.props).map(
     (prop) => {
+      if (state.sceneKey === 'mini_register' && ['register', 'keys', 'permit'].includes(prop.id)) {
+        // These three props are painted into the generated registration
+        // layers. Keep their interaction hotspots, but avoid drawing a second
+        // SVG key/ledger over the full-canvas asset.
+        return { ...prop, draw: false };
+      }
       if (prop.id === 'vase' && state.shotKey === 'listen_vase')
         return { ...prop, kind: 'shards' as const, name: '碎花瓶', command: '检查花瓶碎片' };
       if (prop.id === 'latch' && state.sceneKey === 'mini_three_knocks')

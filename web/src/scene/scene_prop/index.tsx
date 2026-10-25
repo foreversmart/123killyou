@@ -30,7 +30,7 @@ export function SceneProp({
     );
   return (
     <button
-      className={styles.prop}
+      className={`${styles.prop} ${prop.draw === false ? styles['prop--hotspot'] : ''}`}
       data-interactive="true"
       data-prop={prop.id}
       style={style}

@@ -2,31 +2,31 @@
   {
     "id": "key",
     "name": "铜钥匙",
-    "image": "/art/item-key.webp",
+    "image": "/art/story/items/copper_key.webp",
     "description": "一把磨损的铜钥匙。钥匙柄上刻着一个模糊的符号，守夜人似乎认得它。"
   },
   {
     "id": "page",
     "name": "残页",
-    "image": "/art/item-page.webp",
+    "image": "/art/story/items/torn_page.webp",
     "description": "从旧册子上撕下的残页。最后一行写着：钟响之后，不要回答自己的名字。"
   },
   {
     "id": "candle",
     "name": "红烛",
-    "image": "/art/item-candle.webp",
+    "image": "/art/story/items/red_candle.webp",
     "description": "一截没有点燃的红烛。蜡面上留着几道指甲般的划痕。"
   },
   {
     "id": "beads",
     "name": "念珠",
-    "image": "/art/item-beads.webp",
+    "image": "/art/story/items/prayer_beads.webp",
     "description": "一串温凉的木珠，其中一颗比其他的颜色更深。"
   },
   {
     "id": "permit",
     "name": "通行凭",
-    "image": "/art/item-page.webp",
+    "image": "/art/story/items/permit.webp",
     "description": "守夜人递来的通行凭，边角有一枚暗红色印章。背面写着：只许去，不许问。"
   }
 ]

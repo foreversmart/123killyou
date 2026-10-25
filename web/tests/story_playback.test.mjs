@@ -37,7 +37,7 @@ async function fixture() {
   };
 }
 
-test('仅开启播放且拒绝麦克风，角色对白仍自动接续；同一分镜只提交一次', async () => {
+test('开启或关闭声音都能自动接续安全对白；同一分镜只提交一次', async () => {
   const f = await fixture();
   f.render();
   f.runtime.flushTimers();
@@ -51,13 +51,21 @@ test('仅开启播放且拒绝麦克风，角色对白仍自动接续；同一�
   f.runtime.dispose();
 });
 
+test('未开启播放或关闭声音时，安全的 NPC 串联仍会等待后自动提交', async () => {
+  for (const override of [{ playbackOn: false }, { soundOn: false }]) {
+    const f = await fixture();
+    f.render(f.state, { ...f.voice, ...override });
+    f.runtime.flushTimers();
+    assert.deepEqual(f.submitted, ['继续抵达对白'], JSON.stringify(override));
+    f.runtime.dispose();
+  }
+});
+
 test('说话、录音、暂停、道具阅读、死亡或播放错误期间不自动触发下一动作', async () => {
   for (const override of [
     { voice: { status: 'speaking' } },
     { voice: { status: 'recording' } },
     { voice: { status: 'processing' } },
-    { voice: { playbackOn: false } },
-    { voice: { soundOn: false } },
     { voice: { playbackProblem: '播放失败' } },
     { state: { paused: true } },
     { state: { overlay: 'history' } },

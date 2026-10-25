@@ -6,6 +6,30 @@
   height: 56%;
 }
 
+/* The generated gate image supplies the architecture. Keep only these two
+   labels as overlays so the story names remain readable on its blank sign. */
+.temple-gate[data-asset-gate='true'] {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.temple-gate[data-asset-gate='true'] > :not(.plaque):not(.old-plaque) {
+  display: none;
+}
+
+.temple-gate[data-asset-gate='true'] .plaque {
+  top: 10%;
+  left: 39%;
+  width: 22%;
+  font-size: 1.35cqw;
+}
+
+.temple-gate[data-asset-gate='true'] .old-plaque {
+  top: 13%;
+  right: 29%;
+}
+
 .roof {
   position: absolute;
   inset: 0 -7% 57%;

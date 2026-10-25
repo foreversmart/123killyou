@@ -3,6 +3,7 @@ import { ScenePerson } from '@/scene/scene_person';
 import { SceneProp } from '@/scene/scene_prop';
 import { MealDiscussion } from '@/scene/meal_discussion';
 import { StoryReading } from '@/scene/story_reading';
+import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
 import { sceneChoices } from './choices';
 import { cx } from '@/shared/lib/cx';
@@ -48,6 +49,36 @@ export function StoryStage({
             pose={state.shotKey}
           />
         ))}
+        {state.sceneKey === 'mini_register' && (
+          <>
+            <img
+              className={styles.registrationForeground}
+              src={storyAssets.scenes.registrationDesk}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className={styles.registrationLayer}
+              src={
+                state.shotKey === 'register_rooms'
+                  ? storyAssets.scenes.registrationPropsClosedStack
+                  : state.shotKey === 'register_luggage'
+                    ? storyAssets.scenes.registrationPropsOpenSingle
+                    : storyAssets.scenes.registrationPropsOpenStack
+              }
+              alt=""
+              aria-hidden="true"
+            />
+            {state.shotKey === 'register_rooms' || state.shotKey === 'register_luggage' ? (
+              <div className={styles.registrationTags} aria-hidden="true">
+                <span>听</span>
+                <span>灯</span>
+                <span>纸</span>
+                <span>门</span>
+              </div>
+            ) : null}
+          </>
+        )}
         {layout.props.map((prop) => (
           <SceneProp
             key={prop.id}

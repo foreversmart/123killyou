@@ -14,7 +14,7 @@ func storyCommands(engine *Engine, state *State, commands ...string) {
 func drainMiniDialogue(t *testing.T, engine *Engine, state *State) []string {
 	t.Helper()
 	var speakers []string
-	for count := 0; state.DialogueNext != ""; count++ {
+	for count := 0; state.DialogueNext != "" && !strings.HasPrefix(state.DialogueNext, "自动"); count++ {
 		if count > 20 {
 			t.Fatal("对白没有在玩家选择前结束")
 		}
@@ -54,7 +54,7 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 		t.Fatal("没有演出安置行李")
 	}
 	e.Apply(&s, "去斋堂")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀", "慧普"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀"}) {
 		t.Fatalf("晚膳说话者: %v", got)
 	}
 	if s.Flags["meal_player_ate"] || s.Flags["meal_player_refused"] {

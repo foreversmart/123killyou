@@ -34,6 +34,19 @@
   filter: drop-shadow(0.6cqw 0.65cqw 0.2cqw #4a573c44);
 }
 
+.asset-figure {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 0.3cqw 0.18cqw #26382955);
+}
+
+.figure[data-asset] > i {
+  display: none;
+}
+
 .head {
   position: absolute;
   top: 0;

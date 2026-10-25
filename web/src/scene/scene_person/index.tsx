@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import type { SceneActor } from '@/shared/types/game';
 import type { ActorPlacement } from '@/scene/story_stage/types';
 import { CharacterAvatar } from '@/shared/ui/character_avatar';
+import { storyAssets } from '@/shared/lib/story_assets';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 import { BackFigure } from './back_figure';
@@ -21,6 +22,17 @@ export function ScenePerson({
   const id = actor.portrait || actor.id;
   const disguised = actor.id.includes('double');
   const calm = disguised && pose === 'double_calm';
+  const assetCharacter =
+    actor.id in storyAssets.characters
+      ? storyAssets.characters[actor.id as keyof typeof storyAssets.characters]
+      : undefined;
+  const useAssetCharacter =
+    Boolean(assetCharacter) &&
+    !disguised &&
+    !calm &&
+    actor.id !== 'evil' &&
+    !(actor.id === 'huipu' && pose?.startsWith('listen_')) &&
+    !(actor.id === 'shangong' && pose === 'oracle_stone');
   return (
     <div
       className={cx(styles.person, speaking && styles.speaking)}
@@ -39,7 +51,9 @@ export function ScenePerson({
       }
     >
       <div className={styles.body}>
-        {actor.id === 'evil' ? (
+        {useAssetCharacter ? (
+          <img className={styles.assetCharacter} src={assetCharacter} alt="" aria-hidden="true" />
+        ) : actor.id === 'evil' ? (
           <DeathFigure pose={pose} />
         ) : calm ? (
           <CalmFigure id={id} name={actor.name} />
