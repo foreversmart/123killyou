@@ -1,23 +1,25 @@
 # 第一夜：代码架构与协作边界
 
-更新时间：2026-10-24。本文描述已经落地的目录和依赖；灵矽当前接入范围及后续限制见 [虚拟设备接入](development/linx.md)。
+更新时间：2026-10-26。本文描述已经落地的目录和依赖；灵矽当前接入范围及后续限制见 [虚拟设备接入](development/linx.md)。
 
 ## 前端：按功能维护组件和样式
 
 ```text
 web/src/
   main.tsx                          应用启动
-  app/startup/                      启动能力检查，通过后懒加载游戏
-  app/game/                         页面组装、回合反馈、自动演示
+  app/startup/                      画面能力检查、语音准备，通过后懒加载游戏
+  app/game/                         页面组装、片头门控、回合反馈、自动演示
   features/
     startup/browser_check/          启动绘制自检、前后台切换及取消
     startup/browser_requirements/   能力检查失败时的说明与重新检测入口
+    startup/voice_setup/            麦克风权限与 AudioContext 解锁
     hud/player_status/              玩家状态、房间标题、存档状态
     inventory/inventory/            常驻物品栏
     dialogue/dialogue_panel/        当前说话者、头像与对白
     voice/                          按住录音、PCM 采集与云端识别会话
       voice_dock/                   语音入口及状态
       waveform/                     音量可视化
+    story_audio/                    分镜音效、念经背景音乐与音频状态
     session/                        HTTP / WebSocket 会话与状态同步
     overlays/                       信息层分发
       map_panel/                    地图
@@ -31,7 +33,13 @@ web/src/
     debug/command_panel/            开发转写注入
   scene/
     room/                           房间布局、黑屏转场与显示状态
-    background/                     Pixi 场景与资源生命周期
+    background/                     场景入口、旧房间 Pixi 生命周期
+    authored_scene/                 依据 layout.json 的正式分层场景组合
+    arrival/                        山门抵达页、开场片头回放与首幕热点
+    story_transition/               场景间行走 / 入睡过渡画面
+    story_stage/                    章节标题、人物与交互热点
+    story_art/                      authored scene 之外的 SVG 兼容后备画面
+    story_observation/              调查特写与证据视图
     html_clue/                      HTML-in-Canvas 线索渲染
     effects/                        滤镜工厂与独立 GLSL 文件
   shared/
@@ -55,17 +63,23 @@ features/dialogue/dialogue_panel/
 
 对白以语音为主，字幕为辅助：底部对白行按内容自动增高，较长回复换行时向上占用部分场景空间，不固定在画面高度的某个百分比，也不要求玩家用鼠标滚动字幕。头像保持方形尺寸，不随文字高度拉伸；字幕使用较小字号、保留分行，并允许长串字符折行。
 
-页面入口只负责组装，语音回合反馈和自动演示分别在 `useGameController.ts`、`useDemoTour.ts` 中。HTTP NDJSON 语音流适配与 WebSocket 快照恢复放在会话功能内，GPU shader 作为 `.glsl` 文件独立维护。新增地图内容、语音状态或对白样式不需要修改同一个大组件和全局样式表。
+页面入口只负责组装，片头门控、语音回合反馈和自动演示分别在 `useGameController.ts`、`useStoryPlayback.ts`、`useDemoTour.ts` 中。HTTP NDJSON 语音流适配与 WebSocket 快照恢复放在会话功能内，GPU shader 作为 `.glsl` 文件独立维护。新增地图内容、语音状态或对白样式不需要修改同一个大组件和全局样式表。
 
-启动入口 `app/startup` 先挂载 `BrowserCheck`，使用 `shared/lib/htmlCanvas.ts` 检查必需方法，再由 `htmlCanvasProbe.ts` 创建一个 16×16 的实际 HTML-in-Canvas 探针：在 `paint` 事件内调用 `drawElementImage()`，读取两个区域的像素，与已知颜色比较。只有通过像素校验才挂载懒加载的 `Game`；接口缺失、异常、空白 / 错误颜色或 5 秒超时均显示 `BrowserRequirements`，区分缺少接口与绘制失败。自检和账本共用 `configureHtmlCanvas()` 配置 `drawable`。
+启动入口 `app/startup` 先挂载 `BrowserCheck`，使用 `shared/lib/htmlCanvas.ts` 检查必需方法，再由 `htmlCanvasProbe.ts` 创建一个 16×16 的实际 HTML-in-Canvas 探针：在 `paint` 事件内调用 `drawElementImage()`，读取两个区域的像素，与已知颜色比较。只有通过像素校验才进入 `VoiceSetup`；用户允许麦克风并解锁 `AudioContext` 后才挂载懒加载的 `Game`。接口缺失、异常、空白 / 错误颜色或 5 秒超时均显示 `BrowserRequirements`，区分缺少接口与绘制失败。自检和账本共用 `configureHtmlCanvas()` 配置 `drawable`。
 
-检查位于会话、演示、调试输入和麦克风启动之前，不提供绕过选项，也不缓存手动确认。检测页变为后台时取消等待，回到前台重新检测；每次完成或取消都清理探针、监听与定时器。失败页重新聚焦时重试，已进入的游戏不因切换窗口重新挂载；刷新始终重新自检。浏览器 flags 仅作为官方试用指引，网页不能读取其值，实际绘制结果决定是否放行。账本不提供普通 HTML 回退；自检通过不等同于 PixiJS 纹理上传与 shader 已完整验证。
+检查位于会话、演示、调试输入和麦克风启动之前，不提供绕过选项，也不缓存手动确认。检测页变为后台时取消等待，回到前台重新检测；每次完成或取消都清理探针、监听与定时器。失败页重新聚焦时重试，已进入的游戏不因切换窗口重新挂载；刷新始终重新自检。浏览器 flags 仅作为官方试用指引，网页不能读取其值，实际绘制结果决定是否放行。账本不提供普通 HTML 回退；自检通过不等同于 PixiJS 纹理上传与 shader 已完整验证。语音准备同样必须在 `localhost` 或 HTTPS 中完成，并由用户手势取得麦克风和音频播放权限。
 
 每轮反馈不能依赖命中剧情：开放式 NPC 回应由灵矽生成；系统与动作结果通过灵矽 TTS 播报，不提供本地 NPC 台词或浏览器读白回退。AudioWorklet 只在按住空格时采集，WebSocket 将 PCM 上行到 Go，再由 `SpeechRecognizer` 返回灵矽 STT 文字。识别错误、空结果和断连均有反馈；静音与取消不创建游戏回合。HTTP NDJSON 先交付已提交的动作状态，再逐段交付字幕与 PCM；同一请求 ID 的重试只重放原结果。
 
 语音请求的失效控制独立在 `voiceTurns.ts`：玩家按下空格、开启下一轮或退出时，通过 AbortController 取消 HTTP 与云端生成，清空 PCM 播放队列并阻止旧字幕和旧错误；播放结束事件也检查所属轮次，不覆盖新回合状态。`pcmPlayer.ts` 负责 PCM16 转换、约 120ms 小块缓冲和音频时钟调度，`useSpeechOutput.ts` 负责音频生命周期和播放反馈。`pushToTalk.ts` 负责一次按住期间的识别、松开收句与迟到结果隔离；`pushToTalkKeys.ts` 负责键盘事件、输入框排除和失焦取消。未按键时不运行识别，避免依赖台词字符串匹配来过滤扬声器回声。系统设置只提供语音重置进度，不提供声音开关。账本在真实绘制后标记就绪，异常或首次绘制超时显示恢复提示。
 
 场景所在网格行使用固定高度，底部为对白保留最小高度。角色、系统与心声切换或字幕换行时，对白仅向上覆盖场景，不改变背景容器和 PixiJS 画布的尺寸。信息面板关闭统一由旁白反馈“已关闭”。
+
+开场流程由 `useGameController` 管理：页面先只读加载第一幕，用户完成片头视频后进入“山门已近”门控画面，必须说出“开始游戏”才创建新会话并推进剧情；“继续上次进度”直接走恢复接口。片头视频、封面和过渡用 `story_assets.ts` 统一提供运行 URL，不能在组件内散落路径或绕过门控直接创建会话。
+
+正式场景的画面来源由 `web/src/scene/authored_scene/` 负责。各场景的 `assets/scenes/*/layout.json` 是坐标、源图裁切、图层顺序、状态条件和遮挡区域的来源；`composeLayout()` 将相对 layout 的 PNG 路径转换为 `web/public/art/story` 下的 WebP，`AuthoredScene` 再按 `sourceFrame → rect → zIndex` 组合 SVG 图片层。`story_art` 只在没有 authored composition 的场景提供 SVG 或单张背景后备，`story_stage` 在 authored composition 生效时隐藏旧的百分比人物和道具层，避免同一角色或道具绘制两次。调整真实贴图位置优先修改 layout JSON，再检查 `story_stage` 的交互热点；不要直接把布局坐标复制回旧 SVG。
+
+场景音频由 `features/story_audio/` 管理。`cues.ts` 根据场景、镜头和状态生成一次性更锣、敲门、脚步、撕裂、鸟叫等程序化音效，`synthesis.ts` 通过 Web Audio 调度并清理音源；`music.ts` 与 `useStorySound.ts` 在夜间场景中延迟启动并循环播放背景音乐，暂停、换局和离开夜间场景时停止并重置。音效和背景音乐只表达当前已提交状态，不参与规则结算。
 
 ## 后端：规则、编排与基础设施分开
 

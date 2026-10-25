@@ -1,6 +1,6 @@
 {
   "purpose": "NPC头像框中的未知人物占位表现",
-  "runtimeIntegration": "not_integrated",
+  "runtimeIntegration": "integrated",
   "frame": {
     "aspectRatio": 1,
     "reuseExistingNpcFrame": true,

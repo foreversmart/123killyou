@@ -10,6 +10,7 @@ export type SceneLayer = {
   clipRect?: Rect;
   actorId?: string;
   rotation?: number;
+  filter?: string;
 };
 export type SceneLabel = {
   id: string;
@@ -23,6 +24,7 @@ export type SceneLabel = {
   baseline?: string;
   rotation?: number;
   zIndex?: number;
+  visibleWhen?: Record<string, string | boolean>;
 };
 export type SceneComposition = {
   width: number;
@@ -49,6 +51,7 @@ export type AuthoredLayout = {
     zIndex: number;
     visibleWhen?: Record<string, string | boolean>;
     clipRect?: Rect;
+    filter?: string;
   }[];
   labels?: SceneLabel[];
 };

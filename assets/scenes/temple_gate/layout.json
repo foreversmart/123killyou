@@ -17,7 +17,8 @@
     "time": "afternoon",
     "bags": true,
     "cat": true,
-    "companions": true
+    "companions": true,
+    "keeper": true
   },
   "sprites": {
     "afternoon": {
@@ -117,6 +118,20 @@
         "width": 496,
         "height": 1496
       }
+    },
+    "lu_chen": {
+      "path": "../../characters/lu_chen/standing_reception.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1693254,
+      "sha256": "57762bf29688d2682f24bd4e9cb3fedeb03305d5404ff02e8cbd7a56af4f6392",
+      "sourceFrame": {
+        "x": 230,
+        "y": 11,
+        "width": 607,
+        "height": 1516
+      }
     }
   },
   "layers": [
@@ -152,10 +167,10 @@
       "id": "cat",
       "sprite": "cat",
       "rect": {
-        "x": 333,
+        "x": 245,
         "y": 737,
-        "width": 205,
-        "height": 129
+        "width": 185,
+        "height": 116.41463414634147
       },
       "zIndex": 10,
       "visibleWhen": {
@@ -180,10 +195,10 @@
       "id": "lin_lan",
       "sprite": "lin_lan",
       "rect": {
-        "x": 564.47,
-        "y": 257,
-        "width": 225.06,
-        "height": 615
+        "x": 434.789,
+        "y": 291,
+        "width": 210.422,
+        "height": 575
       },
       "zIndex": 15,
       "visibleWhen": {
@@ -199,10 +214,10 @@
       "id": "zhou_yan",
       "sprite": "zhou_yan",
       "rect": {
-        "x": 849.713717693837,
-        "y": 227,
-        "width": 214.57256461232603,
-        "height": 645
+        "x": 718.516,
+        "y": 282,
+        "width": 182.969,
+        "height": 550
       },
       "zIndex": 15,
       "visibleWhen": {
@@ -218,14 +233,33 @@
       "id": "xu_zhi",
       "sprite": "xu_zhi",
       "rect": {
-        "x": 1078.3636363636363,
-        "y": 277,
-        "width": 197.27272727272728,
-        "height": 595
+        "x": 1107.995,
+        "y": 315,
+        "width": 184.011,
+        "height": 555
       },
       "zIndex": 15,
       "visibleWhen": {
         "companions": true
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "lu_chen",
+      "sprite": "lu_chen",
+      "rect": {
+        "x": 968.304,
+        "y": 247,
+        "width": 172.177,
+        "height": 430
+      },
+      "zIndex": 11,
+      "visibleWhen": {
+        "keeper": true
       },
       "scaleMode": "uniform",
       "anchor": {
@@ -263,6 +297,7 @@
   ],
   "notes": [
     "回廊取回相机盖之后，晨间山门的林岚用原带盖站姿；疲惫表情在对白头像表现。",
-    "文字根据牌匾透视准确排字；旧名仅作为露边信息，不覆盖主匾。"
+    "文字根据牌匾透视准确排字；旧名仅作为露边信息，不覆盖主匾。",
+    "抵达与晨间山门共用同一室外机位；人物脚底按石阶与地面定位，陆沉留在门内后景，禁止将山门人物坐标叠进车内底图。"
   ]
 }

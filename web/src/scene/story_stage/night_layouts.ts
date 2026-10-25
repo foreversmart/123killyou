@@ -12,7 +12,7 @@ const p = (
 const roomProps: StageProp[] = [
   p('candle', '红烛', 'candle', 35, 73, '点燃红烛', 6),
   p('history', '游客版寺史册', 'book', 28, 78, '查看寺庙历史', 7),
-  p('scripture', '清心静神经', 'book', 42, 79, '阅读清心静神经', 7),
+  p('scripture', '大念处经', 'book', 42, 79, '阅读大念处经', 7),
   p('page', '入住须知残页', 'paper', 27, 68, '查看残页', 5),
   p('matches', '火柴', 'match', 39, 69, '点燃红烛', 4),
   p('latch', '门闩', 'latch', 65, 52, '检查门闩', 8),
@@ -21,7 +21,7 @@ const roomProps: StageProp[] = [
 ];
 const room: StageLayout = {
   chapter: '05 · 门房',
-  title: '灯在我前，门在我后',
+  title: '大念处经 · 四句经文',
   atmosphere: '窗外一线回廊灯，床边只有自己的呼吸。',
   actors: {},
   props: roomProps,

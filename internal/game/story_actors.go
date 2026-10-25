@@ -9,8 +9,8 @@ const protagonistName = "赵熙"
 func miniSceneActors(key string) []SceneActor {
 	actors := map[string][]SceneActor{
 		"mini_arrival": {
-			actor("player", protagonistName, "游客·主角", "大巴车门旁 / 第一视角", "player", "观察中"),
-			actor("linlan", "林岚", "摄影爱好者", "大巴车左侧台阶", "", "举着相机"),
+			actor("player", protagonistName, "游客·主角", "山门外石阶 / 第一视角", "player", "观察中"),
+			actor("linlan", "林岚", "摄影爱好者", "山门左侧台阶", "", "举着相机"),
 			actor("zhouyan", "周砚", "古建筑爱好者", "山门右侧台阶", "", "查看梁架"),
 			actor("xuzhi", "许栀", "同行游客", "山门檐下 / 旅行包旁", "", "整理发圈"),
 			actor("luchen", "陆沉", "守夜人和尚", "山门内侧", "keeper", "迎接来客"),

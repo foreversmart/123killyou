@@ -12,7 +12,7 @@ func TestStoryObservationsShowTheSceneWithoutSpeakingItsDescription(t *testing.T
 		{"mini_arrival", "看看山门", "arrival_plaque", "明照寺"},
 		{"mini_room", "点燃红烛", "room_candle", "火柴"},
 		{"mini_room", "读寺史", "room_history", "验身"},
-		{"mini_room", "看经文", "room_scripture", "心不逐声"},
+		{"mini_room", "看经文", "room_scripture", "观身如身"},
 		{"mini_room", "检查门闩", "room_latch", "深槽"},
 		{"mini_room", "看烛芯", "room_candle_detail", "划痕"},
 		{"mini_wake_three_gongs", "看烛芯", "wake_candle_detail", "烛芯发黑"},
@@ -38,6 +38,24 @@ func TestStoryObservationsShowTheSceneWithoutSpeakingItsDescription(t *testing.T
 				t.Fatalf("现场反馈丢失: shot=%s text=%q last=%q", s.ShotKey, s.SceneText, s.LastAction)
 			}
 		})
+	}
+}
+
+func TestOpeningGreatScriptureShowsItsFourVerses(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("great-scripture")
+	e.setMiniScene(&s, "mini_room")
+
+	intent, speak := e.Apply(&s, "阅读大念处经")
+	if intent != "inspect" || speak != "" {
+		t.Fatalf("打开经书不应生成对白: intent=%s speak=%q", intent, speak)
+	}
+	want := "观身如身、观受如受、观心如心、观法如法"
+	if s.ShotKey != "room_scripture" || !strings.Contains(s.SceneText, "《大念处经》") || !strings.Contains(s.SceneText, want) {
+		t.Fatalf("经书内容未完整呈现: shot=%s text=%q", s.ShotKey, s.SceneText)
+	}
+	if !s.Flags["mind_script_learned"] || !strings.Contains(strings.Join(s.Clues, "、"), want) {
+		t.Fatalf("阅读经书未记录学习内容: flags=%v clues=%v", s.Flags, s.Clues)
 	}
 }
 
@@ -104,7 +122,7 @@ func TestSilentStoryReplayKeepsTheObservationAndDoesNotRestoreOldSpeech(t *testi
 func TestReadingScriptureIsSpokenByThePlayer(t *testing.T) {
 	e, s := storyAtListen(t, true)
 	e.Apply(&s, "模仿猫叫")
-	_, speak := e.Apply(&s, "朗读清心静神经")
+	_, speak := e.Apply(&s, "朗读大念处经")
 	if s.Dialogue.Speaker != "赵熙" || speak != miniScripture[0] {
 		t.Fatalf("实际念诵被写成内心独白: %+v", s.Dialogue)
 	}

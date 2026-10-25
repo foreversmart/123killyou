@@ -29,8 +29,13 @@ func TestEnsureAgentUpdatesExistingPrefixedAgent(t *testing.T) {
 			if _, exists := body["ttsVoiceId"]; exists {
 				t.Fatal("startup update overwrote the console voice")
 			}
-			if body["assistantName"] != "守夜人" || body["systemPrompt"] != "当前游戏上下文：{{game_context}}" || body["llmModelId"] != DefaultModelID || body["extra"] == nil {
-				t.Fatalf("game configuration was not updated: %+v", body)
+			if body["assistantName"] != "守夜人" || body["systemPrompt"] != "当前游戏上下文：{{game_context}}" {
+				t.Fatalf("game-owned configuration was not updated: %+v", body)
+			}
+			for _, field := range []string{"ttsVoiceId", "llmModelId", "memModelId", "intentModelId", "extra"} {
+				if _, exists := body[field]; exists {
+					t.Fatalf("startup update overwrote console-owned field %q: %+v", field, body)
+				}
 			}
 			_, _ = w.Write([]byte(`{"code":0,"data":{}}`))
 		default:

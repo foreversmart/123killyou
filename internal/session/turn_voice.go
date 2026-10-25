@@ -55,7 +55,7 @@ func (s *Service) planVoice(ctx context.Context, tx Transaction, before game.Sta
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {
 			plan.NPCID = npcID
 			plan.Dialogue = true
-			plan.GameContext = describeDialogueContext(candidate, reply)
+			plan.GameContext = describeDialogueContext(candidate, reply, text)
 			plan.BufferedDialogue = candidate.StoryMode
 			plan.PreviousReplies = []string{before.Dialogue.Text}
 			memories, _, err := tx.Context(before.RunID)

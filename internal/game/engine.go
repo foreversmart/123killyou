@@ -35,7 +35,7 @@ func (e *Engine) StartMiniStory(state *State) {
 	state.StoryMode = true
 	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
-	miniObserve(state, "阳光从车窗斜进来，大巴停在红烛寺山门前。车门打开，鸟鸣穿过树叶，四只小旅行包已经放在檐下靠墙处。")
+	miniObserve(state, "大巴停稳后，你走下车站到山门前。鸟鸣穿过树叶，陆沉从门内迎来，四只小旅行包已经放在檐下靠墙处。")
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
@@ -51,9 +51,14 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 // service uses this during its plan/commit pair so jev is called exactly once
 // for a player turn. Direct callers should use Apply, which prepares a
 // decision when a judge is configured.
-func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text string, decision StoryDecision) (string, string) {
+func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text string, decision StoryDecision) (intent, speak string) {
+	pendingNext := state.DialogueNext
+	pendingScene := state.SceneKey
+	pendingShot := state.ShotKey
+	pendingOverlay := state.Overlay
 	defer func() {
 		if state.StoryMode {
+			restoreSafeStoryContinuation(state, pendingScene, pendingShot, pendingOverlay, pendingNext, intent)
 			syncMiniStaging(state)
 		}
 	}()

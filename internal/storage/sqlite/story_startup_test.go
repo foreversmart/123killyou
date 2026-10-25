@@ -14,10 +14,10 @@ func assertStoryOpening(t *testing.T, state game.State) {
 	if !state.StoryMode || state.SceneKey != "mini_arrival" || state.Room != "gate" || state.RoomName != "红烛寺山门" {
 		t.Fatalf("新局没有完整进入第一幕: %+v", state)
 	}
-	if len(state.Actors) != 5 || state.Actors[0].Position != "大巴车门旁 / 第一视角" || state.Actors[4].Name != "陆沉" {
+	if len(state.Actors) != 5 || state.Actors[0].Position != "山门外石阶 / 第一视角" || state.Actors[4].Name != "陆沉" {
 		t.Fatalf("第一幕人物站位缺失: %+v", state.Actors)
 	}
-	if len(state.SceneProps) != 12 || !strings.Contains(state.SceneText, "大巴停在红烛寺山门前") {
+	if len(state.SceneProps) != 12 || !strings.Contains(state.SceneText, "山门前") {
 		t.Fatalf("第一幕分镜与道具缺失: %+v", state)
 	}
 	if len(state.Inventory) != 0 || state.Flags["checked_in"] || state.Flags["red_candle_held"] {
