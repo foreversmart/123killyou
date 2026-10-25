@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { GameState } from '@/shared/types/game';
 import { Scene } from '../background';
 import { StoryScene } from '../story_scene';
+import { StoryTransition } from '@/scene/story_transition';
 import type { RoomPhase } from './useRoomTransition';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
@@ -33,6 +34,7 @@ export function Room({
         )}
       />
       <StoryScene state={state} onAction={onAction} interactive={interactive} />
+      <StoryTransition state={state} phase={phase} />
       {children}
       <div
         className={cx(
