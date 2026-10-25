@@ -43,7 +43,7 @@ func storyAtListen(t *testing.T, meat bool) (*Engine, State) {
 func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("staged")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "赵熙·心声"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "陆沉"}) {
 		t.Fatalf("山门说话者: %v", got)
 	}
 	e.Apply(&s, "登记入住")
@@ -60,7 +60,7 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	if s.Flags["meal_player_ate"] || s.Flags["meal_player_refused"] {
 		t.Fatal("演出对白替玩家做了吃粥选择")
 	}
-	storyCommands(e, &s, "劝大家不吃", "吃完晚膳")
+	storyCommands(e, &s, "劝大家不吃", "吃完晚膳", "自动离开斋堂", "自动离开斋堂")
 	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"陆沉", "陆沉", "林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
 		t.Fatalf("回廊说话者: %v", got)
 	}

@@ -7,7 +7,7 @@ import type { useVoice } from '@/features/voice/useVoice';
 const PLAYBACK_ADVANCE_DELAY_MS = 1400;
 const SCRIPTURE_ADVANCE_DELAY_MS = 1800;
 const SILENT_ADVANCE_DELAY_MS = 4000;
-const MEAL_EATING_ADVANCE_DELAY_MS = 7000;
+const MEAL_EATING_ADVANCE_DELAY_MS = 5000;
 const FOUR_KNOCKS_AUTO_ADVANCE = '自动进入三敲';
 const FOUR_KNOCKS_AUTO_ADVANCE_DELAY_MS = 5000;
 const AUTOMATIC_SAFE_ACTIONS = new Set([
@@ -40,7 +40,9 @@ export function useStoryPlayback(
     if (submitted.current === key) return;
     const delay =
       next === '自动离开斋堂'
-        ? MEAL_EATING_ADVANCE_DELAY_MS
+        ? state.flags.refectory_meal_finished
+          ? PLAYBACK_ADVANCE_DELAY_MS
+          : MEAL_EATING_ADVANCE_DELAY_MS
         : next === FOUR_KNOCKS_AUTO_ADVANCE
           ? FOUR_KNOCKS_AUTO_ADVANCE_DELAY_MS
           : AUTOMATIC_SAFE_ACTIONS.has(next) || next.startsWith('自动') || !voice.playbackOn
@@ -61,6 +63,7 @@ export function useStoryPlayback(
     state?.overlay,
     state?.flags.story_dead,
     next,
+    state?.flags.refectory_meal_finished,
     ready,
     voice.status,
     voice.playbackProblem,

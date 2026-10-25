@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { storyAssets } from '@/shared/lib/story_assets';
+import { bindOpeningSkipKey } from './keys';
 import styles from './style.module.css';
 
 type OpeningPhase = 'reel' | 'journey';
@@ -22,6 +23,14 @@ export function StartChoices({
     if (!video) return;
     void video.play().catch(() => {
       // The startup voice gesture normally unlocks autoplay before this screen mounts.
+    });
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'reel') return;
+    return bindOpeningSkipKey(window, () => {
+      reel.current?.pause();
+      setPhase('journey');
     });
   }, [phase]);
 

@@ -184,15 +184,19 @@ func TestMiniScriptKeepsSceneActorsWithoutNarratingCandleAction(t *testing.T) {
 func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival")
-	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "赵熙·心声"} {
-		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听", 5: "继续听", 6: "继续听"}
+	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉"} {
+		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听", 5: "继续听"}
 		intent, _ := engine.Apply(&state, commands[index])
 		if intent != "story" || state.Dialogue.Speaker != want {
 			t.Fatalf("第一话第 %d 句说话者错误: intent=%s dialogue=%+v", index+1, intent, state.Dialogue)
 		}
 	}
+	engine.Apply(&state, "继续听")
 	if !state.Flags["arrival_intro_done"] {
 		t.Fatal("第一话结束后没有记录完成状态")
+	}
+	if state.Dialogue.Speaker == "赵熙·心声" || strings.Contains(state.Dialogue.Text, "别把这份安静当成安全") {
+		t.Fatalf("第一话不应再出现主角心声: %+v", state.Dialogue)
 	}
 }
 
@@ -200,7 +204,7 @@ func TestMiniScriptArrivalInvitationGoesToRegistrationRoom(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival-invitation")
 	var lines []string
-	for index, command := range []string{"听第一话", "继续听", "继续听", "继续听", "继续听", "继续听", "继续听"} {
+	for index, command := range []string{"听第一话", "继续听", "继续听", "继续听", "继续听", "继续听"} {
 		intent, _ := engine.Apply(&state, command)
 		if intent != "story" {
 			t.Fatalf("第一话第 %d 句没有作为剧情对白返回: intent=%s", index+1, intent)
@@ -215,6 +219,16 @@ func TestMiniScriptArrivalInvitationGoesToRegistrationRoom(t *testing.T) {
 	}
 	if !strings.Contains(lines[5], "登记室") || !strings.Contains(lines[5], "分配房间") {
 		t.Fatalf("陆沉没有邀请队伍前往登记室并分配房间: %q", lines[5])
+	}
+	if state.SceneKey != "mini_arrival" {
+		t.Fatalf("第一话对白结束前不应提前离开山门: %s", state.SceneKey)
+	}
+	intent, _ := engine.Apply(&state, "自动登记入住")
+	if intent != "move" || state.SceneKey != "mini_register" {
+		t.Fatalf("自动登记没有进入登记室: intent=%s scene=%s", intent, state.SceneKey)
+	}
+	if strings.Contains(state.Dialogue.Text, "请随我去登记室") {
+		t.Fatalf("登记室不应重复播放山门邀请: %q", state.Dialogue.Text)
 	}
 }
 
