@@ -21,6 +21,7 @@ export type SoundEvent = {
     | 'bus';
   at: number;
   pan?: number;
+  duration?: number;
 };
 const repeat = (kind: SoundEvent['kind'], count: number, spacing = 0.85): SoundEvent[] =>
   Array.from({ length: count }, (_, index) => ({ kind, at: index * spacing }));
@@ -110,7 +111,7 @@ export function storyCues(state: GameState): SoundEvent[] {
       ];
     case 'dawn_gongs':
     case 'mini_dawn_trap':
-      return [...repeat('gong', 5), { kind: 'bell', at: 4.6, pan: 0.8 }];
+      return [...repeat('gong', 5), { kind: 'gong', at: 4.6, pan: 0.8, duration: 3.3 }];
     case 'dawn_courtyard':
       return [
         ...repeat('gong', 5),
@@ -138,6 +139,7 @@ export function storyCues(state: GameState): SoundEvent[] {
   }
 }
 export function cueDuration(cue: SoundEvent): number {
+  if (cue.duration) return cue.duration;
   if (cue.kind === 'bell') return 3.3;
   if (cue.kind === 'bus') return 3.1;
   if (cue.kind === 'breath' || cue.kind === 'tear' || cue.kind === 'rooster') return 1.5;

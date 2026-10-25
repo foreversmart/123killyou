@@ -1,7 +1,7 @@
 package game
 
 func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool) {
-	if miniHasAny(text, "算作第六声", "把钟算锣", "以为天亮", "已经天亮", "开门做早课") {
+	if miniHasAny(text, "算作第六声", "把钟算锣", "把锣算第六声", "以为天亮", "已经天亮", "开门做早课") {
 		miniSetFlag(state, "fake_dawn_knocks")
 		miniShot(state, "dawn_knocks")
 		return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "是我，天亮了。你开门，我们一起去做早课。"), true
@@ -20,9 +20,9 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 		e.setMiniScene(state, "mini_dawn")
 		return "move", miniObserve(state, "五声更锣再次响起。鸡鸣先起，檐鸟应声，淡青晨光从窗纸背后铺开，门外的呼吸消失。三位同伴站在各自的房门前。"), true
 	}
-	if miniHasAny(text, "重听", "听钟", "辨认钟声") {
+	if miniHasAny(text, "重听", "听钟", "听锣", "辨认钟声", "辨认锣声") {
 		miniSetFlag(state, "gong_bell_distinguished")
-		return "inspect", miniObserve(state, "近处五声更锣间隔均匀，余震停后，钟楼方向传来一声低长的钟。窗纸始终漆黑。"), true
+		return "inspect", miniObserve(state, "近处五声更锣间隔均匀，余震停后，钟楼方向传来一声低长的锣。窗纸始终漆黑。"), true
 	}
 	if miniHasAny(text, "回答姓名", "开口回应", "回答门外", "和门外说话", "与门外对话", "继续和鬼说话") {
 		recordGhostDialogue(state)
@@ -30,7 +30,7 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 		return "story", miniDialogue(state, "你（门外回声）", "是我。你怎么还不开门？"), true
 	}
 	if miniHasAny(text, "听声音", "看窗外", "观察天色") {
-		return "inspect", miniObserve(state, "五声更锣的余震散去，远处一声钟慢慢拖长。窗纸仍黑，红烛在门边燃着。"), true
+		return "inspect", miniObserve(state, "五声更锣的余震散去，远处一声低长的锣慢慢拖长。窗纸仍黑，红烛在门边燃着。"), true
 	}
 	return e.storyConversation(state, text)
 }

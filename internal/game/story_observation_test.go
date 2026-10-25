@@ -23,7 +23,7 @@ func TestStoryObservationsShowTheSceneWithoutSpeakingItsDescription(t *testing.T
 		{"mini_listen", "碰倒花瓶", "listen_vase", "碎瓷"},
 		{"mini_oracle", "检查猫食碟", "oracle_cat", "猫叫"},
 		{"mini_oracle", "检查鸟笼", "oracle_bird", "短鸣"},
-		{"mini_dawn_trap", "重听钟声", "dawn_gongs", "低长"},
+		{"mini_dawn_trap", "重听锣声", "dawn_gongs", "低长"},
 	} {
 		t.Run(tt.scene+tt.command, func(t *testing.T) {
 			s := e.Initial("observations")

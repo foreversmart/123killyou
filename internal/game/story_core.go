@@ -113,7 +113,7 @@ func (e *Engine) arrivalIntro(state *State) string {
 	case !state.Flags["arrival_intro_luchen"]:
 		miniSetFlag(state, "arrival_intro_luchen")
 		miniShot(state, "arrival_luchen")
-		return miniDialogue(state, "陆沉", "四位施主，行李先放在灯下。名字写清楚，钥匙才好交。夜里若听见钟，先数声，再听它从哪里来。")
+		return miniDialogue(state, "陆沉", "四位施主，行李先放在灯下。名字写清楚，钥匙才好交。夜里若听见更锣，先数声，再听它从哪里来。")
 	default:
 		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_inner")

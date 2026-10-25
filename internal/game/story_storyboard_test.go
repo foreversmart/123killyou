@@ -61,11 +61,14 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 		t.Fatal("演出对白替玩家做了吃粥选择")
 	}
 	storyCommands(e, &s, "劝大家不吃", "吃完晚膳")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"陆沉", "陆沉", "林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
 		t.Fatalf("回廊说话者: %v", got)
 	}
 	if s.ShotKey != "corridor_two_gongs" || s.Flags["red_candle_held"] {
 		t.Fatal("更锣与领烛时序错误")
+	}
+	if s.Dialogue.Text != "各位施主，两更天到了，请各位早些休息吧。五更天我们会起来做早课，有空的话，可以前来观摩。" {
+		t.Fatalf("二更对白未落在房门前: %q", s.Dialogue.Text)
 	}
 }
 
@@ -199,7 +202,7 @@ func TestStoryboardOracleWeightedCastAndSafeRetry(t *testing.T) {
 
 func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 	e, s := storyAtListen(t, false)
-	storyCommands(e, &s, "模仿鸟叫", "把钟声算作第六声")
+	storyCommands(e, &s, "模仿鸟叫", "把锣声算作第六声")
 	if !strings.HasSuffix(s.Dialogue.Speaker, "（门外）") || s.ShotKey != "dawn_knocks" {
 		t.Fatal("假晓未定位声源")
 	}

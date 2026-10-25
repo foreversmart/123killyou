@@ -34,7 +34,7 @@ const travelBeats: Record<string, TravelBeat> = {
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
     title: '晚膳后沿回廊返回',
-    detail: '陆沉收起斋碗，抱着烛盒走在前方，大家回到东院再逐人领取红烛。',
+    detail: '陆沉收起斋碗，抱着烛盒边走边递烛，大家沿回廊回到各自房门。',
     landmark: '斋堂后门 · 檐灯 · 四间偏房',
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardDusk,
@@ -147,6 +147,12 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
                   }
                   alt={person.name}
                 />
+                {sceneKey === 'mini_corridor_candle' && (
+                  <span
+                    className={styles.travelCandle}
+                    style={{ '--candle-delay': `${0.28 + index * 0.24}s` } as CSSProperties}
+                  />
+                )}
               </div>
             ))}
           </div>
