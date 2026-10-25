@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { StageProp } from '@/scene/story_stage/types';
 import { PropArt } from './art';
+import { FoodArt } from './food_art';
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
@@ -20,7 +21,9 @@ export function SceneProp({
 }) {
   const asset = state ? getPropAsset(prop.id, state, lit) : undefined;
   const graphic =
-    prop.draw === false ? null : asset ? (
+    prop.draw === false ? null : ['bread', 'pickles', 'local_vegetables'].includes(prop.id) ? (
+      <FoodArt id={prop.id} />
+    ) : asset ? (
       <img className={styles.assetProp} src={asset} alt="" />
     ) : (
       <PropArt kind={prop.kind} name={prop.name} lit={lit} />
@@ -57,17 +60,9 @@ export function SceneProp({
 function getPropAsset(id: string, state: GameState, lit: boolean): string | undefined {
   const props = storyAssets.props;
   if (id === 'player_bowl')
-    return state.shotKey === 'refectory_porridge'
-      ? props.porridgeInspect
-      : state.flags.meal_player_ate
-        ? props.porridgeEmpty
-        : props.porridgeFull;
+    return state.flags.meal_player_ate ? props.porridgeEmpty : props.porridgeFull;
   if (id === 'linlan_bowl')
-    return state.shotKey === 'refectory_porridge'
-      ? props.porridgeInspect
-      : state.flags.meal_linlan_ate
-        ? props.porridgeEmpty
-        : props.porridgeFull;
+    return state.flags.meal_linlan_ate ? props.porridgeEmpty : props.porridgeFull;
   if (id === 'zhouyan_bowl')
     return state.shotKey === 'refectory_porridge'
       ? props.porridgeInspect
@@ -75,11 +70,7 @@ function getPropAsset(id: string, state: GameState, lit: boolean): string | unde
         ? props.porridgeEmpty
         : props.porridgeFull;
   if (id === 'xuzhi_bowl')
-    return state.shotKey === 'refectory_porridge'
-      ? props.porridgeInspect
-      : state.flags.meal_xuzhi_ate
-        ? props.porridgeEmpty
-        : props.porridgeFull;
+    return state.flags.meal_xuzhi_ate ? props.porridgeEmpty : props.porridgeFull;
   if (id === 'spoon') return props.porridgeSpoon;
   if (id === 'candle') {
     if (state.sceneKey === 'mini_wake_three_gongs') return props.candleExtinguished;
@@ -116,7 +107,6 @@ function getPropAsset(id: string, state: GameState, lit: boolean): string | unde
   }
   if (id === 'bags') return props.travelBags;
   if (id === 'camera') return props.cameraCap;
-  if (id === 'bread') return props.flatbread;
   if (id === 'water') return props.hotWater;
   if (id === 'bamboo') return props.bambooShoots;
   if (id === 'ribbon') return props.blueTieNotice;

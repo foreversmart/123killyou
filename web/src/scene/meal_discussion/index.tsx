@@ -33,7 +33,7 @@ export function MealDiscussion({
               {state.flags[`meal_${id}_ate`]
                 ? '已喝粥'
                 : state.flags[`meal_${id}_refused`]
-                  ? '换素饼'
+                  ? '换馒头'
                   : '还在犹豫'}
             </span>
           </button>
@@ -42,8 +42,8 @@ export function MealDiscussion({
       {person && (
         <div className={styles.discussion}>
           <span>我对{person}说……</span>
-          <button disabled={!enabled} onClick={() => void onAction(`劝${person}别吃肉粥，换素饼`)}>
-            先别喝，换素饼吧
+          <button disabled={!enabled} onClick={() => void onAction(`劝${person}别吃肉粥，换馒头`)}>
+            先别喝，吃馒头和素菜吧
           </button>
           <button disabled={!enabled} onClick={() => void onAction(`让${person}喝粥`)}>
             也许只是招待游客的粥

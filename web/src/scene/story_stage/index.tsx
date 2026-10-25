@@ -1,5 +1,6 @@
 import type { GameState } from '@/shared/types/game';
 import { ScenePerson } from '@/scene/scene_person';
+import { canShowScenePerson } from '@/scene/scene_person/visibility';
 import { SceneProp } from '@/scene/scene_prop';
 import { MealDiscussion } from '@/scene/meal_discussion';
 import { StoryReading } from '@/scene/story_reading';
@@ -24,8 +25,7 @@ export function StoryStage({
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
   const speaker = state.dialogue.speaker;
   const actors = (state.actors || []).filter(
-    (actor) =>
-      actor.visible && actor.id !== 'player' && !(actor.id === 'victim' && state.flags.skin_seen),
+    (actor) => canShowScenePerson(actor) && !(actor.id === 'victim' && state.flags.skin_seen),
   );
   const unseenSpeaker = state.actors?.find(
     (actor) =>

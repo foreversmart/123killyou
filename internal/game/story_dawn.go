@@ -31,7 +31,7 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 	if miniHasAny(text, "听声音", "看窗外", "观察天色") {
 		return "inspect", miniObserve(state, "五声更锣的余震散去，远处一声钟慢慢拖长。窗纸仍黑，红烛在门边燃着。"), true
 	}
-	return "clarify", miniSystem(state, "没有确认下一步行动。可以说‘重听钟声’、‘看窗外’，再决定是否等待。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
@@ -71,5 +71,5 @@ func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
 		miniShot(state, "dawn_gate")
 		return "dialogue", miniDialogue(state, "陆沉", "住持的事，先别在山门问。五更后门会开，下山时别回头数灯。"), true
 	}
-	return "story", miniDialogue(state, "许栀", "大家都出来了。把行李收好，我们一起下山吧。"), true
+	return e.storyConversation(state, text)
 }

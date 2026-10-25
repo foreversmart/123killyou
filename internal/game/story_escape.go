@@ -33,7 +33,7 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 	if miniHasAny(text, "保持安静") {
 		return "inspect", miniObserve(state, "四下敲门的余震已经散去。门外没有回答，呼吸声在门板近处回响。"), true
 	}
-	return "clarify", miniSystem(state, "没有确认下一步行动。可以说‘看门眼’、‘问是谁’或‘不开门’。"), true
+	return e.storyConversation(state, text)
 }
 
 func miniPersonName(person string) string {
@@ -96,7 +96,7 @@ func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bo
 	if miniHasAny(text, "留在房间", "不出去", "不跟") {
 		return "story", miniObserve(state, "红烛照着紧闭的房门。门外脚步移到另一扇门旁停下，没有催促声。"), true
 	}
-	return "story", miniSystem(state, "可以询问门外的私物细节，再决定是否同行。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
@@ -151,7 +151,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 	if miniHasAny(text, "听声音", "观察四周", "看地面") {
 		return "inspect", miniObserve(state, "手电光压在地面，半掩房门内传来撕裂声。花瓶紧挨鞋跟，地砖中央留着一道拖痕。"), true
 	}
-	return "clarify", miniSystem(state, "没有确认下一步行动。可以说‘观察屋内’、‘听猫叫’、‘听鸟叫’，或说出撤退方向。"), true
+	return e.storyConversation(state, text)
 }
 
 func (e *Engine) breakMiniVase(state *State) (string, string, bool) {
