@@ -10,36 +10,49 @@
   ],
   "assets": [
     {
-      "id": "east_courtyard",
+      "id": "corridor_afternoon",
       "name": "东院回廊·晴日下午",
       "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
       "width": 1672,
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 2035284,
-      "sha256": "eb26468f6e6ca3de87eeb979e578fb8d5d879ff66ac3b0d3317fc93696c77290",
-      "status": "selected",
+      "bytes": 1910150,
+      "sha256": "dfc307736f13e568adcb7a4d53872ddd921d8614a6999bba574bdc3b642eee68",
+      "status": "generated",
       "usage": {
-        "storyBeats": ["02"],
-        "purpose": "下午分房的回廊背景；后续时段沿用空间结构，门与可变道具仍需分层"
-      }
+        "storyBeats": [
+          "02"
+        ],
+        "purpose": "东院回廊·晴日下午"
+      },
+      "kind": "background",
+      "promptSet": "assets/generation/production_manifest.json",
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
     },
     {
-      "id": "player_room",
-      "name": "主角门房·夜间亮烛",
+      "id": "player_room_candlelit",
+      "name": "主角门房·夜间亮烛底图",
       "path": "assets/scenes/player_room/room_candlelit.png",
       "width": 1672,
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 1724499,
-      "sha256": "fa98b6e67d15d1f88857ff71d31a4694c441d968efa4265dfe2ae2aa1ec75bd9",
-      "status": "selected",
+      "bytes": 1596823,
+      "sha256": "b8fe731e5c945ee97395dc5141bdaf7a7daaaa83efffaef6a4951d3772cdcffc",
+      "status": "generated",
       "usage": {
-        "storyBeats": ["05", "06", "07", "10", "11"],
-        "purpose": "主角房内夜间亮烛状态；仅用于烛亮且机位、烛长与道具位置匹配的段落"
-      }
+        "storyBeats": [
+          "05",
+          "06",
+          "07",
+          "10"
+        ],
+        "purpose": "主角门房·夜间亮烛底图"
+      },
+      "kind": "background",
+      "promptSet": "assets/generation/production_manifest.json",
+      "layerLayout": "assets/scenes/player_room/layout.json"
     },
     {
       "id": "lin_lan",
@@ -53,8 +66,21 @@
       "sha256": "44781db08da1f7f847c7d7ed4c244546eee40fd640697db18c766d445c011a1e",
       "status": "selected",
       "usage": {
-        "storyBeats": ["01", "02"],
-        "purpose": "林岚正常同行图与角色定型；相机盖仍在镜头前，挂到铜铃旁后需去盖状态"
+        "storyBeats": [
+          "01",
+          "02"
+        ],
+        "purpose": "01正常带盖同行、12取回盖后使用；入住放盖后切 standing_cap_removed"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1127884,
+        "nearOpaquePixels": 411969,
+        "silhouetteBounds": {
+          "minX": 273,
+          "minY": 24,
+          "maxX": 818,
+          "maxY": 1515
+        }
       }
     },
     {
@@ -69,8 +95,20 @@
       "sha256": "493c3d16664cd1fddd949ab63c1df9eb42fccbd5b36da2f3c7f50f0375425e84",
       "status": "selected",
       "usage": {
-        "storyBeats": ["04"],
-        "purpose": "陆沉持灯站姿与造型参考；登记处仅用于遮挡预览，正式接待与递物姿态另制"
+        "storyBeats": [
+          "04"
+        ],
+        "purpose": "04入夜带路和巡门的提灯站姿；登记与清晨回收使用白日接待姿态"
+      },
+      "alphaCheck": {
+        "transparentPixels": 977798,
+        "nearOpaquePixels": 554417,
+        "silhouetteBounds": {
+          "minX": 229,
+          "minY": 4,
+          "maxX": 831,
+          "maxY": 1533
+        }
       }
     },
     {
@@ -89,14 +127,17 @@
         "nearOpaquePixels": 403148,
         "silhouetteBounds": {
           "minX": 276,
-          "minY": 14,
-          "maxX": 776,
-          "maxY": 1520
+          "minY": 13,
+          "maxX": 777,
+          "maxY": 1521
         }
       },
       "usage": {
-        "storyBeats": ["01", "02"],
-        "purpose": "周砚正常同行图与角色定型；持灯、夜间观察及异常状态从此派生"
+        "storyBeats": [
+          "01",
+          "02"
+        ],
+        "purpose": "正常同行与古建观察；用斋、显露缝线和晨间头像使用各自状态"
       }
     },
     {
@@ -114,15 +155,18 @@
         "transparentPixels": 1118872,
         "nearOpaquePixels": 424696,
         "silhouetteBounds": {
-          "minX": 287,
-          "minY": 24,
-          "maxX": 780,
-          "maxY": 1516
+          "minX": 286,
+          "minY": 22,
+          "maxX": 781,
+          "maxY": 1517
         }
       },
       "usage": {
-        "storyBeats": ["01", "02"],
-        "purpose": "许栀正常同行图与角色定型；蓝发圈夹纸线索独立制作，保留短圆脸辨识特征"
+        "storyBeats": [
+          "01",
+          "02"
+        ],
+        "purpose": "正常同行与关切交谈；保持短圆脸和平刘海，蓝发圈在独立纸张上"
       }
     },
     {
@@ -141,14 +185,17 @@
         "nearOpaquePixels": 577548,
         "silhouetteBounds": {
           "minX": 223,
-          "minY": 9,
-          "maxX": 829,
-          "maxY": 1519
+          "minY": 8,
+          "maxX": 830,
+          "maxY": 1520
         }
       },
       "usage": {
-        "storyBeats": ["03", "08"],
-        "purpose": "慧普正常人形的造型参考；帘后初见与空背揭露需要专用姿态，不能直接替代"
+        "storyBeats": [
+          "03",
+          "08"
+        ],
+        "purpose": "正常外貌与服装定型；帘后、背身空背和回望使用专用状态"
       }
     },
     {
@@ -166,15 +213,17 @@
         "transparentPixels": 1055810,
         "nearOpaquePixels": 494758,
         "silhouetteBounds": {
-          "minX": 292,
-          "minY": 28,
+          "minX": 291,
+          "minY": 27,
           "maxX": 793,
-          "maxY": 1519
+          "maxY": 1520
         }
       },
       "usage": {
-        "storyBeats": ["09"],
-        "purpose": "神公及杯筊的造型参考；桌后坐姿、引灯与石化状态需要专用素材"
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "神公与杯筊造型参考；09初见用坐姿，结果后切石化或持烛引路"
       }
     },
     {
@@ -189,7 +238,9 @@
       "sha256": "20f58d75f77aa4208cdae46a3594a98bae6220acd7e23b950561b0060b588db5",
       "status": "generated",
       "usage": {
-        "storyBeats": ["01"],
+        "storyBeats": [
+          "01"
+        ],
         "purpose": "下午抵达的山门背景；牌匾准确排字，人物、花猫与行李另行叠加"
       }
     },
@@ -206,7 +257,9 @@
       "status": "generated",
       "layerLayout": "assets/scenes/registration/layout.json",
       "usage": {
-        "storyBeats": ["02"],
+        "storyBeats": [
+          "02"
+        ],
         "purpose": "登记处分层背景，与独立桌前景、登记簿、钥匙、通行凭及四块房牌组合"
       }
     },
@@ -233,7 +286,10 @@
         }
       },
       "usage": {
-        "storyBeats": ["01", "02"],
+        "storyBeats": [
+          "01",
+          "02"
+        ],
         "purpose": "林岚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -261,7 +317,10 @@
         }
       },
       "usage": {
-        "storyBeats": ["01", "02"],
+        "storyBeats": [
+          "01",
+          "02"
+        ],
         "purpose": "周砚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -289,7 +348,10 @@
         }
       },
       "usage": {
-        "storyBeats": ["01", "02"],
+        "storyBeats": [
+          "01",
+          "02"
+        ],
         "purpose": "许栀普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -317,7 +379,9 @@
         }
       },
       "usage": {
-        "storyBeats": ["04"],
+        "storyBeats": [
+          "04"
+        ],
         "purpose": "陆沉普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -345,7 +409,10 @@
         }
       },
       "usage": {
-        "storyBeats": ["03", "08"],
+        "storyBeats": [
+          "03",
+          "08"
+        ],
         "purpose": "慧普普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "帘后初见使用通用黑影加问号占位；面容已按分镜可见时使用普通头像，不提前展示怪物结构。"
       }
@@ -373,7 +440,9 @@
         }
       },
       "usage": {
-        "storyBeats": ["09"],
+        "storyBeats": [
+          "09"
+        ],
         "purpose": "神公普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -402,7 +471,12 @@
       },
       "presentation": "assets/generation/portrait_presentation.json",
       "usage": {
-        "storyBeats": ["03", "07", "08", "11"],
+        "storyBeats": [
+          "03",
+          "07",
+          "08",
+          "11"
+        ],
         "purpose": "帘后人物及尚未看清、未核实的门外发言占位；保留NPC头像框，由界面叠加问号",
         "visibilityRule": "依据玩家已见信息选择通用黑影或可见人物外貌，不依据后台真实身份暗示真假"
       }
@@ -432,7 +506,11 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": ["02", "07", "08"],
+        "storyBeats": [
+          "02",
+          "07",
+          "08"
+        ],
         "purpose": "单枚铜钥匙的道具栏、背包与调查图；沿用登记处钥匙身份"
       }
     },
@@ -461,7 +539,13 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": ["02", "05", "07", "11", "12"],
+        "storyBeats": [
+          "02",
+          "05",
+          "07",
+          "11",
+          "12"
+        ],
         "purpose": "残页的道具栏与调查底图；末行警告由准确排字提供"
       }
     },
@@ -490,7 +574,15 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": ["04", "05", "06", "08", "09", "10", "11"],
+        "storyBeats": [
+          "04",
+          "05",
+          "06",
+          "08",
+          "09",
+          "10",
+          "11"
+        ],
         "purpose": "未点燃红烛的道具栏与调查图；不是场景中燃烧或短芯状态"
       }
     },
@@ -519,7 +611,11 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": ["02", "05", "06"],
+        "storyBeats": [
+          "02",
+          "05",
+          "06"
+        ],
         "purpose": "木念珠的道具栏与调查图；保留一颗更深的珠子"
       }
     },
@@ -548,8 +644,2413 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": ["02", "12"],
+        "storyBeats": [
+          "02",
+          "12"
+        ],
         "purpose": "通行凭的道具栏与正反面调查底图；不再与残页共用图片"
+      }
+    },
+    {
+      "id": "lin_lan_alert",
+      "name": "林岚·警觉",
+      "kind": "portrait",
+      "path": "assets/characters/lin_lan/portrait_alert.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1575669,
+      "sha256": "5492861a4604a62bcf3c86a55426432d67f53457fbd25de12be640bf45804c27",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "04",
+          "08"
+        ],
+        "purpose": "林岚·警觉"
+      },
+      "alphaCheck": {
+        "transparentPixels": 671178,
+        "nearOpaquePixels": 867642,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 54,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "lin_lan_afraid",
+      "name": "林岚·害怕",
+      "kind": "portrait",
+      "path": "assets/characters/lin_lan/portrait_afraid.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1575341,
+      "sha256": "6442fbdcb9fe91ea4309b82f304bd4a0e70d7b37a786c546fc67cc9283501691",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08",
+          "10"
+        ],
+        "purpose": "林岚·害怕"
+      },
+      "alphaCheck": {
+        "transparentPixels": 670768,
+        "nearOpaquePixels": 867254,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 55,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_doubtful",
+      "name": "周砚·怀疑",
+      "kind": "portrait",
+      "path": "assets/characters/zhou_yan/portrait_doubtful.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1520965,
+      "sha256": "18540da3b26a22ee7f83df84dc22f6dd7b5ece85a5cb3b4932dfc9fe7dc039e8",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03",
+          "04"
+        ],
+        "purpose": "周砚·怀疑"
+      },
+      "alphaCheck": {
+        "transparentPixels": 719084,
+        "nearOpaquePixels": 834208,
+        "silhouetteBounds": {
+          "minX": 3,
+          "minY": 41,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_tense",
+      "name": "周砚·紧张",
+      "kind": "portrait",
+      "path": "assets/characters/zhou_yan/portrait_tense.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1488123,
+      "sha256": "123fa7eab8021fb304914aca59865aed7b6eb05c07b4fa39548bdeb1bc412ca8",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "周砚·紧张"
+      },
+      "alphaCheck": {
+        "transparentPixels": 717674,
+        "nearOpaquePixels": 834102,
+        "silhouetteBounds": {
+          "minX": 4,
+          "minY": 40,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_concerned",
+      "name": "许栀·关切",
+      "kind": "portrait",
+      "path": "assets/characters/xu_zhi/portrait_concerned.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1628948,
+      "sha256": "d468e627926530d4120b2de379b73915ea0180049203b480296a08a944bbb32a",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03",
+          "08"
+        ],
+        "purpose": "许栀·关切"
+      },
+      "alphaCheck": {
+        "transparentPixels": 655901,
+        "nearOpaquePixels": 886130,
+        "silhouetteBounds": {
+          "minX": 38,
+          "minY": 45,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_resolute",
+      "name": "许栀·坚定拒绝",
+      "kind": "portrait",
+      "path": "assets/characters/xu_zhi/portrait_resolute.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1630322,
+      "sha256": "6717d4b825b1a319a474cf95865c36a42bf4bafefaec79a6b637fde071f38544",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03",
+          "10"
+        ],
+        "purpose": "许栀·坚定拒绝"
+      },
+      "alphaCheck": {
+        "transparentPixels": 655958,
+        "nearOpaquePixels": 884235,
+        "silhouetteBounds": {
+          "minX": 37,
+          "minY": 45,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "lu_chen_scrutinizing",
+      "name": "陆沉·审视",
+      "kind": "portrait",
+      "path": "assets/characters/lu_chen/portrait_scrutinizing.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1520424,
+      "sha256": "b0ad91ccac5ae6b50d50fc4285ef3f6af02038d522e33fbd5e97a3fb83288985",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "04"
+        ],
+        "purpose": "陆沉·审视"
+      },
+      "alphaCheck": {
+        "transparentPixels": 714825,
+        "nearOpaquePixels": 844095,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 43,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "lu_chen_hesitant",
+      "name": "陆沉·欲言又止",
+      "kind": "portrait",
+      "path": "assets/characters/lu_chen/portrait_hesitant.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1527055,
+      "sha256": "4329bddf0cf05fd48a22658f9d4d17ee551f187ec79c5b022c530e408b61c709",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03",
+          "12"
+        ],
+        "purpose": "陆沉·欲言又止"
+      },
+      "alphaCheck": {
+        "transparentPixels": 715095,
+        "nearOpaquePixels": 844253,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 43,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "dining_sunset",
+      "name": "斋堂·夕照",
+      "kind": "background",
+      "path": "assets/scenes/dining_hall/dining_sunset.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2101154,
+      "sha256": "12de54317d806c8f892ada4505643474bd5195e870956bcf7294bb691c68eff0",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋堂·夕照"
+      },
+      "layerLayout": "assets/scenes/dining_hall/layout.json"
+    },
+    {
+      "id": "shrine_night",
+      "name": "东侧偏殿·夜间",
+      "kind": "background",
+      "path": "assets/scenes/east_shrine/shrine_night.png",
+      "width": 1671,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1701270,
+      "sha256": "547ecb18efe71353fceac2804c3e6adf62083c0e7f2df76fdb5fbd995e5d3b7a",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "东侧偏殿·夜间"
+      },
+      "layerLayout": "assets/scenes/east_shrine/layout.json"
+    },
+    {
+      "id": "lu_chen_reception",
+      "name": "陆沉·白日接待",
+      "kind": "character",
+      "path": "assets/characters/lu_chen/standing_reception.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1693254,
+      "sha256": "57762bf29688d2682f24bd4e9cb3fedeb03305d5404ff02e8cbd7a56af4f6392",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "02",
+          "03",
+          "12"
+        ],
+        "purpose": "陆沉·白日接待"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1003065,
+        "nearOpaquePixels": 544165,
+        "silhouetteBounds": {
+          "minX": 230,
+          "minY": 11,
+          "maxX": 836,
+          "maxY": 1526
+        }
+      }
+    },
+    {
+      "id": "corridor_bell",
+      "name": "回廊铜铃",
+      "kind": "prop",
+      "path": "assets/scenes/east_courtyard/props/bell.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1156923,
+      "sha256": "a6079fb94de8c54cf65985a0593f366b715ae7a5c34e127c511f91ce5ad45f1e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "08"
+        ],
+        "purpose": "回廊铜铃"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1386494,
+        "nearOpaquePixels": 166229,
+        "silhouetteBounds": {
+          "minX": 315,
+          "minY": 82,
+          "maxX": 707,
+          "maxY": 1368
+        }
+      }
+    },
+    {
+      "id": "corridor_vase",
+      "name": "回廊花瓶·完整",
+      "kind": "prop",
+      "path": "assets/scenes/east_courtyard/props/vase_intact.png",
+      "width": 1263,
+      "height": 1245,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 797264,
+      "sha256": "0b19e8a462d848b13c795fe69f5c0f6a0bb8bd8fe222e6ea470c8af0591e8145",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "08"
+        ],
+        "purpose": "回廊花瓶·完整"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1279017,
+        "nearOpaquePixels": 168916,
+        "silhouetteBounds": {
+          "minX": 244,
+          "minY": 12,
+          "maxX": 1088,
+          "maxY": 1206
+        }
+      }
+    },
+    {
+      "id": "room_candle_burning",
+      "name": "红烛烛台·燃烧",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/candle_burning.png",
+      "width": 1263,
+      "height": 1246,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 594296,
+      "sha256": "670ebf0cc5d52225e31d8fafb0e1873916f1e999e7eb54636a80b35115968911",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "07",
+          "10"
+        ],
+        "purpose": "红烛烛台·燃烧"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1243899,
+        "nearOpaquePixels": 309246,
+        "silhouetteBounds": {
+          "minX": 298,
+          "minY": 73,
+          "maxX": 965,
+          "maxY": 1180
+        }
+      }
+    },
+    {
+      "id": "room_scripture",
+      "name": "清心经·桌面",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/scripture_closed.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1605130,
+      "sha256": "3d257770fc4952632f38eb3a10dda6050856820907afd8153b0d5478f75de423",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "10"
+        ],
+        "purpose": "清心经·桌面"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1064709,
+        "nearOpaquePixels": 493163,
+        "silhouetteBounds": {
+          "minX": 199,
+          "minY": 199,
+          "maxX": 1338,
+          "maxY": 886
+        }
+      }
+    },
+    {
+      "id": "room_page",
+      "name": "入住残页·桌面",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/torn_page.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1489719,
+      "sha256": "de628c496d84ac06d0568538699daaf5ba7d46bccd15a50b58e0f9d87c74077f",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "07"
+        ],
+        "purpose": "入住残页·桌面"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1045511,
+        "nearOpaquePixels": 508253,
+        "silhouetteBounds": {
+          "minX": 59,
+          "minY": 237,
+          "maxX": 1493,
+          "maxY": 954
+        }
+      }
+    },
+    {
+      "id": "room_history",
+      "name": "寺史册·桌面",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/history_closed.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1988235,
+      "sha256": "b51414d4b8bdbc6531b3f12ec7eec6cfc1513fd5b6ce87e472ef8fd6a8126b09",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05"
+        ],
+        "purpose": "寺史册·桌面"
+      },
+      "alphaCheck": {
+        "transparentPixels": 873277,
+        "nearOpaquePixels": 684982,
+        "silhouetteBounds": {
+          "minX": 170,
+          "minY": 101,
+          "maxX": 1382,
+          "maxY": 961
+        }
+      }
+    },
+    {
+      "id": "dining_table",
+      "name": "斋堂桌前景",
+      "kind": "foreground",
+      "path": "assets/scenes/dining_hall/table_foreground.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 594441,
+      "sha256": "6b4be4755ff44671786f18f76fa7e0d9638742c256c3df218da5e4dddd7a12e4",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋堂桌前景"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1185377,
+        "nearOpaquePixels": 307328,
+        "silhouetteBounds": {
+          "minX": 12,
+          "minY": 588,
+          "maxX": 1659,
+          "maxY": 925
+        }
+      }
+    },
+    {
+      "id": "corridor_dusk",
+      "name": "东院回廊·入夜",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/corridor_dusk.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1836507,
+      "sha256": "03d6281e885b76564d3b0d5b6c4e01e95ad1af4eca1eb35423c26c8912bc6001",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "04"
+        ],
+        "purpose": "东院回廊·入夜"
+      },
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
+    },
+    {
+      "id": "corridor_night",
+      "name": "东院回廊·午夜",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/corridor_night.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1782404,
+      "sha256": "9d79ecdd9f9b26c33ebee32c6431117ca892d9454b3519751c8296f9fdf79e47",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "08",
+          "10",
+          "11"
+        ],
+        "purpose": "东院回廊·午夜"
+      },
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
+    },
+    {
+      "id": "porridge_full",
+      "name": "斋碗·肉粥",
+      "kind": "prop",
+      "path": "assets/props/porridge/bowl_full.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1387070,
+      "sha256": "df039e8d47250b8fabb0c254e022af06c6199b22fb5d062daa4f1c07c9fb4d6e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋碗·肉粥"
+      },
+      "alphaCheck": {
+        "transparentPixels": 796476,
+        "nearOpaquePixels": 757769,
+        "silhouetteBounds": {
+          "minX": 56,
+          "minY": 228,
+          "maxX": 1183,
+          "maxY": 1128
+        }
+      }
+    },
+    {
+      "id": "shrine_table",
+      "name": "杯筊桌前景",
+      "kind": "foreground",
+      "path": "assets/scenes/east_shrine/table_foreground.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 923749,
+      "sha256": "abf24dae39a32c449d9cf33332d3198848ef5df0be13c415a87fce7f3d392f8b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "杯筊桌前景"
+      },
+      "alphaCheck": {
+        "transparentPixels": 896552,
+        "nearOpaquePixels": 641353,
+        "silhouetteBounds": {
+          "minX": 64,
+          "minY": 408,
+          "maxX": 1608,
+          "maxY": 862
+        }
+      }
+    },
+    {
+      "id": "room_oil_lamp",
+      "name": "门房油灯·未燃",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/oil_lamp_unlit.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 786523,
+      "sha256": "e4c8498900441c508c5182e4160f1ca66b6fa76994f5676de25d2fe602386fd8",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "07",
+          "10",
+          "11"
+        ],
+        "purpose": "门房油灯·未燃"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1167505,
+        "nearOpaquePixels": 168950,
+        "silhouetteBounds": {
+          "minX": 389,
+          "minY": 30,
+          "maxX": 857,
+          "maxY": 1198
+        }
+      }
+    },
+    {
+      "id": "corridor_dawn",
+      "name": "东院回廊·真实清晨",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/corridor_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1921753,
+      "sha256": "cf43f90580bcccb029685cd0c1c0e21adc866bb0423d8a97bcebbca17f3c9d1a",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "东院回廊·真实清晨"
+      },
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
+    },
+    {
+      "id": "room_moonlit",
+      "name": "门房·红烛熄灭",
+      "kind": "background",
+      "path": "assets/scenes/player_room/room_moonlit.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1577814,
+      "sha256": "2e6342cc6d1a6f375330acf57a3722bc20832ff0eead2c51b54508b0dd362391",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "10"
+        ],
+        "purpose": "门房·红烛熄灭"
+      },
+      "layerLayout": "assets/scenes/player_room/layout.json"
+    },
+    {
+      "id": "room_false_dawn",
+      "name": "门房·假报晓",
+      "kind": "background",
+      "path": "assets/scenes/player_room/room_false_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1541381,
+      "sha256": "80578b12215f1380097d8b63382144b912d5878cfc1664a2dfc3bae68e116f21",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "11"
+        ],
+        "purpose": "门房·假报晓"
+      },
+      "layerLayout": "assets/scenes/player_room/layout.json"
+    },
+    {
+      "id": "room_dawn",
+      "name": "门房·真实清晨",
+      "kind": "background",
+      "path": "assets/scenes/player_room/room_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1853139,
+      "sha256": "44f4d3b043d622f77a0f16ada6daf0fb850c1ace712894f67e7729d77a8f18aa",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "11",
+          "12"
+        ],
+        "purpose": "门房·真实清晨"
+      },
+      "layerLayout": "assets/scenes/player_room/layout.json"
+    },
+    {
+      "id": "gate_dawn",
+      "name": "山门·晨光",
+      "kind": "background",
+      "path": "assets/scenes/temple_gate/gate_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2183047,
+      "sha256": "50fc1ef12c26c812f15f8882c74356781627b5ca5455f638ebcd79498cffade5",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "山门·晨光"
+      },
+      "layerLayout": "assets/scenes/temple_gate/layout.json"
+    },
+    {
+      "id": "bus_arrival",
+      "name": "大巴·午后抵达",
+      "kind": "background",
+      "path": "assets/scenes/bus/bus_arrival.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1984218,
+      "sha256": "19bd5c0b61dd8d60952bfaa0cc843821a10334aef03699b5bc3eaf6b5c40ddab",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01"
+        ],
+        "purpose": "大巴·午后抵达"
+      }
+    },
+    {
+      "id": "main_hall_night",
+      "name": "大雄宝殿·夜间入口",
+      "kind": "background",
+      "path": "assets/scenes/main_hall/hall_night.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1797276,
+      "sha256": "2b69157a86bfde71a82c22ba4968b7bd813bca5a31e304dbe03344b9bc5e003e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08",
+          "09"
+        ],
+        "purpose": "大雄宝殿·夜间入口"
+      }
+    },
+    {
+      "id": "victim_room_night",
+      "name": "偏房·门隙观察",
+      "kind": "background",
+      "path": "assets/scenes/guest_room/room_night.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1526836,
+      "sha256": "362517c798fb28a96c95c882276b4313c95e6ce3e9e70f6e99f82dfa52d13047",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "偏房·门隙观察"
+      },
+      "layerLayout": "assets/scenes/guest_room/layout.json"
+    },
+    {
+      "id": "bus_departure",
+      "name": "大巴·晨间返程",
+      "kind": "background",
+      "path": "assets/scenes/bus/bus_departure.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2016200,
+      "sha256": "c75387409a46040cdbfb965a7d8684badc416d9b4ec1423be7c8cce2e91fabe0",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "大巴·晨间返程"
+      }
+    },
+    {
+      "id": "peephole_empty",
+      "name": "门眼·空回廊",
+      "kind": "background",
+      "path": "assets/scenes/player_room/peephole_empty.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1590779,
+      "sha256": "87dfe51a1da257fb15f2683fd05541a8c97931ab3da50bdc2003ad1854c8dee0",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07"
+        ],
+        "purpose": "门眼·空回廊"
+      },
+      "layerLayout": "assets/scenes/player_room/layout.json"
+    },
+    {
+      "id": "vase_broken",
+      "name": "回廊花瓶·碎裂",
+      "kind": "prop",
+      "path": "assets/scenes/east_courtyard/props/vase_broken.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2183080,
+      "sha256": "e737728149c27ed213fe2891ada14d4e6990ca17640c091e084cf9ea56aaa9fd",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "回廊花瓶·碎裂"
+      },
+      "alphaCheck": {
+        "transparentPixels": 974429,
+        "nearOpaquePixels": 432128,
+        "silhouetteBounds": {
+          "minX": 63,
+          "minY": 240,
+          "maxX": 1493,
+          "maxY": 926
+        }
+      }
+    },
+    {
+      "id": "camera_cap",
+      "name": "林岚相机盖",
+      "kind": "prop",
+      "path": "assets/props/camera_cap/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 557921,
+      "sha256": "39c34227725f3640e08f1e4061b7f3fe7bc61219a7a9359bc3a015f799c206ce",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "08",
+          "12"
+        ],
+        "purpose": "林岚相机盖"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1320138,
+        "nearOpaquePixels": 229034,
+        "silhouetteBounds": {
+          "minX": 379,
+          "minY": 24,
+          "maxX": 886,
+          "maxY": 1211
+        }
+      }
+    },
+    {
+      "id": "repair_drawing",
+      "name": "周砚折叠修缮图",
+      "kind": "prop",
+      "path": "assets/props/repair_drawing/inventory.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2161624,
+      "sha256": "53ff4fb77f798e48807fb478dd152a8310e0b7e3a66ca6d807931b27099575de",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "02",
+          "08"
+        ],
+        "purpose": "周砚折叠修缮图"
+      },
+      "alphaCheck": {
+        "transparentPixels": 675250,
+        "nearOpaquePixels": 872594,
+        "silhouetteBounds": {
+          "minX": 50,
+          "minY": 87,
+          "maxX": 1477,
+          "maxY": 945
+        }
+      }
+    },
+    {
+      "id": "blue_tie_notice",
+      "name": "许栀蓝发圈夹入住须知",
+      "kind": "prop",
+      "path": "assets/props/blue_tie_notice/scene.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1710033,
+      "sha256": "d4d676e075f4debe4e58c26584093f2e25cc1c57806e3e6961a2331566a8669c",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "08"
+        ],
+        "purpose": "许栀蓝发圈夹入住须知"
+      },
+      "alphaCheck": {
+        "transparentPixels": 832652,
+        "nearOpaquePixels": 717152,
+        "silhouetteBounds": {
+          "minX": 174,
+          "minY": 84,
+          "maxX": 897,
+          "maxY": 1454
+        }
+      }
+    },
+    {
+      "id": "matches",
+      "name": "火柴",
+      "kind": "prop",
+      "path": "assets/props/matches/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1262439,
+      "sha256": "59ab55599dafd93d67656c9c7022bd3d79cb38309b1c537f611c33e96e7debf0",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "08"
+        ],
+        "purpose": "火柴"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1005780,
+        "nearOpaquePixels": 547171,
+        "silhouetteBounds": {
+          "minX": 68,
+          "minY": 221,
+          "maxX": 1188,
+          "maxY": 1055
+        }
+      }
+    },
+    {
+      "id": "flashlight",
+      "name": "手电",
+      "kind": "prop",
+      "path": "assets/props/flashlight/inventory.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 891245,
+      "sha256": "46afc974e0fdac6f48a7c384e86c5b1662219d4d77b791295ef954507004be37",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "08"
+        ],
+        "purpose": "手电"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1161932,
+        "nearOpaquePixels": 388989,
+        "silhouetteBounds": {
+          "minX": 59,
+          "minY": 257,
+          "maxX": 1218,
+          "maxY": 972
+        }
+      }
+    },
+    {
+      "id": "hui_pu_curtain",
+      "name": "慧普·帘后轮廓",
+      "kind": "character",
+      "path": "assets/characters/hui_pu/curtain_presence.png",
+      "width": 1295,
+      "height": 1215,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1659814,
+      "sha256": "d729530b08c5c6ef2c0923db01f4fae277ed98ff50d598696b95e326b7108054",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "慧普·帘后轮廓"
+      },
+      "alphaCheck": {
+        "transparentPixels": 645461,
+        "nearOpaquePixels": 896890,
+        "silhouetteBounds": {
+          "minX": 240,
+          "minY": 11,
+          "maxX": 1056,
+          "maxY": 1196
+        }
+      }
+    },
+    {
+      "id": "porridge_empty",
+      "name": "斋碗·食用后",
+      "kind": "prop",
+      "path": "assets/props/porridge/bowl_empty.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1433979,
+      "sha256": "1e9c312db3c787a08a3f131c56f2c726e8423badf8040c5c604ffba9560477af",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "斋碗·食用后"
+      },
+      "alphaCheck": {
+        "transparentPixels": 792682,
+        "nearOpaquePixels": 757412,
+        "silhouetteBounds": {
+          "minX": 56,
+          "minY": 227,
+          "maxX": 1185,
+          "maxY": 1129
+        }
+      }
+    },
+    {
+      "id": "flatbread",
+      "name": "素饼",
+      "kind": "prop",
+      "path": "assets/props/flatbread/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1372374,
+      "sha256": "fd6021a89f3e007d545dc0b0205d72de388718306a563e41681bcf3804509629",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "素饼"
+      },
+      "alphaCheck": {
+        "transparentPixels": 917425,
+        "nearOpaquePixels": 636085,
+        "silhouetteBounds": {
+          "minX": 50,
+          "minY": 292,
+          "maxX": 1204,
+          "maxY": 1013
+        }
+      }
+    },
+    {
+      "id": "porridge_inspect",
+      "name": "肉粥·勺底纤维调查",
+      "kind": "prop",
+      "path": "assets/props/porridge/bowl_inspect.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1522435,
+      "sha256": "fffcca9ddf00c8da0d643dab8b1a272954ac624bc513d9ffb72351110a889d1c",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "肉粥·勺底纤维调查"
+      },
+      "alphaCheck": {
+        "transparentPixels": 784504,
+        "nearOpaquePixels": 761701,
+        "silhouetteBounds": {
+          "minX": 24,
+          "minY": 96,
+          "maxX": 1244,
+          "maxY": 1186
+        }
+      }
+    },
+    {
+      "id": "wooden_spoon",
+      "name": "木勺",
+      "kind": "prop",
+      "path": "assets/props/porridge/spoon.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 693574,
+      "sha256": "82131b201e1322d14a6cec9f9f8c4a5b2409e63aeb0d1eef141be69ce7f31984",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "木勺"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1276106,
+        "nearOpaquePixels": 279727,
+        "silhouetteBounds": {
+          "minX": 39,
+          "minY": 33,
+          "maxX": 1227,
+          "maxY": 1199
+        }
+      }
+    },
+    {
+      "id": "hot_water",
+      "name": "热水",
+      "kind": "prop",
+      "path": "assets/props/hot_water/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1031003,
+      "sha256": "99950d4dcdc420447e92195a0197a903c2948a5910ac09b147df31483f58692f",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "热水"
+      },
+      "alphaCheck": {
+        "transparentPixels": 999019,
+        "nearOpaquePixels": 489536,
+        "silhouetteBounds": {
+          "minX": 188,
+          "minY": 103,
+          "maxX": 1060,
+          "maxY": 1149
+        }
+      }
+    },
+    {
+      "id": "bamboo_shoots",
+      "name": "腌笋",
+      "kind": "prop",
+      "path": "assets/props/bamboo_shoots/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1286269,
+      "sha256": "b7362264a014b3f1aeb411808adbbf0ed14097e24b0ed5e697e30e2fea05f40b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "腌笋"
+      },
+      "alphaCheck": {
+        "transparentPixels": 930189,
+        "nearOpaquePixels": 625610,
+        "silhouetteBounds": {
+          "minX": 47,
+          "minY": 308,
+          "maxX": 1208,
+          "maxY": 1034
+        }
+      }
+    },
+    {
+      "id": "room_candle_unlit",
+      "name": "红烛烛台·未燃",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/candle_unlit.png",
+      "width": 1263,
+      "height": 1246,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 693075,
+      "sha256": "07f63453bc168d0ca28f5ba5dc854df360665a9e35232ec23628234af6ea2f21",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "10",
+          "11"
+        ],
+        "purpose": "红烛烛台·未燃"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1182344,
+        "nearOpaquePixels": 377319,
+        "silhouetteBounds": {
+          "minX": 256,
+          "minY": 334,
+          "maxX": 1016,
+          "maxY": 1209
+        }
+      }
+    },
+    {
+      "id": "room_candle_out",
+      "name": "红烛烛台·熄灭",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/candle_extinguished.png",
+      "width": 1263,
+      "height": 1246,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 580691,
+      "sha256": "af70c835a5718cfa38fd30e7dab06d72142afb0bfd16194cd3136210b17b0172",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "10",
+          "11"
+        ],
+        "purpose": "红烛烛台·熄灭"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1269144,
+        "nearOpaquePixels": 290136,
+        "silhouetteBounds": {
+          "minX": 297,
+          "minY": 407,
+          "maxX": 968,
+          "maxY": 1176
+        }
+      }
+    },
+    {
+      "id": "room_candle_short",
+      "name": "红烛烛台·短芯燃烧",
+      "kind": "prop",
+      "path": "assets/scenes/player_room/props/candle_short.png",
+      "width": 1278,
+      "height": 1230,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 492319,
+      "sha256": "67c6c30abac3067ab21839766d79fda93e0925e75008c96ee7bcfc5b20cb2ac1",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "10",
+          "11"
+        ],
+        "purpose": "红烛烛台·短芯燃烧"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1315463,
+        "nearOpaquePixels": 241284,
+        "silhouetteBounds": {
+          "minX": 298,
+          "minY": 448,
+          "maxX": 981,
+          "maxY": 1156
+        }
+      }
+    },
+    {
+      "id": "jiaobei_sealed",
+      "name": "杯筊·封存",
+      "kind": "prop",
+      "path": "assets/props/jiaobei/sealed.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2121939,
+      "sha256": "b2b7b0eb1cd4359912df61323fb6f7f7e66378067aa8d1a0d915ab92066b9db6",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "杯筊·封存"
+      },
+      "alphaCheck": {
+        "transparentPixels": 901928,
+        "nearOpaquePixels": 651239,
+        "silhouetteBounds": {
+          "minX": 208,
+          "minY": 36,
+          "maxX": 1405,
+          "maxY": 964
+        }
+      }
+    },
+    {
+      "id": "jiaobei_flat",
+      "name": "杯筊单块·平面朝上",
+      "kind": "prop",
+      "path": "assets/props/jiaobei/flat_up.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1657051,
+      "sha256": "c4c18e7f406c708468e146457f2261ebef7d6de62c65fe1e6dd63727b50c737f",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "杯筊单块·平面朝上"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1095712,
+        "nearOpaquePixels": 463404,
+        "silhouetteBounds": {
+          "minX": 190,
+          "minY": 171,
+          "maxX": 1387,
+          "maxY": 857
+        }
+      }
+    },
+    {
+      "id": "birdcage",
+      "name": "偏殿鸟笼",
+      "kind": "prop",
+      "path": "assets/props/birdcage/scene.png",
+      "width": 1312,
+      "height": 1199,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1114443,
+      "sha256": "e418b6b6b0ed5bd721f5965968816b90b08b37d5576a8402004f76b1d6d53c6c",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "偏殿鸟笼"
+      },
+      "alphaCheck": {
+        "transparentPixels": 999407,
+        "nearOpaquePixels": 356536,
+        "silhouetteBounds": {
+          "minX": 279,
+          "minY": 13,
+          "maxX": 1029,
+          "maxY": 1156
+        }
+      }
+    },
+    {
+      "id": "cat_dish",
+      "name": "偏殿猫食碟",
+      "kind": "prop",
+      "path": "assets/props/cat_dish/scene.png",
+      "width": 1670,
+      "height": 942,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1152795,
+      "sha256": "9729211139bf3e1b3624e3d59a83c489c2901ed94ce087853580144f0e9d1b5d",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "偏殿猫食碟"
+      },
+      "alphaCheck": {
+        "transparentPixels": 960046,
+        "nearOpaquePixels": 597664,
+        "silhouetteBounds": {
+          "minX": 281,
+          "minY": 128,
+          "maxX": 1390,
+          "maxY": 845
+        }
+      }
+    },
+    {
+      "id": "temple_cat",
+      "name": "寺猫·花猫",
+      "kind": "animal",
+      "path": "assets/props/animals/cat_resting.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2151076,
+      "sha256": "fe1ddbff3baeb475b5af3a3af83a992971ef3db354a022f0dbc8e2dd696a0246",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "09"
+        ],
+        "purpose": "寺猫·花猫"
+      },
+      "alphaCheck": {
+        "transparentPixels": 865407,
+        "nearOpaquePixels": 641175,
+        "silhouetteBounds": {
+          "minX": 71,
+          "minY": 31,
+          "maxX": 1503,
+          "maxY": 995
+        }
+      }
+    },
+    {
+      "id": "jiaobei_curved",
+      "name": "杯筊单块·凸面朝上",
+      "kind": "prop",
+      "path": "assets/props/jiaobei/curved_up.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1884354,
+      "sha256": "7475b68bcc5ea5cec259873f2a20ef10c5d4ff17987b75b015a4b04454bbebe8",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "杯筊单块·凸面朝上"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1021125,
+        "nearOpaquePixels": 537990,
+        "silhouetteBounds": {
+          "minX": 143,
+          "minY": 151,
+          "maxX": 1431,
+          "maxY": 851
+        }
+      }
+    },
+    {
+      "id": "temple_bird",
+      "name": "檐鸟·麻雀",
+      "kind": "animal",
+      "path": "assets/props/animals/sparrow.png",
+      "width": 1363,
+      "height": 1154,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 953768,
+      "sha256": "92c30d41a5466d30522da5d485b27e64f6d285d6d3e636f412f2eb4df0fc7162",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "09",
+          "11"
+        ],
+        "purpose": "檐鸟·麻雀"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1122348,
+        "nearOpaquePixels": 416102,
+        "silhouetteBounds": {
+          "minX": 122,
+          "minY": 118,
+          "maxX": 1193,
+          "maxY": 1069
+        }
+      }
+    },
+    {
+      "id": "travel_bags",
+      "name": "四人旅行行李",
+      "kind": "prop",
+      "path": "assets/props/travel_bags/group.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1633993,
+      "sha256": "03b49d10a94a5951f03597acd9c06622135d4e7cb9b29d9e5f438f1e93b68589",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "02",
+          "12"
+        ],
+        "purpose": "四人旅行行李"
+      },
+      "alphaCheck": {
+        "transparentPixels": 751708,
+        "nearOpaquePixels": 777264,
+        "silhouetteBounds": {
+          "minX": 50,
+          "minY": 65,
+          "maxX": 1631,
+          "maxY": 887
+        }
+      }
+    },
+    {
+      "id": "lin_lan_cap_removed",
+      "name": "林岚·相机去盖站姿",
+      "kind": "character",
+      "path": "assets/characters/lin_lan/standing_cap_removed.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1513858,
+      "sha256": "d5f1e5020d38698d177551bba1bbf81b86e6f806ca58fd3a066efd21a104bb59",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "04",
+          "08",
+          "12"
+        ],
+        "purpose": "林岚·相机去盖站姿"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1124075,
+        "nearOpaquePixels": 417597,
+        "silhouetteBounds": {
+          "minX": 273,
+          "minY": 24,
+          "maxX": 820,
+          "maxY": 1516
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_seated",
+      "name": "周砚·斋堂坐姿",
+      "kind": "character",
+      "path": "assets/characters/zhou_yan/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2168567,
+      "sha256": "35cdd0082dd0dce2244fea94e0f93ba7568f4d49dab70ee7c0d1fa64a8e95394",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "周砚·斋堂坐姿"
+      },
+      "alphaCheck": {
+        "transparentPixels": 537216,
+        "nearOpaquePixels": 1007411,
+        "silhouetteBounds": {
+          "minX": 23,
+          "minY": 67,
+          "maxX": 1023,
+          "maxY": 1535
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_seated",
+      "name": "许栀·斋堂坐姿",
+      "kind": "character",
+      "path": "assets/characters/xu_zhi/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2163626,
+      "sha256": "0746cae5164715eefd333d6ddbc54fb73ebda33dc2371cc2c6e35c641984590e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "许栀·斋堂坐姿"
+      },
+      "alphaCheck": {
+        "transparentPixels": 546702,
+        "nearOpaquePixels": 993095,
+        "silhouetteBounds": {
+          "minX": 62,
+          "minY": 29,
+          "maxX": 1019,
+          "maxY": 1535
+        }
+      }
+    },
+    {
+      "id": "lu_chen_hush",
+      "name": "陆沉·示意噤声",
+      "kind": "character",
+      "path": "assets/characters/lu_chen/standing_hush.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1747152,
+      "sha256": "b53687e4759dfbe564ca919370860afc449475b7d56e5d7069b8037123ef450c",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "04"
+        ],
+        "purpose": "陆沉·示意噤声"
+      },
+      "alphaCheck": {
+        "transparentPixels": 983747,
+        "nearOpaquePixels": 557608,
+        "silhouetteBounds": {
+          "minX": 230,
+          "minY": 15,
+          "maxX": 835,
+          "maxY": 1535
+        }
+      }
+    },
+    {
+      "id": "lin_lan_seated",
+      "name": "林岚·斋堂坐姿",
+      "kind": "character",
+      "path": "assets/characters/lin_lan/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2096636,
+      "sha256": "f4355b813758f99895b98c738f78daf567a51a61142f76c1af4034bf70371bbe",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03"
+        ],
+        "purpose": "林岚·斋堂坐姿"
+      },
+      "alphaCheck": {
+        "transparentPixels": 575138,
+        "nearOpaquePixels": 960798,
+        "silhouetteBounds": {
+          "minX": 46,
+          "minY": 57,
+          "maxX": 1013,
+          "maxY": 1535
+        }
+      }
+    },
+    {
+      "id": "shen_gong_seated",
+      "name": "神公·守桌坐姿",
+      "kind": "character",
+      "path": "assets/characters/shen_gong/seated.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2044253,
+      "sha256": "c8b3f84b71efe8e8ae64e0821979723ac767bc4b2010212c7b7519a680ec70d4",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "神公·守桌坐姿"
+      },
+      "alphaCheck": {
+        "transparentPixels": 565782,
+        "nearOpaquePixels": 985764,
+        "silhouetteBounds": {
+          "minX": 10,
+          "minY": 97,
+          "maxX": 1023,
+          "maxY": 1498
+        }
+      }
+    },
+    {
+      "id": "shen_gong_guiding",
+      "name": "神公·持烛引路",
+      "kind": "character",
+      "path": "assets/characters/shen_gong/standing_guiding.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1658209,
+      "sha256": "48891eb1b3da11eb207fb728f8394c2c35e3bda8761a74017f5b243002f0a4cc",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "神公·持烛引路"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1029897,
+        "nearOpaquePixels": 517898,
+        "silhouetteBounds": {
+          "minX": 255,
+          "minY": 32,
+          "maxX": 804,
+          "maxY": 1517
+        }
+      }
+    },
+    {
+      "id": "shen_gong_stone_partial",
+      "name": "神公·指尖石化",
+      "kind": "character",
+      "path": "assets/characters/shen_gong/seated_stone_partial.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1977776,
+      "sha256": "cfa3a6877c4ea5fd61d6e518cb154b2eb4fbf8b9c87fcdff2439a033bea4fdf1",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "神公·指尖石化"
+      },
+      "alphaCheck": {
+        "transparentPixels": 574532,
+        "nearOpaquePixels": 981311,
+        "silhouetteBounds": {
+          "minX": 9,
+          "minY": 92,
+          "maxX": 1023,
+          "maxY": 1487
+        }
+      }
+    },
+    {
+      "id": "shen_gong_stone",
+      "name": "神公·完全石化",
+      "kind": "character",
+      "path": "assets/characters/shen_gong/seated_stone.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 2922225,
+      "sha256": "d186ffa7f2095affb20975ae01e58a4d02e304ebce40a08b39449c6b6868874d",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "09"
+        ],
+        "purpose": "神公·完全石化"
+      },
+      "alphaCheck": {
+        "transparentPixels": 576207,
+        "nearOpaquePixels": 976975,
+        "silhouetteBounds": {
+          "minX": 11,
+          "minY": 97,
+          "maxX": 1023,
+          "maxY": 1490
+        }
+      }
+    },
+    {
+      "id": "hui_pu_rear",
+      "name": "慧普·空背剥皮",
+      "kind": "character",
+      "path": "assets/characters/hui_pu/rear_hollow.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1811389,
+      "sha256": "51536649113f856bed34abc060d02eee352f15cd0525b3a42f6a3177f5e6b6ba",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "慧普·空背剥皮"
+      },
+      "alphaCheck": {
+        "transparentPixels": 937297,
+        "nearOpaquePixels": 611512,
+        "silhouetteBounds": {
+          "minX": 110,
+          "minY": 18,
+          "maxX": 880,
+          "maxY": 1495
+        }
+      }
+    },
+    {
+      "id": "victim_detail",
+      "name": "偏房·床上局部",
+      "kind": "prop",
+      "path": "assets/scenes/guest_room/props/victim_partial.png",
+      "width": 1671,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 569203,
+      "sha256": "4b3c76ff40184d4934542844a97008136b9e9bb8677706ce866439486409e691",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "偏房·床上局部"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1275865,
+        "nearOpaquePixels": 278799,
+        "silhouetteBounds": {
+          "minX": 120,
+          "minY": 248,
+          "maxX": 1558,
+          "maxY": 747
+        }
+      }
+    },
+    {
+      "id": "hui_pu_turn",
+      "name": "慧普·停手回望",
+      "kind": "character",
+      "path": "assets/characters/hui_pu/turning_hollow.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1790272,
+      "sha256": "1cb163b8f28cba19c0aba5ea2a8b838f33771db1eae0fc43a25126e4efeee614",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "慧普·停手回望"
+      },
+      "alphaCheck": {
+        "transparentPixels": 947796,
+        "nearOpaquePixels": 601503,
+        "silhouetteBounds": {
+          "minX": 117,
+          "minY": 24,
+          "maxX": 882,
+          "maxY": 1495
+        }
+      }
+    },
+    {
+      "id": "lin_lan_double",
+      "name": "林岚·换皮者抓脸",
+      "kind": "character",
+      "path": "assets/characters/lin_lan/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1565802,
+      "sha256": "bc582e29b41c9e9e6bbba9ae00edcbde6498bd015f51cc4aeb5ae5d6a72fdc4b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "10"
+        ],
+        "purpose": "林岚·换皮者抓脸"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1123262,
+        "nearOpaquePixels": 417291,
+        "silhouetteBounds": {
+          "minX": 271,
+          "minY": 19,
+          "maxX": 868,
+          "maxY": 1514
+        }
+      }
+    },
+    {
+      "id": "lin_lan_portrait_revealed",
+      "name": "林岚·缝线显露头像",
+      "kind": "portrait",
+      "path": "assets/characters/lin_lan/portrait_revealed.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1617644,
+      "sha256": "7bbaaf7593ad83be8310ae9cd32bd39b8f1ba693285bf75838008dec7752db0d",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "林岚·缝线显露头像"
+      },
+      "alphaCheck": {
+        "transparentPixels": 670260,
+        "nearOpaquePixels": 865531,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 55,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "lin_lan_portrait_tired",
+      "name": "林岚·晨间疲惫",
+      "kind": "portrait",
+      "path": "assets/characters/lin_lan/portrait_tired.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1622825,
+      "sha256": "dd9f5b890a1036bc05fe633df87b3dbaf10eca2b75f012b6d3095626d86e05b5",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "林岚·晨间疲惫"
+      },
+      "alphaCheck": {
+        "transparentPixels": 664140,
+        "nearOpaquePixels": 867989,
+        "silhouetteBounds": {
+          "minX": 0,
+          "minY": 48,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_double",
+      "name": "周砚·换皮者抓脸",
+      "kind": "character",
+      "path": "assets/characters/zhou_yan/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1570629,
+      "sha256": "15a1d78731368da8314cfd69f111ea3a885e6dbd63499bca774a8c256ffc6e7e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "10"
+        ],
+        "purpose": "周砚·换皮者抓脸"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1104733,
+        "nearOpaquePixels": 436535,
+        "silhouetteBounds": {
+          "minX": 234,
+          "minY": 13,
+          "maxX": 866,
+          "maxY": 1524
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_portrait_revealed",
+      "name": "周砚·缝线显露头像",
+      "kind": "portrait",
+      "path": "assets/characters/zhou_yan/portrait_revealed.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1533531,
+      "sha256": "f518aa18c331ca1f0d78da25be8fab3ecf361dd6f45dc8a6f42c0c94a4a899af",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "周砚·缝线显露头像"
+      },
+      "alphaCheck": {
+        "transparentPixels": 715619,
+        "nearOpaquePixels": 833474,
+        "silhouetteBounds": {
+          "minX": 2,
+          "minY": 40,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "zhou_yan_portrait_tired",
+      "name": "周砚·晨间疲惫",
+      "kind": "portrait",
+      "path": "assets/characters/zhou_yan/portrait_tired.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1576546,
+      "sha256": "9c553923da8a761ff3dcc7910ea8a941155ff994892ed2834c6daa98cce939b0",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "周砚·晨间疲惫"
+      },
+      "alphaCheck": {
+        "transparentPixels": 713891,
+        "nearOpaquePixels": 836352,
+        "silhouetteBounds": {
+          "minX": 1,
+          "minY": 38,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_double",
+      "name": "许栀·换皮者抓脸",
+      "kind": "character",
+      "path": "assets/characters/xu_zhi/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1572101,
+      "sha256": "b609cd12cf8fe7c1a334c46ccde3bceb124ab10b612a77c7a7104b64d6837185",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "10"
+        ],
+        "purpose": "许栀·换皮者抓脸"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1113295,
+        "nearOpaquePixels": 428467,
+        "silhouetteBounds": {
+          "minX": 285,
+          "minY": 13,
+          "maxX": 820,
+          "maxY": 1523
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_portrait_revealed",
+      "name": "许栀·缝线显露头像",
+      "kind": "portrait",
+      "path": "assets/characters/xu_zhi/portrait_revealed.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1663050,
+      "sha256": "7135f05286fb3322f6c62a2a8c7b76da6fab7e275298a398df0b8bec5d01aedd",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "10"
+        ],
+        "purpose": "许栀·缝线显露头像"
+      },
+      "alphaCheck": {
+        "transparentPixels": 652039,
+        "nearOpaquePixels": 884942,
+        "silhouetteBounds": {
+          "minX": 33,
+          "minY": 45,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "xu_zhi_portrait_tired",
+      "name": "许栀·晨间疲惫",
+      "kind": "portrait",
+      "path": "assets/characters/xu_zhi/portrait_tired.png",
+      "width": 1254,
+      "height": 1254,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1674447,
+      "sha256": "82ff2a308094936399f90502bb27bb4611bdf839ae1c63e352cf4e1937b8df9e",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "许栀·晨间疲惫"
+      },
+      "alphaCheck": {
+        "transparentPixels": 653455,
+        "nearOpaquePixels": 884219,
+        "silhouetteBounds": {
+          "minX": 34,
+          "minY": 46,
+          "maxX": 1253,
+          "maxY": 1253
+        }
+      }
+    },
+    {
+      "id": "corridor_lamp_ajar",
+      "name": "回廊·灯房半掩",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/corridor_lamp_ajar.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1700814,
+      "sha256": "b49307f16be10ccd69184550bb66d6cf3178371f53da6ab93ec0cada343a4d7b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "回廊·灯房半掩"
+      },
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
+    },
+    {
+      "id": "corridor_paper_ajar",
+      "name": "回廊·纸房半掩",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/corridor_paper_ajar.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1799912,
+      "sha256": "110022c89ca9cc5ef75a3c765d4eb4c98253494c2ec33ef0b3e749c9b8215395",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "回廊·纸房半掩"
+      },
+      "layerLayout": "assets/scenes/east_courtyard/layout.json"
+    },
+    {
+      "id": "room_door_open",
+      "name": "门房·开门",
+      "kind": "state_overlay",
+      "path": "assets/scenes/player_room/props/door_open.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 664478,
+      "sha256": "619442ea29f80555f05367a421624d256783d51664a5dd1938bea8f73039a6fc",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "08",
+          "10"
+        ],
+        "purpose": "门房·开门"
+      },
+      "alphaCheck": {
+        "transparentPixels": 1086535,
+        "nearOpaquePixels": 468588,
+        "silhouetteBounds": {
+          "minX": 586,
+          "minY": 3,
+          "maxX": 1174,
+          "maxY": 877
+        }
+      }
+    },
+    {
+      "id": "room_door_bulge",
+      "name": "门房·人形鼓门",
+      "kind": "state_overlay",
+      "path": "assets/scenes/player_room/props/door_bulging.png",
+      "width": 1046,
+      "height": 1503,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1140906,
+      "sha256": "1b45009403f11e1b92bdd2f44a034a8100ecf6b051d27def38c8809d54f77cfc",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "06"
+        ],
+        "purpose": "门房·人形鼓门"
+      },
+      "alphaCheck": {
+        "transparentPixels": 685314,
+        "nearOpaquePixels": 864883,
+        "silhouetteBounds": {
+          "minX": 189,
+          "minY": 47,
+          "maxX": 857,
+          "maxY": 1377
+        }
+      }
+    },
+    {
+      "id": "intrusion_shadow",
+      "name": "破门黑影",
+      "kind": "effect",
+      "path": "assets/scenes/player_room/props/intrusion_shadow.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 1432715,
+      "sha256": "b55e8090f391b3dd63304889c9470236235c21f389a9bfb0d48e7525ba08410b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "06"
+        ],
+        "purpose": "破门黑影"
+      },
+      "alphaCheck": {
+        "transparentPixels": 675476,
+        "nearOpaquePixels": 625544,
+        "silhouetteBounds": {
+          "minX": 54,
+          "minY": 16,
+          "maxX": 1014,
+          "maxY": 1462
+        }
       }
     },
     {

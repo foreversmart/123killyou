@@ -19,3 +19,9 @@
 物品图片已输出为网页格式并接入剧情游戏，运行文件位于 `web/public/art/story/items/`，`internal/content/items.json` 使用对应路径。旧的 `/art/item-*.webp` 仅保留给非剧情演示；通行凭使用独立图片。六格道具栏的更多物品展示规则仍按游戏状态处理。
 
 当前 [提示词](../generation/inventory_prompts.json)、[文件校验信息](../generation/asset_catalog.json)与[素材用途](../generation/asset_usage.md)使用固定路径同步维护。
+
+## 首夜流程补充物件
+
+火柴、手电、相机盖、折叠修缮图、蓝发圈夹纸、肉粥与食用后状态、木勺、素饼、热水、腌笋、杯筊朝向与封存状态、鸟笼、猫食碟、花猫、麻雀和四只旅行行李已独立归档。房内经书、寺史册、残页、未燃油灯与四种红烛烛台状态位于对应场景的 props/ 目录。
+
+[逐幕素材用途](../generation/asset_usage.md)说明背包、场景与调查用途；[场景展示配置](../generation/scene_presentation.json)记录精确文字、归属与程序效果。场景图层按各 layout 的 sourceFrame 与 rect 组合；角色采用等比缩放。素材不会自行新增领取规则，状态与归属仍由后端结算。

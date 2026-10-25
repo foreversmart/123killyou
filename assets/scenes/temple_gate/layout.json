@@ -1,0 +1,268 @@
+{
+  "sceneId": "temple_gate",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "alpha": "preserve source alpha",
+    "state": "visual contract; runtime authority remains backend",
+    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+  },
+  "defaultState": {
+    "time": "afternoon",
+    "bags": true,
+    "cat": true,
+    "companions": true
+  },
+  "sprites": {
+    "afternoon": {
+      "path": "gate_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 2061328,
+      "sha256": "20f58d75f77aa4208cdae46a3594a98bae6220acd7e23b950561b0060b588db5",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "dawn": {
+      "path": "gate_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 2183047,
+      "sha256": "50fc1ef12c26c812f15f8882c74356781627b5ca5455f638ebcd79498cffade5",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "cat": {
+      "path": "../../props/animals/cat_resting.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 2151076,
+      "sha256": "fe1ddbff3baeb475b5af3a3af83a992971ef3db354a022f0dbc8e2dd696a0246",
+      "sourceFrame": {
+        "x": 71,
+        "y": 31,
+        "width": 1433,
+        "height": 965
+      }
+    },
+    "bags": {
+      "path": "../../props/travel_bags/group.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 1633993,
+      "sha256": "03b49d10a94a5951f03597acd9c06622135d4e7cb9b29d9e5f438f1e93b68589",
+      "sourceFrame": {
+        "x": 50,
+        "y": 65,
+        "width": 1582,
+        "height": 823
+      }
+    },
+    "lin_lan": {
+      "path": "../../characters/lin_lan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1519523,
+      "sha256": "44781db08da1f7f847c7d7ed4c244546eee40fd640697db18c766d445c011a1e",
+      "sourceFrame": {
+        "x": 273,
+        "y": 24,
+        "width": 546,
+        "height": 1492
+      }
+    },
+    "zhou_yan": {
+      "path": "../../characters/zhou_yan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1446493,
+      "sha256": "56337ce8280c0b8ae1d5664bce59869e3407311287dd61f2784745f25e4f9543",
+      "sourceFrame": {
+        "x": 276,
+        "y": 13,
+        "width": 502,
+        "height": 1509
+      }
+    },
+    "xu_zhi": {
+      "path": "../../characters/xu_zhi/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1551869,
+      "sha256": "27565053cae1a70686d71acc018900e345567969c27b7a83a9905e714a573250",
+      "sourceFrame": {
+        "x": 286,
+        "y": 22,
+        "width": 496,
+        "height": 1496
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "afternoon",
+      "sprite": "afternoon",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "afternoon"
+      }
+    },
+    {
+      "id": "dawn",
+      "sprite": "dawn",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "dawn"
+      }
+    },
+    {
+      "id": "cat",
+      "sprite": "cat",
+      "rect": {
+        "x": 333,
+        "y": 737,
+        "width": 205,
+        "height": 129
+      },
+      "zIndex": 10,
+      "visibleWhen": {
+        "cat": true
+      }
+    },
+    {
+      "id": "bags",
+      "sprite": "bags",
+      "rect": {
+        "x": 1320,
+        "y": 760,
+        "width": 300,
+        "height": 156
+      },
+      "zIndex": 12,
+      "visibleWhen": {
+        "bags": true
+      }
+    },
+    {
+      "id": "lin_lan",
+      "sprite": "lin_lan",
+      "rect": {
+        "x": 564.47,
+        "y": 257,
+        "width": 225.06,
+        "height": 615
+      },
+      "zIndex": 15,
+      "visibleWhen": {
+        "companions": true
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "zhou_yan",
+      "sprite": "zhou_yan",
+      "rect": {
+        "x": 849.713717693837,
+        "y": 227,
+        "width": 214.57256461232603,
+        "height": 645
+      },
+      "zIndex": 15,
+      "visibleWhen": {
+        "companions": true
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "xu_zhi",
+      "sprite": "xu_zhi",
+      "rect": {
+        "x": 1078.3636363636363,
+        "y": 277,
+        "width": 197.27272727272728,
+        "height": 595
+      },
+      "zIndex": 15,
+      "visibleWhen": {
+        "companions": true
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    }
+  ],
+  "labels": [
+    {
+      "id": "temple_name",
+      "text": "灯影寺",
+      "x": 859,
+      "y": 174,
+      "fontFamily": "serif",
+      "fontSize": 52,
+      "color": "#b49b65",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60,
+      "rotation": -0.08
+    },
+    {
+      "id": "old_name",
+      "text": "明照寺",
+      "x": 1120,
+      "y": 155,
+      "fontFamily": "serif",
+      "fontSize": 19,
+      "color": "#6a5740",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    }
+  ],
+  "notes": [
+    "回廊取回相机盖之后，晨间山门的林岚用原带盖站姿；疲惫表情在对白头像表现。",
+    "文字根据牌匾透视准确排字；旧名仅作为露边信息，不覆盖主匾。"
+  ]
+}

@@ -30,6 +30,124 @@
     "不根据后台真实NPC、真假、性别、年龄或职业更换黑影；占位仅表示玩家暂未看清。",
     "人物面容已被玩家看见时，按可见外貌展示普通头像；不能因后台判定为换皮者而继续黑影或提前切换异变头像。",
     "称呼只使用剧情已经公开的信息；未知说话人不显示后台真实姓名，已知称呼如住持可保留帘后标记。",
-    "纯环境音和系统旁白沿用独立系统表现，不凭空添加一个发言人物。"
-  ]
+    "纯环境音和系统旁白沿用独立系统表现，不凭空添加一个发言人物。",
+    "三位同伴晨间疲惫头像仅用于12幕，缝线头像仅在10幕明确显露后使用。",
+    "身体局部作为头像时按指定sourceFrame裁取，再在共用方框内等比显示，不拉伸五官。"
+  ],
+  "characters": {
+    "lin_lan": {
+      "neutral": {
+        "assetPath": "assets/characters/lin_lan/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "alert": {
+        "assetPath": "assets/characters/lin_lan/portrait_alert.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "afraid": {
+        "assetPath": "assets/characters/lin_lan/portrait_afraid.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "revealed": {
+        "assetPath": "assets/characters/lin_lan/portrait_revealed.png",
+        "useOnlyAfterVisibleReveal": true
+      },
+      "tired": {
+        "assetPath": "assets/characters/lin_lan/portrait_tired.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    },
+    "zhou_yan": {
+      "neutral": {
+        "assetPath": "assets/characters/zhou_yan/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "doubtful": {
+        "assetPath": "assets/characters/zhou_yan/portrait_doubtful.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "tense": {
+        "assetPath": "assets/characters/zhou_yan/portrait_tense.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "revealed": {
+        "assetPath": "assets/characters/zhou_yan/portrait_revealed.png",
+        "useOnlyAfterVisibleReveal": true
+      },
+      "tired": {
+        "assetPath": "assets/characters/zhou_yan/portrait_tired.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    },
+    "xu_zhi": {
+      "neutral": {
+        "assetPath": "assets/characters/xu_zhi/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "concerned": {
+        "assetPath": "assets/characters/xu_zhi/portrait_concerned.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "resolute": {
+        "assetPath": "assets/characters/xu_zhi/portrait_resolute.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "revealed": {
+        "assetPath": "assets/characters/xu_zhi/portrait_revealed.png",
+        "useOnlyAfterVisibleReveal": true
+      },
+      "tired": {
+        "assetPath": "assets/characters/xu_zhi/portrait_tired.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    },
+    "lu_chen": {
+      "neutral": {
+        "assetPath": "assets/characters/lu_chen/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "scrutinizing": {
+        "assetPath": "assets/characters/lu_chen/portrait_scrutinizing.png",
+        "useOnlyAfterVisibleReveal": false
+      },
+      "hesitant": {
+        "assetPath": "assets/characters/lu_chen/portrait_hesitant.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    },
+    "hui_pu": {
+      "neutral": {
+        "assetPath": "assets/characters/hui_pu/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    },
+    "shen_gong": {
+      "neutral": {
+        "assetPath": "assets/characters/shen_gong/portrait_neutral.png",
+        "useOnlyAfterVisibleReveal": false
+      }
+    }
+  },
+  "visibleBodyCrops": {
+    "hui_pu_turn": {
+      "assetPath": "assets/characters/hui_pu/turning_hollow.png",
+      "sourceFrame": {
+        "x": 310,
+        "y": 15,
+        "width": 250,
+        "height": 250
+      },
+      "useOnlyAfterFaceSeen": true
+    },
+    "shen_gong_stone": {
+      "assetPath": "assets/characters/shen_gong/seated_stone.png",
+      "sourceFrame": {
+        "x": 260,
+        "y": 65,
+        "width": 450,
+        "height": 450
+      },
+      "useOnlyAfterPetrification": true
+    }
+  }
 }

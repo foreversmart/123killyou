@@ -1,0 +1,579 @@
+{
+  "sceneId": "dining_hall",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "alpha": "preserve source alpha",
+    "state": "visual contract; runtime authority remains backend",
+    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+  },
+  "defaultState": {
+    "huiPu": true,
+    "linLan": "full",
+    "zhouYan": "full",
+    "xuZhi": "full",
+    "player": "full"
+  },
+  "sprites": {
+    "background": {
+      "path": "dining_sunset.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 2101154,
+      "sha256": "12de54317d806c8f892ada4505643474bd5195e870956bcf7294bb691c68eff0",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "lin_lan": {
+      "path": "../../characters/lin_lan/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2096636,
+      "sha256": "f4355b813758f99895b98c738f78daf567a51a61142f76c1af4034bf70371bbe",
+      "sourceFrame": {
+        "x": 46,
+        "y": 57,
+        "width": 968,
+        "height": 1479
+      }
+    },
+    "zhou_yan": {
+      "path": "../../characters/zhou_yan/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2168567,
+      "sha256": "35cdd0082dd0dce2244fea94e0f93ba7568f4d49dab70ee7c0d1fa64a8e95394",
+      "sourceFrame": {
+        "x": 23,
+        "y": 67,
+        "width": 1001,
+        "height": 1469
+      }
+    },
+    "xu_zhi": {
+      "path": "../../characters/xu_zhi/seated_dining.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2163626,
+      "sha256": "0746cae5164715eefd333d6ddbc54fb73ebda33dc2371cc2c6e35c641984590e",
+      "sourceFrame": {
+        "x": 62,
+        "y": 29,
+        "width": 958,
+        "height": 1507
+      }
+    },
+    "curtain_presence": {
+      "path": "../../characters/hui_pu/curtain_presence.png",
+      "width": 1295,
+      "height": 1215,
+      "hasAlpha": true,
+      "bytes": 1659814,
+      "sha256": "d729530b08c5c6ef2c0923db01f4fae277ed98ff50d598696b95e326b7108054",
+      "sourceFrame": {
+        "x": 240,
+        "y": 11,
+        "width": 817,
+        "height": 1186
+      }
+    },
+    "table": {
+      "path": "table_foreground.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 594441,
+      "sha256": "6b4be4755ff44671786f18f76fa7e0d9638742c256c3df218da5e4dddd7a12e4",
+      "sourceFrame": {
+        "x": 12,
+        "y": 588,
+        "width": 1648,
+        "height": 338
+      }
+    },
+    "linLan_full": {
+      "path": "../../props/porridge/bowl_full.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1387070,
+      "sha256": "df039e8d47250b8fabb0c254e022af06c6199b22fb5d062daa4f1c07c9fb4d6e",
+      "sourceFrame": {
+        "x": 56,
+        "y": 228,
+        "width": 1128,
+        "height": 901
+      }
+    },
+    "linLan_empty": {
+      "path": "../../props/porridge/bowl_empty.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1433979,
+      "sha256": "1e9c312db3c787a08a3f131c56f2c726e8423badf8040c5c604ffba9560477af",
+      "sourceFrame": {
+        "x": 56,
+        "y": 227,
+        "width": 1130,
+        "height": 903
+      }
+    },
+    "zhouYan_full": {
+      "path": "../../props/porridge/bowl_full.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1387070,
+      "sha256": "df039e8d47250b8fabb0c254e022af06c6199b22fb5d062daa4f1c07c9fb4d6e",
+      "sourceFrame": {
+        "x": 56,
+        "y": 228,
+        "width": 1128,
+        "height": 901
+      }
+    },
+    "zhouYan_empty": {
+      "path": "../../props/porridge/bowl_empty.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1433979,
+      "sha256": "1e9c312db3c787a08a3f131c56f2c726e8423badf8040c5c604ffba9560477af",
+      "sourceFrame": {
+        "x": 56,
+        "y": 227,
+        "width": 1130,
+        "height": 903
+      }
+    },
+    "xuZhi_full": {
+      "path": "../../props/porridge/bowl_full.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1387070,
+      "sha256": "df039e8d47250b8fabb0c254e022af06c6199b22fb5d062daa4f1c07c9fb4d6e",
+      "sourceFrame": {
+        "x": 56,
+        "y": 228,
+        "width": 1128,
+        "height": 901
+      }
+    },
+    "xuZhi_empty": {
+      "path": "../../props/porridge/bowl_empty.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1433979,
+      "sha256": "1e9c312db3c787a08a3f131c56f2c726e8423badf8040c5c604ffba9560477af",
+      "sourceFrame": {
+        "x": 56,
+        "y": 227,
+        "width": 1130,
+        "height": 903
+      }
+    },
+    "player_full": {
+      "path": "../../props/porridge/bowl_full.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1387070,
+      "sha256": "df039e8d47250b8fabb0c254e022af06c6199b22fb5d062daa4f1c07c9fb4d6e",
+      "sourceFrame": {
+        "x": 56,
+        "y": 228,
+        "width": 1128,
+        "height": 901
+      }
+    },
+    "player_empty": {
+      "path": "../../props/porridge/bowl_empty.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1433979,
+      "sha256": "1e9c312db3c787a08a3f131c56f2c726e8423badf8040c5c604ffba9560477af",
+      "sourceFrame": {
+        "x": 56,
+        "y": 227,
+        "width": 1130,
+        "height": 903
+      }
+    },
+    "bread": {
+      "path": "../../props/flatbread/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1372374,
+      "sha256": "fd6021a89f3e007d545dc0b0205d72de388718306a563e41681bcf3804509629",
+      "sourceFrame": {
+        "x": 50,
+        "y": 292,
+        "width": 1155,
+        "height": 722
+      }
+    },
+    "water": {
+      "path": "../../props/hot_water/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1031003,
+      "sha256": "99950d4dcdc420447e92195a0197a903c2948a5910ac09b147df31483f58692f",
+      "sourceFrame": {
+        "x": 188,
+        "y": 103,
+        "width": 873,
+        "height": 1047
+      }
+    },
+    "bamboo": {
+      "path": "../../props/bamboo_shoots/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 1286269,
+      "sha256": "b7362264a014b3f1aeb411808adbbf0ed14097e24b0ed5e697e30e2fea05f40b",
+      "sourceFrame": {
+        "x": 47,
+        "y": 308,
+        "width": 1162,
+        "height": 727
+      }
+    },
+    "spoon": {
+      "path": "../../props/porridge/spoon.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 693574,
+      "sha256": "82131b201e1322d14a6cec9f9f8c4a5b2409e63aeb0d1eef141be69ce7f31984",
+      "sourceFrame": {
+        "x": 39,
+        "y": 33,
+        "width": 1189,
+        "height": 1167
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "sprite": "background",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "lin_lan",
+      "sprite": "lin_lan",
+      "rect": {
+        "x": 416.832,
+        "y": 232,
+        "width": 376.335,
+        "height": 575
+      },
+      "zIndex": 10,
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "zhou_yan",
+      "sprite": "zhou_yan",
+      "rect": {
+        "x": 634.093,
+        "y": 232,
+        "width": 391.814,
+        "height": 575
+      },
+      "zIndex": 10,
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "xu_zhi",
+      "sprite": "xu_zhi",
+      "rect": {
+        "x": 897.236,
+        "y": 232,
+        "width": 365.528,
+        "height": 575
+      },
+      "zIndex": 10,
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "curtain_presence",
+      "sprite": "curtain_presence",
+      "rect": {
+        "x": 1126.105,
+        "y": 111,
+        "width": 365.79,
+        "height": 531
+      },
+      "zIndex": 8,
+      "visibleWhen": {
+        "huiPu": true
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "table",
+      "sprite": "table",
+      "rect": {
+        "x": 0,
+        "y": 614,
+        "width": 1672,
+        "height": 600
+      },
+      "zIndex": 20
+    },
+    {
+      "id": "linLan_full",
+      "sprite": "linLan_full",
+      "rect": {
+        "x": 500,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "linLan": "full"
+      }
+    },
+    {
+      "id": "linLan_empty",
+      "sprite": "linLan_empty",
+      "rect": {
+        "x": 500,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "linLan": "empty"
+      }
+    },
+    {
+      "id": "zhouYan_full",
+      "sprite": "zhouYan_full",
+      "rect": {
+        "x": 767,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "zhouYan": "full"
+      }
+    },
+    {
+      "id": "zhouYan_empty",
+      "sprite": "zhouYan_empty",
+      "rect": {
+        "x": 767,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "zhouYan": "empty"
+      }
+    },
+    {
+      "id": "xuZhi_full",
+      "sprite": "xuZhi_full",
+      "rect": {
+        "x": 1030,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "xuZhi": "full"
+      }
+    },
+    {
+      "id": "xuZhi_empty",
+      "sprite": "xuZhi_empty",
+      "rect": {
+        "x": 1030,
+        "y": 644,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "xuZhi": "empty"
+      }
+    },
+    {
+      "id": "player_full",
+      "sprite": "player_full",
+      "rect": {
+        "x": 650,
+        "y": 690,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "player": "full"
+      }
+    },
+    {
+      "id": "player_empty",
+      "sprite": "player_empty",
+      "rect": {
+        "x": 650,
+        "y": 690,
+        "width": 140,
+        "height": 109
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "player": "empty"
+      }
+    },
+    {
+      "id": "bread",
+      "sprite": "bread",
+      "rect": {
+        "x": 1220,
+        "y": 680,
+        "width": 171,
+        "height": 110
+      },
+      "zIndex": 31
+    },
+    {
+      "id": "water",
+      "sprite": "water",
+      "rect": {
+        "x": 1390,
+        "y": 655,
+        "width": 110,
+        "height": 132
+      },
+      "zIndex": 31
+    },
+    {
+      "id": "bamboo",
+      "sprite": "bamboo",
+      "rect": {
+        "x": 258,
+        "y": 670,
+        "width": 190,
+        "height": 125
+      },
+      "zIndex": 31
+    },
+    {
+      "id": "spoon",
+      "sprite": "spoon",
+      "rect": {
+        "x": 845,
+        "y": 677,
+        "width": 125,
+        "height": 125
+      },
+      "zIndex": 32
+    }
+  ],
+  "labels": [
+    {
+      "id": "tag_linLan",
+      "text": "林岚",
+      "x": 627,
+      "y": 731,
+      "fontFamily": "serif",
+      "fontSize": 12,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "tag_zhouYan",
+      "text": "周砚",
+      "x": 894,
+      "y": 731,
+      "fontFamily": "serif",
+      "fontSize": 12,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "tag_xuZhi",
+      "text": "许栀",
+      "x": 1157,
+      "y": 731,
+      "fontFamily": "serif",
+      "fontSize": 12,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "tag_player",
+      "text": "你",
+      "x": 777,
+      "y": 777,
+      "fontFamily": "serif",
+      "fontSize": 12,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    }
+  ],
+  "notes": [
+    "四只碗分别绑定四人的meal_choices；拒绝或暂缓仍显示满碗，吃后才切食用后状态，不从一人的选择推断全员。",
+    "前景桌遮住人物下半身；帘后存在图是含布纹的局部替换层，只放入原帘的左侧板内。",
+    "调查肉纤维改用bowl_inspect.png近景，不将调查近景叠在另一个完整碗上。"
+  ]
+}

@@ -10,7 +10,8 @@
     "sourceFrame": "crop source pixels before mapping into rect",
     "anchor": "normalized within rect; all placements use top-left",
     "alpha": "preserve source alpha",
-    "state": "preview state only; runtime state comes from the game backend"
+    "state": "preview state only; runtime state comes from the game backend",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
   },
   "defaultState": {
     "ledger": "open",
@@ -417,21 +418,22 @@
     }
   ],
   "actorPreview": {
-    "path": "../../characters/lu_chen/standing_lantern.png",
+    "path": "../../characters/lu_chen/standing_reception.png",
     "sourceFrame": {
-      "x": 227,
-      "y": 2,
+      "x": 230,
+      "y": 11,
       "width": 607,
-      "height": 1534
+      "height": 1516
     },
     "rect": {
-      "x": 656.0,
+      "x": 653.636,
       "y": 94.6,
-      "width": 408.0,
+      "width": 412.728,
       "height": 1030.8
     },
     "zIndex": 10,
-    "role": "existing sprite for placement and desk occlusion review; registration pose can be authored separately",
-    "placementNote": "人物水平中心为 x=860；桌后遮挡线 y=637 为可见躯干的定位基准。使用原立绘像素取样，按 rect 渲染。"
+    "role": "陆沉白日接待站姿；保留人物放大后的站位及登记桌遮挡",
+    "placementNote": "人物水平中心为 x=860；桌后遮挡线 y=637 为可见躯干的定位基准。使用原立绘像素取样，按 rect 渲染。",
+    "scaleMode": "uniform"
   }
 }

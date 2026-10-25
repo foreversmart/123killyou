@@ -164,7 +164,7 @@
 - **角色定型图**：先为六名主要 NPC 做正面、侧面、背面或四分之三角度参考，锁定脸、发型、服装、体型和随身物。设定图只供制作，不进入游戏视角。
 - **人物成品**：透明背景、完整轮廓，日常与异常状态分开；半身和全身按出场机位选择。人物单独出图后，在实际背景里核对笔触、尺寸、地面接触与光照。
 - **头像**：六名主要 NPC 已有独立方形普通对话头像，沿当前立绘生成，保留五官与服装锚点。边框、底色与名字由界面提供；情绪或异常状态从同一身份参考派生。帘后初见和未看清的门外发言使用共用黑影加问号占位，保留同一个头像框；不通过后台身份改变占位轮廓或提前暴露真假。
-- **背景**：沿用现有文档的16:9、优先2560×1440建议；空背景不混入 UI、字幕、头像、道具栏或不在场人物。
+- **背景**：采用16:9与1672×941组合坐标系，原图实际尺寸以素材目录为准；空背景不混入 UI、字幕、头像、道具栏或不在场人物。
 - **裁切**：现有界面的背景区域比整屏16:9更宽，先以实际游戏容器预览再定出图比例；关键线索远离易被裁掉的上下边缘与字幕可能覆盖的位置。
 - **分层**：背景、人物、门板遮挡、道具、影子与光效按状态拆分；背景保留人物离开后的完整区域，人物使用独立透明图层。
 - **时段变体**：沿同一机位参考修改光照和状态，锁定门窗、床桌、裂纹与物件位置，避免每次重画出不同建筑。
@@ -183,33 +183,10 @@
 
 ## 8. 当前采用的素材
 
-| 素材                | 文件                                                                                      | 尺寸与格式            |
-| ------------------- | ----------------------------------------------------------------------------------------- | --------------------- |
-| 山门·晴日下午       | [gate_afternoon.png](../../assets/scenes/temple_gate/gate_afternoon.png)                  | 1672 × 941，PNG       |
-| 登记处·下午干净背景 | [registration_afternoon.png](../../assets/scenes/registration/registration_afternoon.png) | 1672 × 941，PNG       |
-| 东院回廊·晴日下午   | [corridor_afternoon.png](../../assets/scenes/east_courtyard/corridor_afternoon.png)       | 1672 × 941，PNG       |
-| 主角门房·夜间亮烛   | [room_candlelit.png](../../assets/scenes/player_room/room_candlelit.png)                  | 1672 × 941，PNG       |
-| 林岚·正常站姿       | [standing.png](../../assets/characters/lin_lan/standing.png)                              | 1024 × 1536，透明 PNG |
-| 陆沉·提灯站姿       | [standing_lantern.png](../../assets/characters/lu_chen/standing_lantern.png)              | 1024 × 1536，透明 PNG |
-| 周砚·正常站姿       | [standing.png](../../assets/characters/zhou_yan/standing.png)                             | 1024 × 1536，透明 PNG |
-| 许栀·正常站姿       | [standing.png](../../assets/characters/xu_zhi/standing.png)                               | 1024 × 1536，透明 PNG |
-| 慧普·正常站姿       | [standing.png](../../assets/characters/hui_pu/standing.png)                               | 1024 × 1536，透明 PNG |
-| 神公·持筊站姿       | [standing_jiaobei.png](../../assets/characters/shen_gong/standing_jiaobei.png)            | 1024 × 1536，透明 PNG |
-| 林岚·普通对话头像   | [portrait_neutral.png](../../assets/characters/lin_lan/portrait_neutral.png)              | 1254 × 1254，透明 PNG |
-| 周砚·普通对话头像   | [portrait_neutral.png](../../assets/characters/zhou_yan/portrait_neutral.png)             | 1254 × 1254，透明 PNG |
-| 许栀·普通对话头像   | [portrait_neutral.png](../../assets/characters/xu_zhi/portrait_neutral.png)               | 1254 × 1254，透明 PNG |
-| 陆沉·普通对话头像   | [portrait_neutral.png](../../assets/characters/lu_chen/portrait_neutral.png)              | 1254 × 1254，透明 PNG |
-| 慧普·普通对话头像   | [portrait_neutral.png](../../assets/characters/hui_pu/portrait_neutral.png)               | 1254 × 1254，透明 PNG |
-| 神公·普通对话头像   | [portrait_neutral.png](../../assets/characters/shen_gong/portrait_neutral.png)            | 1254 × 1254，透明 PNG |
-| 未知人物·占位头像   | [unknown.png](../../assets/portraits/unknown.png)                                         | 1254 × 1254，透明 PNG |
-| 铜钥匙·物品图       | [inventory.png](../../assets/props/copper_key/inventory.png)                              | 1254 × 1254，透明 PNG |
-| 残页·物品图         | [inventory.png](../../assets/props/torn_page/inventory.png)                               | 1254 × 1254，透明 PNG |
-| 红烛·物品图         | [unlit.png](../../assets/props/red_candle/unlit.png)                                      | 1254 × 1254，透明 PNG |
-| 念珠·物品图         | [inventory.png](../../assets/props/prayer_beads/inventory.png)                            | 1254 × 1254，透明 PNG |
-| 通行凭·物品图       | [inventory.png](../../assets/props/permit/inventory.png)                                  | 1254 × 1254，透明 PNG |
+首夜十二幕的图片原图、人物状态、可变道具和七组组合配置已归档，逐幕说明见 [素材用途](../../assets/generation/asset_usage.md)，逐图文件和尺寸见 [素材目录](../../assets/generation/README.md)，当前提示词见 [制作清单](../../assets/generation/production_manifest.json)。场景、人物和物品的语义状态均使用固定路径；修改直接替换，清除废稿和被替换缓存。
 
-当前已具备四处场景、六名主要 NPC 的普通状态人物图、六张普通对话头像、一张未知人物占位头像与五张正式物品图。逐张素材的对应幕次、使用位置与适用状态见 [素材用途总表](../../assets/generation/asset_usage.md)。文件信息、人物生成提示词与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；慧普帘后遮挡、神公桌后坐姿及异常状态按场景派生，游戏运行素材的接入由实现任务处理。
+人物在每个机位按取样区域原始宽高比等比缩放；只调身高、脚底与遮挡线，不单独拉伸宽高。回廊下午、入夜、午夜、清晨与半掩门状态保持同一建筑；门房亮烛、月光、假报晓和晨光沿用同一布局。铜铃、花瓶、书册、红烛、油灯与身份物件均独立管理，红烛与镜头盖按同一实物保持归属连续。
 
-登记处采用干净背景、登记桌前景与独立道具分层，共八张图片；登记簿开合、通行凭纸叠与单张为不同语义状态。铜房牌复用一张空白底图，房名准确排字。叠放与坐标见 [登记处分层说明](../../assets/scenes/registration/README.md)及 [定位配置](../../assets/scenes/registration/layout.json)。运行时按 `register_desk`、`register_rooms`、`register_luggage` 分镜切换这些图层，人物、道具归属与存档仍由后端状态驱动。
+普通、情绪、缝线显露和晨间疲惫头像见 [头像展示规则](../../assets/generation/portrait_presentation.json)。慧普帘后不露全脸；神公石化沿用同一坐姿；假同伴未显露前保持熟悉外貌。文字和程序效果见 [场景展示规则](../../assets/generation/scene_presentation.json)。
 
-物品图的用途、状态与文本排版见 [正式物品图说明](../../assets/props/README.md)和 [显示与文字配置](../../assets/generation/inventory_presentation.json)。场景透视图与物品展示图沿同一物件造型派生；红烛的归属和燃烧状态保持连续。
+这些原图与组合配置尚未接入正式游戏、语音分支、道具领取或存档。网页原型仍按 [当前演示素材链路](assets-and-slicing.md)运行。

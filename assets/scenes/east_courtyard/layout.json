@@ -1,0 +1,638 @@
+{
+  "sceneId": "east_courtyard",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "alpha": "preserve source alpha",
+    "state": "visual contract; runtime authority remains backend",
+    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+  },
+  "defaultState": {
+    "time": "afternoon",
+    "vase": "intact",
+    "privateClues": true,
+    "door": "closed",
+    "actor": "none"
+  },
+  "sprites": {
+    "background_afternoon": {
+      "path": "corridor_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1910150,
+      "sha256": "dfc307736f13e568adcb7a4d53872ddd921d8614a6999bba574bdc3b642eee68",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_dusk": {
+      "path": "corridor_dusk.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1836507,
+      "sha256": "03d6281e885b76564d3b0d5b6c4e01e95ad1af4eca1eb35423c26c8912bc6001",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_night": {
+      "path": "corridor_night.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1782404,
+      "sha256": "9d79ecdd9f9b26c33ebee32c6431117ca892d9454b3519751c8296f9fdf79e47",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_dawn": {
+      "path": "corridor_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1921753,
+      "sha256": "cf43f90580bcccb029685cd0c1c0e21adc866bb0423d8a97bcebbca17f3c9d1a",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "bell": {
+      "path": "props/bell.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1156923,
+      "sha256": "a6079fb94de8c54cf65985a0593f366b715ae7a5c34e127c511f91ce5ad45f1e",
+      "sourceFrame": {
+        "x": 315,
+        "y": 82,
+        "width": 393,
+        "height": 1287
+      }
+    },
+    "vase_intact": {
+      "path": "props/vase_intact.png",
+      "width": 1263,
+      "height": 1245,
+      "hasAlpha": true,
+      "bytes": 797264,
+      "sha256": "0b19e8a462d848b13c795fe69f5c0f6a0bb8bd8fe222e6ea470c8af0591e8145",
+      "sourceFrame": {
+        "x": 244,
+        "y": 12,
+        "width": 845,
+        "height": 1195
+      }
+    },
+    "vase_broken": {
+      "path": "props/vase_broken.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 2183080,
+      "sha256": "e737728149c27ed213fe2891ada14d4e6990ca17640c091e084cf9ea56aaa9fd",
+      "sourceFrame": {
+        "x": 63,
+        "y": 240,
+        "width": 1431,
+        "height": 687
+      }
+    },
+    "camera_cap": {
+      "path": "../../props/camera_cap/scene.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 557921,
+      "sha256": "39c34227725f3640e08f1e4061b7f3fe7bc61219a7a9359bc3a015f799c206ce",
+      "sourceFrame": {
+        "x": 379,
+        "y": 24,
+        "width": 508,
+        "height": 1188
+      }
+    },
+    "repair_drawing": {
+      "path": "../../props/repair_drawing/inventory.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 2161624,
+      "sha256": "53ff4fb77f798e48807fb478dd152a8310e0b7e3a66ca6d807931b27099575de",
+      "sourceFrame": {
+        "x": 50,
+        "y": 87,
+        "width": 1428,
+        "height": 859
+      }
+    },
+    "blue_tie_notice": {
+      "path": "../../props/blue_tie_notice/scene.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1710033,
+      "sha256": "d4d676e075f4debe4e58c26584093f2e25cc1c57806e3e6961a2331566a8669c",
+      "sourceFrame": {
+        "x": 174,
+        "y": 84,
+        "width": 724,
+        "height": 1371
+      }
+    },
+    "actor_lu_chen": {
+      "path": "../../characters/lu_chen/standing_hush.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1747152,
+      "sha256": "b53687e4759dfbe564ca919370860afc449475b7d56e5d7069b8037123ef450c",
+      "sourceFrame": {
+        "x": 230,
+        "y": 15,
+        "width": 606,
+        "height": 1521
+      }
+    },
+    "actor_shen_gong": {
+      "path": "../../characters/shen_gong/standing_guiding.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1658209,
+      "sha256": "48891eb1b3da11eb207fb728f8394c2c35e3bda8761a74017f5b243002f0a4cc",
+      "sourceFrame": {
+        "x": 255,
+        "y": 32,
+        "width": 550,
+        "height": 1486
+      }
+    },
+    "actor_lin_lan": {
+      "path": "../../characters/lin_lan/standing_cap_removed.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1513858,
+      "sha256": "d5f1e5020d38698d177551bba1bbf81b86e6f806ca58fd3a066efd21a104bb59",
+      "sourceFrame": {
+        "x": 273,
+        "y": 24,
+        "width": 548,
+        "height": 1493
+      }
+    },
+    "actor_zhou_yan": {
+      "path": "../../characters/zhou_yan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1446493,
+      "sha256": "56337ce8280c0b8ae1d5664bce59869e3407311287dd61f2784745f25e4f9543",
+      "sourceFrame": {
+        "x": 276,
+        "y": 13,
+        "width": 502,
+        "height": 1509
+      }
+    },
+    "actor_xu_zhi": {
+      "path": "../../characters/xu_zhi/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1551869,
+      "sha256": "27565053cae1a70686d71acc018900e345567969c27b7a83a9905e714a573250",
+      "sourceFrame": {
+        "x": 286,
+        "y": 22,
+        "width": 496,
+        "height": 1496
+      }
+    },
+    "background_lamp": {
+      "id": "corridor_lamp_ajar",
+      "name": "回廊·灯房半掩",
+      "kind": "background",
+      "path": "corridor_lamp_ajar.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1700814,
+      "sha256": "b49307f16be10ccd69184550bb66d6cf3178371f53da6ab93ec0cada343a4d7b",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": ["08"],
+        "purpose": "回廊·灯房半掩"
+      },
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_paper": {
+      "id": "corridor_paper_ajar",
+      "name": "回廊·纸房半掩",
+      "kind": "background",
+      "path": "corridor_paper_ajar.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1799912,
+      "sha256": "110022c89ca9cc5ef75a3c765d4eb4c98253494c2ec33ef0b3e749c9b8215395",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": ["08"],
+        "purpose": "回廊·纸房半掩"
+      },
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "background_afternoon",
+      "sprite": "background_afternoon",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "afternoon"
+      }
+    },
+    {
+      "id": "background_dusk",
+      "sprite": "background_dusk",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "dusk"
+      }
+    },
+    {
+      "id": "background_night",
+      "sprite": "background_night",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "night",
+        "door": "closed"
+      }
+    },
+    {
+      "id": "background_dawn",
+      "sprite": "background_dawn",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "dawn"
+      }
+    },
+    {
+      "id": "bell",
+      "sprite": "bell",
+      "rect": {
+        "x": 46,
+        "y": 109,
+        "width": 65,
+        "height": 207
+      },
+      "zIndex": 12
+    },
+    {
+      "id": "vase_intact",
+      "sprite": "vase_intact",
+      "rect": {
+        "x": 1120,
+        "y": 316,
+        "width": 100,
+        "height": 155
+      },
+      "zIndex": 12,
+      "visibleWhen": {
+        "vase": "intact"
+      }
+    },
+    {
+      "id": "vase_broken",
+      "sprite": "vase_broken",
+      "rect": {
+        "x": 1110,
+        "y": 592,
+        "width": 190,
+        "height": 95
+      },
+      "zIndex": 14,
+      "visibleWhen": {
+        "vase": "broken"
+      },
+      "filter": "brightness(.48) saturate(.65)"
+    },
+    {
+      "id": "camera_cap",
+      "sprite": "camera_cap",
+      "rect": {
+        "x": 98,
+        "y": 117,
+        "width": 40,
+        "height": 102
+      },
+      "zIndex": 13,
+      "visibleWhen": {
+        "privateClues": true
+      }
+    },
+    {
+      "id": "repair_drawing",
+      "sprite": "repair_drawing",
+      "rect": {
+        "x": 727,
+        "y": 450,
+        "width": 64,
+        "height": 42
+      },
+      "zIndex": 12,
+      "visibleWhen": {
+        "privateClues": true
+      }
+    },
+    {
+      "id": "blue_tie_notice",
+      "sprite": "blue_tie_notice",
+      "rect": {
+        "x": 1307,
+        "y": 332,
+        "width": 48,
+        "height": 98
+      },
+      "zIndex": 12,
+      "visibleWhen": {
+        "privateClues": true
+      }
+    },
+    {
+      "id": "actor_lu_chen",
+      "sprite": "actor_lu_chen",
+      "rect": {
+        "x": 775.553,
+        "y": 181,
+        "width": 278.895,
+        "height": 700
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "lu_chen"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "actor_shen_gong",
+      "sprite": "actor_shen_gong",
+      "rect": {
+        "x": 785.457,
+        "y": 181,
+        "width": 259.085,
+        "height": 700
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "shen_gong"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "actor_lin_lan",
+      "sprite": "actor_lin_lan",
+      "rect": {
+        "x": 786.534,
+        "y": 181,
+        "width": 256.932,
+        "height": 700
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "lin_lan"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "actor_zhou_yan",
+      "sprite": "actor_zhou_yan",
+      "rect": {
+        "x": 798.566,
+        "y": 181,
+        "width": 232.869,
+        "height": 700
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "zhou_yan"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "actor_xu_zhi",
+      "sprite": "actor_xu_zhi",
+      "rect": {
+        "x": 798.957,
+        "y": 181,
+        "width": 232.086,
+        "height": 700
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "xu_zhi"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "background_lamp",
+      "sprite": "background_lamp",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "night",
+        "door": "lamp"
+      }
+    },
+    {
+      "id": "background_paper",
+      "sprite": "background_paper",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "night",
+        "door": "paper"
+      }
+    }
+  ],
+  "labels": [
+    {
+      "id": "room_听",
+      "text": "听",
+      "x": 219,
+      "y": 128,
+      "fontFamily": "serif",
+      "fontSize": 28,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "room_灯",
+      "text": "灯",
+      "x": 653,
+      "y": 261,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60,
+      "visibleWhen": {
+        "door": "closed"
+      }
+    },
+    {
+      "id": "room_纸",
+      "text": "纸",
+      "x": 1267,
+      "y": 261,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "room_门",
+      "text": "门",
+      "x": 1559,
+      "y": 139,
+      "fontFamily": "serif",
+      "fontSize": 28,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60
+    },
+    {
+      "id": "lamp_label_paper_open",
+      "text": "灯",
+      "x": 653,
+      "y": 261,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60,
+      "visibleWhen": {
+        "door": "paper"
+      }
+    },
+    {
+      "id": "lamp_label_lamp_open",
+      "text": "灯",
+      "x": 679,
+      "y": 253,
+      "fontFamily": "serif",
+      "fontSize": 23,
+      "color": "#4c3522",
+      "align": "center",
+      "baseline": "middle",
+      "zIndex": 60,
+      "visibleWhen": {
+        "door": "lamp"
+      }
+    }
+  ],
+  "notes": [
+    "房位：近左听、远左灯、近右门、远右纸。灯房与纸房半掩使用同机位的午夜完整底图，与关闭状态互斥。",
+    "修缮图为随身古建图纸，不作为本院导航平面图；场景放在灯房门边的灯下窗沿。",
+    "夜间对铜铃、相机盖、发圈纸与人物施加与背景一致的低亮冷色；晨间回收相机盖后隐藏其图层，林岚改用原正常站姿。",
+    "回廊折返、全灯压暗和呼吸声用同一夜景配转场/效果，不另换建筑。"
+  ]
+}

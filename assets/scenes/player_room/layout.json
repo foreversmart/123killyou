@@ -1,0 +1,657 @@
+{
+  "sceneId": "player_room",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "alpha": "preserve source alpha",
+    "state": "visual contract; runtime authority remains backend",
+    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+  },
+  "defaultState": {
+    "time": "candlelit",
+    "candle": "burning",
+    "door": "closed",
+    "books": true,
+    "page": true,
+    "actor": "none"
+  },
+  "sprites": {
+    "background_candlelit": {
+      "path": "room_candlelit.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1596823,
+      "sha256": "b8fe731e5c945ee97395dc5141bdaf7a7daaaa83efffaef6a4951d3772cdcffc",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_moonlit": {
+      "path": "room_moonlit.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1577814,
+      "sha256": "2e6342cc6d1a6f375330acf57a3722bc20832ff0eead2c51b54508b0dd362391",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_false_dawn": {
+      "path": "room_false_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1541381,
+      "sha256": "80578b12215f1380097d8b63382144b912d5878cfc1664a2dfc3bae68e116f21",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "background_dawn": {
+      "path": "room_dawn.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1853139,
+      "sha256": "44f4d3b043d622f77a0f16ada6daf0fb850c1ace712894f67e7729d77a8f18aa",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      }
+    },
+    "scripture": {
+      "path": "props/scripture_closed.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1605130,
+      "sha256": "3d257770fc4952632f38eb3a10dda6050856820907afd8153b0d5478f75de423",
+      "sourceFrame": {
+        "x": 199,
+        "y": 199,
+        "width": 1140,
+        "height": 688
+      }
+    },
+    "history": {
+      "path": "props/history_closed.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1988235,
+      "sha256": "b51414d4b8bdbc6531b3f12ec7eec6cfc1513fd5b6ce87e472ef8fd6a8126b09",
+      "sourceFrame": {
+        "x": 170,
+        "y": 101,
+        "width": 1213,
+        "height": 861
+      }
+    },
+    "page": {
+      "path": "props/torn_page.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1489719,
+      "sha256": "de628c496d84ac06d0568538699daaf5ba7d46bccd15a50b58e0f9d87c74077f",
+      "sourceFrame": {
+        "x": 59,
+        "y": 237,
+        "width": 1435,
+        "height": 718
+      }
+    },
+    "oil_lamp": {
+      "path": "props/oil_lamp_unlit.png",
+      "width": 1254,
+      "height": 1254,
+      "hasAlpha": true,
+      "bytes": 786523,
+      "sha256": "e4c8498900441c508c5182e4160f1ca66b6fa76994f5676de25d2fe602386fd8",
+      "sourceFrame": {
+        "x": 389,
+        "y": 30,
+        "width": 469,
+        "height": 1169
+      }
+    },
+    "candle_burning": {
+      "path": "props/candle_burning.png",
+      "width": 1263,
+      "height": 1246,
+      "hasAlpha": true,
+      "bytes": 594296,
+      "sha256": "670ebf0cc5d52225e31d8fafb0e1873916f1e999e7eb54636a80b35115968911",
+      "sourceFrame": {
+        "x": 298,
+        "y": 73,
+        "width": 668,
+        "height": 1108
+      }
+    },
+    "candle_unlit": {
+      "path": "props/candle_unlit.png",
+      "width": 1263,
+      "height": 1246,
+      "hasAlpha": true,
+      "bytes": 693075,
+      "sha256": "07f63453bc168d0ca28f5ba5dc854df360665a9e35232ec23628234af6ea2f21",
+      "sourceFrame": {
+        "x": 256,
+        "y": 334,
+        "width": 761,
+        "height": 876
+      }
+    },
+    "candle_out": {
+      "path": "props/candle_extinguished.png",
+      "width": 1263,
+      "height": 1246,
+      "hasAlpha": true,
+      "bytes": 580691,
+      "sha256": "af70c835a5718cfa38fd30e7dab06d72142afb0bfd16194cd3136210b17b0172",
+      "sourceFrame": {
+        "x": 297,
+        "y": 407,
+        "width": 672,
+        "height": 770
+      }
+    },
+    "candle_short": {
+      "path": "props/candle_short.png",
+      "width": 1278,
+      "height": 1230,
+      "hasAlpha": true,
+      "bytes": 492319,
+      "sha256": "67c6c30abac3067ab21839766d79fda93e0925e75008c96ee7bcfc5b20cb2ac1",
+      "sourceFrame": {
+        "x": 298,
+        "y": 448,
+        "width": 684,
+        "height": 709
+      }
+    },
+    "door_open": {
+      "path": "props/door_open.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 664478,
+      "sha256": "619442ea29f80555f05367a421624d256783d51664a5dd1938bea8f73039a6fc",
+      "sourceFrame": {
+        "x": 585,
+        "y": 0,
+        "width": 585,
+        "height": 878
+      }
+    },
+    "door_bulging": {
+      "path": "props/door_bulging.png",
+      "width": 1046,
+      "height": 1503,
+      "hasAlpha": true,
+      "bytes": 1140906,
+      "sha256": "1b45009403f11e1b92bdd2f44a034a8100ecf6b051d27def38c8809d54f77cfc",
+      "sourceFrame": {
+        "x": 215,
+        "y": 188,
+        "width": 525,
+        "height": 1091
+      }
+    },
+    "double_lin_lan": {
+      "path": "../../characters/lin_lan/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1565802,
+      "sha256": "bc582e29b41c9e9e6bbba9ae00edcbde6498bd015f51cc4aeb5ae5d6a72fdc4b",
+      "sourceFrame": {
+        "x": 271,
+        "y": 19,
+        "width": 598,
+        "height": 1496
+      }
+    },
+    "familiar_lin_lan": {
+      "path": "../../characters/lin_lan/standing_cap_removed.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1513858,
+      "sha256": "d5f1e5020d38698d177551bba1bbf81b86e6f806ca58fd3a066efd21a104bb59",
+      "sourceFrame": {
+        "x": 273,
+        "y": 24,
+        "width": 548,
+        "height": 1493
+      }
+    },
+    "double_zhou_yan": {
+      "path": "../../characters/zhou_yan/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1570629,
+      "sha256": "15a1d78731368da8314cfd69f111ea3a885e6dbd63499bca774a8c256ffc6e7e",
+      "sourceFrame": {
+        "x": 234,
+        "y": 13,
+        "width": 633,
+        "height": 1512
+      }
+    },
+    "familiar_zhou_yan": {
+      "path": "../../characters/zhou_yan/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1446493,
+      "sha256": "56337ce8280c0b8ae1d5664bce59869e3407311287dd61f2784745f25e4f9543",
+      "sourceFrame": {
+        "x": 276,
+        "y": 13,
+        "width": 502,
+        "height": 1509
+      }
+    },
+    "double_xu_zhi": {
+      "path": "../../characters/xu_zhi/double_scratching.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1572101,
+      "sha256": "b609cd12cf8fe7c1a334c46ccde3bceb124ab10b612a77c7a7104b64d6837185",
+      "sourceFrame": {
+        "x": 285,
+        "y": 13,
+        "width": 536,
+        "height": 1511
+      }
+    },
+    "familiar_xu_zhi": {
+      "path": "../../characters/xu_zhi/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1551869,
+      "sha256": "27565053cae1a70686d71acc018900e345567969c27b7a83a9905e714a573250",
+      "sourceFrame": {
+        "x": 286,
+        "y": 22,
+        "width": 496,
+        "height": 1496
+      }
+    },
+    "intrusion": {
+      "path": "props/intrusion_shadow.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1432715,
+      "sha256": "b55e8090f391b3dd63304889c9470236235c21f389a9bfb0d48e7525ba08410b",
+      "sourceFrame": {
+        "x": 54,
+        "y": 16,
+        "width": 961,
+        "height": 1447
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "background_candlelit",
+      "sprite": "background_candlelit",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "candlelit"
+      }
+    },
+    {
+      "id": "background_moonlit",
+      "sprite": "background_moonlit",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "moonlit"
+      }
+    },
+    {
+      "id": "background_false_dawn",
+      "sprite": "background_false_dawn",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "false_dawn"
+      }
+    },
+    {
+      "id": "background_dawn",
+      "sprite": "background_dawn",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0,
+      "visibleWhen": {
+        "time": "dawn"
+      }
+    },
+    {
+      "id": "scripture",
+      "sprite": "scripture",
+      "rect": {
+        "x": 1056,
+        "y": 652,
+        "width": 223,
+        "height": 98
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "books": true
+      }
+    },
+    {
+      "id": "history",
+      "sprite": "history",
+      "rect": {
+        "x": 1245,
+        "y": 654,
+        "width": 221,
+        "height": 93
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "books": true
+      }
+    },
+    {
+      "id": "page",
+      "sprite": "page",
+      "rect": {
+        "x": 1354,
+        "y": 731,
+        "width": 170,
+        "height": 78
+      },
+      "zIndex": 31,
+      "visibleWhen": {
+        "page": true
+      }
+    },
+    {
+      "id": "oil_lamp",
+      "sprite": "oil_lamp",
+      "rect": {
+        "x": 1526,
+        "y": 471,
+        "width": 96,
+        "height": 234
+      },
+      "zIndex": 30
+    },
+    {
+      "id": "candle_burning",
+      "sprite": "candle_burning",
+      "rect": {
+        "x": 1377,
+        "y": 490,
+        "width": 118,
+        "height": 190
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "candle": "burning"
+      }
+    },
+    {
+      "id": "candle_unlit",
+      "sprite": "candle_unlit",
+      "rect": {
+        "x": 1377,
+        "y": 535,
+        "width": 118,
+        "height": 145
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "candle": "unlit"
+      }
+    },
+    {
+      "id": "candle_out",
+      "sprite": "candle_out",
+      "rect": {
+        "x": 1377,
+        "y": 535,
+        "width": 118,
+        "height": 145
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "candle": "out"
+      }
+    },
+    {
+      "id": "candle_short",
+      "sprite": "candle_short",
+      "rect": {
+        "x": 1377,
+        "y": 551,
+        "width": 118,
+        "height": 129
+      },
+      "zIndex": 32,
+      "visibleWhen": {
+        "candle": "short"
+      }
+    },
+    {
+      "id": "door_open",
+      "sprite": "door_open",
+      "rect": {
+        "x": 995,
+        "y": 4,
+        "width": 373,
+        "height": 652
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "door": "open"
+      },
+      "clipRect": {
+        "x": 970,
+        "y": 0,
+        "width": 450,
+        "height": 635
+      }
+    },
+    {
+      "id": "door_bulging",
+      "sprite": "door_bulging",
+      "rect": {
+        "x": 1018,
+        "y": 103,
+        "width": 235,
+        "height": 480
+      },
+      "zIndex": 5,
+      "visibleWhen": {
+        "door": "bulging"
+      }
+    },
+    {
+      "id": "double_lin_lan",
+      "sprite": "double_lin_lan",
+      "rect": {
+        "x": 579.097,
+        "y": 203,
+        "width": 291.805,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "lin_lan"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "familiar_lin_lan",
+      "sprite": "familiar_lin_lan",
+      "rect": {
+        "x": 591.028,
+        "y": 203,
+        "width": 267.944,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "lin_lan_familiar"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "double_zhou_yan",
+      "sprite": "double_zhou_yan",
+      "rect": {
+        "x": 572.192,
+        "y": 203,
+        "width": 305.615,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "zhou_yan"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "familiar_zhou_yan",
+      "sprite": "familiar_zhou_yan",
+      "rect": {
+        "x": 603.575,
+        "y": 203,
+        "width": 242.85,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "zhou_yan_familiar"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "double_xu_zhi",
+      "sprite": "double_xu_zhi",
+      "rect": {
+        "x": 595.523,
+        "y": 203,
+        "width": 258.954,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "xu_zhi"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "familiar_xu_zhi",
+      "sprite": "familiar_xu_zhi",
+      "rect": {
+        "x": 603.984,
+        "y": 203,
+        "width": 242.032,
+        "height": 730
+      },
+      "zIndex": 20,
+      "visibleWhen": {
+        "actor": "xu_zhi_familiar"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "intrusion",
+      "sprite": "intrusion",
+      "rect": {
+        "x": 780,
+        "y": 70,
+        "width": 610,
+        "height": 900
+      },
+      "zIndex": 50,
+      "visibleWhen": {
+        "actor": "intrusion"
+      }
+    }
+  ],
+  "labels": [],
+  "notes": [
+    "桌上可变道具全部独立，油灯始终未燃。燃烧/短芯使用亮烛或假报晓底图；未燃/熄灭使用月光底图。",
+    "同一支烛：归属转移时令candle=absent；神公引路素材带烛，房内与其他位置必须隐藏该烛。",
+    "门保持关闭时使用底图；异常门板与打开门洞为不透明替换层，矩形不得改成透明空洞。",
+    "正常外观用于假同伴显露前；抓脸及颈部缝线被玩家看到后才切double层。",
+    "12开门离室直接转清晨回廊，不将午夜开门洞画到白天房间。"
+  ]
+}

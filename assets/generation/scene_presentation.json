@@ -1,0 +1,88 @@
+{
+  "runtimeIntegration": "not_integrated",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941
+  },
+  "layouts": [
+    "assets/scenes/east_courtyard/layout.json",
+    "assets/scenes/player_room/layout.json",
+    "assets/scenes/dining_hall/layout.json",
+    "assets/scenes/east_shrine/layout.json",
+    "assets/scenes/guest_room/layout.json",
+    "assets/scenes/temple_gate/layout.json",
+    "assets/scenes/registration/layout.json"
+  ],
+  "bus": {
+    "arrival": {
+      "path": "assets/scenes/bus/bus_arrival.png",
+      "plaque": {
+        "text": "灯影寺",
+        "x": 1110,
+        "y": 235,
+        "fontSize": 32,
+        "rotation": -0.08
+      }
+    },
+    "departure": {
+      "path": "assets/scenes/bus/bus_departure.png",
+      "reflectedPlaque": {
+        "text": "明照寺",
+        "x": 126,
+        "y": 129,
+        "fontSize": 12,
+        "mirrorHorizontally": true,
+        "visibleWhen": "ending_old_name_flash"
+      }
+    }
+  },
+  "documents": {
+    "scripture": {
+      "cover": "清心静神经",
+      "body": ["心不逐声，眼不随影；", "一念既起，归于清明；", "灯在我前，", "门在我后。"],
+      "learnedOnlyAfterReading": true
+    },
+    "history": {
+      "cover": "灯影寺简史",
+      "body": ["七年前方丈顾怀山于方丈室圆寂，灯灭即成佛。"],
+      "missingField": "验身"
+    },
+    "notice": {
+      "title": "入住须知",
+      "knownText": ["只许去，不许问。", "夜间如需用水，先叫陆沉。"]
+    },
+    "foodRecord": {
+      "reusePaper": "assets/props/torn_page/inventory.png",
+      "title": "施食记",
+      "textReveal": "只显示剧本已公开内容；不补写肉来源或皮号"
+    },
+    "busTicket": {
+      "reusePaper": "assets/props/permit/inventory.png",
+      "title": "乘车票",
+      "route": "灯影寺接驳车"
+    },
+    "booking": {
+      "presentation": "使用纸面/手机预约UI文字视图，不新增可领取道具或品牌设备",
+      "title": "灯影寺住宿预约",
+      "partySize": 4
+    }
+  },
+  "effects": {
+    "procedural": [
+      "烛焰闪烁",
+      "压灯",
+      "同伴影子/缺失影子",
+      "呼吸参照/缺失呼吸",
+      "声源波形",
+      "空间折返",
+      "死亡淡出"
+    ],
+    "death": "只在主角机位即时反馈，不播放镜外追杀"
+  },
+  "ownership": {
+    "redCandle": "single object shared across inventory, room, shrine and guiding elder; at most one visible owner",
+    "cameraCap": "camera before check-in; bell-side after placing; camera after dawn retrieval",
+    "roomTags": "标识按场景展示，不自动四块都成为背包物品"
+  },
+  "notCovered": ["完整扩展主线人物与后山/钟楼内部", "声音录制、对白切换、动画与存档接入"]
+}

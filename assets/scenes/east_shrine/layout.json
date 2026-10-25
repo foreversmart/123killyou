@@ -1,0 +1,480 @@
+{
+  "sceneId": "east_shrine",
+  "coordinateSpace": {
+    "width": 1672,
+    "height": 941,
+    "origin": "top_left"
+  },
+  "pathBase": "scene_directory",
+  "rendering": {
+    "sourceFrame": "crop source pixels before mapping into rect",
+    "alpha": "preserve source alpha",
+    "state": "visual contract; runtime authority remains backend",
+    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
+    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+  },
+  "defaultState": {
+    "elder": "alive",
+    "jiaobei": "sealed",
+    "candle": false
+  },
+  "sprites": {
+    "background": {
+      "path": "shrine_night.png",
+      "width": 1671,
+      "height": 941,
+      "hasAlpha": false,
+      "bytes": 1701270,
+      "sha256": "547ecb18efe71353fceac2804c3e6adf62083c0e7f2df76fdb5fbd995e5d3b7a",
+      "sourceFrame": {
+        "x": 0,
+        "y": 0,
+        "width": 1671,
+        "height": 941
+      }
+    },
+    "elder_alive": {
+      "path": "../../characters/shen_gong/seated.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2044253,
+      "sha256": "c8b3f84b71efe8e8ae64e0821979723ac767bc4b2010212c7b7519a680ec70d4",
+      "sourceFrame": {
+        "x": 10,
+        "y": 97,
+        "width": 1014,
+        "height": 1402
+      }
+    },
+    "elder_partial": {
+      "path": "../../characters/shen_gong/seated_stone_partial.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1977776,
+      "sha256": "cfa3a6877c4ea5fd61d6e518cb154b2eb4fbf8b9c87fcdff2439a033bea4fdf1",
+      "sourceFrame": {
+        "x": 9,
+        "y": 92,
+        "width": 1015,
+        "height": 1396
+      }
+    },
+    "elder_stone": {
+      "path": "../../characters/shen_gong/seated_stone.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 2922225,
+      "sha256": "d186ffa7f2095affb20975ae01e58a4d02e304ebce40a08b39449c6b6868874d",
+      "sourceFrame": {
+        "x": 11,
+        "y": 97,
+        "width": 1013,
+        "height": 1394
+      }
+    },
+    "table": {
+      "path": "table_foreground.png",
+      "width": 1672,
+      "height": 941,
+      "hasAlpha": true,
+      "bytes": 923749,
+      "sha256": "abf24dae39a32c449d9cf33332d3198848ef5df0be13c415a87fce7f3d392f8b",
+      "sourceFrame": {
+        "x": 64,
+        "y": 408,
+        "width": 1545,
+        "height": 455
+      }
+    },
+    "bird": {
+      "path": "../../props/animals/sparrow.png",
+      "width": 1363,
+      "height": 1154,
+      "hasAlpha": true,
+      "bytes": 953768,
+      "sha256": "92c30d41a5466d30522da5d485b27e64f6d285d6d3e636f412f2eb4df0fc7162",
+      "sourceFrame": {
+        "x": 122,
+        "y": 118,
+        "width": 1072,
+        "height": 952
+      }
+    },
+    "cage": {
+      "path": "../../props/birdcage/scene.png",
+      "width": 1312,
+      "height": 1199,
+      "hasAlpha": true,
+      "bytes": 1114443,
+      "sha256": "e418b6b6b0ed5bd721f5965968816b90b08b37d5576a8402004f76b1d6d53c6c",
+      "sourceFrame": {
+        "x": 279,
+        "y": 13,
+        "width": 751,
+        "height": 1144
+      }
+    },
+    "cat_dish": {
+      "path": "../../props/cat_dish/scene.png",
+      "width": 1670,
+      "height": 942,
+      "hasAlpha": true,
+      "bytes": 1152795,
+      "sha256": "9729211139bf3e1b3624e3d59a83c489c2901ed94ce087853580144f0e9d1b5d",
+      "sourceFrame": {
+        "x": 281,
+        "y": 128,
+        "width": 1110,
+        "height": 718
+      }
+    },
+    "sealed": {
+      "path": "../../props/jiaobei/sealed.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 2121939,
+      "sha256": "b2b7b0eb1cd4359912df61323fb6f7f7e66378067aa8d1a0d915ab92066b9db6",
+      "sourceFrame": {
+        "x": 208,
+        "y": 36,
+        "width": 1198,
+        "height": 929
+      }
+    },
+    "sacred_a": {
+      "path": "../../props/jiaobei/flat_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1657051,
+      "sha256": "c4c18e7f406c708468e146457f2261ebef7d6de62c65fe1e6dd63727b50c737f",
+      "sourceFrame": {
+        "x": 190,
+        "y": 171,
+        "width": 1198,
+        "height": 687
+      }
+    },
+    "sacred_b": {
+      "path": "../../props/jiaobei/curved_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1884354,
+      "sha256": "7475b68bcc5ea5cec259873f2a20ef10c5d4ff17987b75b015a4b04454bbebe8",
+      "sourceFrame": {
+        "x": 143,
+        "y": 151,
+        "width": 1289,
+        "height": 701
+      }
+    },
+    "laugh_a": {
+      "path": "../../props/jiaobei/flat_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1657051,
+      "sha256": "c4c18e7f406c708468e146457f2261ebef7d6de62c65fe1e6dd63727b50c737f",
+      "sourceFrame": {
+        "x": 190,
+        "y": 171,
+        "width": 1198,
+        "height": 687
+      }
+    },
+    "laugh_b": {
+      "path": "../../props/jiaobei/flat_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1657051,
+      "sha256": "c4c18e7f406c708468e146457f2261ebef7d6de62c65fe1e6dd63727b50c737f",
+      "sourceFrame": {
+        "x": 190,
+        "y": 171,
+        "width": 1198,
+        "height": 687
+      }
+    },
+    "yin_a": {
+      "path": "../../props/jiaobei/curved_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1884354,
+      "sha256": "7475b68bcc5ea5cec259873f2a20ef10c5d4ff17987b75b015a4b04454bbebe8",
+      "sourceFrame": {
+        "x": 143,
+        "y": 151,
+        "width": 1289,
+        "height": 701
+      }
+    },
+    "yin_b": {
+      "path": "../../props/jiaobei/curved_up.png",
+      "width": 1536,
+      "height": 1024,
+      "hasAlpha": true,
+      "bytes": 1884354,
+      "sha256": "7475b68bcc5ea5cec259873f2a20ef10c5d4ff17987b75b015a4b04454bbebe8",
+      "sourceFrame": {
+        "x": 143,
+        "y": 151,
+        "width": 1289,
+        "height": 701
+      }
+    },
+    "candle": {
+      "path": "../player_room/props/candle_burning.png",
+      "width": 1263,
+      "height": 1246,
+      "hasAlpha": true,
+      "bytes": 594296,
+      "sha256": "670ebf0cc5d52225e31d8fafb0e1873916f1e999e7eb54636a80b35115968911",
+      "sourceFrame": {
+        "x": 298,
+        "y": 73,
+        "width": 668,
+        "height": 1108
+      }
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "sprite": "background",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
+      },
+      "zIndex": 0
+    },
+    {
+      "id": "elder_alive",
+      "sprite": "elder_alive",
+      "rect": {
+        "x": 655.176,
+        "y": 184,
+        "width": 455.649,
+        "height": 630
+      },
+      "zIndex": 10,
+      "visibleWhen": {
+        "elder": "alive"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "elder_partial",
+      "sprite": "elder_partial",
+      "rect": {
+        "x": 653.971,
+        "y": 184,
+        "width": 458.059,
+        "height": 630
+      },
+      "zIndex": 10,
+      "visibleWhen": {
+        "elder": "partial"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "elder_stone",
+      "sprite": "elder_stone",
+      "rect": {
+        "x": 654.094,
+        "y": 184,
+        "width": 457.812,
+        "height": 630
+      },
+      "zIndex": 10,
+      "visibleWhen": {
+        "elder": "stone"
+      },
+      "scaleMode": "uniform",
+      "anchor": {
+        "x": 0.5,
+        "y": 1
+      }
+    },
+    {
+      "id": "table",
+      "sprite": "table",
+      "rect": {
+        "x": 180,
+        "y": 731,
+        "width": 1320,
+        "height": 392
+      },
+      "zIndex": 20
+    },
+    {
+      "id": "bird",
+      "sprite": "bird",
+      "rect": {
+        "x": 1237,
+        "y": 586,
+        "width": 57,
+        "height": 54
+      },
+      "zIndex": 29
+    },
+    {
+      "id": "cage",
+      "sprite": "cage",
+      "rect": {
+        "x": 1150,
+        "y": 420,
+        "width": 240,
+        "height": 340
+      },
+      "zIndex": 30
+    },
+    {
+      "id": "cat_dish",
+      "sprite": "cat_dish",
+      "rect": {
+        "x": 381,
+        "y": 721,
+        "width": 160,
+        "height": 98
+      },
+      "zIndex": 30
+    },
+    {
+      "id": "sealed",
+      "sprite": "sealed",
+      "rect": {
+        "x": 738,
+        "y": 721,
+        "width": 185,
+        "height": 108
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "sealed"
+      }
+    },
+    {
+      "id": "sacred_a",
+      "sprite": "sacred_a",
+      "rect": {
+        "x": 710,
+        "y": 728,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "sacred"
+      }
+    },
+    {
+      "id": "sacred_b",
+      "sprite": "sacred_b",
+      "rect": {
+        "x": 863,
+        "y": 755,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "sacred"
+      }
+    },
+    {
+      "id": "laugh_a",
+      "sprite": "laugh_a",
+      "rect": {
+        "x": 710,
+        "y": 728,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "laugh"
+      }
+    },
+    {
+      "id": "laugh_b",
+      "sprite": "laugh_b",
+      "rect": {
+        "x": 863,
+        "y": 755,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "laugh"
+      }
+    },
+    {
+      "id": "yin_a",
+      "sprite": "yin_a",
+      "rect": {
+        "x": 710,
+        "y": 728,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "yin"
+      }
+    },
+    {
+      "id": "yin_b",
+      "sprite": "yin_b",
+      "rect": {
+        "x": 863,
+        "y": 755,
+        "width": 112,
+        "height": 62
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "jiaobei": "yin"
+      }
+    },
+    {
+      "id": "candle",
+      "sprite": "candle",
+      "rect": {
+        "x": 1008,
+        "y": 553,
+        "width": 113,
+        "height": 181
+      },
+      "zIndex": 30,
+      "visibleWhen": {
+        "candle": true
+      }
+    }
+  ],
+  "labels": [],
+  "notes": [
+    "一平一凸=圣筊，两平=笑筊，两凸=阴筊；只表现后端已结算结果，不由随机图片决定胜负。",
+    "桌放在前景，保留双手在桌后可见以读出局部石化；全石化与局部状态沿同一坐姿对位。",
+    "鸟先绘制再绘制鸟笼，笼条与负空间保留透明；鸟脚落在笼内横栖木。",
+    "神公持烛引路切回回廊actor=shen_gong，桌面与房内同一红烛同时隐藏。"
+  ]
+}
