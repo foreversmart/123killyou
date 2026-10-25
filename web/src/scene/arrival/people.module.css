@@ -27,33 +27,43 @@
 
 .person[data-person='zhouyan'] {
   --clothes: #718c83;
-  left: 82%;
-  bottom: 18%;
+  left: 72%;
+  bottom: 12%;
 }
 
 .person[data-person='xuzhi'] {
   --clothes: #9d7a6a;
-  left: 89%;
-  bottom: 14%;
+  left: 86%;
+  bottom: 15%;
 }
 
 .person[data-person='luchen'] {
   --clothes: #9b9273;
-  left: 71%;
-  bottom: 26%;
+  left: 63%;
+  bottom: 27%;
 }
 
 .person[data-person='linlan'] {
-  left: 61%;
-  bottom: 17%;
+  left: 53%;
+  bottom: 10%;
 }
 
 .figure {
   position: relative;
-  width: 3.8cqw;
-  height: 7.5cqw;
+  width: 4.6cqw;
+  height: 9.1cqw;
   margin: auto;
   filter: drop-shadow(0.6cqw 0.65cqw 0.2cqw #4a573c44);
+}
+
+.person[data-person='luchen'] .figure {
+  width: 3.9cqw;
+  height: 7.8cqw;
+}
+
+.person[data-person='xuzhi'] .figure {
+  width: 4.2cqw;
+  height: 8.3cqw;
 }
 
 .asset-figure {
