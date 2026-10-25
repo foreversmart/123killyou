@@ -59,6 +59,40 @@ func TestOpeningGreatScriptureShowsItsFourVerses(t *testing.T) {
 	}
 }
 
+func TestRoomVoiceFallbackUsesVisibleObjectsAndActions(t *testing.T) {
+	e := newStoryTestEngine(t)
+	for _, tt := range []struct {
+		name     string
+		text     string
+		shot     string
+		intent   string
+		scene    string
+		wantClue string
+	}{
+		{name: "candle", text: "再看一眼烛火", shot: "room_candle_detail", intent: "inspect", scene: "mini_room"},
+		{name: "history homophone", text: "翻翻四史", shot: "room_history", intent: "inspect", scene: "mini_room", wantClue: "游客版寺史"},
+		{name: "scripture", text: "看看桌上的经书", shot: "room_scripture", intent: "inspect", scene: "mini_room", wantClue: "大念处经末页"},
+		{name: "sleep", text: "躺下歇一会儿", shot: "wake_candle", intent: "sleep", scene: "mini_room"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			s := e.Initial("room-voice-fallback")
+			e.setMiniScene(&s, tt.scene)
+			s.Flags["red_candle_held"] = true
+			s.Flags["red_candle_lit"] = true
+			intent, speak := e.Apply(&s, tt.text)
+			if intent != tt.intent || speak != "" {
+				t.Fatalf("物件语音没有执行门房动作: intent=%q speak=%q state=%+v", intent, speak, s)
+			}
+			if s.ShotKey != tt.shot || s.Dialogue != (Dialogue{}) {
+				t.Fatalf("物件语音没有回到对应镜头: shot=%q dialogue=%+v", s.ShotKey, s.Dialogue)
+			}
+			if tt.wantClue != "" && !strings.Contains(strings.Join(s.Clues, "、"), tt.wantClue) {
+				t.Fatalf("物件语音没有记录对应线索: clues=%v", s.Clues)
+			}
+		})
+	}
+}
+
 func TestDoorInvestigationReturnsToTheRequestedSoundOrObject(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("focus")
