@@ -2,28 +2,55 @@ import styles from './style.module.css';
 
 export function StoryReading({ shot }: { shot: string }) {
   const history = shot === 'room_history';
-  if (!history && shot !== 'room_scripture') return null;
+  const page = shot === 'room_page';
+  const permit = shot === 'room_permit';
+  if (!history && !page && !permit && shot !== 'room_scripture') return null;
   return (
     <article
       className={styles.page}
-      aria-label={history ? '游客版寺史册展开页' : '清心静神经展开页'}
+      aria-label={
+        page
+          ? '入住须知残页'
+          : permit
+            ? '通行凭背面'
+            : history
+              ? '游客版寺史册展开页'
+              : '清心静神经展开页'
+      }
     >
       <span className={styles.binding} aria-hidden="true" />
-      <small>{history ? '灯影寺 · 游客版' : '门房案头 · 末页短偈'}</small>
-      <h3>{history ? '明照旧事' : '清心静神经'}</h3>
-      {history ? (
+      <small>
+        {page
+          ? '入住须知 · 残页'
+          : permit
+            ? '灯影寺 · 外客凭据'
+            : history
+              ? '灯影寺 · 游客版'
+              : '门房案头 · 末页短偈'}
+      </small>
+      <h3>{page ? '夜间须知' : permit ? '通行凭' : history ? '明照旧事' : '清心静神经'}</h3>
+      {page ? (
+        <p className={styles.ink}>
+          钟响之后，
+          <br />
+          不要回答自己的名字。
+        </p>
+      ) : permit ? (
+        <>
+          <p>只许去，不许问。</p>
+          <div className={styles.seal}>灯影寺</div>
+        </>
+      ) : history ? (
         <>
           <p>七年前，方丈顾怀山于方丈室圆寂。</p>
           <p>灯灭即成佛，诸弟子毋近。</p>
           <div className={styles.torn}>验身记录　…………</div>
-          <small>这一栏的纸，沿装订线被撕走了。</small>
         </>
       ) : (
         <>
           <p>心不逐声，眼不随影。</p>
           <p>一念既起，归于清明。</p>
           <p>灯在我前，门在我后。</p>
-          <small>把这几句记在心里，别只记住声音。</small>
         </>
       )}
     </article>

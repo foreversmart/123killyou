@@ -12,6 +12,12 @@
 .dialogue-panel--narrator {
   grid-template-columns: minmax(0, 1fr) 19%;
 }
+.quiet {
+  grid-template-columns: minmax(0, 1fr) 19%;
+}
+.quiet > :last-child {
+  grid-column: 2;
+}
 .speaker-portrait {
   position: relative;
   align-self: start;

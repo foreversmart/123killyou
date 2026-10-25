@@ -43,7 +43,7 @@ const points: Record<string, Record<string, ArtPoint>> = {
     tower: [938, 264, false],
   },
   mini_listen: {
-    vase: [235, 455, false],
+    vase: [235, 455, true],
     cat: [350, 513, false],
     bird: [320, 264, false],
     plaque: [666, 128, false],

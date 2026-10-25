@@ -8,7 +8,7 @@ func (e *Engine) storyDeath(state *State, message string) (string, string) {
 	e.setMiniScene(state, "mini_death")
 	state.ShotKey = "death_" + source
 	state.SceneText = message
-	return "death", miniInner(state, message+"眼前停在烛光熄灭的一刻。可以从最近的安全节点重试。")
+	return "death", miniObserve(state, message+"画面停在烛光熄灭的一刻。")
 }
 
 func (e *Engine) retryMiniStory(state *State) (string, string, bool) {
@@ -34,5 +34,5 @@ func (e *Engine) retryMiniStory(state *State) (string, string, bool) {
 	if scene == "mini_double" {
 		state.DialogueNext = "继续听"
 	}
-	return "retry", miniInner(state, "我重新站在刚才还能选择的位置。已看过的纸页和记住的话还在，这次先看清眼前。"), true
+	return "retry", miniSystem(state, "已回到最近的安全节点，已读纸页和线索保留。请重新选择下一步行动。"), true
 }

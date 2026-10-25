@@ -159,7 +159,7 @@ func TestMiniScriptSkinDoubleCanBeCalmedByTheReadScripture(t *testing.T) {
 	}
 }
 
-func TestMiniScriptKeepsSceneActorsAndInnerVoice(t *testing.T) {
+func TestMiniScriptKeepsSceneActorsWithoutNarratingCandleAction(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-staging")
 	if len(state.Actors) < 5 || state.Actors[1].Name != "林岚" {
@@ -172,8 +172,8 @@ func TestMiniScriptKeepsSceneActorsAndInnerVoice(t *testing.T) {
 	applyStory(t, engine, &state, "拿红烛")
 	applyStory(t, engine, &state, "回房")
 	applyStory(t, engine, &state, "点燃红烛")
-	if state.Dialogue.Speaker != "你·心声" {
-		t.Fatalf("点烛没有使用主角内心独白: %+v", state.Dialogue)
+	if state.Dialogue != (Dialogue{}) || state.SceneText == "" || state.LastAction != state.SceneText {
+		t.Fatalf("点烛未通过画面呈现: %+v", state)
 	}
 	if len(state.Actors) != 2 || state.Actors[0].Position != "门房矮桌前" {
 		t.Fatalf("门房演员站位不完整: %+v", state.Actors)
@@ -203,8 +203,8 @@ func TestMiniScriptRequiresObservedAnimalCall(t *testing.T) {
 	} {
 		applyStory(t, engine, &state, command)
 	}
-	if _, speak := engine.Apply(&state, "检查猫食碟"); state.Dialogue.Speaker != "你·心声" || speak == "" {
-		t.Fatalf("检查猫食碟没有产生内心调查: %+v", state.Dialogue)
+	if _, speak := engine.Apply(&state, "检查猫食碟"); state.Dialogue != (Dialogue{}) || speak != "" || state.ShotKey != "listen_cat" {
+		t.Fatalf("检查猫食碟未通过现场声音呈现: %+v", state)
 	}
 	intent, _ := engine.Apply(&state, "模仿猫叫")
 	if intent == "clarify" || !state.Flags["animal_call_passed"] {

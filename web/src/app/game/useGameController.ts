@@ -63,8 +63,13 @@ export function useGameController() {
       });
       if (action !== latestAction.current) return '';
       announce(result);
-      const textReply = result.speak?.trim() || result.state.lastAction?.trim() || '';
-      return { text: textReply, streamed, problem: result.voiceError };
+      const sceneOnly = Boolean(
+        result.state.storyMode && !result.speak?.trim() && !result.state.dialogue.text,
+      );
+      const textReply = sceneOnly
+        ? ''
+        : result.speak?.trim() || result.state.lastAction?.trim() || '';
+      return { text: textReply, streamed, problem: result.voiceError, sceneOnly };
     },
     [send],
   );

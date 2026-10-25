@@ -47,6 +47,7 @@ export function useSpeechOutput(
 
   const speak = useCallback(
     (answer: VoiceAnswer) => {
+      if (typeof answer !== 'string' && answer.sceneOnly) return;
       if (!sound.current || !enabled.current) return;
       if (typeof answer === 'string' || !answer.streamed || !player.current?.received) {
         stop();

@@ -10,4 +10,5 @@ export type VoiceStatus =
   | 'error'
   | 'unsupported';
 
-export type VoiceAnswer = string | { text: string; streamed?: boolean; problem?: string };
+export type VoiceAnswer =
+  string | { text: string; streamed?: boolean; problem?: string; sceneOnly?: boolean };

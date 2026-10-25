@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
-import { storyCues, cueSignature } from '../src/features/story_audio/cues.ts';
+import { storyCues, cueSignature, cueDuration } from '../src/features/story_audio/cues.ts';
+import { oracleFaces } from '../src/scene/story_observation/oracle_faces.ts';
 import { audioFixture, hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
 
 const state = (shotKey, extra = {}) => ({
@@ -21,7 +22,7 @@ test('更锣与敲门按分镜给出清楚的独立计数，钟声不计作更�
     ['three_knocks', 'knock', 3],
     ['dawn_knocks', 'knock', 3],
   ]) {
-    const cues = storyCues(state(shot));
+    const cues = storyCues(state(shot)).filter((cue) => cue.kind === kind);
     assert.equal(cues.length, count, shot);
     assert.ok(
       cues.every((cue) => cue.kind === kind),
@@ -42,7 +43,7 @@ test('更锣与敲门按分镜给出清楚的独立计数，钟声不计作更�
   const trueDawn = storyCues(state('dawn_courtyard'));
   assert.deepEqual(
     trueDawn.map((cue) => cue.kind),
-    ['gong', 'gong', 'gong', 'gong', 'gong', 'bird', 'bird'],
+    ['gong', 'gong', 'gong', 'gong', 'gong', 'rooster', 'bird', 'bird'],
   );
   assert.ok(trueDawn[5].at > trueDawn[4].at);
 });
@@ -73,6 +74,7 @@ test('同一声源自动只播一次；主动重听后普通调查不再额外�
     {
       AudioContext: audio.AudioContext,
       cueSignature,
+      cueDuration,
       storyCues,
       document: {
         addEventListener: (name, callback) => listeners.set(name, callback),
@@ -101,6 +103,95 @@ test('同一声源自动只播一次；主动重听后普通调查不再额外�
   assert.equal(heard.length, 8);
   runtime.render(useStorySound, { ...original, runId: 'new-run' }, true, 'idle');
   assert.equal(heard.length, 12);
+  runtime.dispose();
+});
+
+test('客观调查直接播放所在位置的环境声，动物声可主动复听', () => {
+  for (const [shot, kind] of [
+    ['arrival_cat', 'cat'],
+    ['listen_cat', 'cat'],
+    ['oracle_cat', 'cat'],
+    ['listen_bird', 'bird'],
+    ['oracle_bird', 'bird'],
+    ['room_candle', 'match'],
+    ['room_latch', 'latch'],
+    ['room_history', 'rustle'],
+    ['register_camera_bell', 'chime'],
+    ['listen_skin', 'tear'],
+    ['ending_bus', 'bus'],
+  ]) {
+    const cues = storyCues(state(shot));
+    assert.ok(
+      cues.some((cue) => cue.kind === kind),
+      shot,
+    );
+    assert.ok(
+      cues.every((cue) => cueDuration(cue) > 0),
+      shot,
+    );
+  }
+  const waking = storyCues(state('wake_candle'));
+  assert.deepEqual(
+    waking.slice(3).map((cue) => cue.kind),
+    ['breath', 'scrape'],
+  );
+  assert.ok(waking[3].at > waking[2].at + cueDuration(waking[2]));
+  assert.ok(waking.slice(3).every((cue) => cue.pan > 0));
+  const original = state('listen_cat', { lastHeard: '检查猫食碟' });
+  assert.notEqual(cueSignature(original), cueSignature({ ...original, revision: 2 }));
+});
+
+test('杯筊画面忠实显示服务端的一平一凸、两平和两凸，落地声分别对应两片', () => {
+  assert.deepEqual(oracleFaces({ cup_roll_sacred: true }), ['flat', 'curved']);
+  assert.deepEqual(oracleFaces({ cup_roll_laugh: true }), ['flat', 'flat']);
+  assert.deepEqual(oracleFaces({ cup_roll_dark: true }), ['curved', 'curved']);
+  assert.deepEqual(oracleFaces({ cup_jiao_rescue: true }), ['flat', 'curved']);
+  assert.equal(oracleFaces({}), null);
+  const cups = storyCues(state('oracle_cast'));
+  assert.deepEqual(
+    cups.map((cue) => cue.kind),
+    ['wood', 'wood'],
+  );
+  assert.ok(cups[1].at > cups[0].at);
+  assert.deepEqual(storyCues(state('wake_candle_detail')), []);
+  const knocks = state('four_knocks', { lastHeard: '听敲门' });
+  assert.notEqual(cueSignature(knocks), cueSignature({ ...knocks, revision: 2 }));
+});
+
+test('离开声源镜头会立即停止旧环境声，即使下一镜头暂在说话', async () => {
+  const runtime = hookRuntime(),
+    audio = audioFixture(),
+    listeners = new Map();
+  let stops = 0;
+  audio.AudioContext.prototype.createGain = () => ({ gain: {}, connect() {}, disconnect() {} });
+  const useStorySound = await loadHook(
+    '../../src/features/story_audio/useStorySound.ts',
+    'useStorySound',
+    runtime,
+    {
+      AudioContext: audio.AudioContext,
+      cueSignature,
+      cueDuration,
+      storyCues,
+      document: {
+        addEventListener: (name, callback) => listeners.set(name, callback),
+        removeEventListener: (name) => listeners.delete(name),
+      },
+      playStoryCue: () => [
+        {
+          stop() {
+            stops++;
+          },
+        },
+      ],
+    },
+  );
+  runtime.render(useStorySound, state('listen_skin'), true, 'idle');
+  listeners.get('pointerdown')();
+  await Promise.resolve();
+  runtime.render(useStorySound, state('listen_skin'), true, 'idle');
+  runtime.render(useStorySound, state('room_table'), true, 'speaking');
+  assert.equal(stops, 2);
   runtime.dispose();
 });
 
