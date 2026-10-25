@@ -18,7 +18,8 @@ export type SoundEvent = {
     | 'chime'
     | 'rooster'
     | 'wood'
-    | 'bus';
+    | 'bus'
+    | 'death';
   at: number;
   pan?: number;
   duration?: number;
@@ -26,16 +27,14 @@ export type SoundEvent = {
 const repeat = (kind: SoundEvent['kind'], count: number, spacing = 0.85): SoundEvent[] =>
   Array.from({ length: count }, (_, index) => ({ kind, at: index * spacing }));
 export function storyCues(state: GameState): SoundEvent[] {
-  if (state.shotKey?.startsWith('death_'))
+  if (state.shotKey?.startsWith('death_')) {
+    const sourceCue =
+      state.retryScene === 'mini_listen' || state.retryScene === 'mini_oracle' ? 'step' : 'door';
     return [
-      {
-        kind:
-          state.retryScene === 'mini_listen' || state.retryScene === 'mini_oracle'
-            ? 'step'
-            : 'door',
-        at: 0,
-      },
+      { kind: 'death', at: 0, duration: 1.2 },
+      { kind: sourceCue, at: 0.62 },
     ];
+  }
   switch (state.shotKey || state.sceneKey) {
     case 'corridor_two_gongs':
       return repeat('gong', 2);
@@ -140,6 +139,7 @@ export function storyCues(state: GameState): SoundEvent[] {
 }
 export function cueDuration(cue: SoundEvent): number {
   if (cue.duration) return cue.duration;
+  if (cue.kind === 'death') return 1.2;
   if (cue.kind === 'bell') return 3.3;
   if (cue.kind === 'bus') return 3.1;
   if (cue.kind === 'breath' || cue.kind === 'tear' || cue.kind === 'rooster') return 1.5;

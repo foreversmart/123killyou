@@ -80,6 +80,30 @@ func TestDoorInvestigationReturnsToTheRequestedSoundOrObject(t *testing.T) {
 	}
 }
 
+func TestFourKnocksQuietWindowAdvancesToThreeKnocks(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("four-knocks-quiet-window")
+	e.setMiniScene(&s, "mini_four_knocks")
+	if s.DialogueNext != fourKnocksAutoAdvance {
+		t.Fatalf("空门场景应安排静默后自动进入三敲: next=%q", s.DialogueNext)
+	}
+
+	intent, speak := e.Apply(&s, fourKnocksAutoAdvance)
+	if intent != "story" || speak == "" || s.SceneKey != "mini_three_knocks" || !s.Flags["four_knocks_survived"] {
+		t.Fatalf("静默窗口结束后未进入三敲: intent=%s speak=%q scene=%s flags=%v", intent, speak, s.SceneKey, s.Flags)
+	}
+}
+
+func TestFourKnocksListeningResetsQuietWindow(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("four-knocks-listen")
+	e.setMiniScene(&s, "mini_four_knocks")
+	e.Apply(&s, "听门外")
+	if s.SceneKey != "mini_four_knocks" || s.ShotKey != "four_knocks" || s.DialogueNext != fourKnocksAutoAdvance {
+		t.Fatalf("重听空门后应重新等待自动转场: %+v", s)
+	}
+}
+
 func TestFourKnocksSpeechStaysSilentAndLowersDevotion(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("four-knocks-speech")
