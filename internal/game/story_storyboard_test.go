@@ -36,7 +36,7 @@ func storyAtListen(t *testing.T, meat bool) (*Engine, State) {
 	} else {
 		e.Apply(&s, "劝大家不要吃粥")
 	}
-	storyCommands(e, &s, "吃完晚膳", "拿红烛", "回房", "点燃红烛", "阅读清心静神经", "睡下", "续燃红烛", "不开门", "跟同伴去偷听")
+	storyCommands(e, &s, "吃完晚膳", "拿红烛", "回房", "点燃红烛", "阅读大念处经", "睡下", "续燃红烛", "不开门", "跟同伴去偷听")
 	return e, s
 }
 
@@ -140,7 +140,7 @@ func TestStoryboardFourScriptureLinesCannotBeSkippedAndReplayIsHarmless(t *testi
 	if s.Dialogue.Speaker != miniDoubleName(&s) || s.DialogueNext != "" {
 		t.Fatal("假同伴没有用模仿者身份提灭烛要求")
 	}
-	e.Apply(&s, "朗读清心静神经")
+	e.Apply(&s, "朗读大念处经")
 	if s.Flags["double_calm"] {
 		t.Fatal("一句输入跳过了四句经文")
 	}

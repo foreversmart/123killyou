@@ -15,7 +15,7 @@ export function StoryReading({ shot }: { shot: string }) {
             ? '通行凭背面'
             : history
               ? '游客版寺史册展开页'
-              : '清心静神经展开页'
+              : '大念处经展开页'
       }
     >
       <span className={styles.binding} aria-hidden="true" />
@@ -26,9 +26,9 @@ export function StoryReading({ shot }: { shot: string }) {
             ? '红烛寺 · 外客凭据'
             : history
               ? '红烛寺 · 游客版'
-              : '门房案头 · 末页短偈'}
+              : '门房案头 · 四句经文'}
       </small>
-      <h3>{page ? '夜间须知' : permit ? '通行凭' : history ? '明照旧事' : '清心静神经'}</h3>
+      <h3>{page ? '夜间须知' : permit ? '通行凭' : history ? '明照旧事' : '大念处经'}</h3>
       {page ? (
         <p className={styles.ink}>
           钟响之后，
@@ -48,9 +48,8 @@ export function StoryReading({ shot }: { shot: string }) {
         </>
       ) : (
         <>
-          <p>心不逐声，眼不随影。</p>
-          <p>一念既起，归于清明。</p>
-          <p>灯在我前，门在我后。</p>
+          <p>观身如身、观受如受、</p>
+          <p>观心如心、观法如法。</p>
         </>
       )}
     </article>

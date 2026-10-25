@@ -232,7 +232,7 @@
     },
     {
       "id": "room_scripture",
-      "name": "清心经·桌面",
+      "name": "大念处经·桌面",
       "path": "assets/scenes/player_room/props/scripture_closed.png",
       "kind": "prop",
       "beats": [
