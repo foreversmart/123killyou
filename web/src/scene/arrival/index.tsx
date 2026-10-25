@@ -1,6 +1,7 @@
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
+import openingStyles from './opening_reel.module.css';
 import temple from './temple.module.css';
 import people from './people.module.css';
 import interaction from './interaction.module.css';
@@ -16,6 +17,7 @@ export function ArrivalBackdrop() {
   return (
     <div
       className={styles.arrival}
+      data-authored="true"
       role="img"
       aria-label="晴天下午，你站在大巴车门台阶。左侧林岚举起相机，许栀在行李车旁；右侧周砚看山门梁架，守夜人陆沉在灯影寺山门内的登记桌后等候。旧匾明照寺露在新匾侧面，铜铃垂在檐下，花猫在石阶旁晒太阳。"
     >
@@ -26,10 +28,21 @@ export function ArrivalBackdrop() {
       <div className={styles['tree-shadow']} />
       <img
         className={styles['asset-gate']}
-        src={storyAssets.scenes.templeGate}
+        src={storyAssets.scenes.busArrival}
         alt=""
         aria-hidden="true"
       />
+      <details className={openingStyles.reel}>
+        <summary>片头回放</summary>
+        <video
+          className={openingStyles.video}
+          src={storyAssets.video.opening}
+          poster={storyAssets.video.titleCard}
+          controls
+          preload="metadata"
+          aria-label="灯影寺片头回放"
+        />
+      </details>
       <div className={styles.tree}>
         <i />
         <i />

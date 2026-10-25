@@ -24,7 +24,7 @@ export function DialoguePanel({
   onTour: () => Promise<void>;
 }) {
   const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
-  const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker);
+  const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker, state);
   const hasPortrait =
     (Boolean(dialogue.portrait) || Boolean(portraitAsset)) && dialogue.speaker !== '系统';
   const inner = dialogue.speaker.includes('心声');
@@ -81,7 +81,7 @@ export function DialoguePanel({
   );
 }
 
-function getPortraitAsset(id: string, speaker: string): string | null {
+function getPortraitAsset(id: string, speaker: string, state: GameState): string | null {
   if (id === 'player') return '/art/portrait-player.webp';
   const aliases: Record<string, keyof typeof storyAssets.portraits> = {
     keeper: 'luchen',
@@ -93,7 +93,35 @@ function getPortraitAsset(id: string, speaker: string): string | null {
     shangong: 'shangong',
   };
   const mapped = aliases[id];
-  if (mapped) return storyAssets.portraits[mapped];
+  if (mapped) return getStoryPortrait(mapped, state);
   if (speaker.includes('门外') || speaker.includes('帘后')) return storyAssets.portraits.unknown;
   return null;
+}
+
+function getStoryPortrait(id: keyof typeof storyAssets.portraits, state: GameState): string {
+  const shot = state.shotKey || '';
+  const poses = storyAssets.characterPoses[id as keyof typeof storyAssets.characterPoses] as
+    Record<string, string> | undefined;
+  if (!poses) return storyAssets.portraits[id];
+  if (id === 'linlan') {
+    if (state.sceneKey === 'mini_dawn') return poses.tired || storyAssets.portraits[id];
+    if (shot === 'listen_skin' || shot === 'listen_vase')
+      return poses.afraid || storyAssets.portraits[id];
+    if (shot === 'refectory_porridge') return poses.alert || storyAssets.portraits[id];
+  }
+  if (id === 'zhouyan') {
+    if (state.sceneKey === 'mini_dawn') return poses.tired || storyAssets.portraits[id];
+    if (shot === 'listen_skin' || shot === 'listen_vase')
+      return poses.tense || storyAssets.portraits[id];
+    if (shot === 'refectory_porridge') return poses.doubtful || storyAssets.portraits[id];
+  }
+  if (id === 'xuzhi') {
+    if (state.sceneKey === 'mini_dawn') return poses.tired || storyAssets.portraits[id];
+    if (shot === 'listen_skin' || shot === 'listen_vase')
+      return poses.resolute || storyAssets.portraits[id];
+    if (shot === 'refectory_porridge') return poses.concerned || storyAssets.portraits[id];
+  }
+  if (id === 'luchen' && state.sceneKey === 'mini_corridor_candle')
+    return poses.scrutinizing || storyAssets.portraits[id];
+  return storyAssets.portraits[id];
 }

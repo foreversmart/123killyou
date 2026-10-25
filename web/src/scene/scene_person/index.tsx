@@ -13,26 +13,25 @@ export function ScenePerson({
   placement,
   speaking,
   pose,
+  sceneKey,
+  flags = {},
 }: {
   actor: SceneActor;
   placement: ActorPlacement;
   speaking: boolean;
   pose?: string;
+  sceneKey?: string;
+  flags?: Record<string, boolean>;
 }) {
   const id = actor.portrait || actor.id;
   const disguised = actor.id.includes('double');
   const calm = disguised && pose === 'double_calm';
-  const assetCharacter =
-    actor.id in storyAssets.characters
-      ? storyAssets.characters[actor.id as keyof typeof storyAssets.characters]
-      : undefined;
+  const assetCharacter = getCharacterAsset(actor, sceneKey, pose, flags);
   const useAssetCharacter =
     Boolean(assetCharacter) &&
-    !disguised &&
+    (!disguised || Boolean(assetCharacter)) &&
     !calm &&
-    actor.id !== 'evil' &&
-    !(actor.id === 'huipu' && pose?.startsWith('listen_')) &&
-    !(actor.id === 'shangong' && pose === 'oracle_stone');
+    actor.id !== 'evil';
   return (
     <div
       className={cx(styles.person, speaking && styles.speaking)}
@@ -76,6 +75,50 @@ export function ScenePerson({
       </div>
     </div>
   );
+}
+
+function getCharacterAsset(
+  actor: SceneActor,
+  sceneKey?: string,
+  shotKey?: string,
+  flags: Record<string, boolean> = {},
+): string | undefined {
+  const id = actor.portrait in storyAssets.characterPoses ? actor.portrait : actor.id;
+  const poses = storyAssets.characterPoses[id as keyof typeof storyAssets.characterPoses];
+  if (!poses) return undefined;
+  const poseMap = poses as Record<string, string>;
+  if (actor.id === 'skin_double')
+    return shotKey === 'double_frenzy' || shotKey === 'double_exit'
+      ? poseMap.doubleScratching
+      : undefined;
+  if (id === 'huipu') {
+    if (sceneKey === 'mini_listen')
+      return flags.vase_broken || shotKey === 'listen_vase'
+        ? poseMap.turningHollow
+        : poseMap.rearHollow;
+    if (sceneKey === 'mini_refectory') return poseMap.curtain;
+    return poseMap.standing;
+  }
+  if (id === 'shangong') {
+    if (flags.cup_failed || shotKey === 'oracle_stone') return poseMap.stone;
+    if (flags.cup_jiao_rescue || shotKey === 'oracle_rescue') return poseMap.standing;
+    if (shotKey === 'oracle_cast' || shotKey === 'oracle_rules') return poseMap.jiaobei;
+    return poseMap.seated;
+  }
+  if (id === 'luchen') {
+    if (sceneKey === 'mini_register') return poseMap.reception;
+    if (sceneKey === 'mini_corridor_candle')
+      return shotKey === 'corridor_warning' || shotKey === 'corridor_two_gongs'
+        ? poseMap.hush
+        : poseMap.lantern;
+    return poseMap.reception;
+  }
+  if (sceneKey === 'mini_refectory') return poseMap.seatedDining;
+  if (sceneKey === 'mini_dawn' && shotKey === 'dawn_gate' && poseMap.capRemoved)
+    return poseMap.capRemoved;
+  if (sceneKey === 'mini_listen' && flags.skin_seen && poseMap.revealed) return poseMap.revealed;
+  if (sceneKey === 'mini_dawn' && poseMap.tired) return poseMap.tired;
+  return poseMap.standing;
 }
 
 function CalmFigure({ id, name }: { id: string; name: string }) {

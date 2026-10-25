@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 import type { StageProp } from '@/scene/story_stage/types';
 import { PropArt } from './art';
+import type { GameState } from '@/shared/types/game';
+import { storyAssets } from '@/shared/lib/story_assets';
 import styles from './style.module.css';
 
 export function SceneProp({
@@ -8,14 +10,21 @@ export function SceneProp({
   enabled,
   lit,
   onAction,
+  state,
 }: {
   prop: StageProp;
   enabled: boolean;
   lit: boolean;
   onAction: (command: string) => Promise<void>;
+  state?: GameState;
 }) {
+  const asset = state ? getPropAsset(prop.id, state, lit) : undefined;
   const graphic =
-    prop.draw === false ? null : <PropArt kind={prop.kind} name={prop.name} lit={lit} />;
+    prop.draw === false ? null : asset ? (
+      <img className={styles.assetProp} src={asset} alt="" />
+    ) : (
+      <PropArt kind={prop.kind} name={prop.name} lit={lit} />
+    );
   const style = {
     left: `${prop.x}%`,
     top: `${prop.y}%`,
@@ -43,4 +52,64 @@ export function SceneProp({
       <span className={styles.name}>{prop.name}</span>
     </button>
   );
+}
+
+function getPropAsset(id: string, state: GameState, lit: boolean): string | undefined {
+  const props = storyAssets.props;
+  if (id === 'player_bowl')
+    return state.shotKey === 'refectory_porridge'
+      ? props.porridgeInspect
+      : state.flags.meal_player_ate
+        ? props.porridgeEmpty
+        : props.porridgeFull;
+  if (id === 'linlan_bowl')
+    return state.shotKey === 'refectory_porridge'
+      ? props.porridgeInspect
+      : state.flags.meal_linlan_ate
+        ? props.porridgeEmpty
+        : props.porridgeFull;
+  if (id === 'zhouyan_bowl')
+    return state.shotKey === 'refectory_porridge'
+      ? props.porridgeInspect
+      : state.flags.meal_zhouyan_ate
+        ? props.porridgeEmpty
+        : props.porridgeFull;
+  if (id === 'xuzhi_bowl')
+    return state.shotKey === 'refectory_porridge'
+      ? props.porridgeInspect
+      : state.flags.meal_xuzhi_ate
+        ? props.porridgeEmpty
+        : props.porridgeFull;
+  if (id === 'spoon') return props.porridgeSpoon;
+  if (id === 'candle') {
+    if (state.sceneKey === 'mini_wake_three_gongs') return props.candleExtinguished;
+    if (state.sceneKey === 'mini_dawn_trap') return props.candleShort;
+    return lit ? props.candleBurning : props.candleUnlit;
+  }
+  if (id === 'matches') return '/art/story/props/matches/inventory.webp';
+  if (id === 'history') return props.historyClosed;
+  if (id === 'scripture') return props.scriptureClosed;
+  if (id === 'page') return props.tornPage;
+  if (id === 'lamp') return props.oilLampUnlit;
+  if (id === 'torch') return '/art/story/props/flashlight/inventory.webp';
+  if (id === 'latch') {
+    if (state.sceneKey === 'mini_death') return props.doorBulging;
+    if (state.shotKey === 'double_exit') return props.doorOpen;
+  }
+  if (id === 'vase') return state.flags.vase_broken ? props.vaseBroken : props.vaseIntact;
+  if (id === 'bird') return props.birdcage;
+  if (id === 'cat') return props.catDish;
+  if (id === 'bell') return props.bell;
+  if (id === 'cups') {
+    if (state.flags.cup_failed) return props.jiaobeiCurved;
+    if (state.flags.cup_jiao_rescue) return props.jiaobeiFlat;
+    return props.jiaobeiSealed;
+  }
+  if (id === 'bags') return props.travelBags;
+  if (id === 'camera') return props.cameraCap;
+  if (id === 'bread') return props.flatbread;
+  if (id === 'water') return props.hotWater;
+  if (id === 'bamboo') return props.bambooShoots;
+  if (id === 'ribbon') return props.blueTieNotice;
+  return undefined;
 }

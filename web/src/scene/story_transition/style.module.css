@@ -44,7 +44,6 @@
   box-shadow: 0 0 1.5cqw #f6d57b;
   animation: lantern-sway 0.9s ease-in-out infinite alternate;
 }
-
 .cat {
   position: absolute;
   right: 9%;
@@ -54,7 +53,6 @@
   text-shadow: 0 0 0.7cqw #f0bd6366;
   animation: cat-watch 1.1s ease-in-out infinite alternate;
 }
-
 .sleepScene {
   position: absolute;
   inset: 14% 12% 24%;
@@ -68,7 +66,6 @@
     linear-gradient(180deg, transparent, #07121755);
   animation: sleep-breathe 1.8s ease-in-out both;
 }
-
 .candleFlame {
   position: absolute;
   top: 29%;
@@ -83,7 +80,6 @@
   transform: rotate(12deg);
   animation: candle-flicker 0.42s ease-in-out infinite alternate;
 }
-
 .sleepBook {
   z-index: 1;
   min-width: 10cqw;
@@ -95,7 +91,6 @@
   font-size: clamp(9px, 0.7cqw, 13px);
   transform: rotate(-2deg);
 }
-
 .gongRing {
   position: absolute;
   top: 9%;
@@ -107,7 +102,6 @@
   transform: translateX(-50%);
   animation: gong-ripple 1.8s ease-out both;
 }
-
 .path {
   position: absolute;
   right: -8%;
@@ -119,7 +113,6 @@
   background: repeating-linear-gradient(90deg, #84734d22 0 6%, #dec18012 6.2% 12%);
   border-top: 1px solid #d6bd7a32;
 }
-
 .walkers {
   position: absolute;
   right: 15%;
@@ -130,7 +123,6 @@
   justify-content: space-between;
   animation: walk 0.95s cubic-bezier(0.2, 0.7, 0.25, 1) both;
 }
-
 .walker {
   display: grid;
   width: clamp(18px, 2.7cqw, 42px);
@@ -145,34 +137,27 @@
   font-size: clamp(10px, 1cqw, 16px);
   animation: step 0.28s ease-in-out infinite alternate;
 }
-
 .walker:nth-child(2) {
   animation-delay: 0.06s;
 }
-
 .walker:nth-child(3) {
   animation-delay: 0.12s;
 }
-
 .walker:nth-child(4) {
   animation-delay: 0.18s;
 }
-
 .walker:nth-child(5) {
   animation-delay: 0.24s;
 }
-
 .keeper {
   height: clamp(34px, 6.2cqw, 88px);
   color: #f7dc93;
   background: linear-gradient(180deg, #5c5037, #141817);
 }
-
 .player {
   border-style: dashed;
   color: #fff0c5;
 }
-
 .copy {
   position: absolute;
   right: 5%;
@@ -185,25 +170,21 @@
   background: linear-gradient(90deg, #101b1de6, #101b1d99 70%, transparent);
   text-shadow: 0 1px 3px #000;
 }
-
 .copy strong {
   color: #ffe7a6;
   font-family: 'Songti SC', 'STSong', serif;
   font-size: clamp(13px, 1.1cqw, 20px);
   font-weight: 500;
 }
-
 .copy span,
 .copy small {
   color: #d4c69e;
   font-size: clamp(9px, 0.7cqw, 13px);
 }
-
 .copy small {
   color: #a4b7a3;
   letter-spacing: 0.08em;
 }
-
 @keyframes reveal {
   from {
     opacity: 0;
@@ -214,7 +195,6 @@
     transform: scale(1);
   }
 }
-
 @keyframes sky-drift {
   from {
     transform: translateX(4%);
@@ -223,7 +203,6 @@
     transform: translateX(-2%);
   }
 }
-
 @keyframes walk {
   from {
     transform: translateX(-8%) scale(0.94);
@@ -234,25 +213,21 @@
     opacity: 1;
   }
 }
-
 @keyframes step {
   to {
     transform: translateY(-0.35cqw);
   }
 }
-
 @keyframes lantern-sway {
   to {
     transform: rotate(3deg);
   }
 }
-
 @keyframes cat-watch {
   to {
     transform: translateX(-0.7cqw);
   }
 }
-
 @keyframes sleep-breathe {
   from {
     opacity: 0;
@@ -263,14 +238,12 @@
     transform: scale(1);
   }
 }
-
 @keyframes candle-flicker {
   to {
     opacity: 0.68;
     transform: rotate(-8deg) scale(0.88);
   }
 }
-
 @keyframes gong-ripple {
   from {
     opacity: 0.65;
@@ -281,7 +254,6 @@
     transform: translateX(-50%) scale(2.4);
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   .transition,
   .sky,

@@ -22,7 +22,10 @@ export function StoryStage({
   const enabled =
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
   const speaker = state.dialogue.speaker;
-  const actors = (state.actors || []).filter((actor) => actor.visible && actor.id !== 'player');
+  const actors = (state.actors || []).filter(
+    (actor) =>
+      actor.visible && actor.id !== 'player' && !(actor.id === 'victim' && state.flags.skin_seen),
+  );
   const unseenSpeaker = state.actors?.find(
     (actor) =>
       !actor.visible &&
@@ -47,6 +50,8 @@ export function StoryStage({
             placement={layout.actors[actor.id] || { x: 35 + index * 13, y: 74, height: 32 }}
             speaking={speaker.startsWith(actor.name) && !speaker.includes('心声')}
             pose={state.shotKey}
+            sceneKey={state.sceneKey}
+            flags={state.flags}
           />
         ))}
         {state.sceneKey === 'mini_register' && (
@@ -58,13 +63,27 @@ export function StoryStage({
               aria-hidden="true"
             />
             <img
-              className={styles.registrationLayer}
+              className={`${styles.registrationItem} ${styles.registrationLedger}`}
               src={
                 state.shotKey === 'register_rooms'
-                  ? storyAssets.scenes.registrationPropsClosedStack
-                  : state.shotKey === 'register_luggage'
-                    ? storyAssets.scenes.registrationPropsOpenSingle
-                    : storyAssets.scenes.registrationPropsOpenStack
+                  ? storyAssets.scenes.registrationLedgerClosed
+                  : storyAssets.scenes.registrationLedgerOpen
+              }
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className={`${styles.registrationItem} ${styles.registrationKey}`}
+              src={storyAssets.scenes.registrationCopperKey}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className={`${styles.registrationItem} ${styles.registrationPermit}`}
+              src={
+                state.shotKey === 'register_luggage'
+                  ? storyAssets.scenes.registrationPermitSingle
+                  : storyAssets.scenes.registrationPermitStack
               }
               alt=""
               aria-hidden="true"
@@ -86,6 +105,30 @@ export function StoryStage({
             ) : null}
           </>
         )}
+        {state.sceneKey === 'mini_refectory' && (
+          <img
+            className={styles.diningForeground}
+            src={storyAssets.scenes.diningTable}
+            alt=""
+            aria-hidden="true"
+          />
+        )}
+        {state.sceneKey === 'mini_oracle' && (
+          <img
+            className={styles.shrineForeground}
+            src={storyAssets.scenes.shrineTable}
+            alt=""
+            aria-hidden="true"
+          />
+        )}
+        {state.sceneKey === 'mini_listen' && state.flags.skin_seen && (
+          <img
+            className={styles.victimPartial}
+            src={storyAssets.scenes.victimPartial}
+            alt="房内床沿垂下一只手"
+            aria-hidden="true"
+          />
+        )}
         {layout.props.map((prop) => (
           <SceneProp
             key={prop.id}
@@ -96,6 +139,7 @@ export function StoryStage({
               (prop.id === 'candle' && state.sceneKey === 'mini_oracle'),
             )}
             onAction={onAction}
+            state={state}
           />
         ))}
       </div>
