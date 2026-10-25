@@ -9,6 +9,7 @@ export type SceneLayer = {
   zIndex: number;
   clipRect?: Rect;
   actorId?: string;
+  rotation?: number;
 };
 export type SceneLabel = {
   id: string;
@@ -38,6 +39,15 @@ export type AuthoredLayout = {
     height: number;
     sourceFrame?: Rect;
   }>;
+  sprites: Record<
+    string,
+    {
+      path: string;
+      width: number;
+      height: number;
+      sourceFrame?: Rect;
+    }
+  >;
   layers: {
     id: string;
     sprite: string;
