@@ -75,6 +75,54 @@ func TestJudgeOracleMapsTypeSafeRubricScoreToPercentage(t *testing.T) {
 	}
 }
 
+func TestJudgeRoomActionSendsVisibleContextAndParsesChoice(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/systemone" || r.Method != http.MethodPost {
+			t.Fatalf("unexpected request: %s %s", r.Method, r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal(err)
+		}
+		state := body["state"].(string)
+		for _, want := range []string{"门房", "room_table", "红烛已点燃：true", "桌上那本书"} {
+			if !strings.Contains(state, want) {
+				t.Fatalf("room context missing %q: %s", want, state)
+			}
+		}
+		questions := body["questions"].(map[string]any)
+		if questions["room_action"] == nil {
+			t.Fatalf("room action question missing: %+v", questions)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"answers":{"room_action":{"type":"choice","choice":"scripture","confidence":0.93}}}`))
+	}))
+	defer server.Close()
+	client := New(Config{APIKey: "test-key", APIBase: server.URL, RequestLimit: time.Second})
+	result, err := client.JudgeRoomAction(context.Background(), game.RoomActionRequest{
+		PlayerText: "我想看看桌上那本书",
+		Scene:      "门房",
+		SceneText:  "矮桌上放着书册",
+		Shot:       "room_table",
+		CandleLit:  true,
+	})
+	if err != nil || result.Action != game.RoomActionScripture || result.Confidence != .93 {
+		t.Fatalf("JudgeRoomAction() = %+v, %v", result, err)
+	}
+}
+
+func TestJudgeRoomActionRejectsUnknownChoice(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"answers":{"room_action":{"type":"choice","choice":"unknown","confidence":0.94}}}`))
+	}))
+	defer server.Close()
+	client := New(Config{APIKey: "test-key", APIBase: server.URL})
+	if _, err := client.JudgeRoomAction(context.Background(), game.RoomActionRequest{PlayerText: "这是什么"}); err == nil {
+		t.Fatal("unknown room choice was accepted")
+	}
+}
+
 func TestJudgeRejectsMissingKeyAndInvalidResponse(t *testing.T) {
 	client := New(Config{})
 	if _, err := client.JudgeOracle(context.Background(), game.OracleJudgeRequest{PlayerText: "回答"}); err == nil {
