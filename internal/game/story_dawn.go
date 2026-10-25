@@ -37,7 +37,7 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 
 func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
 	if miniHasAny(text, "看看照片") {
-		return "inspect", miniDialogue(state, "林岚", "相机盖还在。昨晚我是不是拍到一只猫？照片全黑，只剩一圈红光……回车上我再看。"), true
+		return "inspect", miniDialogue(state, "林岚", "相机还在，可惜拍的照片全是黑的，只剩一圈红光……等等回到车上我再看看。"), true
 	}
 	if miniHasAny(text, "看看门轴") {
 		return "inspect", miniDialogue(state, "周砚", "这道痕昨晚没有。先不碰，回去我把平面图画出来，再对照门的方向。"), true

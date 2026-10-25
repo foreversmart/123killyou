@@ -110,6 +110,21 @@ func TestThreeKnocksCompanionsCallZhaoXiWithTheirOwnWarning(t *testing.T) {
 	}
 }
 
+func TestListenCompanionUsesTornSoundWarning(t *testing.T) {
+	e, s := storyAtListen(t, false)
+	if !s.Flags["companion_present"] {
+		t.Fatal("未进入同行偷听路线")
+	}
+	want := "你听，好像有什么东西被撕开的声音。"
+	if s.Dialogue.Text != want || s.Dialogue.Speaker != miniCompanionName(&s) {
+		t.Fatalf("同行偷听台词未更新: speaker=%q text=%q", s.Dialogue.Speaker, s.Dialogue.Text)
+	}
+	e.Apply(&s, "继续听")
+	if s.Dialogue.Text == want {
+		t.Fatal("继续偷听后仍停留在同行提示")
+	}
+}
+
 func TestStoryboardCompanionsFollowTheirIndividualMeals(t *testing.T) {
 	for _, want := range []string{"linlan", "zhouyan", "xuzhi"} {
 		t.Run(want, func(t *testing.T) {
