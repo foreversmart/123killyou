@@ -79,7 +79,21 @@ function refectoryScene(state: GameState): SceneComposition {
     player: mealState(state, 'player'),
     huiPu: true,
   };
-  return composeLayout(diningLayout as never, 'dining_hall', selection);
+  const composition = composeLayout(diningLayout as never, 'dining_hall', selection);
+  const keeper: SceneLayer = {
+    id: 'actor_lu_chen_refectory',
+    src: '/art/story/characters/lu_chen/standing_lantern.webp',
+    imageWidth: 1024,
+    imageHeight: 1536,
+    frame: { x: 0, y: 0, width: 1024, height: 1536 },
+    rect: { x: 1300, y: 285, width: 320, height: 480 },
+    zIndex: 12,
+    actorId: 'luchen',
+  };
+  return {
+    ...composition,
+    layers: [...composition.layers, keeper].sort((a, b) => a.zIndex - b.zIndex),
+  };
 }
 
 function mealState(state: GameState, person: string): string {

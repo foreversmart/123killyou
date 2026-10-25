@@ -4,6 +4,7 @@ import { travelParty } from '../src/scene/story_transition/party.ts';
 import { canShowScenePerson } from '../src/scene/scene_person/visibility.ts';
 import { actorComposition, propComposition } from '../src/scene/story_stage/compositions.ts';
 import { dayLayouts } from '../src/scene/story_stage/day_layouts.ts';
+import { storyAssets } from '../src/shared/lib/story_assets.ts';
 
 test('同行转场保持第一人称，返程让陆沉留在寺里，回房时停下等候', () => {
   for (const sceneKey of [
@@ -61,4 +62,10 @@ test('登记和回廊的同伴按远近散开，晚斋的粥和整套素食真�
     assert.ok(prop.command, id);
   }
   assert.match(props.find((prop) => prop.id === 'bread').name, /馒头/);
+});
+
+test('斋堂把陆沉放在饭桌边缘，并保留午后大殿过渡素材', () => {
+  assert.equal(dayLayouts.mini_refectory.actors.luchen.x, 89);
+  assert.equal(dayLayouts.mini_refectory.actors.luchen.height, 36);
+  assert.match(storyAssets.scenes.mainHallAfternoon, /main_hall\/hall_afternoon\.webp$/);
 });

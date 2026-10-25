@@ -12,6 +12,7 @@ type TravelBeat = {
   landmark: string;
   kind: 'walk' | 'sleep';
   backdrop: string;
+  interlude?: string;
 };
 
 const travelBeats: Record<string, TravelBeat> = {
@@ -25,11 +26,12 @@ const travelBeats: Record<string, TravelBeat> = {
   },
   mini_refectory: {
     id: 'register_walk_refectory',
-    title: '穿过长廊去斋堂',
-    detail: '檐灯一盏盏亮起，脚步声沿着旧拖痕传向饭堂。',
-    landmark: '东院回廊 · 封闭钟楼门 · 夕阳格窗',
+    title: '经过大殿，走向斋堂',
+    detail: '队伍先经过红竹寺大殿，佛像与烛烟在眼前停留一拍，随后沿回廊慢慢走向斋堂。',
+    landmark: '红竹寺大殿 · 东院回廊 · 斋堂灯影',
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardAfternoon,
+    interlude: storyAssets.scenes.mainHallAfternoon,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
@@ -83,7 +85,12 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
   const beat = active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
   if (!beat || state.flags.debug_scene_skipped) return null;
   return (
-    <div className={styles.transition} data-transition={beat.id} role="status" aria-live="polite">
+    <div
+      className={`${styles.transition} ${beat.interlude ? styles['transition--interlude'] : ''}`}
+      data-transition={beat.id}
+      role="status"
+      aria-live="polite"
+    >
       <img
         src={beat.backdrop}
         alt=""
@@ -100,6 +107,9 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
           filter: 'saturate(0.7) brightness(0.68)',
         }}
       />
+      {beat.interlude && (
+        <img className={styles.interludeBackdrop} src={beat.interlude} alt="" aria-hidden="true" />
+      )}
       <div className={styles.sky} aria-hidden="true" />
       {beat.kind === 'sleep' ? (
         <div className={styles.sleepScene} aria-hidden="true">

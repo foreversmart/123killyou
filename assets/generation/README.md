@@ -1,6 +1,6 @@
 # 《红烛无声》素材目录
 
-日期：2026-10-25。当前归档 **117 张现用图片**，由内置 image_gen 生成。剧情依据为 [mini_script.md](../../story/mini_script.md)，美术依据为[风格参考](../references/style_reference/README.md)。当前素材尚未接入游戏。
+日期：2026-10-25。当前归档 **118 张现用图片**，包含内置 image_gen 生成素材与用户提供的大殿午后参考图。剧情依据为 [mini_script.md](../../story/mini_script.md)，美术依据为[风格参考](../references/style_reference/README.md)。运行时接入文件位于 `web/public/art/story/`。
 
 [素材用途](asset_usage.md)说明已有素材的使用边界；[完整流程制作清单](production_manifest.json)记录各幕所需图像、参考、提示词与当前完成状态。清单中的 verified 表示原图已生成并检查。首夜十二幕的图像状态已补齐，人物等比、叠加和遮挡配置已核对。
 
@@ -58,6 +58,7 @@
 | 山门·晨光                 | [gate_dawn.png](../scenes/temple_gate/gate_dawn.png)                            | 1672 × 941        | 山门·晨光                                                                                  |
 | 大巴·午后抵达             | [bus_arrival.png](../scenes/bus/bus_arrival.png)                                | 1672 × 941        | 大巴·午后抵达                                                                              |
 | 大雄宝殿·夜间入口         | [hall_night.png](../scenes/main_hall/hall_night.png)                            | 1672 × 941        | 大雄宝殿·夜间入口                                                                          |
+| 大雄宝殿·午后经过           | [hall_afternoon.png](../scenes/main_hall/hall_afternoon.png)                    | 2944 × 1270       | 去斋堂途中经过红竹寺大殿的过渡画面；运行时按 16:9 容器裁切显示                         |
 | 偏房·门隙观察             | [room_night.png](../scenes/guest_room/room_night.png)                           | 1672 × 941        | 偏房·门隙观察                                                                              |
 | 大巴·晨间返程             | [bus_departure.png](../scenes/bus/bus_departure.png)                            | 1672 × 941        | 大巴·晨间返程                                                                              |
 | 门眼·空回廊               | [peephole_empty.png](../scenes/player_room/peephole_empty.png)                  | 1672 × 941        | 门眼·空回廊                                                                                |

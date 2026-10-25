@@ -52,6 +52,7 @@ export const shotTitles: Record<string, string> = {
   refectory_bread: '饭桌边 · 热馒头与本地素菜',
   refectory_porridge: '勺底的肉纤维',
   refectory_lamp: '斋堂灯下 · 碗签与木勺',
+  refectory_eating: '斋堂 · 众人开始用膳',
   refectory_curtain: '长明灯后的半张脸',
   corridor_candles: '陆沉逐人发烛',
   corridor_warning: '嘘，小声',

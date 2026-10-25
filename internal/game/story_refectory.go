@@ -15,6 +15,45 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		return "story", speak, true
 	}
 	if miniHasAny(text, "自动结束晚膳") {
+		// Let the table have a visible eating beat when the player simply
+		// listens. Explicit choices are preserved; only people still waiting
+		// for a decision are settled by the scene's outcome.
+		if !state.Flags["refectory_eating_shown"] {
+			choiceMade := false
+			anyAte := false
+			for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
+				for _, choice := range []string{"ate", "refused", "deferred"} {
+					if state.Flags["meal_"+person+"_"+choice] {
+						choiceMade = true
+					}
+				}
+				if state.Flags["meal_"+person+"_ate"] {
+					anyAte = true
+				}
+			}
+			if !choiceMade {
+				for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
+					miniChooseMeal(state, person, "refused")
+				}
+				miniSetFlag(state, "meal_default_refused")
+				miniShot(state, "refectory_eating")
+				miniSetFlag(state, "refectory_eating_shown")
+				state.DialogueNext = "自动离开斋堂"
+				return "story", miniDialogue(state, "许栀", "大家都决定不吃肉粥，那就先吃馒头和素菜。碗勺声先响起来，等想清楚了再说。"), true
+			}
+			if anyAte {
+				miniShot(state, "refectory_eating")
+				miniSetFlag(state, "refectory_eating_shown")
+				state.DialogueNext = "自动离开斋堂"
+				return "story", miniDialogue(state, "许栀", "有人想吃就慢慢吃，不吃肉粥的就夹些馒头和素菜。大家都照自己的选择来。"), true
+			}
+			miniShot(state, "refectory_table")
+			miniSetFlag(state, "refectory_eating_shown")
+			state.DialogueNext = "自动离开斋堂"
+			return "story", miniDialogue(state, "许栀", "那就都不吃肉粥了，先吃馒头和素菜。等问清楚了，再决定要不要动那几碗。"), true
+		}
+	}
+	if miniHasAny(text, "自动离开斋堂") {
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			if !state.Flags["meal_"+person+"_ate"] && !state.Flags["meal_"+person+"_refused"] && !state.Flags["meal_"+person+"_deferred"] {
 				miniChooseMeal(state, person, "deferred")

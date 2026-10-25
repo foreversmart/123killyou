@@ -30,6 +30,7 @@ var miniShotDescriptions = map[string]string{
 	"refectory_lamp":       "陆沉放下手里的灯，解释肉食只为照顾外来客人的口味，僧人自己不吃；他把馒头和素菜往桌边让了让。",
 	"refectory_table":      "粥碗旁的馒头还冒着热气，咸菜、笋干和香菇青菜摆在桌中央。林岚放下相机盖，许栀把蒸笼推近。",
 	"refectory_bread":      "许栀把盛馒头的蒸笼挪到众人手边，示意先夹咸菜和笋干；周砚的勺子仍停在碗沿。",
+	"refectory_eating":     "桌边的手一个接一个动起来。有人端起粥碗，有人夹起馒头和素菜，碗勺声在夕阳里慢慢连起来。",
 	"refectory_curtain":    "长明灯把慧普的半张脸投在帘后。他没有动勺，温和的声音却压过了桌边的窃语。",
 	"corridor_candles":     "天色转成靛蓝。陆沉逐人递红烛，最后一支烛柄落进主角掌心，烛面划痕在檐灯下像细小指甲印。",
 	"corridor_warning":     "陆沉把食指竖在唇前。四扇偏房门下，檐灯同时轻轻晃了一下。",
@@ -118,6 +119,22 @@ func syncMiniStaging(state *State) {
 
 	for index := range state.Actors {
 		actor := &state.Actors[index]
+		if state.SceneKey == "mini_refectory" && state.ShotKey == "refectory_eating" {
+			switch actor.ID {
+			case "player":
+				if state.Flags["meal_player_ate"] {
+					actor.Status = "端碗喝粥"
+				} else {
+					actor.Status = "夹馒头和素菜"
+				}
+			case "linlan", "zhouyan", "xuzhi":
+				if state.Flags["meal_"+actor.ID+"_ate"] {
+					actor.Status = "端碗慢慢喝"
+				} else {
+					actor.Status = "夹馒头和素菜"
+				}
+			}
+		}
 		if state.SceneKey == "mini_dawn" {
 			positions := map[string]string{
 				"player": "门房门前 / 东院回廊", "linlan": "听房门口", "zhouyan": "灯房门口",
