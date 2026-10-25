@@ -45,7 +45,7 @@ export function StartChoices({
 
   if (phase === 'reel') {
     return (
-      <aside className={`${styles.choices} ${styles.reel}`} aria-label="片头播放">
+      <div className={styles.reel} role="region" aria-label="片头播放">
         <video
           ref={reel}
           className={styles.video}
@@ -57,29 +57,33 @@ export function StartChoices({
           onEnded={() => setPhase('journey')}
           aria-label="灯影寺片头"
         />
-        <p>片头播放中 · 红烛、回廊与未说完的声音</p>
-        <button className={styles.resume} onClick={() => setPhase('journey')}>
-          跳过片头，驶向灯影寺
-        </button>
-      </aside>
+        <div className={styles.reelOverlay}>
+          <p>片头播放中 · 红烛、回廊与未说完的声音</p>
+          <button className={styles.resume} onClick={() => setPhase('journey')}>
+            跳过片头，驶向灯影寺
+          </button>
+        </div>
+      </div>
     );
   }
 
   if (phase === 'journey') {
     return (
-      <aside className={`${styles.choices} ${styles.journey}`} aria-label="大巴驶向灯影寺">
+      <div className={styles.journey} role="region" aria-label="大巴驶向灯影寺">
         <div className={styles.journeyScene} aria-hidden="true">
           <img className={styles.journeyRoad} src={storyAssets.scenes.busDeparture} alt="" />
           <img className={styles.journeyGate} src={storyAssets.scenes.busArrival} alt="" />
           <span className={styles.journeyGlow} />
         </div>
-        <span>片头之后 · 山间小路</span>
-        <h2>大巴缓缓驶向灯影寺</h2>
-        <p>车窗外的山色一层层退开，山门在树影尽头出现。</p>
-        <button disabled={busy} onClick={() => void finishJourney()}>
-          {busy ? '正在抵达…' : '进入山门'}
-        </button>
-      </aside>
+        <div className={styles.journeyOverlay}>
+          <span>片头之后 · 山间小路</span>
+          <h2>大巴缓缓驶向灯影寺</h2>
+          <p>车窗外的山色一层层退开，山门在树影尽头出现。</p>
+          <button disabled={busy} onClick={() => void finishJourney()}>
+            {busy ? '正在抵达…' : '进入山门'}
+          </button>
+        </div>
+      </div>
     );
   }
 
