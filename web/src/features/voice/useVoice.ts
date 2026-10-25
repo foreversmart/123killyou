@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { VoiceStatus, VoiceAnswer } from '@/features/voice/types';
 import { useSpeechOutput } from '@/features/voice/useSpeechOutput';
-import { soundSettingFor } from '@/features/voice/soundSetting';
 import { createVoiceTurns } from '@/features/voice/voiceTurns';
 import { attachAudioInput } from '@/features/voice/audioInput';
 import { createPushToTalk } from '@/features/voice/pushToTalk';
@@ -21,7 +20,6 @@ export function useVoice(
   const [microphoneProblem, setMicrophoneProblem] = useState('');
   const [playbackOn, setPlaybackOn] = useState(false);
   const [microphoneOn, setMicrophoneOn] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
   const [caption, setCaption] = useState<SpeechCaption | null>(null);
   const handler = useRef(onText);
   handler.current = onText;
@@ -35,8 +33,6 @@ export function useVoice(
   const audio = useRef<AudioContext | null>(null);
   const analyser = useRef<AnalyserNode | null>(null);
   const ambient = useRef<GainNode | null>(null);
-  const sound = useRef(soundOn);
-  sound.current = soundOn;
   const initializing = useRef(false);
   const mounted = useRef(true);
 
@@ -48,10 +44,8 @@ export function useVoice(
     speak,
     stream: receiveSpeech,
     stop,
-  } = useSpeechOutput(outputEnabled, wanted, sound, setStatus, audio, report);
+  } = useSpeechOutput(outputEnabled, wanted, setStatus, audio, report);
   const enablePlayback = useCallback(async () => {
-    sound.current = true;
-    setSoundOn(true);
     setProblem('');
     try {
       // Resume synchronously within the click gesture, before any microphone permission request.
@@ -63,7 +57,7 @@ export function useVoice(
     } catch {
       outputEnabled.current = false;
       setPlaybackOn(false);
-      report('浏览器未能启动音频播放，请检查声音设置后重试。');
+      report('浏览器未能启动音频播放，请检查浏览器播放权限后重试。');
       return false;
     }
   }, [report]);
@@ -88,15 +82,10 @@ export function useVoice(
             );
           receiveSpeech(event);
         },
-        start(text) {
+        start() {
           setProblem('');
           setStatus('processing');
           stop();
-          const setting = soundSettingFor(text);
-          if (setting !== undefined) {
-            sound.current = setting;
-            setSoundOn(setting);
-          }
         },
         answer(answer) {
           setStatus(wanted.current ? 'listening' : 'idle');
@@ -149,7 +138,7 @@ export function useVoice(
       media.current = stream;
       if (!(await playback) || !audio.current) throw new Error('Audio playback unavailable');
       if (!mounted.current) return false;
-      const input = attachAudioInput(audio.current, stream, ambient.current, sound.current);
+      const input = attachAudioInput(audio.current, stream, ambient.current);
       analyser.current = input.analyser;
       ambient.current = input.ambient;
       microphone.current = await prepareMicrophone(audio.current, stream);
@@ -203,17 +192,6 @@ export function useVoice(
   );
 
   useEffect(() => {
-    if (ambient.current && audio.current)
-      ambient.current.gain.setTargetAtTime(soundOn ? 0.018 : 0, audio.current.currentTime, 0.3);
-    if (!soundOn) {
-      stop();
-      setStatus((current) =>
-        current === 'speaking' ? (wanted.current ? 'listening' : 'idle') : current,
-      );
-    }
-  }, [soundOn, stop]);
-
-  useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
@@ -250,7 +228,5 @@ export function useVoice(
     enablePlayback,
     submit,
     level,
-    soundOn,
-    setSoundOn,
   };
 }

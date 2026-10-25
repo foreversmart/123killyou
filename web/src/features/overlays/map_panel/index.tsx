@@ -7,7 +7,7 @@ export function MapPanel({ room }: { room: string }) {
   return (
     <PaperPanel className={styles['map-sheet']}>
       <div className={styles['map-heading']}>
-        <span>第一夜 · 已知区域</span>
+        <span>已知区域</span>
         <Icon kind="seal" />
       </div>
       <h2>院落舆图</h2>

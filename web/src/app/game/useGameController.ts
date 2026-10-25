@@ -88,7 +88,7 @@ export function useGameController() {
     }
   }, [enter, opening, voiceSession.start, voiceSession.submit, voiceSession.enablePlayback]);
   const voice = { ...voiceSession, start: startVoice };
-  const soundBusy = useStorySound(state, voice.soundOn, voice.status);
+  const soundBusy = useStorySound(state, voice.status);
   useStoryPlayback(incomingState, voice, connected && roomPhase === 'idle' && !soundBusy);
   const begin = useCallback(async () => {
     try {

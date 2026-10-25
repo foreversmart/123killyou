@@ -21,7 +21,6 @@ async function fixture() {
     status: 'idle',
     playbackOn: true,
     microphoneOn: false,
-    soundOn: true,
     problem: '麦克风未获授权，请检查浏览器权限。',
     microphoneProblem: '麦克风未获授权，请检查浏览器权限。',
     playbackProblem: '',
@@ -37,7 +36,7 @@ async function fixture() {
   };
 }
 
-test('开启或关闭声音都能自动接续安全对白；同一分镜只提交一次', async () => {
+test('播放待机时自动接续安全对白；同一分镜只提交一次', async () => {
   const f = await fixture();
   f.render();
   f.runtime.flushTimers();
@@ -51,14 +50,12 @@ test('开启或关闭声音都能自动接续安全对白；同一分镜只提�
   f.runtime.dispose();
 });
 
-test('未开启播放或关闭声音时，安全的 NPC 串联仍会等待后自动提交', async () => {
-  for (const override of [{ playbackOn: false }, { soundOn: false }]) {
-    const f = await fixture();
-    f.render(f.state, { ...f.voice, ...override });
-    f.runtime.flushTimers();
-    assert.deepEqual(f.submitted, ['继续抵达对白'], JSON.stringify(override));
-    f.runtime.dispose();
-  }
+test('未开启播放时，安全的 NPC 串联仍会等待后自动提交', async () => {
+  const f = await fixture();
+  f.render(f.state, { ...f.voice, playbackOn: false });
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, ['继续抵达对白']);
+  f.runtime.dispose();
 });
 
 test('说话、录音、暂停、道具阅读、死亡或播放错误期间不自动触发下一动作', async () => {

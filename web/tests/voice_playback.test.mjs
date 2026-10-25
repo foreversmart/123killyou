@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createPCMPlayer } from '../src/features/voice/pcmPlayer.ts';
 import { createVoiceTurns } from '../src/features/voice/voiceTurns.ts';
-import { soundSettingFor } from '../src/features/voice/soundSetting.ts';
 import { audioFixture, hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
 
 const pcm = Buffer.alloc(1920 * 2).toString('base64');
@@ -27,7 +26,6 @@ async function fixture() {
     useSpeechOutput,
     resumeAudioContext,
     createVoiceTurns,
-    soundSettingFor,
     window: { isSecureContext: true },
     document: {},
     navigator: {
@@ -115,7 +113,6 @@ test('播放完成根据实际麦克风状态待机，打断后的旧音频不�
     useSpeechOutput,
     { current: true },
     microphone,
-    { current: true },
     (status) => statuses.push(status),
     { current: context },
     (message) => assert.fail(message),
@@ -148,7 +145,6 @@ test('场景反馈不要求语音流，也不播放环境描述', async () => {
     useSpeechOutput,
     { current: true },
     { current: false },
-    { current: true },
     () => assert.fail('Scene observation must not enter speech playback'),
     { current: new audio.AudioContext() },
     (message) => assert.fail(message),
