@@ -34,6 +34,10 @@
 .closeup > img {
   padding: 0.6cqw;
 }
+.closeup[data-painted='true'] > img {
+  padding: 0;
+  object-fit: cover;
+}
 .closeup > .bird {
   position: absolute;
   width: 30%;

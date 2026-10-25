@@ -245,7 +245,9 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": ["08"],
+        "storyBeats": [
+          "08"
+        ],
         "purpose": "回廊·灯房半掩"
       },
       "sourceFrame": {
@@ -269,7 +271,9 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": ["08"],
+        "storyBeats": [
+          "08"
+        ],
         "purpose": "回廊·纸房半掩"
       },
       "sourceFrame": {
@@ -277,6 +281,34 @@
         "y": 0,
         "width": 1672,
         "height": 941
+      }
+    },
+    "actor_lu_chen_offering": {
+      "path": "../../characters/lu_chen/offering_candle.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1770415,
+      "sha256": "a71dbe81a7dc430e349d0dd0c25fea6043ba56dc87d98f226e7e713dbf8285cb",
+      "sourceFrame": {
+        "x": 221,
+        "y": 5,
+        "width": 618,
+        "height": 1528
+      }
+    },
+    "actor_lu_chen_reception": {
+      "path": "../../characters/lu_chen/standing_reception.png",
+      "width": 1024,
+      "height": 1536,
+      "hasAlpha": true,
+      "bytes": 1693254,
+      "sha256": "57762bf29688d2682f24bd4e9cb3fedeb03305d5404ff02e8cbd7a56af4f6392",
+      "sourceFrame": {
+        "x": 230,
+        "y": 11,
+        "width": 607,
+        "height": 1516
       }
     }
   },

@@ -1,5 +1,5 @@
 {
-  "runtimeIntegration": "not_integrated",
+  "runtimeIntegration": "integrated",
   "coordinateSpace": {
     "width": 1672,
     "height": 941
@@ -16,13 +16,7 @@
   "bus": {
     "arrival": {
       "path": "assets/scenes/bus/bus_arrival.png",
-      "plaque": {
-        "text": "红烛寺",
-        "x": 1110,
-        "y": 235,
-        "fontSize": 32,
-        "rotation": -0.08
-      }
+      "usage": "片头结束后的车内等待画面；说开始游戏后切到山门外机位，不叠加室外人物、猫或行李。"
     },
     "departure": {
       "path": "assets/scenes/bus/bus_departure.png",
@@ -35,6 +29,39 @@
         "visibleWhen": "ending_old_name_flash"
       }
     }
+  },
+  "arrivalGameplay": {
+    "path": "assets/scenes/temple_gate/gate_afternoon.png",
+    "layout": "assets/scenes/temple_gate/layout.json",
+    "camera": "下车后的正常眼高山门外第一视角；人物、猫、行李和牌匾共用同一坐标系。"
+  },
+  "keeperActions": {
+    "writing": "assets/characters/lu_chen/writing_ledger.png",
+    "offering": "assets/characters/lu_chen/offering_candle.png",
+    "presentation": "登记时俯身书写，发烛时递烛并抱盒；手势必须对应分镜，钥匙、灯和烛盒不同时硬叠。"
+  },
+  "calmCompanions": {
+    "poses": {
+      "lin_lan": "assets/characters/lin_lan/slumped_calm.png",
+      "zhou_yan": "assets/characters/zhou_yan/slumped_calm.png",
+      "xu_zhi": "assets/characters/xu_zhi/slumped_calm.png"
+    },
+    "presentation": "安抚成功后使用低头跪伏的独立透明姿态，置于床脚；不旋转或压扁普通站姿。"
+  },
+  "diningFood": {
+    "steamedBuns": "assets/props/steamed_buns/scene.png",
+    "pickledVegetables": "assets/props/pickled_vegetables/scene.png",
+    "mushroomGreens": "assets/props/mushroom_greens/scene.png",
+    "presentation": "三道素食为独立透明道具；与粥碗、木勺、笋干和热水共享桌面透视与左侧夕光。"
+  },
+  "observationDetails": {
+    "drag_marks": "assets/details/drag_marks.png",
+    "door_latch_wet": "assets/details/door_latch_wet.png",
+    "broken_shadow": "assets/details/broken_shadow.png"
+  },
+  "transitions": {
+    "presentation": "场景切换以环境图、黑场淡出和淡入交接；不使用正面站姿立绘平移或缩放模拟行走。",
+    "state": "转场只负责视觉衔接，进入场景、物品归属和存档继续由后端确认。"
   },
   "documents": {
     "scripture": {
@@ -86,5 +113,5 @@
     "cameraCap": "camera before check-in; bell-side after placing; camera after dawn retrieval",
     "roomTags": "标识按场景展示，不自动四块都成为背包物品"
   },
-  "notCovered": ["完整扩展主线人物与后山/钟楼内部", "声音录制、对白切换、动画与存档接入"]
+  "notCovered": ["完整扩展主线人物与后山/钟楼内部"]
 }

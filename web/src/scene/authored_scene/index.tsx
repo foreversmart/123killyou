@@ -56,6 +56,7 @@ function Layer({ layer }: { layer: SceneLayer }) {
       data-actor-id={layer.actorId || undefined}
       transform={layer.rotation ? `rotate(${layer.rotation} ${centerX} ${centerY})` : undefined}
       clipPath={layer.clipRect ? `url(#clip-${layer.id})` : undefined}
+      style={layer.filter ? { filter: layer.filter } : undefined}
     >
       <svg
         x={rect.x}
