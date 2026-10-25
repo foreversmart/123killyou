@@ -2,7 +2,10 @@ import { useEffect, useRef } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { useVoice } from '@/features/voice/useVoice';
 
-const PLAYBACK_ADVANCE_DELAY_MS = 650;
+// Leave a visible breath after a voiced line. The next shot may need to settle
+// on a prop or sound source before the following character speaks.
+const PLAYBACK_ADVANCE_DELAY_MS = 1400;
+const SCRIPTURE_ADVANCE_DELAY_MS = 1800;
 const SILENT_ADVANCE_DELAY_MS = 4000;
 const AUTOMATIC_SAFE_ACTIONS = new Set([
   '自动登记入住',
@@ -37,7 +40,9 @@ export function useStoryPlayback(
       next.startsWith('自动') ||
       !(voice.soundOn && voice.playbackOn)
         ? SILENT_ADVANCE_DELAY_MS
-        : PLAYBACK_ADVANCE_DELAY_MS;
+        : next === '继续念经'
+          ? SCRIPTURE_ADVANCE_DELAY_MS
+          : PLAYBACK_ADVANCE_DELAY_MS;
     const timer = setTimeout(() => {
       submitted.current = key;
       void voice.submit(next);
