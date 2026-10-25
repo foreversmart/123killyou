@@ -134,7 +134,7 @@ func miniDebugOpening(state *State) string {
 	case "mini_corridor_candle":
 		return miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。")
 	case "mini_room":
-		return miniObserve(state, "门房的门关上，红烛已经点稳，桌上的寺史册和《清心静神经》还没有收起。")
+		return miniObserve(state, "门房的门关上，红烛已经点稳，桌上的寺史册和《大念处经》还没有收起。")
 	case "mini_wake_three_gongs":
 		return miniObserve(state, "黑场中响起三声沉闷的锣。烛芯已经黑了，月光移过门缝，外面传来湿重的呼吸。")
 	case "mini_four_knocks":

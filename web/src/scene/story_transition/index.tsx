@@ -51,7 +51,7 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'room_sleep_blackout',
     title: '红烛压低，三更入梦',
     detail: '更锣从远处传来，寺史册和经文沉入烛影，门外没有人影。',
-    landmark: '烛芯 · 寺史册 · 清心静神经',
+    landmark: '烛芯 · 寺史册 · 大念处经',
     kind: 'sleep',
     backdrop: storyAssets.scenes.playerRoom,
   },
@@ -108,7 +108,7 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
           <img
             className={styles.sleepBook}
             src={storyAssets.props.scriptureClosed}
-            alt="清心静神经"
+            alt="大念处经"
           />
           <i className={styles.gongRing} />
         </div>

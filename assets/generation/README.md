@@ -42,7 +42,7 @@
 | 回廊铜铃                  | [bell.png](../scenes/east_courtyard/props/bell.png)                             | 1024 × 1536，透明 | 回廊铜铃                                                                                   |
 | 回廊花瓶·完整             | [vase_intact.png](../scenes/east_courtyard/props/vase_intact.png)               | 1263 × 1245，透明 | 回廊花瓶·完整                                                                              |
 | 红烛烛台·燃烧             | [candle_burning.png](../scenes/player_room/props/candle_burning.png)            | 1263 × 1246，透明 | 红烛烛台·燃烧                                                                              |
-| 清心经·桌面               | [scripture_closed.png](../scenes/player_room/props/scripture_closed.png)        | 1536 × 1024，透明 | 清心经·桌面                                                                                |
+| 大念处经·桌面               | [scripture_closed.png](../scenes/player_room/props/scripture_closed.png)        | 1536 × 1024，透明 | 大念处经·桌面                                                                                |
 | 入住残页·桌面             | [torn_page.png](../scenes/player_room/props/torn_page.png)                      | 1536 × 1024，透明 | 入住残页·桌面                                                                              |
 | 寺史册·桌面               | [history_closed.png](../scenes/player_room/props/history_closed.png)            | 1536 × 1024，透明 | 寺史册·桌面                                                                                |
 | 斋堂桌前景                | [table_foreground.png](../scenes/dining_hall/table_foreground.png)              | 1672 × 941，透明  | 斋堂桌前景                                                                                 |

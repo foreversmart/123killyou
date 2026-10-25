@@ -1070,7 +1070,7 @@
     },
     {
       "id": "room_scripture",
-      "name": "清心经·桌面",
+      "name": "大念处经·桌面",
       "kind": "prop",
       "path": "assets/scenes/player_room/props/scripture_closed.png",
       "width": 1536,
@@ -1086,7 +1086,7 @@
           "05",
           "10"
         ],
-        "purpose": "清心经·桌面"
+        "purpose": "大念处经·桌面"
       },
       "alphaCheck": {
         "transparentPixels": 1064709,

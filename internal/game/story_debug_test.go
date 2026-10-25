@@ -66,7 +66,7 @@ func TestDebugSkipVisitsEverySceneAndStopsAtEnding(t *testing.T) {
 				t.Fatal("可选神公场景不可投掷")
 			}
 		case "mini_double":
-			e.Apply(&probe, "朗读清心静神经")
+			e.Apply(&probe, "朗读大念处经")
 			if probe.ShotKey != "double_scripture_1" || !s.Flags["skin_double_present"] {
 				t.Fatal("强制假人场景缺少经文准备")
 			}
