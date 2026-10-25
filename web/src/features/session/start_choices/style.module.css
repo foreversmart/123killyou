@@ -81,43 +81,58 @@
 }
 
 .reel {
-  top: 7%;
-  right: 4%;
-  width: min(48%, 680px);
-  padding: 0.8cqw;
-  background: #121813f2;
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  overflow: hidden;
+  color: #f5e8cb;
+  background: #080b0a;
 }
 
 .video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
   background: #080b0a;
 }
 
-.reel p,
-.journey p {
-  margin: 0.8em 0;
+.reelOverlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  padding: 2.2cqw 3cqw 1.8cqw;
+  background: linear-gradient(0deg, #080b0af2, #080b0ab8 65%, transparent);
+  pointer-events: none;
+}
+
+.reelOverlay p {
+  margin: 0;
   color: #d4c49f;
   font-size: 0.8cqw;
   line-height: 1.7;
 }
 
 .journey {
-  top: 7%;
-  right: 4%;
-  width: min(48%, 680px);
-  padding: 0.8cqw;
+  position: absolute;
+  z-index: 6;
+  inset: 0;
   overflow: hidden;
-  background: #15221de8;
+  color: #ead8ad;
+  background: #18231e;
 }
 
 .journeyScene {
-  position: relative;
-  height: min(27cqw, 360px);
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  border: 1px solid #c7a65b88;
   background: #18231e;
 }
 
@@ -146,16 +161,62 @@
   animation: road-glow 3.9s ease both;
 }
 
-.journey > span {
+.journeyOverlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  gap: 0.3cqw;
+  padding: 2.2cqw 3cqw 1.8cqw;
+  background: linear-gradient(0deg, #101b1df2, #101b1d99 65%, transparent);
+  text-shadow: 0 1px 3px #000;
+}
+
+.journeyOverlay > span {
   display: block;
-  margin-top: 0.8em;
   color: #d4c49f;
   font-size: 0.7cqw;
   letter-spacing: 0.2em;
 }
 
-.journey h2 {
+.journeyOverlay h2 {
   margin: 0.35em 0 0;
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: clamp(18px, 1.6cqw, 29px);
+  font-weight: 500;
+}
+
+.journeyOverlay p {
+  margin: 0.25em 0 0.6em;
+  color: #d4c49f;
+  font-size: 0.8cqw;
+  line-height: 1.7;
+}
+
+.reelOverlay button,
+.journeyOverlay button {
+  pointer-events: auto;
+  justify-self: start;
+  min-width: 10em;
+  padding: 0.65em 1.1em;
+  font: inherit;
+  font-size: 0.85cqw;
+  color: #282e22;
+  background: #ead6a5;
+  border: 1px solid #e2cfa0;
+  cursor: pointer;
+}
+
+.reelOverlay button:focus-visible,
+.journeyOverlay button:focus-visible {
+  outline: 2px solid #fff5c6;
+  outline-offset: 3px;
+}
+
+.journeyOverlay button:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 
 @keyframes road-drift {
