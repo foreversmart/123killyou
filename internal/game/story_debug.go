@@ -153,7 +153,7 @@ func miniDebugOpening(state *State) string {
 	case "mini_double":
 		return miniObserve(state, "隔壁先响起门闩，门缝里伸进一只熟悉的鞋。同行人撞进门房，红烛照亮了衣服，影子的边缘却缺了一块。")
 	case "mini_dawn_trap":
-		return miniObserve(state, "五声更锣停下后，另一声才从更远的地方过来。窗纸仍然黑着，红烛还亮着。")
+		return miniObserve(state, "五声更锣停下后，另一声低长的锣才从更远的地方传来。窗纸仍然黑着，红烛还亮着。")
 	case "mini_dawn":
 		return miniObserve(state, "五声更锣再次响起。鸡鸣先起，檐鸟跟着应声，晨光才越过东院；林岚、周砚、许栀都站在各自的房门前。")
 	default:

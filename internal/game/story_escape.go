@@ -177,9 +177,9 @@ func (e *Engine) afterMiniEscape(state *State, message string) string {
 		return miniObserve(state, message+"隔壁先响起门闩，一只熟悉的鞋伸进门缝。同行人撞进房间，用肩膀把门合上，影子的边缘断在烛光外。")
 	}
 	e.setMiniScene(state, "mini_dawn_trap")
-	return miniObserve(state, message+"视线落在红烛后淡出。五声更锣之后，远处又响起一声低长的钟，窗纸仍黑着。")
+	return miniObserve(state, message+"视线落在红烛后淡出。五声更锣之后，远处又响起一声低长的锣，窗纸仍黑着。")
 }
 func (e *Engine) finishMiniDouble(state *State, message string) string {
 	e.setMiniScene(state, "mini_dawn_trap")
-	return miniObserve(state, message+"红烛缩成一点，画面淡入黑场。五声更锣之后，远处又响起一声低长的钟，窗纸仍黑着。")
+	return miniObserve(state, message+"红烛缩成一点，画面淡入黑场。五声更锣之后，远处又响起一声低长的锣，窗纸仍黑着。")
 }

@@ -19,7 +19,7 @@ const state = (shotKey, extra = {}) => ({
   ...extra,
 });
 
-test('更锣与敲门按分镜给出清楚的独立计数，钟声不计作更锣', () => {
+test('报时统一使用更锣，敲门仍保持独立计数', () => {
   for (const [shot, kind, count] of [
     ['corridor_two_gongs', 'gong', 2],
     ['wake_candle', 'gong', 3],
@@ -42,9 +42,10 @@ test('更锣与敲门按分镜给出清楚的独立计数，钟声不计作更�
   const falseDawn = storyCues(state('dawn_gongs'));
   assert.deepEqual(
     falseDawn.map((cue) => cue.kind),
-    ['gong', 'gong', 'gong', 'gong', 'gong', 'bell'],
+    ['gong', 'gong', 'gong', 'gong', 'gong', 'gong'],
   );
   assert.ok(falseDawn[5].at > falseDawn[4].at);
+  assert.ok(cueDuration(falseDawn[5]) > cueDuration(falseDawn[0]));
   const trueDawn = storyCues(state('dawn_courtyard'));
   assert.deepEqual(
     trueDawn.map((cue) => cue.kind),

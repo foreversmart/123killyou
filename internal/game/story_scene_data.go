@@ -103,9 +103,9 @@ var miniScenes = map[string]storyScene{
 	},
 	"mini_dawn_trap": {
 		key:      "mini_dawn_trap",
-		name:     "门房·五更与一声钟",
-		text:     "五声更锣之后又响了一声更低、更长的钟；窗外仍然很黑。",
-		props:    []string{"五声更锣", "一声钟", "门闩", "红烛"},
+		name:     "门房·五更与远处一声锣",
+		text:     "五声更锣之后又响了一声更低、更长的锣；窗外仍然很黑。",
+		props:    []string{"五声更锣", "远处一声低长锣", "门闩", "红烛"},
 		room:     "room_door",
 		roomName: "门房",
 	},
