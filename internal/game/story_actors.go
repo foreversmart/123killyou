@@ -26,7 +26,7 @@ func miniSceneActors(key string) []SceneActor {
 			actor("zhouyan", "周砚", "古建筑爱好者", "饭桌对面", "", "检查碗签"),
 			actor("xuzhi", "许栀", "同行游客", "饭桌右侧", "", "拿着馒头"),
 			actor("luchen", "陆沉", "守夜人和尚", "斋堂门帘外", "keeper", "解释供食"),
-			actor("huipu", "慧普", "灯影寺住持", "帘后长明灯旁", "", "只露半张脸"),
+			actor("huipu", "慧普", "红烛寺住持", "帘后长明灯旁", "", "只露半张脸"),
 		},
 		"mini_corridor_candle": {
 			actor("player", "你", "游客·主角", "门房门前", "player", "接红烛"),
@@ -54,12 +54,12 @@ func miniSceneActors(key string) []SceneActor {
 		"mini_listen": {
 			actor("player", "你", "游客·主角", "偏房门侧", "player", "贴墙偷听"),
 			actor("companion", "同行者", "同行者", "你身后半步", "", "屏住呼吸"),
-			actor("huipu", "慧普", "灯影寺住持", "半掩房门内", "", "剥取人皮"),
+			actor("huipu", "慧普", "红烛寺住持", "半掩房门内", "", "剥取人皮"),
 		},
 		"mini_oracle": {
 			actor("player", "你", "游客·主角", "大殿东侧偏殿", "player", "逃入"),
 			actor("shangong", "神公", "守杯筊的殿前人", "杯筊桌后", "", "等你掷筊"),
-			actor("huipu", "慧普", "灯影寺住持", "大殿门外远处", "", "逼近"),
+			actor("huipu", "慧普", "红烛寺住持", "大殿门外远处", "", "逼近"),
 		},
 		"mini_double": {
 			actor("player", "你", "游客·主角", "门房床边", "player", "守住红烛"),

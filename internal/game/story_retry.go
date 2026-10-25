@@ -19,10 +19,11 @@ func (e *Engine) retryMiniStory(state *State) (string, string, bool) {
 	if scene == "mini_oracle" {
 		scene = "mini_listen"
 	}
-	for _, flag := range []string{"story_dead", "double_calm", "double_frenzy", "double_refused_candle", "double_scripture_1", "double_scripture_2", "double_scripture_3", "double_scripture_4", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark", "fake_dawn_knocks", "dawn_waited"} {
+	for _, flag := range []string{"story_dead", "double_calm", "double_frenzy", "double_refused_candle", "double_scripture_1", "double_scripture_2", "double_scripture_3", "double_scripture_4", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark", "oracle_sincerity_question", "oracle_sincerity_judged", "oracle_sincere", "oracle_sincerity_score", "fake_dawn_knocks", "dawn_waited"} {
 		delete(state.Flags, flag)
 	}
 	state.Flags["red_candle_lit"] = scene != "mini_wake_three_gongs" && scene != "mini_room"
+	state.OracleSincerityScore = 0
 	state.Effect = Effect{Kind: "none"}
 	e.setMiniScene(state, scene)
 	state.DialogueNext = ""

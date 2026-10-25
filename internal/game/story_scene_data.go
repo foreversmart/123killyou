@@ -15,11 +15,11 @@ type storyScene struct {
 var miniScenes = map[string]storyScene{
 	"mini_arrival": {
 		key:      "mini_arrival",
-		name:     "晴天下午·灯影寺山门",
-		text:     "阳光从大巴车窗斜进来，灯影寺的山门在树影中一明一暗。",
-		props:    []string{"大巴", "大巴票", "手机预约单", "四只旅行包", "相机", "折叠修缮图", "蓝色发圈", "香客指示牌", "灯影寺山门", "明照寺旧匾", "山门铜铃", "晒太阳的花猫"},
+		name:     "晴天下午·红烛寺山门",
+		text:     "阳光从大巴车窗斜进来，红烛寺的山门在树影中一明一暗。",
+		props:    []string{"大巴", "大巴票", "手机预约单", "四只旅行包", "相机", "折叠修缮图", "蓝色发圈", "香客指示牌", "红烛寺山门", "明照寺旧匾", "山门铜铃", "晒太阳的花猫"},
 		room:     "gate",
-		roomName: "灯影寺山门",
+		roomName: "红烛寺山门",
 	},
 	"mini_register": {
 		key:      "mini_register",

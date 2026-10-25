@@ -55,11 +55,11 @@ export function StartChoices({
           controls
           playsInline
           onEnded={() => setPhase('journey')}
-          aria-label="灯影寺片头"
+          aria-label="红烛寺片头"
         />
         <p>片头播放中 · 红烛、回廊与未说完的声音</p>
         <button className={styles.resume} onClick={() => setPhase('journey')}>
-          跳过片头，驶向灯影寺
+          跳过片头，驶向红烛寺
         </button>
       </aside>
     );
@@ -67,14 +67,14 @@ export function StartChoices({
 
   if (phase === 'journey') {
     return (
-      <aside className={`${styles.choices} ${styles.journey}`} aria-label="大巴驶向灯影寺">
+      <aside className={`${styles.choices} ${styles.journey}`} aria-label="大巴驶向红烛寺">
         <div className={styles.journeyScene} aria-hidden="true">
           <img className={styles.journeyRoad} src={storyAssets.scenes.busDeparture} alt="" />
           <img className={styles.journeyGate} src={storyAssets.scenes.busArrival} alt="" />
           <span className={styles.journeyGlow} />
         </div>
         <span>片头之后 · 山间小路</span>
-        <h2>大巴缓缓驶向灯影寺</h2>
+        <h2>大巴缓缓驶向红烛寺</h2>
         <p>车窗外的山色一层层退开，山门在树影尽头出现。</p>
         <button disabled={busy} onClick={() => void finishJourney()}>
           {busy ? '正在抵达…' : '进入山门'}
@@ -89,7 +89,7 @@ export function StartChoices({
       <div className={styles.titleVeil} aria-hidden="true" />
       <aside className={styles.choices} aria-label="选择旅程">
         <span>周末 · 午后</span>
-        <h2>灯影寺，一夜之行</h2>
+        <h2>红烛寺，一夜之行</h2>
         <p>周末午后，四个人坐上开往山寺的大巴，准备离开城市一晚。</p>
         <button disabled={busy} onClick={() => setPhase('reel')}>
           {busy ? '正在准备…' : '开始旅程 · 第一幕'}

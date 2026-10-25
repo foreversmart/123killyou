@@ -60,6 +60,7 @@ func TestDebugSkipVisitsEverySceneAndStopsAtEnding(t *testing.T) {
 			}
 		case "mini_oracle":
 			e.Apply(&probe, "确认求回门房")
+			e.Apply(&probe, "可能是风，也可能是我拿得不稳，我会先稳住手")
 			e.Apply(&probe, "掷杯筊")
 			if probe.ShotKey != "oracle_cast" {
 				t.Fatal("可选神公场景不可投掷")

@@ -52,7 +52,7 @@ func (s *Service) command(ctx context.Context, id, runID, requestID, text string
 		if before.RunID != runID {
 			return ErrStaleRun
 		}
-		plan, err = s.planVoice(tx, before, text)
+		plan, err = s.planVoice(ctx, tx, before, text)
 		return err
 	})
 	if err != nil || result.Type != "" {
@@ -109,7 +109,7 @@ func (s *Service) command(ctx context.Context, id, runID, requestID, text string
 			return err
 		}
 		if !handled {
-			intent, speak = s.engine.Apply(&next, text)
+			intent, speak = s.engine.ApplyWithDecision(ctx, &next, text, plan.StoryDecision)
 			if plan.Dialogue && providerReply != "" && intent == "dialogue" && !next.Caught {
 				speak = providerReply
 				next.Dialogue.Text = providerReply
