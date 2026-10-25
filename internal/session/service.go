@@ -50,6 +50,11 @@ func (s *Service) Create() (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error { var e error; state, e = s.create(tx); return e })
 	return
 }
+
+// Opening previews a new game's first scene without creating a session or
+// changing the player's automatic save.
+func (s *Service) Opening() game.State { return s.engine.Initial("") }
+
 func (s *Service) Resume() (state game.State, err error) {
 	err = s.repository.Transaction(func(tx Transaction) error {
 		var e error

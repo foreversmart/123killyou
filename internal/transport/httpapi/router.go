@@ -9,6 +9,7 @@ import (
 )
 
 type SessionService interface {
+	Opening() game.State
 	Resume() (game.State, error)
 	Create() (game.State, error)
 	Snapshot(string) (game.State, error)
@@ -36,8 +37,11 @@ func NewRouter(sessions SessionService) *gin.Engine {
 		if provider, ok := sessions.(interface{ DialogueStatus() session.DialogueStatus }); ok {
 			linxStatus = provider.DialogueStatus()
 		}
-		c.JSON(200, gin.H{"ok": true, "mode": "demo", "speechProvider": speechProvider, "qiniuConnected": qiniuConnected, "linx": linxStatus, "storage": "sqlite"})
+		// The dev launcher uses this marker to avoid attaching Vite to a stale
+		// backend that still serves the retired room demo on port 8787.
+		c.JSON(200, gin.H{"ok": true, "mode": "story", "story": "mini_script", "openingContract": "mini_arrival_v1", "speechProvider": speechProvider, "qiniuConnected": qiniuConnected, "linx": linxStatus, "storage": "sqlite"})
 	})
+	r.GET("/api/story/opening", h.opening)
 	r.POST("/api/sessions/resume", h.resume)
 	r.POST("/api/sessions", h.create)
 	r.GET("/api/sessions/:id", h.snapshot)

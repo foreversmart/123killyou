@@ -16,6 +16,6 @@
 
 本批红烛仅表示未点燃；燃烧、熄灭和短芯等场景状态仍需独立制作。铜钥匙与通行凭的物品图是面向调查与背包的展示机位，不覆盖登记处的桌面透视图；它们在剧情里仍是同一件物品，归属由后端结算。
 
-当前图片尚未接入游戏；现有 /art/item-*.webp 与 items.json 继续服务演示剧情。正式接入时统一输出网页格式并更新消费映射，通行凭使用独立图片。六格道具栏的更多物品展示规则也需随接入调整。
+物品图片已输出为网页格式并接入剧情游戏，运行文件位于 `web/public/art/story/items/`，`internal/content/items.json` 使用对应路径。旧的 `/art/item-*.webp` 仅保留给非剧情演示；通行凭使用独立图片。六格道具栏的更多物品展示规则仍按游戏状态处理。
 
 当前 [提示词](../generation/inventory_prompts.json)、[文件校验信息](../generation/asset_catalog.json)与[素材用途](../generation/asset_usage.md)使用固定路径同步维护。

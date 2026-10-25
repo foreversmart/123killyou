@@ -1,12 +1,11 @@
 .dialogue-panel {
   grid-column: 1;
   grid-row: 3;
-  align-self: end;
   position: relative;
   display: grid;
   grid-template-columns: 11% minmax(0, 1fr) 19%;
   padding: 0.55cqw 0.85cqw 0.6cqw 0.7cqw;
-  min-height: 8.2cqw;
+  min-height: 7.8cqw;
   border-top: 2px solid #675033;
   z-index: 8;
 }
@@ -88,4 +87,21 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.speaker-name small {
+  padding: 0.15cqw 0.4cqw;
+  font-size: 0.6cqw;
+  letter-spacing: 0.1em;
+  border: 1px solid #9d986c40;
+  color: #a4b6a2;
+}
+.inner {
+  border-top-color: #687b72;
+}
+.inner .speaker-name {
+  color: #b9d0bf;
+}
+.inner .dialogue-text {
+  color: #d3e0d4;
+  font-style: italic;
 }

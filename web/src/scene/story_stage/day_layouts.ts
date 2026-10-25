@@ -1,0 +1,116 @@
+import type { StageLayout, StageProp } from './types';
+
+const p = (
+  id: string,
+  name: string,
+  kind: StageProp['kind'],
+  x: number,
+  y: number,
+  command?: string,
+  width = 7,
+): StageProp => ({ id, name, kind, x, y, command, width });
+
+export const dayLayouts: Record<string, StageLayout> = {
+  mini_register: {
+    chapter: '02 · 登记与入住',
+    title: '名字写在灯下',
+    atmosphere: '铜牌轻碰，钥匙转过东院旧锁。',
+    daylight: true,
+    actors: {
+      luchen: { x: 44, y: 68, height: 33 },
+      linlan: { x: 22, y: 78 },
+      zhouyan: { x: 71, y: 70, height: 30 },
+      xuzhi: { x: 85, y: 78 },
+    },
+    props: [
+      p('register', '登记簿', 'book', 42, 70, '看登记簿', 9),
+      p('keys', '铜钥匙', 'key', 52, 72, '查看铜钥匙', 5),
+      p('permit', '通行凭', 'paper', 35, 77, '查看通行凭', 6),
+      p('page', '残页', 'paper', 31, 68, '查看残页', 5),
+      p('beads', '念珠', 'beads', 57, 69, '查看念珠', 5),
+      p('bags', '四人的行李', 'bag', 14, 84, '放好行李', 10),
+      p('camera', '相机盖', 'camera', 24, 57, '看相机盖', 4),
+      p('ribbon', '蓝色发圈', 'ribbon', 84, 63, '看蓝色发圈', 4),
+      p('map', '折叠修缮图', 'paper', 72, 61, '看修缮图', 5),
+    ],
+  },
+  mini_refectory: {
+    chapter: '03 · 斋堂晚膳',
+    title: '粥面不散的油花',
+    atmosphere: '夕阳穿过格窗，木勺轻轻碰到碗沿。',
+    daylight: true,
+    actors: {
+      linlan: { x: 23, y: 68, height: 31 },
+      zhouyan: { x: 49, y: 57, height: 27 },
+      xuzhi: { x: 73, y: 68, height: 31 },
+      luchen: { x: 89, y: 72, height: 36 },
+      huipu: { x: 80, y: 43, height: 24 },
+    },
+    props: [
+      p('player_bowl', '你的粥碗', 'bowl', 49, 81, '查看粥碗', 12),
+      p('linlan_bowl', '林岚的粥碗', 'bowl', 31, 70, '问林岚吃不吃粥', 9),
+      p('zhouyan_bowl', '周砚的粥碗', 'bowl', 49, 64, '查看碗签', 8),
+      p('xuzhi_bowl', '许栀的粥碗', 'bowl', 66, 71, '问许栀吃不吃粥', 9),
+      p('spoon', '木勺', 'spoon', 58, 81, '搅动肉粥', 6),
+      p('bread', '素饼', 'bread', 37, 81, '查看素饼', 9),
+      p('water', '热水', 'bowl', 69, 83, '查看热水', 6),
+      p('bamboo', '腌笋', 'plate', 58, 69, '查看腌笋', 6),
+      p('offering', '施食记残页', 'paper', 18, 82, '谁供的肉', 6),
+      p('curtain_lamp', '帘后长明灯', 'lamp', 84, 48, '看帘后', 5),
+    ],
+  },
+  mini_corridor_candle: {
+    chapter: '04 · 东院回廊',
+    title: '一人一支，火不能灭',
+    atmosphere: '檐灯由金黄转成靛蓝，远处的锣声压过脚步。',
+    actors: {
+      luchen: { x: 52, y: 77, height: 41 },
+      linlan: { x: 22, y: 71, height: 30 },
+      zhouyan: { x: 69, y: 66, height: 29 },
+      xuzhi: { x: 84, y: 75, height: 33 },
+    },
+    props: [
+      p('candle', '红烛', 'candle', 46, 71, '拿红烛', 6),
+      p('keeper_lamp', '檐灯', 'lamp', 51, 27, '观察回廊', 5),
+      p('bell', '走廊铜铃', 'bell', 19, 32, '听回廊声音', 4),
+      p('notice', '入住须知', 'paper', 83, 62, '查看入住须知', 4),
+      p('tower', '封闭钟楼门', 'sign', 92, 41, '看看钟楼门', 5),
+    ],
+  },
+  mini_dawn: {
+    chapter: '12 · 天亮离寺',
+    title: '四个人，一个不少',
+    atmosphere: '鸡鸣与檐鸟同时响起，晨光照到四只旅行包。',
+    daylight: true,
+    actors: {
+      linlan: { x: 23, y: 77, height: 35 },
+      zhouyan: { x: 44, y: 70, height: 31 },
+      xuzhi: { x: 66, y: 80, height: 37 },
+      luchen: { x: 83, y: 65, height: 31 },
+    },
+    props: [
+      p('camera', '林岚的相机', 'camera', 20, 68, '看看照片', 5),
+      p('map', '周砚的修缮图', 'paper', 46, 62, '看看门轴', 5),
+      p('ribbon', '蓝色发圈', 'ribbon', 67, 66, '看看蓝色发圈', 4),
+      p('bags', '四只旅行包', 'bag', 53, 84, '整理行李', 10),
+      p('permit', '通行凭', 'paper', 78, 72, '交还通行凭', 5),
+      p('page', '残页', 'paper', 36, 83, '留下残页', 5),
+    ],
+  },
+  mini_ending: {
+    chapter: '尾声 · 平安离寺',
+    title: '旧匾在后视镜里闪了一下',
+    atmosphere: '车门合拢，寺里的钟声终于被引擎盖过。',
+    daylight: true,
+    actors: {
+      linlan: { x: 23, y: 74, height: 33 },
+      zhouyan: { x: 51, y: 68, height: 28 },
+      xuzhi: { x: 78, y: 75, height: 33 },
+    },
+    props: [
+      p('camera', '黑色照片', 'camera', 28, 77, '看看照片', 6),
+      p('map', '修缮图', 'paper', 54, 77, '看看修缮图', 6),
+      p('ribbon', '蓝色发圈', 'ribbon', 77, 80, '看看蓝色发圈', 4),
+    ],
+  },
+};

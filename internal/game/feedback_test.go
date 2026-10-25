@@ -26,7 +26,7 @@ func TestSpeechRoutesToCloudDialogueOrExplicitRuleFeedbackWithoutStoryChanges(t 
 		{"locked room", "", "去内堂", "blocked"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			state := engine.Initial("feedback-test")
+			state := ruleState(engine, "feedback-test")
 			if test.setup != "" {
 				engine.Apply(&state, test.setup)
 			}

@@ -1,0 +1,29 @@
+{
+  "id": "shangong",
+  "name": "神公",
+  "aliases": [
+    "守殿人",
+    "守殿和尚"
+  ],
+  "room": "oracle",
+  "portrait": "shangong",
+  "voice": {
+    "profile": "shangong_old_male",
+    "providerVoiceId": "4c89ea979ba44dafb14aeddf8d994956"
+  },
+  "traits": [
+    "疲惫",
+    "守旧规",
+    "寡言"
+  ],
+  "knowledge": [
+    "守大殿东侧杯筊桌；不代掷，不改结果，不在掷筊前允诺救援。"
+  ],
+  "intro": "活路不在我嘴里，在你能不能认清眼前的声。",
+  "return": "活路不在我嘴里，在你能不能认清眼前的声。",
+  "reject": "先留在手边。眼前的事还没有弄清楚。",
+  "exposureThreshold": 0,
+  "exposedReply": "先看清眼前，再决定下一步。",
+  "dialogueRules": [],
+  "exchanges": []
+}

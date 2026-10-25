@@ -1,0 +1,77 @@
+.prop {
+  aspect-ratio: 1.2;
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--rotate));
+  padding: 0;
+  border: 0;
+  background: none;
+  z-index: 3;
+  color: #eddfbd;
+  pointer-events: none;
+}
+.prop svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+.prop[data-interactive='true'] {
+  cursor: pointer;
+  pointer-events: auto;
+}
+.prop--hotspot {
+  z-index: 6;
+}
+.glimmer {
+  position: absolute;
+  width: 0.35cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  top: 42%;
+  left: 58%;
+  background: #f9e5a9;
+  box-shadow:
+    0 0 0.5cqw #ffe5a0,
+    0 0 1cqw 0.2cqw #f7cf7860;
+  animation: gleam 3s ease-in-out infinite;
+}
+.name {
+  position: absolute;
+  bottom: 90%;
+  left: 50%;
+  transform: translateX(-50%) rotate(calc(-1 * var(--rotate)));
+  padding: 0.4cqw 0.7cqw;
+  border: 1px solid #c4b88b;
+  background: #28382ef5;
+  font-size: clamp(9px, 0.7cqw, 13px);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.prop:hover .name,
+.prop:focus-visible .name {
+  opacity: 1;
+}
+.prop:focus-visible {
+  outline: 1px solid #ffe8b4;
+  outline-offset: 4px;
+  border-radius: 10%;
+}
+.prop:disabled {
+  cursor: default;
+}
+.prop:disabled .glimmer {
+  opacity: 0.25;
+  animation: none;
+}
+@keyframes gleam {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.65);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glimmer {
+    animation: none;
+  }
+}

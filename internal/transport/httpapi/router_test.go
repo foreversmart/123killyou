@@ -55,17 +55,17 @@ func TestResumeAndCommandsAcrossServerRestart(t *testing.T) {
 	var state game.State
 	post("/api/sessions/resume", nil, 200, &state)
 	var moved game.Result
-	input := command{Type: "command", RunID: state.RunID, RequestID: "move", Text: "去走廊"}
+	input := command{Type: "command", RunID: state.RunID, RequestID: "move", Text: "登记入住"}
 	post("/api/sessions/"+state.ID+"/commands", input, 200, &moved)
-	if moved.State.Room != "corridor" {
-		t.Fatal("HTTP 指令未移动房间")
+	if moved.State.SceneKey != "mini_register" || moved.State.Room != "register" {
+		t.Fatal("HTTP 指令未从第一幕推进到登记桌")
 	}
 	server.Close()
 	s.Close()
 	_, server = open()
 	var resumed game.State
 	post("/api/sessions/resume", nil, 200, &resumed)
-	if resumed.ID != state.ID || resumed.RunID != state.RunID || resumed.Room != "corridor" || resumed.Revision != moved.State.Revision {
+	if resumed.ID != state.ID || resumed.RunID != state.RunID || resumed.SceneKey != "mini_register" || resumed.Revision != moved.State.Revision {
 		t.Fatal("服务重启或新浏览器丢失自动存档")
 	}
 	var replay game.Result
@@ -107,22 +107,22 @@ func TestWebSocketSurvivesStaleBranchError(t *testing.T) {
 	if _, err := s.Command(state.ID, state.RunID, "other-tab-reset", "重新开始"); err != nil {
 		t.Fatal(err)
 	}
-	if err := wsjson.Write(ctx, conn, command{Type: "command", RunID: state.RunID, RequestID: "stale", Text: "去走廊"}); err != nil {
+	if err := wsjson.Write(ctx, conn, command{Type: "command", RunID: state.RunID, RequestID: "stale", Text: "登记入住"}); err != nil {
 		t.Fatal(err)
 	}
 	if err := wsjson.Read(ctx, conn, &result); err != nil {
 		t.Fatal(err)
 	}
-	if result.Type != "error" || result.RequestID != "stale" || result.State.RunID == state.RunID || result.State.Room != "watch" {
+	if result.Type != "error" || result.RequestID != "stale" || result.State.RunID == state.RunID || result.State.SceneKey != "mini_arrival" || result.State.Room != "gate" {
 		t.Fatal("WS 未返回错误和可恢复的当前进度")
 	}
-	if err := wsjson.Write(ctx, conn, command{Type: "command", RunID: result.State.RunID, RequestID: "new", Text: "去走廊"}); err != nil {
+	if err := wsjson.Write(ctx, conn, command{Type: "command", RunID: result.State.RunID, RequestID: "new", Text: "登记入住"}); err != nil {
 		t.Fatal(err)
 	}
 	if err := wsjson.Read(ctx, conn, &result); err != nil {
 		t.Fatal(err)
 	}
-	if result.Type != "state" || result.State.Room != "corridor" {
+	if result.Type != "state" || result.State.SceneKey != "mini_register" || result.State.Room != "register" {
 		t.Fatal("WS 错误后不能继续操作")
 	}
 }

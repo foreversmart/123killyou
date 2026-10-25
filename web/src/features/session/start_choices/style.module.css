@@ -1,0 +1,50 @@
+.choices {
+  position: absolute;
+  z-index: 6;
+  top: 14%;
+  right: 3%;
+  width: 27%;
+  padding: 1.25cqw;
+  border: 1px solid #af8e56;
+  color: #f5e8cb;
+  background: #26352deb;
+  box-shadow: 0 8px 32px #17282235;
+}
+.choices > span {
+  font-size: 0.7cqw;
+  letter-spacing: 0.2em;
+  color: #d4c49f;
+}
+.choices h2 {
+  font-size: 1.2cqw;
+  margin: 0.6em 0;
+}
+.choices p {
+  font-size: 0.8cqw;
+  line-height: 1.8;
+  margin-bottom: 1em;
+}
+.choices button {
+  display: block;
+  width: 100%;
+  padding: 0.65em;
+  font: inherit;
+  font-size: 0.85cqw;
+  color: #282e22;
+  background: #ead6a5;
+  border: 1px solid #e2cfa0;
+  cursor: pointer;
+}
+.choices .resume {
+  margin-top: 0.6em;
+  background: transparent;
+  color: #f5e8cb;
+}
+.choices button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.choices button:focus-visible {
+  outline: 2px solid #fff5c6;
+  outline-offset: 3px;
+}

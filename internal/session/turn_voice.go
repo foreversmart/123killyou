@@ -34,12 +34,14 @@ func (s *Service) planVoice(tx Transaction, before game.State, text string) (voi
 	}
 	plan := voicePlan{Reply: reply, Speaker: "系统"}
 	if candidate.Dialogue.Text == reply {
+		plan.Speaker, plan.Portrait = candidate.Dialogue.Speaker, candidate.Dialogue.Portrait
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {
 			plan.NPCID = npcID
-			plan.Speaker, plan.Portrait = candidate.Dialogue.Speaker, candidate.Dialogue.Portrait
 		}
 	}
-	if intent == "dialogue" && !candidate.Caught {
+	// The staged story is authored dialogue. TTS must read that exact character
+	// line; open generation remains available for the legacy conversation mode.
+	if intent == "dialogue" && !candidate.Caught && !candidate.StoryMode {
 		if npcID, known := s.engine.NPCForDialogue(candidate); known {
 			plan.NPCID = npcID
 			plan.Dialogue = true

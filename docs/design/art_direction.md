@@ -210,6 +210,6 @@
 
 当前已具备四处场景、六名主要 NPC 的普通状态人物图、六张普通对话头像、一张未知人物占位头像与五张正式物品图。逐张素材的对应幕次、使用位置与适用状态见 [素材用途总表](../../assets/generation/asset_usage.md)。文件信息、人物生成提示词与后续生成规范见 [素材目录](../../assets/generation/README.md)。人物、时段与道具状态的扩展均以这些素材保持连续；慧普帘后遮挡、神公桌后坐姿及异常状态按场景派生，游戏运行素材的接入由实现任务处理。
 
-登记处采用干净背景、登记桌前景与独立道具分层，共八张图片；登记簿开合、通行凭纸叠与单张为不同语义状态。铜房牌复用一张空白底图，房名准确排字。叠放与坐标见 [登记处分层说明](../../assets/scenes/registration/README.md)及 [定位配置](../../assets/scenes/registration/layout.json)。素材预览已核对道具切换与桌前遮挡，正式游戏状态与存档尚未接入。
+登记处采用干净背景、登记桌前景与独立道具分层，共八张图片；登记簿开合、通行凭纸叠与单张为不同语义状态。铜房牌复用一张空白底图，房名准确排字。叠放与坐标见 [登记处分层说明](../../assets/scenes/registration/README.md)及 [定位配置](../../assets/scenes/registration/layout.json)。运行时按 `register_desk`、`register_rooms`、`register_luggage` 分镜切换这些图层，人物、道具归属与存档仍由后端状态驱动。
 
 物品图的用途、状态与文本排版见 [正式物品图说明](../../assets/props/README.md)和 [显示与文字配置](../../assets/generation/inventory_presentation.json)。场景透视图与物品展示图沿同一物件造型派生；红烛的归属和燃烧状态保持连续。

@@ -1,28 +1,68 @@
 package game
 
-import "nightwatch/internal/content"
+import (
+	"nightwatch/internal/content"
+	"strings"
+)
 
-type Engine struct{ content *content.Catalog }
+type Engine struct {
+	content   *content.Catalog
+	storyRoll func() int
+}
 
 func NewEngine(catalog *content.Catalog) *Engine { return &Engine{content: catalog} }
 func (e *Engine) Initial(id string) State {
-	world := e.content.World()
-	profile, _ := e.content.NPC(world.InitialNPC)
-	inventory := []Item{}
-	for _, id := range world.StartingItems {
-		item, _ := e.content.Item(id)
-		inventory = append(inventory, Item(item))
+	state := State{
+		ID:        id,
+		Revision:  1,
+		Devotion:  e.content.World().InitialDevotion,
+		Inventory: []Item{},
+		Clues:     []string{},
+		Flags:     map[string]bool{},
+		Effect:    Effect{Kind: "none"},
 	}
-	return State{ID: id, Revision: 1, Room: world.InitialRoom, RoomName: world.InitialRoomName, Devotion: world.InitialDevotion, Inventory: inventory, Clues: []string{}, Flags: map[string]bool{}, Dialogue: Dialogue{Speaker: profile.Name, Text: profile.Intro, Portrait: profile.Portrait}, LastAction: "说出你的行动，房间会回应。", Effect: Effect{Kind: "none"}}
+	e.StartMiniStory(&state)
+	return state
+}
+
+// StartMiniStory applies the complete opening scene, including its room and
+// narrator, so every new-game entry point starts at the same story position.
+func (e *Engine) StartMiniStory(state *State) {
+	if state == nil {
+		return
+	}
+	state.StoryMode = true
+	miniSetFlag(state, "arrived")
+	e.setMiniScene(state, "mini_arrival")
+	state.Dialogue = Dialogue{
+		Speaker: "旁白",
+		Text:    "阳光明媚的下午，大巴停在灯影寺山门前。周末的游览从登记入住开始。",
+	}
+	state.LastAction = state.Dialogue.Text
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
 func (e *Engine) Apply(state *State, text string) (string, string) {
+	defer func() {
+		if state.StoryMode {
+			syncMiniStaging(state)
+		}
+	}()
+	if Normalize(text) == "调试跳到下一剧情场景" {
+		return e.skipMiniScene(state)
+	}
+	if state.StoryMode && miniHasAny(Normalize(text), "重听当前对白", "重听这句", "再说一遍") {
+		return "replay", state.Dialogue.Text
+	}
+	state.DialogueNext = ""
 	text = Normalize(text)
 	if message, clarify := ActionClarification(text); clarify {
 		return "clarify", feedback(state, message)
 	}
 	if intent, speak, ok := e.system(state, text); ok {
+		return intent, speak
+	}
+	if intent, speak, ok := e.story(state, text); ok {
 		return intent, speak
 	}
 	if intent, speak, ok := e.movement(state, text); ok {
@@ -46,6 +86,18 @@ func (e *Engine) Apply(state *State, text string) (string, string) {
 	return e.dialogue(state, text)
 }
 func (e *Engine) NPCForDialogue(state State) (string, bool) {
+	if state.StoryMode {
+		speaker := state.Dialogue.Speaker
+		for _, npc := range e.content.NPCs() {
+			names := append([]string{npc.Name}, npc.Aliases...)
+			for _, name := range names {
+				if speaker == name || strings.HasPrefix(speaker, name+"（") || strings.HasPrefix(speaker, name+"·") {
+					return npc.ID, true
+				}
+			}
+		}
+		return "", false
+	}
 	for _, npc := range e.content.NPCs() {
 		if npc.Room == state.Room && npc.Name == state.Dialogue.Speaker && npc.Portrait == state.Dialogue.Portrait {
 			return npc.ID, true

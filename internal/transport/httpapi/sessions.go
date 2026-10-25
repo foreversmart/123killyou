@@ -6,6 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func (h handler) opening(c *gin.Context) {
+	c.Header("Cache-Control", "no-store")
+	c.JSON(200, h.sessions.Opening())
+}
+
 func (h handler) resume(c *gin.Context) {
 	state, err := h.sessions.Resume()
 	if err != nil {

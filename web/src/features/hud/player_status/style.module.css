@@ -78,10 +78,11 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  font-size: 1.65cqw;
+  font-size: 1.22cqw;
   font-weight: 400;
   color: #ded2ad;
-  letter-spacing: 0.22cqw;
+  letter-spacing: 0.1cqw;
+  white-space: nowrap;
   box-shadow: inset 0 0 0 3px #070704;
 }
 .topbar h1 span {

@@ -20,7 +20,7 @@ func TestEveryInformationPanelBlocksNPCDialogueAndHandover(t *testing.T) {
 	engine := panelEngine(t)
 	for _, open := range []string{"看看地图", "看看账本", "看看铜钥匙", "看看手记", "打开背包", "帮助", "设置"} {
 		t.Run(open, func(t *testing.T) {
-			state := engine.Initial("panels")
+			state := ruleState(engine, "panels")
 			engine.Apply(&state, open)
 			if state.Overlay == "" || state.Dialogue.Speaker != "系统" || state.Dialogue.Portrait != "" {
 				t.Fatalf("面板未由无头像旁白打开: %+v", state)
@@ -42,7 +42,7 @@ func TestEveryInformationPanelBlocksNPCDialogueAndHandover(t *testing.T) {
 
 func TestPanelNavigationAndClosingRestoreWorldInteraction(t *testing.T) {
 	engine := panelEngine(t)
-	state := engine.Initial("navigation")
+	state := ruleState(engine, "navigation")
 	for _, step := range []struct{ text, overlay string }{
 		{"打开背包", "inventory"}, {"看看铜钥匙", "item"},
 		{"看看手记", "journal"}, {"看看账本", "ledger"},
@@ -72,7 +72,7 @@ func TestPanelNavigationAndClosingRestoreWorldInteraction(t *testing.T) {
 
 func TestMovementFromPanelUsesNarratorBeforeNextNPCInteraction(t *testing.T) {
 	engine := panelEngine(t)
-	state := engine.Initial("movement")
+	state := ruleState(engine, "movement")
 	for _, text := range []string{"看看铜钥匙", "去走廊", "看看地图", "回休息室"} {
 		intent, speak := engine.Apply(&state, text)
 		if state.Dialogue != (Dialogue{Speaker: "系统", Text: speak}) {

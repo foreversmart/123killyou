@@ -1,0 +1,30 @@
+{
+  "id": "player",
+  "name": "你·心声",
+  "aliases": [
+    "你",
+    "主角",
+    "内心独白"
+  ],
+  "room": "gate",
+  "portrait": "player",
+  "voice": {
+    "profile": "player_young_male",
+    "providerVoiceId": "7e74beb93aaf4b9a866b554068adad0d"
+  },
+  "traits": [
+    "警觉",
+    "克制",
+    "第一视角"
+  ],
+  "knowledge": [
+    "只知道自己亲眼看见和亲耳听见的事实；所有判断用第一人称。"
+  ],
+  "intro": "灯在我前，门在我后。先看清，再决定。",
+  "return": "灯在我前，门在我后。先看清，再决定。",
+  "reject": "先留在手边。眼前的事还没有弄清楚。",
+  "exposureThreshold": 0,
+  "exposedReply": "先看清眼前，再决定下一步。",
+  "dialogueRules": [],
+  "exchanges": []
+}

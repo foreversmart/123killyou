@@ -1,0 +1,144 @@
+import type { GameState } from '@/shared/types/game';
+import { ScenePerson } from '@/scene/scene_person';
+import { SceneProp } from '@/scene/scene_prop';
+import { MealDiscussion } from '@/scene/meal_discussion';
+import { StoryReading } from '@/scene/story_reading';
+import { storyAssets } from '@/shared/lib/story_assets';
+import { sceneLayout, shotTitles } from './layouts';
+import { sceneChoices } from './choices';
+import { cx } from '@/shared/lib/cx';
+import styles from './style.module.css';
+
+export function StoryStage({
+  state,
+  interactive = true,
+  onAction,
+}: {
+  state: GameState;
+  interactive?: boolean;
+  onAction: (command: string) => Promise<void>;
+}) {
+  const layout = sceneLayout(state);
+  const enabled =
+    interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
+  const speaker = state.dialogue.speaker;
+  const actors = (state.actors || []).filter((actor) => actor.visible && actor.id !== 'player');
+  const unseenSpeaker = state.actors?.find(
+    (actor) =>
+      !actor.visible &&
+      (speaker.startsWith(actor.name) || (speaker.includes('门外') && actor.id !== 'player')),
+  );
+  return (
+    <div
+      className={cx(styles.stage, layout.daylight && styles.daylight)}
+      data-scene={state.sceneKey}
+      data-shot={state.shotKey || ''}
+    >
+      <header className={styles.heading}>
+        <span>{layout.chapter}</span>
+        <h2>{shotTitles[state.shotKey || ''] || layout.title}</h2>
+        <p>{layout.atmosphere}</p>
+      </header>
+      <div className={styles.staging} aria-label="人物位置与现场道具">
+        {actors.map((actor, index) => (
+          <ScenePerson
+            key={actor.id}
+            actor={actor}
+            placement={layout.actors[actor.id] || { x: 35 + index * 13, y: 74, height: 32 }}
+            speaking={speaker.startsWith(actor.name) && !speaker.includes('心声')}
+            pose={state.shotKey}
+          />
+        ))}
+        {state.sceneKey === 'mini_register' && (
+          <>
+            <img
+              className={styles.registrationForeground}
+              src={storyAssets.scenes.registrationDesk}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className={styles.registrationLayer}
+              src={
+                state.shotKey === 'register_rooms'
+                  ? storyAssets.scenes.registrationPropsClosedStack
+                  : state.shotKey === 'register_luggage'
+                    ? storyAssets.scenes.registrationPropsOpenSingle
+                    : storyAssets.scenes.registrationPropsOpenStack
+              }
+              alt=""
+              aria-hidden="true"
+            />
+            {state.shotKey === 'register_rooms' || state.shotKey === 'register_luggage' ? (
+              <div className={styles.registrationTags} aria-hidden="true">
+                <span>听</span>
+                <span>灯</span>
+                <span>纸</span>
+                <span>门</span>
+              </div>
+            ) : null}
+          </>
+        )}
+        {layout.props.map((prop) => (
+          <SceneProp
+            key={prop.id}
+            prop={prop}
+            enabled={enabled}
+            lit={Boolean(
+              state.flags.red_candle_lit ||
+              (prop.id === 'candle' && state.sceneKey === 'mini_oracle'),
+            )}
+            onAction={onAction}
+          />
+        ))}
+      </div>
+      {unseenSpeaker && (
+        <div className={styles.source} role="status">
+          <i />
+          {speaker} · 声音从门外传来
+        </div>
+      )}
+      {state.sceneKey === 'mini_refectory' && (
+        <MealDiscussion state={state} enabled={enabled} onAction={onAction} />
+      )}
+      <StoryReading shot={state.shotKey || ''} />
+      {state.sceneKey === 'mini_dawn_trap' && (
+        <div className={styles.soundLines} aria-label="近处与远处两段声音">
+          <span>
+            廊外近处 <i>▂▆▃▁ ▂▆▃▁ ▂▆▃▁ ▂▆▃▁ ▂▆▃▁</i>
+          </span>
+          <span>
+            钟楼方向 <i>▁▂▄▆████▆▄▂▁</i>
+          </span>
+        </div>
+      )}
+      {state.shotKey?.startsWith('double_scripture_') && (
+        <div className={styles.scripture} aria-label="念诵进度">
+          {['心不逐声，眼不随影', '一念既起，归于清明', '灯在我前', '门在我后'].map(
+            (line, index) => (
+              <span key={line} data-read={index < Number(state.shotKey?.split('_').at(-1))}>
+                {line}
+              </span>
+            ),
+          )}
+        </div>
+      )}
+      <div className={styles.choices} aria-label="主角的内心想法">
+        <span className={styles.thought}>我心里想……</span>
+        <div>
+          {sceneChoices(state).map((choice) => (
+            <button
+              type="button"
+              key={choice.command}
+              disabled={!enabled}
+              data-tone={choice.tone}
+              onClick={() => void onAction(choice.command)}
+            >
+              {choice.thought}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

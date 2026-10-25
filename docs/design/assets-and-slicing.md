@@ -2,7 +2,7 @@
 
 日期：2026-10-24
 
-本文记录当前运行中的演示素材与切图链路。以 `story/mini_script.md` 为依据制作的场景、人物及道具用途见 [素材用途总表](../../assets/generation/asset_usage.md)，这些新素材当前尚未接入本演示。
+本文记录旧版演示素材与切图链路。以 `story/mini_script.md` 为依据制作的场景、人物及道具用途见 [素材用途总表](../../assets/generation/asset_usage.md)；剧情运行时使用 `web/public/art/story/` 下的正式网页素材。
 
 ## 原始界面
 

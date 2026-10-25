@@ -31,7 +31,7 @@ func TestCharacterConfigurationDrivesDialogueAndRewards(t *testing.T) {
 		t.Fatal(err)
 	}
 	engine := NewEngine(catalog)
-	state := engine.Initial("test")
+	state := ruleState(engine, "test")
 	if state.Dialogue.Speaker != npc.Name || state.Dialogue.Text != npc.Intro {
 		t.Fatal("初始人设未采用配置")
 	}

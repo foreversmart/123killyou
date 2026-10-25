@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { VoiceStatus, VoiceAnswer } from './types';
-import { useSpeechOutput } from './useSpeechOutput';
-import { createVoiceTurns } from './voiceTurns';
-import { attachAudioInput } from './audioInput';
-import { createPushToTalk } from './pushToTalk';
-import { bindPushToTalkKeys } from './pushToTalkKeys';
-import { prepareMicrophone } from './microphoneCapture';
+import type { VoiceStatus, VoiceAnswer } from '@/features/voice/types';
+import { useSpeechOutput } from '@/features/voice/useSpeechOutput';
+import { soundSettingFor } from '@/features/voice/soundSetting';
+import { createVoiceTurns } from '@/features/voice/voiceTurns';
+import { attachAudioInput } from '@/features/voice/audioInput';
+import { createPushToTalk } from '@/features/voice/pushToTalk';
+import { bindPushToTalkKeys } from '@/features/voice/pushToTalkKeys';
+import { prepareMicrophone } from '@/features/voice/microphoneCapture';
+import { resumeAudioContext } from '@/features/voice/playbackContext';
 import type { AudioTranscription, SpeechCaption, TurnControls } from '@/shared/types/game';
 
-export type { VoiceStatus } from './types';
+export type { VoiceStatus } from '@/features/voice/types';
 
 export function useVoice(
   onText: (text: string, controls: TurnControls) => Promise<VoiceAnswer>,
@@ -16,6 +18,10 @@ export function useVoice(
 ) {
   const [status, setStatus] = useState<VoiceStatus>('idle');
   const [problem, setProblem] = useState('');
+  const [microphoneProblem, setMicrophoneProblem] = useState('');
+  const [playbackOn, setPlaybackOn] = useState(false);
+  const [microphoneOn, setMicrophoneOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
   const [caption, setCaption] = useState<SpeechCaption | null>(null);
   const handler = useRef(onText);
   handler.current = onText;
@@ -23,11 +29,14 @@ export function useVoice(
   transcription.current = openTranscription;
   const microphone = useRef<Awaited<ReturnType<typeof prepareMicrophone>> | null>(null);
   const wanted = useRef(false);
+  const outputEnabled = useRef(false);
   const capture = useRef<ReturnType<typeof createPushToTalk> | null>(null);
   const media = useRef<MediaStream | null>(null);
   const audio = useRef<AudioContext | null>(null);
   const analyser = useRef<AnalyserNode | null>(null);
   const ambient = useRef<GainNode | null>(null);
+  const sound = useRef(soundOn);
+  sound.current = soundOn;
   const initializing = useRef(false);
   const mounted = useRef(true);
 
@@ -35,7 +44,29 @@ export function useVoice(
     setProblem(message);
     setStatus(wanted.current ? 'listening' : 'idle');
   }, []);
-  const { speak, stream: receiveSpeech, stop } = useSpeechOutput(wanted, setStatus, audio, report);
+  const {
+    speak,
+    stream: receiveSpeech,
+    stop,
+  } = useSpeechOutput(outputEnabled, wanted, sound, setStatus, audio, report);
+  const enablePlayback = useCallback(async () => {
+    sound.current = true;
+    setSoundOn(true);
+    setProblem('');
+    try {
+      // Resume synchronously within the click gesture, before any microphone permission request.
+      await resumeAudioContext(audio);
+      if (!mounted.current) return false;
+      outputEnabled.current = true;
+      setPlaybackOn(true);
+      return true;
+    } catch {
+      outputEnabled.current = false;
+      setPlaybackOn(false);
+      report('浏览器未能启动音频播放，请检查声音设置后重试。');
+      return false;
+    }
+  }, [report]);
   const turns = useMemo(
     () =>
       createVoiceTurns({
@@ -57,10 +88,15 @@ export function useVoice(
             );
           receiveSpeech(event);
         },
-        start() {
+        start(text) {
           setProblem('');
           setStatus('processing');
           stop();
+          const setting = soundSettingFor(text);
+          if (setting !== undefined) {
+            sound.current = setting;
+            setSoundOn(setting);
+          }
         },
         answer(answer) {
           setStatus(wanted.current ? 'listening' : 'idle');
@@ -83,15 +119,19 @@ export function useVoice(
   );
 
   const start = useCallback(async () => {
-    if (!mounted.current || initializing.current || wanted.current) return;
+    if (wanted.current) return true;
+    if (!mounted.current || initializing.current) return false;
+    const playback = enablePlayback();
     if (!window.isSecureContext) {
       setStatus('error');
-      setProblem('麦克风需要可信的 HTTPS 或本机 localhost 地址；局域网 HTTP 地址不能开启语音。');
-      return;
+      setMicrophoneProblem(
+        '麦克风需要可信的 HTTPS 或本机 localhost 地址；局域网 HTTP 地址不能开启语音。',
+      );
+      return false;
     }
     initializing.current = true;
     setStatus('starting');
-    setProblem('');
+    setMicrophoneProblem('');
     try {
       capture.current?.dispose();
       microphone.current?.dispose();
@@ -104,19 +144,18 @@ export function useVoice(
       });
       if (!mounted.current) {
         stream.getTracks().forEach((track) => track.stop());
-        return;
+        return false;
       }
       media.current = stream;
-      if (!audio.current) audio.current = new AudioContext({ sampleRate: 16000 });
-      await audio.current.resume();
-      if (!mounted.current) return;
-      const input = attachAudioInput(audio.current, stream, ambient.current);
+      if (!(await playback) || !audio.current) throw new Error('Audio playback unavailable');
+      if (!mounted.current) return false;
+      const input = attachAudioInput(audio.current, stream, ambient.current, sound.current);
       analyser.current = input.analyser;
       ambient.current = input.ambient;
       microphone.current = await prepareMicrophone(audio.current, stream);
       if (!mounted.current) {
         microphone.current.dispose();
-        return;
+        return false;
       }
       capture.current = createPushToTalk({
         open: () => transcription.current(),
@@ -132,21 +171,25 @@ export function useVoice(
         problem: report,
       });
       wanted.current = true;
+      setMicrophoneOn(true);
       setStatus('listening');
+      return true;
     } catch (cause) {
       wanted.current = false;
+      setMicrophoneOn(false);
       setStatus('error');
       microphone.current?.dispose();
       media.current?.getTracks().forEach((track) => track.stop());
-      setProblem(
+      setMicrophoneProblem(
         cause instanceof Error && cause.name === 'NotAllowedError'
           ? '麦克风未获授权，请检查浏览器权限。'
           : '无法启动麦克风，请检查设备是否可用。',
       );
+      return false;
     } finally {
       initializing.current = false;
     }
-  }, [report, turns]);
+  }, [enablePlayback, report, turns]);
 
   useEffect(
     () =>
@@ -160,15 +203,28 @@ export function useVoice(
   );
 
   useEffect(() => {
+    if (ambient.current && audio.current)
+      ambient.current.gain.setTargetAtTime(soundOn ? 0.018 : 0, audio.current.currentTime, 0.3);
+    if (!soundOn) {
+      stop();
+      setStatus((current) =>
+        current === 'speaking' ? (wanted.current ? 'listening' : 'idle') : current,
+      );
+    }
+  }, [soundOn, stop]);
+
+  useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
       wanted.current = false;
+      outputEnabled.current = false;
       capture.current?.dispose();
       microphone.current?.dispose();
       turns.interrupt();
       media.current?.getTracks().forEach((track) => track.stop());
       void audio.current?.close();
+      audio.current = null;
       stop();
     };
   }, [stop, turns]);
@@ -182,5 +238,19 @@ export function useVoice(
     return Math.min(1, Math.sqrt(sum / data.length) * 5);
   }, []);
 
-  return { status, problem, caption, start, submit, level };
+  return {
+    status,
+    problem: problem || microphoneProblem,
+    playbackProblem: problem,
+    microphoneProblem,
+    playbackOn,
+    microphoneOn,
+    caption,
+    start,
+    enablePlayback,
+    submit,
+    level,
+    soundOn,
+    setSoundOn,
+  };
 }

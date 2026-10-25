@@ -15,11 +15,11 @@ import (
 )
 
 func TestRoleSelectedAtHandshakeWithoutRebinding(t *testing.T) {
-	for _, role := range []string{"", "keeper"} {
+	for _, role := range []string{"", "keeper", "player", "linlan", "zhouyan", "xuzhi", "huipu", "shangong"} {
 		t.Run("npc="+role, func(t *testing.T) {
 			want := "narrator"
 			if role != "" {
-				want = "keeper"
+				want = role
 			}
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get("X-Agent-ID") != want || r.Header.Get("Authorization") != "Bearer device-token" {
@@ -51,6 +51,7 @@ func TestRoleSelectedAtHandshakeWithoutRebinding(t *testing.T) {
 			}))
 			defer server.Close()
 			c := New(Config{APIKey: "management-key", KeeperAgent: "keeper", NarratorAgent: "narrator", RequestLimit: time.Second})
+			c.SetRoleAgents(map[string]string{"player": "player", "linlan": "linlan", "zhouyan": "zhouyan", "xuzhi": "xuzhi", "huipu": "huipu", "shangong": "shangong"})
 			c.identity = DeviceIdentity{DeviceID: "02:00:00:00:00:01", ClientID: "client"}
 			c.access = deviceAccess{URL: "ws" + strings.TrimPrefix(server.URL, "http"), Token: "device-token"}
 			c.accessAt = time.Now()

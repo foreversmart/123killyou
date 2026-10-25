@@ -14,12 +14,14 @@ import (
 // Respond uses a bound virtual device and returns both wording and PCM audio.
 // Serialize device turns: parallel connections with one identity can interrupt.
 func (c *Client) Respond(ctx context.Context, request session.DialogueRequest) (response session.DialogueResponse, err error) {
-	if request.NPCID != "" && request.NPCID != "keeper" {
-		return response, errors.New("linx NPC is not configured")
+	role := request.NPCID
+	if role == "" {
+		role = "keeper"
 	}
-	c.mu.RLock()
-	request.AgentID = c.config.KeeperAgent
-	c.mu.RUnlock()
+	request.AgentID, err = c.agentForRole(role)
+	if err != nil {
+		return response, err
+	}
 	return c.exchange(ctx, request, "", request.OnSpeech)
 }
 
@@ -27,15 +29,10 @@ func (c *Client) Synthesize(ctx context.Context, request session.SpeechRequest, 
 	if strings.TrimSpace(request.Text) == "" {
 		return session.DialogueAudio{}, errors.New("linx speech text is empty")
 	}
-	if request.NPCID != "" && request.NPCID != "keeper" {
-		return session.DialogueAudio{}, errors.New("linx speech NPC is not configured")
+	agentID, err := c.agentForRole(request.NPCID)
+	if err != nil {
+		return session.DialogueAudio{}, err
 	}
-	c.mu.RLock()
-	agentID := c.config.NarratorAgent
-	if request.NPCID == "keeper" {
-		agentID = c.config.KeeperAgent
-	}
-	c.mu.RUnlock()
 	response, err := c.exchange(ctx, session.DialogueRequest{AgentID: agentID, PlayerText: "播报本轮已确认的操作结果"}, request.Text, emit)
 	if err != nil {
 		return session.DialogueAudio{}, err
@@ -61,10 +58,7 @@ func (c *Client) exchange(ctx context.Context, request session.DialogueRequest, 
 			c.recordReply()
 		}
 	}()
-	c.mu.RLock()
-	keeper, narrator := c.config.KeeperAgent, c.config.NarratorAgent
-	c.mu.RUnlock()
-	if request.AgentID == "" || (request.AgentID != keeper && request.AgentID != narrator) {
+	if !c.projectAgent(request.AgentID) {
 		return response, errors.New("linx target agent is not configured for this project")
 	}
 	conn, hello, err := c.connect(ctx, request.GameContext, request.AgentID)

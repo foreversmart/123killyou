@@ -10,15 +10,15 @@ export function HelpPanel() {
       <dl>
         <div>
           <dt>观察</dt>
-          <dd>“看看桌上的账本”</dd>
+          <dd>“看看桌上的经书”“查看肉粥”</dd>
         </div>
         <div>
           <dt>移动</dt>
-          <dd>“去走廊”“回休息室”</dd>
+          <dd>“登记入住”“去斋堂”“回自己的房间”</dd>
         </div>
         <div>
-          <dt>交付</dt>
-          <dd>“把铜钥匙给守夜人”</dd>
+          <dt>对白</dt>
+          <dd>“继续听”“重听当前对白”</dd>
         </div>
         <div>
           <dt>查看</dt>

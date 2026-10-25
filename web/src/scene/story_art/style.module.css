@@ -1,0 +1,44 @@
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  background: #14272c;
+}
+.art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.art [data-flame='true'] {
+  animation: flame 3.1s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+.art [data-fog='true'] {
+  animation: mist 13s ease-in-out infinite alternate;
+}
+@keyframes flame {
+  35% {
+    opacity: 0.7;
+    transform: scaleX(0.8) rotate(3deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scaleX(1.1) rotate(-3deg);
+  }
+}
+@keyframes mist {
+  to {
+    transform: translateX(25px);
+    opacity: 0.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .art [data-flame='true'],
+  .art [data-fog='true'] {
+    animation: none;
+  }
+}

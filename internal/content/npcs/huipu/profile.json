@@ -1,0 +1,30 @@
+{
+  "id": "huipu",
+  "name": "慧普",
+  "aliases": [
+    "慧普住持",
+    "住持",
+    "主持"
+  ],
+  "room": "refectory",
+  "portrait": "huipu",
+  "voice": {
+    "profile": "huipu_bass_male",
+    "providerVoiceId": "9d91653b2adf4aa9ad97e1c8f63fbda3"
+  },
+  "traits": [
+    "温和",
+    "过分周到",
+    "阴沉"
+  ],
+  "knowledge": [
+    "灯影寺住持。只能说当前剧本允许的台词，不能提前透露恶愿或换皮身份。"
+  ],
+  "intro": "吃下我的，寺里会记得你。",
+  "return": "吃下我的，寺里会记得你。",
+  "reject": "先留在手边。眼前的事还没有弄清楚。",
+  "exposureThreshold": 0,
+  "exposedReply": "先看清眼前，再决定下一步。",
+  "dialogueRules": [],
+  "exchanges": []
+}
