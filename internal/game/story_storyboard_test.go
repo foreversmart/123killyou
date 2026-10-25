@@ -50,8 +50,8 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀", "陆沉"}) {
 		t.Fatalf("入住说话者: %v", got)
 	}
-	if s.ShotKey != "register_luggage" {
-		t.Fatal("没有演出安置行李")
+	if s.ShotKey != "register_key_tags" {
+		t.Fatal("没有演出钥匙和房牌交接")
 	}
 	e.Apply(&s, "去斋堂")
 	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀"}) {

@@ -86,8 +86,12 @@ func TestStoryItemsArriveAtTheirScenesAndResetClearsThem(t *testing.T) {
 		t.Fatal(err)
 	}
 	registered := run(t, s, state.ID, "register", "登记入住").State
-	if registered.SceneKey != "mini_register" || len(registered.Inventory) != 4 {
-		t.Fatalf("登记时未发放房间用品: %+v", registered)
+	if registered.SceneKey != "mini_register" || len(registered.Inventory) != 0 {
+		t.Fatalf("山门转入登记室时不应提前发放房间用品: %+v", registered)
+	}
+	registered = run(t, s, state.ID, "register-dialogue", "听入住对白").State
+	if len(registered.Inventory) != 4 || !registered.Flags["registration_items_given"] {
+		t.Fatalf("登记室登记后未发放房间用品: %+v", registered)
 	}
 	for _, item := range registered.Inventory {
 		if item.ID == "candle" {

@@ -35,7 +35,7 @@ func (e *Engine) StartMiniStory(state *State) {
 	state.StoryMode = true
 	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
-	miniObserve(state, "阳光从车窗斜进来，大巴停在红烛寺山门前。车门打开，鸟鸣穿过树叶，登记桌就在檐下。")
+	miniObserve(state, "阳光从车窗斜进来，大巴停在红烛寺山门前。车门打开，鸟鸣穿过树叶，四只小旅行包已经放在檐下靠墙处。")
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.
@@ -72,7 +72,7 @@ func (e *Engine) ApplyWithDecision(ctx context.Context, state *State, text strin
 		if intent, speak, ok := e.system(state, text); ok {
 			return intent, speak
 		}
-		if intent, speak, ok := e.story(state, text); ok {
+		if intent, speak, ok := e.story(state, text, decision); ok {
 			return intent, speak
 		}
 	}

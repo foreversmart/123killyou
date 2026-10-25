@@ -12,6 +12,7 @@ type TravelBeat = {
   landmark: string;
   kind: 'walk' | 'sleep';
   backdrop: string;
+  durationMs?: number;
 };
 
 const travelBeats: Record<string, TravelBeat> = {
@@ -22,6 +23,7 @@ const travelBeats: Record<string, TravelBeat> = {
     landmark: '山门石阶 · 铜铃 · 晒太阳的花猫',
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardAfternoon,
+    durationMs: 3000,
   },
   mini_refectory: {
     id: 'register_walk_refectory',
@@ -76,7 +78,7 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
     const next = travelBeats[sceneKey];
     if (!next) return;
     setActive(next);
-    const timer = window.setTimeout(() => setActive(null), 1900);
+    const timer = window.setTimeout(() => setActive(null), next.durationMs ?? 2200);
     return () => window.clearTimeout(timer);
   }, [sceneKey, state.flags.debug_scene_skipped]);
 
@@ -85,20 +87,24 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
   return (
     <div className={styles.transition} data-transition={beat.id} role="status" aria-live="polite">
       <img
+        className={styles.backdrop}
         src={beat.backdrop}
         alt=""
         aria-hidden="true"
-        style={{
-          position: 'absolute',
-          zIndex: 0,
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center',
-          opacity: 0.3,
-          filter: 'saturate(0.7) brightness(0.68)',
-        }}
+        style={
+          {
+            position: 'absolute',
+            zIndex: 0,
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            opacity: 0.3,
+            filter: 'saturate(0.7) brightness(0.68)',
+            '--travel-duration': `${(beat.durationMs ?? 2200) / 1000}s`,
+          } as CSSProperties
+        }
       />
       <div className={styles.sky} aria-hidden="true" />
       {beat.kind === 'sleep' ? (
