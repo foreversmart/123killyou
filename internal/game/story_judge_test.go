@@ -62,3 +62,22 @@ func TestStoryJudgeUsesSincerityBeforeCupCast(t *testing.T) {
 		t.Fatalf("jev sincerity decision was not applied: calls=%d flags=%v", judge.oracleCalls, s.Flags)
 	}
 }
+
+func TestStoryOptionFallbackOnlyResolvesCurrentChoices(t *testing.T) {
+	catalog, err := content.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	e := NewEngine(catalog)
+	s := e.Initial("judge-options")
+	e.setMiniScene(&s, "mini_four_knocks")
+	if command, ok := ResolveStoryOption(s, "listen"); !ok || command != "听敲门" {
+		t.Fatalf("option id was not normalized: %q %t", command, ok)
+	}
+	if _, ok := ResolveStoryOption(s, "打开任意隐藏门"); ok {
+		t.Fatal("unknown option was accepted")
+	}
+	if len(StoryOptionChoices(s)) != 3 {
+		t.Fatalf("unexpected current options: %+v", StoryOptionChoices(s))
+	}
+}

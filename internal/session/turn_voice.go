@@ -13,6 +13,7 @@ type voicePlan struct {
 	BufferedDialogue          bool
 	PreviousReplies           []string
 	Speaker, Portrait         string
+	FallbackCommand           string
 	StoryDecision             game.StoryDecision
 }
 
@@ -41,6 +42,44 @@ func (s *Service) planVoice(ctx context.Context, tx Transaction, before game.Sta
 		decision := s.engine.PrepareStoryDecision(ctx, before, text, describeStoryHistory(memories))
 		plan.StoryDecision = decision
 		intent, reply = s.engine.ApplyWithDecision(ctx, &candidate, text, decision)
+	}
+	// When a scene exposes buttons, an ASR paraphrase may be routed as an open
+	// dialogue or clarification before the deterministic rules can recognize
+	// it. Ask JEV only for those unmatched turns (plus the four-knock scene's
+	// intentional silent inspection); recognized story actions remain local.
+	needsOptionFallback := (intent == "clarify" || intent == "dead" ||
+		(intent == "dialogue" && strings.TrimSpace(reply) == "")) &&
+		!game.StoryTextMatchesOption(before, text)
+	if before.SceneKey == "mini_four_knocks" && intent == "inspect" &&
+		!game.StoryTextMatchesOption(before, text) {
+		needsOptionFallback = true
+	}
+	if before.SceneKey == "mini_ending" && !game.StoryTextMatchesOption(before, text) {
+		needsOptionFallback = true
+	}
+	if needsOptionFallback {
+		// ASR often produces a close paraphrase of a visible button. Give JEV
+		// the constrained server-side option list only after local matching has
+		// failed, then apply the returned canonical command on a fresh state.
+		if option := s.engine.PrepareOptionDecision(ctx, before, text); option != nil {
+			if command, ok := game.ResolveStoryOption(before, option.Choice); ok {
+				fallback := game.Clone(before)
+				fallback.Revision++
+				fallback.LastHeard = text
+				fallback.Effect = game.Effect{Kind: "none"}
+				var fallbackHandled bool
+				intent, reply, fallbackHandled, err = s.control(planningTransaction{tx}, &fallback, before, command)
+				if err != nil {
+					return voicePlan{}, err
+				}
+				if !fallbackHandled {
+					intent, reply = s.engine.ApplyWithDecision(ctx, &fallback, command, game.StoryDecision{})
+				}
+				fallback.LastHeard = text
+				candidate = fallback
+				plan.FallbackCommand = command
+			}
+		}
 	}
 	plan.Reply = reply
 	if candidate.Dialogue.Text == reply {

@@ -60,10 +60,10 @@ export function playStoryCue(
   };
   if (cue.kind === 'gong') {
     const duration = cue.duration || 1.1;
-    tone(208, duration * 0.77, 0.12);
-    tone(337, duration * 0.64, 0.05);
-    tone(551, duration * 0.45, 0.035);
-    noise(Math.min(0.3, duration * 0.27), 0.2, 900);
+    tone(208, duration * 0.77, 0.15);
+    tone(337, duration * 0.64, 0.06);
+    tone(551, duration * 0.45, 0.042);
+    noise(Math.min(0.3, duration * 0.27), 0.24, 900);
   }
   if (cue.kind === 'bell') {
     tone(93, 3.2, 0.13);
@@ -71,13 +71,13 @@ export function playStoryCue(
     tone(502, 2.1, 0.025);
   }
   if (cue.kind === 'knock') {
-    tone(145, 0.13, 0.2);
-    tone(282, 0.09, 0.04);
-    noise(0.11, 0.25, 460);
+    tone(145, 0.13, 0.28);
+    tone(282, 0.09, 0.056);
+    noise(0.11, 0.34, 460);
   }
   if (cue.kind === 'shatter') {
-    noise(1.1, 0.6, 3400);
-    [1180, 2070, 3120].forEach((hz, index) => tone(hz, 0.4, 0.04, index * 0.11));
+    noise(1.1, 0.78, 3400);
+    [1180, 2070, 3120].forEach((hz, index) => tone(hz, 0.4, 0.052, index * 0.11));
   }
   if (cue.kind === 'bird') {
     tone(1640, 0.16, 0.035);

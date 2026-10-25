@@ -75,6 +75,38 @@ func TestJudgeOracleMapsTypeSafeRubricScoreToPercentage(t *testing.T) {
 	}
 }
 
+func TestJudgeOptionSendsConstrainedChoicesAndParsesID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatal(err)
+		}
+		questions := body["questions"].(map[string]any)
+		option := questions["option"].(map[string]any)
+		if !strings.Contains(option["instructions"].(string), "只能选择") {
+			t.Fatalf("option guard missing: %+v", option)
+		}
+		criteria := option["criteria"].(map[string]any)
+		if criteria["listen"] == nil || criteria["none"] == nil {
+			t.Fatalf("constrained choices missing: %+v", criteria)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"answers":{"option":{"type":"choice","choice":"listen","confidence":0.91}}}`))
+	}))
+	defer server.Close()
+	client := New(Config{APIKey: "test-key", APIBase: server.URL})
+	result, err := client.JudgeOption(context.Background(), game.OptionJudgeRequest{
+		PlayerText: "我想先听一下",
+		Scene:      "门房·四敲空门",
+		Options: []game.StoryOption{
+			{ID: "listen", Command: "听敲门", Description: "重听四敲"},
+		},
+	})
+	if err != nil || result.Choice != "listen" || result.Confidence != .91 {
+		t.Fatalf("JudgeOption() = %+v, %v", result, err)
+	}
+}
+
 func TestJudgeRejectsMissingKeyAndInvalidResponse(t *testing.T) {
 	client := New(Config{})
 	if _, err := client.JudgeOracle(context.Background(), game.OracleJudgeRequest{PlayerText: "回答"}); err == nil {
