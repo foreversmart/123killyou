@@ -25,7 +25,7 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 			miniObserve(state, "四敲后留下一段寂静，轻笑从门后退远。走廊另一端响起三下敲门，没有脚步靠近门前。")
 			return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
 		}
-		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)+" 先别开门，沿墙走，别惊动里面的人。"), true
+		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
 	}
 	if miniHasAny(text, "检查门缝", "看门眼", "观察门外", "看门闩") {
 		miniShot(state, "four_peephole")
@@ -70,13 +70,13 @@ func miniCompanionName(state *State) string {
 func miniCompanionLine(state *State) string {
 	switch miniCompanionID(state) {
 	case "linlan":
-		return "相机盖还挂在铜铃旁。我刚才从窗缝看见住持进了周砚的房，里面像是有人在挪东西。"
+		return "喂，赵熙还在吗？我刚从窗缝看见住持进了周砚的房，那边好像有人在挪东西。"
 	case "zhouyan":
-		return "灯座下面的修缮图还在，我没拿走。刚才我看见慧普进了许栀的房，门轴响了一下，随后就没声了。"
+		return "喂，赵熙，你还在吗？我刚看见慧普进了许栀的房，她的门响了一下，你听见了吗？"
 	case "xuzhi":
-		return "我的蓝色发圈还夹着那张残页。我听见门里有拖动声，像重物擦过地板。"
+		return "喂，赵熙，你还醒着吗？我有点害怕。我刚听见了外面有拖动的声音，像是重物拖过地板，你听见了吗？要不要跟我来看一下？"
 	default:
-		return "我从窗户看见住持进了同伴的房间。"
+		return "喂，赵熙，我刚看见住持进了同伴的房间。"
 	}
 }
 
@@ -89,7 +89,7 @@ func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bo
 		if miniCompanionID(state) == "" {
 			return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
 		}
-		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)+" 你先听清楚，再跟我走。"), true
+		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
 	}
 	if miniHasAny(text, "开门") && !miniHasAny(text, "不开门") {
 		if !state.Flags["companion_checked"] {

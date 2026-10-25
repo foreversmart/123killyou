@@ -27,7 +27,7 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 	if miniHasAny(text, "回答姓名", "开口回应", "回答门外", "和门外说话", "与门外对话", "继续和鬼说话") {
 		recordGhostDialogue(state)
 		miniSetFlag(state, "name_echo_heard")
-		return "story", miniDialogue(state, "你（门外回声）", "是我。你怎么还不开门？"), true
+		return "story", miniDialogue(state, "赵熙（门外回声）", "是我。你怎么还不开门？"), true
 	}
 	if miniHasAny(text, "听声音", "看窗外", "观察天色") {
 		return "inspect", miniObserve(state, "五声更锣的余震散去，远处一声低长的锣慢慢拖长。窗纸仍黑，红烛在门边燃着。"), true

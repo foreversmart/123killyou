@@ -105,7 +105,7 @@ func TestReadingScriptureIsSpokenByThePlayer(t *testing.T) {
 	e, s := storyAtListen(t, true)
 	e.Apply(&s, "模仿猫叫")
 	_, speak := e.Apply(&s, "朗读清心静神经")
-	if s.Dialogue.Speaker != "你" || speak != miniScripture[0] {
+	if s.Dialogue.Speaker != "赵熙" || speak != miniScripture[0] {
 		t.Fatalf("实际念诵被写成内心独白: %+v", s.Dialogue)
 	}
 }

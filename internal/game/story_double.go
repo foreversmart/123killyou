@@ -39,7 +39,7 @@ func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 					miniSetFlag(state, "double_calm")
 					state.DialogueNext = "继续听"
 				}
-				return "story", miniDialogue(state, "你", line), true
+				return "story", miniDialogue(state, "赵熙", line), true
 			}
 		}
 		return "story", miniObserve(state, "同行人伏在床脚，红烛仍亮着，抓挠声没有再响。"), true
