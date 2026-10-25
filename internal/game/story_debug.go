@@ -22,11 +22,11 @@ func (e *Engine) skipMiniScene(state *State) (string, string) {
 		}
 	}
 	if index < 0 {
-		return "debug_skip", miniInner(state, "眼前没有可继续的剧情场景。")
+		return "debug_skip", miniSystem(state, "当前没有可继续的剧情场景。")
 	}
 	if index == len(miniDebugSceneOrder)-1 {
 		state.DialogueNext = ""
-		return "debug_skip", miniInner(state, "这一夜已经结束。大巴正在返程，后面没有新的剧情场景。")
+		return "debug_skip", miniSystem(state, "这一夜已经结束，后面没有新的剧情场景。")
 	}
 	target := miniDebugSceneOrder[index+1]
 	e.prepareMiniDebugScene(state, index+1)
@@ -133,30 +133,30 @@ func miniDebugOpening(state *State) string {
 	case "mini_corridor_candle":
 		return miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。")
 	case "mini_room":
-		return miniInner(state, "我回到门房。关门声落下，红烛已经点稳，桌上的寺史册和《清心静神经》还没有收起。")
+		return miniObserve(state, "门房的门关上，红烛已经点稳，桌上的寺史册和《清心静神经》还没有收起。")
 	case "mini_wake_three_gongs":
-		return miniInner(state, "三声沉闷的锣把我惊醒。烛芯已经黑了，月光移过门缝，外面传来湿重的呼吸。")
+		return miniObserve(state, "黑场中响起三声沉闷的锣。烛芯已经黑了，月光移过门缝，外面传来湿重的呼吸。")
 	case "mini_four_knocks":
-		return miniInner(state, "火光先照出门闩上的水痕，烛芯才重新立起。四下敲门之后，门外没有脚步，我把手从门闩上收回来。")
+		return miniObserve(state, "火光先照出门闩上的水痕，烛芯才重新立起。四下敲门之后，门外没有脚步，压在门闩上的手收了回来。")
 	case "mini_three_knocks":
 		if miniCompanionID(state) != "" {
 			return miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)+" 先别开门，沿墙走，别惊动里面的人。")
 		}
-		return miniInner(state, "三下敲门从走廊传来。晚膳时他们都喝了粥，熟悉的声音也未必可信；我得先核对门外的人。")
+		return miniObserve(state, "三下敲门从走廊传来。熟悉的声音反复说着‘跟我来’，没有说出私物的细节。")
 	case "mini_listen":
 		if state.Flags["companion_present"] {
 			return miniDialogue(state, miniCompanionName(state), "别踩中间的砖，沿着墙走。半掩房门里，慧普像是背对着我们，先别惊动他。")
 		}
-		return miniInner(state, "我独自贴着墙走。猫食碟旁先叫了一声，半掩房门里传来撕裂声，脚后跟旁就是花瓶。")
+		return miniObserve(state, "视线贴着墙向半掩房门移动。猫食碟旁先叫了一声，半掩房门里传来撕裂声，脚后跟旁就是花瓶。")
 	case "mini_oracle":
-		return miniInner(state, "偏灯在地上拖出一条窄光。我听见身后的脚步，却先分不清那是脚步、风声，还是自己的回声。")
+		return miniObserve(state, "偏灯在地上拖出窄光，杯筊桌出现在殿侧。身后的脚步由远及近，与穿堂风错开。")
 	case "mini_double":
-		return miniInner(state, "隔壁先响起门闩，门缝里伸进一只熟悉的鞋。同行人撞进门房，红烛照亮了衣服，影子的边缘却缺了一块。")
+		return miniObserve(state, "隔壁先响起门闩，门缝里伸进一只熟悉的鞋。同行人撞进门房，红烛照亮了衣服，影子的边缘却缺了一块。")
 	case "mini_dawn_trap":
-		return miniInner(state, "五声更锣停下后，另一声才从更远的地方过来。窗纸仍然黑着，红烛还亮着。")
+		return miniObserve(state, "五声更锣停下后，另一声才从更远的地方过来。窗纸仍然黑着，红烛还亮着。")
 	case "mini_dawn":
-		return miniInner(state, "真正的五声更锣响了。鸡鸣先起，檐鸟跟着应声，晨光才越过东院；林岚、周砚、许栀都站在各自的房门前。")
+		return miniObserve(state, "五声更锣再次响起。鸡鸣先起，檐鸟跟着应声，晨光才越过东院；林岚、周砚、许栀都站在各自的房门前。")
 	default:
-		return miniInner(state, "我们四个坐上返程大巴。晨雾退到车后，后视镜里‘明照寺’三个旧字闪了一下。")
+		return miniObserve(state, "四只行李放进大巴，车门合拢。晨雾退到车后，后视镜里‘明照寺’三个旧字闪了一下。")
 	}
 }

@@ -94,6 +94,7 @@ func TestStoryConversationKeepsAddressedSpeakerAndRejectsAbsentNPC(t *testing.T)
 func TestMentioningReplayDoesNotRepeatThePreviousLine(t *testing.T) {
 	e := conversationTestEngine(t)
 	s := e.Initial("replay-request")
+	e.Apply(&s, "听第一话")
 	before := s.Dialogue.Text
 	intent, speak := e.Apply(&s, "林岚，不要再说一遍旧话，你知道宇宙飞船吗")
 	if intent == "replay" || speak == before {

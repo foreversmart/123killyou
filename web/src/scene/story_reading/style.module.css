@@ -43,3 +43,16 @@
   color: #bdbfa1;
   clip-path: polygon(0 0, 100% 0, 98% 30%, 100% 48%, 97% 60%, 99% 100%, 0 92%);
 }
+.ink {
+  color: #323b2a;
+  text-shadow: 0.5px 0 #323b2a;
+}
+.seal {
+  width: fit-content;
+  margin: 1cqw 0 0 auto;
+  border: 3px double #994537;
+  padding: 0.4cqw;
+  color: #994537;
+  transform: rotate(-9deg);
+  font-family: serif;
+}

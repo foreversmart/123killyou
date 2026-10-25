@@ -68,9 +68,14 @@ func TestStoryUnmatchedSpeechUsesFreshNPCResponseAndRecentContext(t *testing.T) 
 func TestStoryRepeatedCloudReplyIsNotPlayedOrCommitted(t *testing.T) {
 	provider := &fakeDialogueProvider{}
 	service, before := storyConversationService(t, provider)
+	intro, err := service.Command(before.ID, before.RunID, "intro", "听第一话")
+	if err != nil {
+		t.Fatal(err)
+	}
+	before = intro.State
 	provider.text = before.Dialogue.Text
 	var emitted bool
-	_, err := service.CommandStream(context.Background(), before.ID, before.RunID, "repeat", "林岚，你懂宇宙飞船吗？", func(session.SpeechEvent) error {
+	_, err = service.CommandStream(context.Background(), before.ID, before.RunID, "repeat", "林岚，你懂宇宙飞船吗？", func(session.SpeechEvent) error {
 		emitted = true
 		return nil
 	})

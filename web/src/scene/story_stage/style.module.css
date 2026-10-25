@@ -4,43 +4,6 @@
   color: #e6d3a6;
   pointer-events: none;
 }
-.heading {
-  position: absolute;
-  z-index: 5;
-  left: 3.7%;
-  top: 4.5%;
-  max-width: 58%;
-  border-left: 2px solid #c8ab70;
-  padding: 0.3cqw 1cqw;
-  background: linear-gradient(90deg, #17201ce0, #17201c80 75%, transparent);
-  text-shadow: 0 2px 3px #0005;
-}
-.heading > span {
-  font-size: clamp(9px, 0.7cqw, 13px);
-  letter-spacing: 0.15em;
-  color: #c4b68e;
-}
-.heading h2 {
-  margin: 0.45cqw 0;
-  font-size: clamp(14px, 1.3cqw, 22px);
-  font-weight: 500;
-  letter-spacing: 0.06em;
-}
-.heading p {
-  font-size: clamp(9px, 0.7cqw, 13px);
-  line-height: 1.5;
-  opacity: 0.75;
-  margin: 0;
-}
-.daylight .heading {
-  background: linear-gradient(90deg, #f3e6cbe0, #f3e6cb80 75%, transparent);
-  color: #3c503d;
-  text-shadow: 0 1px #fff4;
-  border-color: #738259;
-}
-.daylight .heading > span {
-  color: #5d7053;
-}
 .staging {
   position: absolute;
   inset: 0;

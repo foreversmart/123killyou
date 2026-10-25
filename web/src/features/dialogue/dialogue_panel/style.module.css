@@ -1,16 +1,23 @@
 .dialogue-panel {
   grid-column: 1;
   grid-row: 3;
+  align-self: end;
   position: relative;
   display: grid;
   grid-template-columns: 11% minmax(0, 1fr) 19%;
   padding: 0.55cqw 0.85cqw 0.6cqw 0.7cqw;
-  min-height: 7.8cqw;
+  min-height: 8.2cqw;
   border-top: 2px solid #675033;
   z-index: 8;
 }
 .dialogue-panel--narrator {
   grid-template-columns: minmax(0, 1fr) 19%;
+}
+.quiet {
+  grid-template-columns: minmax(0, 1fr) 19%;
+}
+.quiet > :last-child {
+  grid-column: 2;
 }
 .speaker-portrait {
   position: relative;

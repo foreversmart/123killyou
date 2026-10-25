@@ -15,12 +15,12 @@ func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
 			miniSetFlag(state, "cup_failed")
 			miniShot(state, "oracle_stone")
 			state.DialogueNext = "继续听"
-			return "story", miniInner(state, "杯面没有落成一平一凸。神公先低头看自己的指尖，灰色沿着手背爬上衣领；大殿深处的脚步又近了一步。"), true
+			return "story", miniObserve(state, "两片杯面朝向相同的一侧。神公低头看指尖，灰色沿手背爬上衣领，身后佛像显出相同的脸。殿外脚步又近了一步。"), true
 		case "oracle_rescue":
 			state.Flags["red_candle_lit"] = true
-			return "move", e.afterMiniEscape(state, "神公提着引路红烛把我送到门房。房内的红烛重新站稳，门闩落下。"), true
+			return "move", e.afterMiniEscape(state, "引路红烛沿回廊移向门房。房内红烛重新站稳，门闩落下。"), true
 		case "oracle_stone":
-			intent, speak := e.storyDeath(state, "神公化成了佛像，再没有人替我引灯。慧普的脚步停在我的身后。")
+			intent, speak := e.storyDeath(state, "神公化成佛像，引路红烛熄灭。慧普的脚步停在身后。")
 			return intent, speak, true
 		default:
 			miniShot(state, "oracle_rules")
@@ -58,7 +58,7 @@ func (e *Engine) storyOracle(state *State, text string) (string, string, bool) {
 		}
 		miniShot(state, "oracle_cast")
 		state.DialogueNext = "继续听"
-		return "story", miniInner(state, "我只问一件事：回到自己的房间。两片杯筊离开手心，在灯下翻了几次，先后落到地砖上。"), true
+		return "story", miniObserve(state, "两片杯筊离开手心，在灯下翻转，先后落到地砖上。神公低头看着杯面。"), true
 	}
 	if miniHasAny(text, "求神公", "救我", "带我回房", "我想回自己的房间", "确认求回门房") {
 		miniSetFlag(state, "oracle_question")

@@ -19,7 +19,7 @@ func (e *Engine) system(state *State, text string) (string, string, bool) {
 	}
 	if (Has(text, "关掉", "关闭", "收起", "返回房间", "返回场景") && !Has(text, "声音", "静音")) || text == "返回" {
 		state.Overlay, state.FocusItem = "", ""
-		return "close", feedback(state, "已返回房间。"), true
+		return "close", feedback(state, "已关闭。"), true
 	}
 	if Has(text, "地图") && (Has(text, "看", "打开", "显示", "调出") || text == "地图") {
 		state.Overlay = "map"
@@ -29,9 +29,9 @@ func (e *Engine) system(state *State, text string) (string, string, bool) {
 		state.Overlay = "help"
 		return "help", feedback(state, "你可以直接说：看看地图、去走廊、看看账本，或者把铜钥匙给守夜人。进度自动保存；说“保存为入堂前”建立检查点，说“回到入堂前”读取。说“返回”可收起界面。"), true
 	}
-	if Has(text, "设置", "关闭声音", "打开声音", "开启声音", "静音", "取消静音") {
+	if Has(text, "设置") {
 		state.Overlay = "settings"
-		return "settings", feedback(state, "你可以说“关闭声音”或“打开声音”。语音聆听会保持开启。"), true
+		return "settings", feedback(state, "系统设置已打开。说“重置进度”重新开始游戏，或说“返回”关闭。"), true
 	}
 	if Has(text, "手记", "线索", "笔记") && !Has(text, "给", "交给") {
 		state.Overlay = "journal"

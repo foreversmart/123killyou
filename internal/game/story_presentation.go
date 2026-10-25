@@ -38,6 +38,15 @@ func miniInner(state *State, text string) string {
 	return miniDialogue(state, "你·心声", text)
 }
 
+// Observations belong to the scene and its sound sources, never the speech
+// channel. Clearing Dialogue also prevents replaying the previous character.
+func miniObserve(state *State, text string) string {
+	state.SceneText = text
+	state.LastAction = text
+	state.Dialogue = Dialogue{}
+	return ""
+}
+
 func miniClue(state *State, clue string) {
 	for _, existing := range state.Clues {
 		if existing == clue {

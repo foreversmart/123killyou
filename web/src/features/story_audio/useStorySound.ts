@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { VoiceStatus } from '@/features/voice/types';
-import { cueSignature, storyCues } from './cues';
+import { cueDuration, cueSignature, storyCues } from './cues';
 import { playStoryCue } from './synthesis';
 
-export function useStorySound(state: GameState | null, soundOn: boolean, voiceStatus: VoiceStatus) {
+export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus) {
   const context = useRef<AudioContext | null>(null);
   const sources = useRef<AudioScheduledSourceNode[]>([]);
   const played = useRef(new Set<string>());
@@ -37,8 +37,24 @@ export function useStorySound(state: GameState | null, soundOn: boolean, voiceSt
     };
   }, []);
   const signature = state ? cueSignature(state) : '';
+  useEffect(
+    () => () => {
+      clearTimeout(finishTimer.current);
+      volumeNode.current?.disconnect();
+      sources.current.forEach((source) => {
+        try {
+          source.stop();
+        } catch {
+          /* Already ended. */
+        }
+      });
+      sources.current = [];
+      setBusy(false);
+    },
+    [signature],
+  );
   useEffect(() => {
-    if (!soundOn || state?.paused) {
+    if (state?.paused) {
       clearTimeout(finishTimer.current);
       volumeNode.current?.disconnect();
       sources.current.forEach((source) => {
@@ -65,6 +81,7 @@ export function useStorySound(state: GameState | null, soundOn: boolean, voiceSt
     clearTimeout(finishTimer.current);
     volumeNode.current?.disconnect();
     played.current.add(signature);
+    played.current.add(`${state.runId}:${state.sceneKey}:${state.shotKey || ''}`);
     if (!cues.length) {
       setBusy(false);
       return;
@@ -82,11 +99,11 @@ export function useStorySound(state: GameState | null, soundOn: boolean, voiceSt
     volume.connect(context.current.destination);
     sources.current = cues.flatMap((cue) => playStoryCue(context.current!, cue, volume));
     setBusy(true);
-    const duration = Math.max(...cues.map((cue) => cue.at + (cue.kind === 'bell' ? 3.3 : 1.1)));
+    const duration = Math.max(...cues.map((cue) => cue.at + cueDuration(cue)));
     finishTimer.current = setTimeout(() => {
       setBusy(false);
       volume.disconnect();
     }, duration * 1000);
-  }, [signature, soundOn, unlocked, state?.paused, voiceStatus]);
+  }, [signature, unlocked, state?.paused, voiceStatus]);
   return busy;
 }

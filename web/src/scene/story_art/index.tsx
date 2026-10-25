@@ -66,7 +66,7 @@ export function StoryArt({ state }: { state: GameState }) {
         viewBox="0 0 1000 600"
         preserveAspectRatio="none"
         role="img"
-        aria-label={descriptions[key] || state.sceneText}
+        aria-label={state.sceneText || descriptions[key]}
       >
         <ArtDefs id={id} />
         {assetScene ? (
@@ -115,7 +115,11 @@ function selectSceneAsset(
   if (key === 'mini_dawn_trap') return storyAssets.scenes.playerRoomFalseDawn;
   if (key === 'mini_wake_three_gongs') return storyAssets.scenes.playerRoomMoonlit;
   if (key === 'mini_four_knocks') return storyAssets.scenes.peepholeEmpty;
-  if (key === 'mini_death') return storyAssets.scenes.playerRoomMoonlit;
+  if (key === 'mini_death') {
+    if (shot === 'death_mini_listen') return storyAssets.scenes.guestRoomNight;
+    if (shot === 'death_mini_oracle') return storyAssets.scenes.shrineNight;
+    return storyAssets.scenes.playerRoomMoonlit;
+  }
   if (key === 'mini_room' || key === 'mini_three_knocks' || key === 'mini_double')
     return flags.red_candle_lit
       ? storyAssets.scenes.playerRoom

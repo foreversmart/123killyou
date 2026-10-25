@@ -1,5 +1,7 @@
 import type { GameState } from '@/shared/types/game';
+import { StoryObservation } from '@/scene/story_observation';
 import { storyAssets } from '@/shared/lib/story_assets';
+import { SceneHeading } from '@/scene/scene_heading';
 import styles from './style.module.css';
 import artwork from './artwork.module.css';
 import openingStyles from './opening_reel.module.css';
@@ -144,11 +146,11 @@ export function ArrivalInteraction({
   const disabled = !enabled || state.paused || state.caught;
   return (
     <div className={interaction.interaction} aria-label="第一幕：大巴抵达灯影寺">
-      <div className={interaction.heading}>
-        <span>第一幕 · 晴天下午</span>
-        <h2>01 · 大巴抵达灯影寺</h2>
-        <p>周末，四个人，一次说好的散心。</p>
-      </div>
+      <SceneHeading
+        chapter="第一幕 · 晴天下午"
+        title="01 · 大巴抵达灯影寺"
+        description="周末，四个人，一次说好的散心。"
+      />
       {hotspots.map((prop) => (
         <button
           className={interaction.hotspot}
@@ -163,7 +165,8 @@ export function ArrivalInteraction({
           <span>{prop.name}</span>
         </button>
       ))}
-      <div className={interaction.actions} aria-label="我接下来想做什么">
+      <StoryObservation state={state} />
+      <div className={interaction.actions} aria-label="接下来的行动">
         <button disabled={disabled} type="button" onClick={() => void onAction('听第一话')}>
           听听他们在说什么
         </button>

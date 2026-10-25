@@ -25,12 +25,6 @@ func (s *Service) control(tx Transaction, next *game.State, before game.State, t
 	if message, clarify := game.ActionClarification(normalized); clarify {
 		return respond("clarify", message)
 	}
-	if game.Has(normalized, "重新开始", "重来一遍", "重置游戏") {
-		*next = s.engine.Initial(before.ID)
-		err = s.fork(tx, next, before, nil, nil)
-		next.LastHeard = text
-		return "reset", feedback(next, "第一夜重新开始。原进度已保留，命名检查点仍可读取。"), true, err
-	}
 	if game.Has(normalized, "继续上次进度", "继续上次游戏", "恢复上次进度", "读取自动存档") {
 		next.Paused = false
 		return respond("resume_save", "已在最近的自动存档中。当前位置："+next.RoomName+"。")
@@ -89,6 +83,13 @@ func (s *Service) control(tx Transaction, next *game.State, before game.State, t
 		err = s.fork(tx, next, before, data.Memories, data.Events)
 		next.LastHeard = text
 		return "load_checkpoint", feedback(next, "已回到检查点“"+name+"”。当前位置："+next.RoomName+"。"), true, err
+	}
+	// Checkpoint names are literal arguments, even when they contain reset words.
+	if game.Has(normalized, "重新开始", "重来一遍", "重置游戏", "重置进度") {
+		*next = s.engine.Initial(before.ID)
+		err = s.fork(tx, next, before, nil, nil)
+		next.LastHeard = text
+		return "reset", feedback(next, "第一夜重新开始。原进度已保留，命名检查点仍可读取。"), true, err
 	}
 	if normalized == "保存游戏" || normalized == "存档" {
 		return respond("save", "当前进度已保存。也可以说“保存为”加一个名字建立检查点。")

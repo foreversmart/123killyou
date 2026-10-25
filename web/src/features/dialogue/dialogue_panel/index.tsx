@@ -24,6 +24,7 @@ export function DialoguePanel({
   onTour: () => Promise<void>;
 }) {
   const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
+  const hasDialogue = Boolean(dialogue.text.trim());
   const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker, state);
   const hasPortrait =
     (Boolean(dialogue.portrait) || Boolean(portraitAsset)) && dialogue.speaker !== '系统';
@@ -35,9 +36,10 @@ export function DialoguePanel({
         styles['dialogue-panel'],
         !hasPortrait && styles['dialogue-panel--narrator'],
         inner && styles.inner,
+        !hasDialogue && styles.quiet,
       )}
     >
-      {hasPortrait && (
+      {hasDialogue && hasPortrait && (
         <div className={styles['speaker-portrait']} key={dialogue.portrait}>
           {portraitAsset ? (
             <img src={portraitAsset} alt={`${dialogue.speaker}头像`} />
@@ -47,27 +49,29 @@ export function DialoguePanel({
           <PortraitCorners />
         </div>
       )}
-      <div className={styles['dialogue-content']}>
-        <div className={styles['speaker-name']}>
-          <span>{dialogue.speaker}</span>
-          <small>
-            {inner
-              ? '内心独白'
-              : dialogue.speaker.includes('门外')
-                ? '隔门传来'
-                : hasPortrait
-                  ? '现场对白'
-                  : dialogue.speaker === '旁白'
-                    ? '旁白'
-                    : dialogue.speaker === '系统'
-                      ? '操作反馈'
-                      : '声音来处未明'}
-          </small>
-          <i />
-          {demo && <span className={styles['heard-text']}>演示：“{demoText}”</span>}
+      {hasDialogue && (
+        <div className={styles['dialogue-content']}>
+          <div className={styles['speaker-name']}>
+            <span>{dialogue.speaker}</span>
+            <small>
+              {inner
+                ? '内心独白'
+                : dialogue.speaker.includes('门外')
+                  ? '隔门传来'
+                  : hasPortrait
+                    ? '现场对白'
+                    : dialogue.speaker === '旁白'
+                      ? '旁白'
+                      : dialogue.speaker === '系统'
+                        ? '操作反馈'
+                        : '声音来处未明'}
+            </small>
+            <i />
+            {demo && <span className={styles['heard-text']}>演示：“{demoText}”</span>}
+          </div>
+          <p className={styles['dialogue-text']}>{dialogue.text}</p>
         </div>
-        <p className={styles['dialogue-text']}>{dialogue.text}</p>
-      </div>
+      )}
       <VoiceDock
         voice={voice}
         demo={demo}

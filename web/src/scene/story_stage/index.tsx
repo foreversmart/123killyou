@@ -4,10 +4,11 @@ import { canShowScenePerson } from '@/scene/scene_person/visibility';
 import { SceneProp } from '@/scene/scene_prop';
 import { MealDiscussion } from '@/scene/meal_discussion';
 import { StoryReading } from '@/scene/story_reading';
+import { StoryObservation } from '@/scene/story_observation';
+import { SceneHeading } from '@/scene/scene_heading';
 import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
 import { sceneChoices } from './choices';
-import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
 export function StoryStage({
@@ -32,16 +33,12 @@ export function StoryStage({
       (speaker.startsWith(actor.name) || (speaker.includes('门外') && actor.id !== 'player')),
   );
   return (
-    <div
-      className={cx(styles.stage, layout.daylight && styles.daylight)}
-      data-scene={state.sceneKey}
-      data-shot={state.shotKey || ''}
-    >
-      <header className={styles.heading}>
-        <span>{layout.chapter}</span>
-        <h2>{shotTitles[state.shotKey || ''] || layout.title}</h2>
-        <p>{layout.atmosphere}</p>
-      </header>
+    <div className={styles.stage} data-scene={state.sceneKey} data-shot={state.shotKey || ''}>
+      <SceneHeading
+        chapter={layout.chapter}
+        title={shotTitles[state.shotKey || ''] || layout.title}
+        description={layout.atmosphere}
+      />
       <div className={styles.staging} aria-label="人物位置与现场道具">
         {actors.map((actor, index) => (
           <ScenePerson
@@ -153,6 +150,7 @@ export function StoryStage({
         <MealDiscussion state={state} enabled={enabled} onAction={onAction} />
       )}
       <StoryReading shot={state.shotKey || ''} />
+      <StoryObservation state={state} />
       {state.sceneKey === 'mini_dawn_trap' && (
         <div className={styles.soundLines} aria-label="近处与远处两段声音">
           <span>
@@ -174,8 +172,8 @@ export function StoryStage({
           )}
         </div>
       )}
-      <div className={styles.choices} aria-label="主角的内心想法">
-        <span className={styles.thought}>我心里想……</span>
+      <div className={styles.choices} aria-label="接下来的行动">
+        <span className={styles.thought}>接下来……</span>
         <div>
           {sceneChoices(state).map((choice) => (
             <button

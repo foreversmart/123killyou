@@ -25,8 +25,7 @@ func (e *Engine) Initial(id string) State {
 	return state
 }
 
-// StartMiniStory applies the complete opening scene, including its room and
-// narrator, so every new-game entry point starts at the same story position.
+// StartMiniStory applies the opening scene without narrating what is visible.
 func (e *Engine) StartMiniStory(state *State) {
 	if state == nil {
 		return
@@ -34,11 +33,7 @@ func (e *Engine) StartMiniStory(state *State) {
 	state.StoryMode = true
 	miniSetFlag(state, "arrived")
 	e.setMiniScene(state, "mini_arrival")
-	state.Dialogue = Dialogue{
-		Speaker: "旁白",
-		Text:    "阳光明媚的下午，大巴停在灯影寺山门前。周末的游览从登记入住开始。",
-	}
-	state.LastAction = state.Dialogue.Text
+	miniObserve(state, "阳光从车窗斜进来，大巴停在灯影寺山门前。车门打开，鸟鸣穿过树叶，登记桌就在檐下。")
 }
 
 // Panels keep interaction with the narrator; world dialogue resumes after closing.

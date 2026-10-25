@@ -17,7 +17,7 @@ func assertStoryOpening(t *testing.T, state game.State) {
 	if len(state.Actors) != 5 || state.Actors[0].Position != "大巴车门旁 / 第一视角" || state.Actors[4].Name != "陆沉" {
 		t.Fatalf("第一幕人物站位缺失: %+v", state.Actors)
 	}
-	if len(state.SceneProps) != 12 || !strings.Contains(state.SceneText, "大巴车窗") {
+	if len(state.SceneProps) != 12 || !strings.Contains(state.SceneText, "大巴停在灯影寺山门前") {
 		t.Fatalf("第一幕分镜与道具缺失: %+v", state)
 	}
 	if len(state.Inventory) != 0 || state.Flags["checked_in"] || state.Flags["red_candle_held"] {
@@ -40,8 +40,8 @@ func TestProductionNewGameEntryPointsStartAtFirstScene(t *testing.T) {
 				t.Fatal(err)
 			}
 			assertStoryOpening(t, state)
-			if state.Dialogue.Speaker != "旁白" || !strings.Contains(state.Dialogue.Text, "大巴停在灯影寺山门前") {
-				t.Fatalf("新局仍使用旧演示对白: %+v", state.Dialogue)
+			if state.Dialogue != (game.Dialogue{}) {
+				t.Fatalf("开场环境被写成了对白: %+v", state.Dialogue)
 			}
 			resumed, err := s.Service.Resume()
 			if err != nil || !reflect.DeepEqual(resumed, state) {

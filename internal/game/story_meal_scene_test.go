@@ -63,8 +63,8 @@ func TestRefectoryVegetarianFoodCanBeInspectedAndChosen(t *testing.T) {
 	storyCommands(e, &s, "登记入住", "去斋堂")
 	for _, question := range []string{"查看馒头", "查看咸菜", "查看素菜"} {
 		intent, speak := e.Apply(&s, question)
-		if intent != "inspect" || !strings.Contains(speak, "它们都是素的") {
-			t.Fatalf("不能查看素食替代: intent=%s speak=%s", intent, speak)
+		if intent != "inspect" || speak != "" || s.Dialogue != (Dialogue{}) || !strings.Contains(s.SceneText, "它们都是素的") {
+			t.Fatalf("素食观察未通过画面呈现: intent=%s speak=%s scene=%s", intent, speak, s.SceneText)
 		}
 	}
 	e.Apply(&s, "我换馒头")

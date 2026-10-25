@@ -15,7 +15,8 @@
   container-type: inline-size;
   display: grid;
   grid-template-columns: 82.2% 17.8%;
-  grid-template-rows: 8.3% minmax(0, 1fr) auto;
+  /* Reserve a stable scene viewport while long dialogue grows over its lower edge. */
+  grid-template-rows: 8.3% minmax(0, 1fr) 14.6%;
   isolation: isolate;
   background: #0f0e0c;
   border: 1px solid #665435;

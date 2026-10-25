@@ -7,26 +7,29 @@ func (e *Engine) storyDawnTrap(state *State, text string) (string, string, bool)
 		return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "是我，天亮了。你开门，我们一起去做早课。"), true
 	}
 	if miniHasAny(text, "开门") && !miniHasAny(text, "不开门") {
-		intent, speak := e.storyDeath(state, "我打开门。窗外仍是黑的，门外的三敲声变成我自己的声音，黑影从门缝外涌了进来。")
+		intent, speak := e.storyDeath(state, "房门打开，窗外仍黑。三敲声后响起与主角相同的声音，黑影涌过门槛。")
 		return intent, speak, true
 	}
 	if miniHasAny(text, "不开门", "等待真正的五更", "等五更", "等天亮") {
 		miniSetFlag(state, "dawn_waited")
 		miniShot(state, "dawn_wait")
 		state.DialogueNext = "继续听"
-		return "story", miniInner(state, "我没有开门，也没有回答自己的名字。窗纸仍然发黑，先把红烛移回门边，再等一组真正的更锣。"), true
+		return "story", miniObserve(state, "红烛移回门边，门闩保持扣紧。窗纸仍黑着，门外的呼吸慢慢退远。"), true
 	}
 	if state.Flags["dawn_waited"] && miniContinue(text) {
 		e.setMiniScene(state, "mini_dawn")
-		return "move", miniInner(state, "真正的五声更锣再次响起。鸡鸣先起，檐鸟跟着应声，晨光才从窗纸背后铺开；门外的呼吸声逐渐退远。"), true
+		return "move", miniObserve(state, "五声更锣再次响起。鸡鸣先起，檐鸟应声，淡青晨光从窗纸背后铺开，门外的呼吸消失。三位同伴站在各自的房门前。"), true
 	}
 	if miniHasAny(text, "重听", "听钟", "辨认钟声") {
 		miniSetFlag(state, "gong_bell_distinguished")
-		return "inspect", miniInner(state, "我重新听了一遍。前五声间隔均匀，最后一声更低、更长；窗纸的黑色一点也没有变浅。"), true
+		return "inspect", miniObserve(state, "近处五声更锣间隔均匀，余震停后，钟楼方向传来一声低长的钟。窗纸始终漆黑。"), true
 	}
 	if miniHasAny(text, "回答姓名", "开口回应", "回答门外") {
 		miniSetFlag(state, "name_echo_heard")
 		return "story", miniDialogue(state, "你（门外回声）", "是我。你怎么还不开门？"), true
+	}
+	if miniHasAny(text, "听声音", "看窗外", "观察天色") {
+		return "inspect", miniObserve(state, "五声更锣的余震散去，远处一声钟慢慢拖长。窗纸仍黑，红烛在门边燃着。"), true
 	}
 	return e.storyConversation(state, text)
 }
@@ -56,7 +59,7 @@ func (e *Engine) storyDawn(state *State, text string) (string, string, bool) {
 		miniSetFlag(state, "story_finished")
 		e.setMiniScene(state, "mini_ending")
 		state.DialogueNext = ""
-		return "ending", miniInner(state, "四只行李都放进大巴。晨雾退到车后，后视镜里的‘明照寺’三个旧字闪了一下；我没有再数山门里的灯。"), true
+		return "ending", miniObserve(state, "四只行李放进大巴，车门合上。晨雾退向车后，后视镜里的‘明照寺’三个旧字闪了一下，山门消失在弯道后。"), true
 	}
 	if miniHasAny(text, "留下残页", "交还残页", "把残页留下") {
 		miniSetFlag(state, "page_left")

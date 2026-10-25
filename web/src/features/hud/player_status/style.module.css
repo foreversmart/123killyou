@@ -6,73 +6,12 @@
   z-index: 6;
   border-bottom: 2px solid #6e583b;
 }
-.player-card {
-  position: relative;
-  height: 115%;
-  aspect-ratio: 1;
-  padding: 0.32cqw;
-  margin-left: 1.1cqw;
-  align-self: flex-start;
-  border: 1px solid #b4ac914f;
-  background: #595849;
-  box-shadow: 0 3px 8px #0009;
-  z-index: 3;
-}
-.player-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  filter: saturate(0.85);
-}
-.devotion {
-  display: flex;
-  gap: 1cqw;
-  align-items: center;
-  padding-left: 1.2cqw;
-  white-space: nowrap;
-}
-.devotion-label {
-  color: #c4a367;
-  font-size: 1.5cqw;
-  letter-spacing: 0.08cqw;
-}
-.devotion-label strong {
-  font-weight: 400;
-  margin-left: 0.25cqw;
-  font-size: 1.9cqw;
-}
-.devotion-meter {
-  width: 14cqw;
-  height: 1.3cqw;
-  padding: 0.16cqw;
-  border: 1px solid #ae8b50a8;
-  box-shadow:
-    0 0 0 2px #050504,
-    inset 0 1px 4px #000;
-  background: #16140f;
-}
-.devotion-meter > div {
-  height: 100%;
-  background: var(--noise), linear-gradient(90deg, #8a6836, #c99f56 70%, #dec485);
-  box-shadow: 0 0 7px #d59d4729;
-  transition: width 1.1s ease;
-}
-.identity {
-  font-size: 1.24cqw;
-  letter-spacing: 0.13cqw;
-  color: #969185;
-  margin-left: 0.3cqw;
-}
-.identity--exposed {
-  color: #d58467;
-}
 .topbar h1 {
   position: absolute;
-  left: 42%;
+  left: 25%;
   top: 12%;
   bottom: 12%;
-  width: 27%;
+  width: 50%;
   border: 1px solid #9c7f4936;
   display: flex;
   align-items: center;
@@ -84,9 +23,6 @@
   letter-spacing: 0.1cqw;
   white-space: nowrap;
   box-shadow: inset 0 0 0 3px #070704;
-}
-.topbar h1 span {
-  margin: 0 0.6cqw;
 }
 .connection-status {
   margin-left: auto;
