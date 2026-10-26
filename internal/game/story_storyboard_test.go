@@ -61,14 +61,37 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 		t.Fatal("演出对白替玩家做了吃粥选择")
 	}
 	storyCommands(e, &s, "劝大家不吃", "吃完晚膳", "自动离开斋堂", "自动离开斋堂")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"陆沉", "陆沉", "林岚", "陆沉", "周砚", "陆沉", "陆沉"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"陆沉", "陆沉", "林岚", "陆沉", "陆沉", "陆沉"}) {
 		t.Fatalf("回廊说话者: %v", got)
 	}
 	if s.ShotKey != "corridor_two_gongs" || s.Flags["red_candle_held"] {
 		t.Fatal("更锣与领烛时序错误")
 	}
-	if s.Dialogue.Text != "各位施主，两更天到了，请各位早些休息吧。五更天我们会起来做早课，有空的话，可以前来观摩。" {
+	if s.Dialogue.Text != "各位施主，二更天到了，请各位早些休息吧。五更天我们会起来做早课，有空的话，可以前来观摩。" {
 		t.Fatalf("二更对白未落在房门前: %q", s.Dialogue.Text)
+	}
+}
+
+func TestCorridorScriptUsesTheUpdatedRedCandleAndTimeWarnings(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("corridor-script")
+	e.setMiniScene(&s, "mini_corridor_candle")
+	want := []string{
+		"晚上回到房里，必须把红烛点起来。红烛能驱除邪祟，别让火在房里熄了。",
+		"夜里非必要不要出门，免得被不干净的东西缠上。",
+		"寺庙里面……还有不干净的地方吗？",
+		"嘘，小声些，不可妄语。要是心里担心、害怕，就多读几页经书，经书能让人定定心神。",
+		"寺里的规矩，夜里会打更，每个时辰打对应锣声数，比如说两根就打两次锣声，千万别把回声和风声混在一起听错了。",
+		"各位施主，二更天到了，请各位早些休息吧。五更天我们会起来做早课，有空的话，可以前来观摩。",
+	}
+	for index, expected := range want {
+		intent, speak := e.Apply(&s, "继续听")
+		if intent != "story" || speak != expected || s.Dialogue.Text != expected {
+			t.Fatalf("第%d句回廊台词不匹配: intent=%s speak=%q dialogue=%q", index+1, intent, speak, s.Dialogue.Text)
+		}
+	}
+	if s.DialogueNext != "" || s.ShotKey != "corridor_two_gongs" {
+		t.Fatalf("回廊对白结束后状态错误: next=%q shot=%q", s.DialogueNext, s.ShotKey)
 	}
 }
 

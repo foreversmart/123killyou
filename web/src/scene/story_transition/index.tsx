@@ -12,6 +12,7 @@ type TravelBeat = {
   backdrop: string;
   interlude?: string;
   durationMs?: number;
+  interludeDurationMs?: number;
 };
 
 const travelBeats: Record<string, TravelBeat> = {
@@ -28,7 +29,8 @@ const travelBeats: Record<string, TravelBeat> = {
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardAfternoon,
     interlude: storyAssets.scenes.mainHallAfternoon,
-    durationMs: 2600,
+    durationMs: 3000,
+    interludeDurationMs: 3000,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
@@ -97,7 +99,13 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
       className={styles.transition}
       data-transition={beat.id}
       data-kind={beat.kind}
-      style={{ '--travel-duration': `${beat.durationMs ?? 2200}ms` } as CSSProperties}
+      data-interlude-pan={beat.interlude ? 'horizontal' : undefined}
+      style={
+        {
+          '--travel-duration': `${beat.durationMs ?? 2200}ms`,
+          '--interlude-duration': `${beat.interludeDurationMs ?? beat.durationMs ?? 2200}ms`,
+        } as CSSProperties
+      }
       role="status"
       aria-live="polite"
     >
