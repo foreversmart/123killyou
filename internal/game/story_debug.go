@@ -146,7 +146,7 @@ func miniDebugOpening(state *State) string {
 		return miniObserve(state, "三下敲门从走廊传来。熟悉的声音反复说着‘跟我来’，没有说出私物的细节。")
 	case "mini_listen":
 		if state.Flags["companion_present"] {
-			return miniDialogue(state, miniCompanionName(state), "别踩中间的砖，沿着墙走。半掩房门里，慧普像是背对着我们，先别惊动他。")
+			return miniDialogue(state, miniCompanionName(state), "你听，好像有什么东西被撕开的声音。")
 		}
 		return miniObserve(state, "视线贴着墙向半掩房门移动。猫食碟旁先叫了一声，半掩房门里传来撕裂声，脚后跟旁就是花瓶。")
 	case "mini_oracle":

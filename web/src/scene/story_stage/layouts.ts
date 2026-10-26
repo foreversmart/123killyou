@@ -45,7 +45,7 @@ export const shotTitles: Record<string, string> = {
   register_desk: '登记桌前 · 写下名字',
   register_key_tags: '登记桌面 · 四块铜牌',
   register_rooms: '东院入口 · 四把房牌',
-  register_drag_mark: '回廊地砖 · 旧拖痕',
+  register_drag_mark: '登记室门槛 · 旧拖痕',
   register_camera_bell: '听房门边 · 铜铃余音',
   register_ribbon: '入住须知 · 蓝色发圈',
   refectory_table: '同一张饭桌',

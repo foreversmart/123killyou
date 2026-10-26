@@ -66,8 +66,12 @@ func TestSilentRefectoryHandoffDefaultsToVegetarianMeal(t *testing.T) {
 		t.Fatal("无响应晚膳不应开启吃粥换皮支线")
 	}
 	e.Apply(&s, s.DialogueNext)
+	if s.SceneKey != "mini_refectory" || s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" || !strings.Contains(s.Dialogue.Text, "吃完") {
+		t.Fatalf("吃饭动画结束后没有先由同行者确认收碗: scene=%s shot=%s next=%q dialogue=%+v", s.SceneKey, s.ShotKey, s.DialogueNext, s.Dialogue)
+	}
+	e.Apply(&s, s.DialogueNext)
 	if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
-		t.Fatalf("默认晚膳没有回到回廊: scene=%s flags=%v", s.SceneKey, s.Flags)
+		t.Fatalf("同行者确认后没有由陆沉带回回廊: scene=%s flags=%v", s.SceneKey, s.Flags)
 	}
 
 	// The corridor is the last safe handoff. Its scripted warning still plays,
@@ -97,6 +101,20 @@ func TestAutomaticMealClosurePreservesExplicitPorridgeChoice(t *testing.T) {
 	if !s.Flags["meal_player_ate"] || !s.Flags["skin_double_present"] || s.Flags["meal_player_deferred"] {
 		t.Fatalf("自动收束覆盖了明确吃粥选择: %v", s.Flags)
 	}
+	if s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" {
+		t.Fatalf("明确吃粥没有先进入统一吃饭动画: shot=%s next=%q", s.ShotKey, s.DialogueNext)
+	}
+	if s.Dialogue.Speaker == "" || strings.TrimSpace(s.Dialogue.Text) == "" {
+		t.Fatalf("吃饭动画缺少 NPC 反馈: %+v", s.Dialogue)
+	}
+	e.Apply(&s, s.DialogueNext)
+	if s.SceneKey != "mini_refectory" || !strings.Contains(s.Dialogue.Text, "吃完") {
+		t.Fatalf("统一吃饭动画后没有由同行者确认收碗: scene=%s dialogue=%+v", s.SceneKey, s.Dialogue)
+	}
+	e.Apply(&s, s.DialogueNext)
+	if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
+		t.Fatalf("同行者确认后没有由守夜人带回偏房: scene=%s flags=%v", s.SceneKey, s.Flags)
+	}
 }
 
 func TestVegetarianMealChoiceStartsEatingBeatBeforeLeaving(t *testing.T) {
@@ -112,8 +130,12 @@ func TestVegetarianMealChoiceStartsEatingBeatBeforeLeaving(t *testing.T) {
 				t.Fatalf("素食选择没有进入吃饭动画: shot=%s next=%q flags=%v", s.ShotKey, s.DialogueNext, s.Flags)
 			}
 			e.Apply(&s, s.DialogueNext)
+			if s.SceneKey != "mini_refectory" || !strings.Contains(s.Dialogue.Text, "吃完") {
+				t.Fatalf("吃饭动画结束后没有由同行者确认收碗: scene=%s dialogue=%+v", s.SceneKey, s.Dialogue)
+			}
+			e.Apply(&s, s.DialogueNext)
 			if s.SceneKey != "mini_corridor_candle" || !s.Flags["meal_done"] {
-				t.Fatalf("吃饭动画结束后没有由陆沉带回东院: scene=%s flags=%v", s.SceneKey, s.Flags)
+				t.Fatalf("同行者确认后没有由陆沉带回东院: scene=%s flags=%v", s.SceneKey, s.Flags)
 			}
 		})
 	}

@@ -74,6 +74,16 @@ test('白天接待、登记写字、黄昏发烛分别使用相应动作，晚�
   assert.equal(new Set(dining.layers.map((layer) => layer.id)).size, dining.layers.length);
 });
 
+test('拖痕调查停留在登记室门槛，并显示周砚观察动作', () => {
+  const drag = authoredScene(state('mini_register', 'register_drag_mark'));
+  assert.ok(
+    drag.layers.some((layer) => layer.src.endsWith('/registration/registration_afternoon.webp')),
+  );
+  const zhouYan = drag.layers.find((layer) => layer.actorId === 'zhouyan');
+  assert.ok(zhouYan);
+  assert.equal(zhouYan.id, 'actor_zhou_yan_registration');
+});
+
 test('场景人物使用与当前动作匹配的微动，背景和静物不会跟着人物一起晃动', () => {
   const writing = authoredScene(state('mini_register', 'register_desk'));
   assert.equal(writing.layers.find((layer) => layer.id === 'actor_lu_chen').motion, 'write');

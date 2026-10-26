@@ -6,15 +6,45 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 	return e.storyRefectoryWithDecision(state, text, nil)
 }
 
-func (e *Engine) startVegetarianMeal(state *State, speaker, text string) string {
+// startMealEating keeps every dinner outcome on the same visible beat. The
+// shot gives the table time to show bowls, vegetables, and the characters'
+// actions before the keeper leads everyone back to the east courtyard.
+func (e *Engine) startMealEating(state *State, speaker, text string) string {
 	miniShot(state, "refectory_eating")
 	miniSetFlag(state, "refectory_eating_shown")
+	delete(state.Flags, "refectory_meal_finished")
 	state.DialogueNext = "自动离开斋堂"
-	return miniDialogue(state, speaker, text)
+	if speaker == "陆沉" || speaker == "" {
+		speaker = "许栀"
+	}
+	return miniDialogue(state, speaker, strings.TrimSpace(text))
 }
 
 func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *MealJudgeResult) (string, string, bool) {
+	// Voice clients advance the eating beat with 自动离开斋堂. Keep direct
+	// command sequences from older clients usable when their next utterance is
+	// already an action from the east-courtyard scene.
+	if state.Flags["refectory_eating_shown"] && miniHasAny(text, "拿红烛", "领红烛", "回房", "回自己的房间", "点燃红烛", "睡下", "续燃红烛", "不开门", "跟同伴") {
+		intent, speak, _ := e.storyRefectoryWithDecision(state, "自动离开斋堂", nil)
+		if state.SceneKey == "mini_refectory" {
+			// The first automatic handoff is the companion's closing line. A
+			// direct next-scene command implies that the short closing beat has
+			// already elapsed, so consume the second handoff as well.
+			intent, speak, _ = e.storyRefectoryWithDecision(state, "自动离开斋堂", nil)
+		}
+		// Older direct-command clients used 拿红烛 as the first command after
+		// closing dinner. Carry that command into the new corridor scene so the
+		// candle is still granted in one turn.
+		if miniHasAny(text, "拿红烛", "领红烛") {
+			return e.storyCandleCorridor(state, text)
+		}
+		return intent, speak, true
+	}
 	if miniContinue(text) || miniHasAny(text, "听晚膳对白") {
+		if state.Flags["refectory_intro_done"] {
+			state.DialogueNext = "自动结束晚膳"
+			return "story", miniDialogue(state, "许栀", "大家按自己的选择慢慢吃，吃完再一起走。"), true
+		}
 		speak := miniSequence(state, "refectory_intro", refectoryLines)
 		if state.Flags["refectory_intro_done"] {
 			state.DialogueNext = "自动结束晚膳"
@@ -48,7 +78,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
-				return "story", miniDialogue(state, "许栀", "大家都决定不吃肉粥，那就先吃馒头和素菜。碗勺声先响起来，等想清楚了再说。"), true
+				return "story", e.startMealEating(state, "许栀", "大家都决定不吃肉粥，那就先吃馒头和素菜。碗勺声先响起来，等想清楚了再说。"), true
 			}
 			if anyAte {
 				state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
@@ -56,17 +86,22 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
-				return "story", miniDialogue(state, "许栀", "有人想吃就慢慢吃，不吃肉粥的就夹些馒头和素菜。大家都照自己的选择来。"), true
+				return "story", e.startMealEating(state, "许栀", "有人想吃就慢慢吃，不吃肉粥的就夹些馒头和素菜。大家都照自己的选择来。"), true
 			}
 			state.Flags["meal_all_ate"] = false
 			state.Flags["skin_double_present"] = false
 			miniShot(state, "refectory_table")
 			miniSetFlag(state, "refectory_eating_shown")
 			state.DialogueNext = "自动离开斋堂"
-			return "story", miniDialogue(state, "许栀", "那就都不吃肉粥了，先吃馒头和素菜。等问清楚了，再决定要不要动那几碗。"), true
+			return "story", e.startMealEating(state, "许栀", "那就都不吃肉粥了，先吃馒头和素菜。等问清楚了，再决定要不要动那几碗。"), true
 		}
 	}
 	if miniHasAny(text, "自动离开斋堂") {
+		if !state.Flags["refectory_meal_finished"] {
+			miniSetFlag(state, "refectory_meal_finished")
+			state.DialogueNext = "自动离开斋堂"
+			return "story", miniDialogue(state, "许栀", "吃完了，大家一起走吧。"), true
+		}
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			if !state.Flags["meal_"+person+"_ate"] && !state.Flags["meal_"+person+"_refused"] && !state.Flags["meal_"+person+"_deferred"] {
 				miniChooseMeal(state, person, "deferred")
@@ -79,9 +114,9 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
 		state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 		e.setMiniScene(state, "mini_corridor_candle")
-		transition := "先用馒头、咸菜和本地素菜垫一垫。晚膳收了跟我回东院，每人领一支红烛。"
+		transition := "大家吃完了。先用馒头、咸菜和本地素菜垫一垫，跟我回东院，每人领一支红烛。"
 		if state.Flags["meal_player_ate"] || state.Flags["meal_linlan_ate"] || state.Flags["meal_zhouyan_ate"] || state.Flags["meal_xuzhi_ate"] {
-			transition = "晚膳收了，各位按自己的选择收好碗。跟我回东院，每人领一支红烛。"
+			transition = "大家吃完了，各位按自己的选择收好碗。跟我回东院，每人领一支红烛。"
 		}
 		return "move", miniDialogue(state, "陆沉", transition), true
 	}
@@ -148,7 +183,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		if len(replies) > 0 {
 			speak := strings.Join(replies, " ")
 			if state.Flags["meal_player_refused"] {
-				return "story", e.startVegetarianMeal(state, firstSpeaker, speak), true
+				return "story", e.startMealEating(state, firstSpeaker, speak), true
 			}
 			return "story", miniDialogue(state, firstSpeaker, speak), true
 		}
@@ -161,7 +196,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 			miniChooseMeal(state, person, "refused")
 		}
 		miniSetFlag(state, "persuasion_success")
-		return "story", e.startVegetarianMeal(state, "许栀", "那就先吃馒头和素菜。问清楚之前，这碗粥先放着。"), true
+		return "story", e.startMealEating(state, "许栀", "那就先吃馒头和素菜。问清楚之前，这碗粥先放着。"), true
 	}
 	choice, explicitMeal := miniMealChoice(text)
 	if explicitMeal && miniHasAny(text, "林岚", "周砚", "许栀") {
@@ -183,7 +218,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		}
 		speak := miniMealReply(state, person, choice)
 		if person == "player" && choice == "refused" {
-			return "story", e.startVegetarianMeal(state, state.Dialogue.Speaker, speak), true
+			return "story", e.startMealEating(state, state.Dialogue.Speaker, speak), true
 		}
 		return "story", speak, true
 	}
@@ -193,7 +228,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 	}
 	if explicitMeal && choice == "refused" {
 		miniChooseMeal(state, "player", "refused")
-		return "story", e.startVegetarianMeal(state, "陆沉", "馒头和热水在你手边。饿了就先吃这个，不必勉强喝粥。"), true
+		return "story", e.startMealEating(state, "许栀", "馒头和热水在你手边。饿了就先吃这个，不必勉强喝粥。"), true
 	}
 	if explicitMeal && choice == "ate" {
 		miniChooseMeal(state, "player", "ate")
@@ -211,6 +246,13 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		miniSetFlag(state, "meal_done")
 		state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
 		state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
+		if !state.Flags["refectory_eating_shown"] {
+			return "story", e.startMealEating(state, "许栀", "大家都按自己的选择吃好了。"), true
+		}
+		if !state.Flags["refectory_meal_finished"] {
+			miniSetFlag(state, "refectory_meal_finished")
+			return "story", miniDialogue(state, "许栀", "吃完了，大家一起走吧。"), true
+		}
 		e.setMiniScene(state, "mini_corridor_candle")
 		return "move", miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。"), true
 	}
