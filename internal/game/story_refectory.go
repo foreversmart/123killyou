@@ -114,7 +114,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
 		state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 		e.setMiniScene(state, "mini_corridor_candle")
-		transition := "大家吃完了。先用馒头、咸菜和本地素菜垫一垫，跟我回东院，每人领一支红烛。"
+		transition := "大家吃完了。跟我回东院，每人领一支红烛。"
 		if state.Flags["meal_player_ate"] || state.Flags["meal_linlan_ate"] || state.Flags["meal_zhouyan_ate"] || state.Flags["meal_xuzhi_ate"] {
 			transition = "大家吃完了，各位按自己的选择收好碗。跟我回东院，每人领一支红烛。"
 		}
