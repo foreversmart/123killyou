@@ -3,5 +3,5 @@
   "initialRoomName": "休息室",
   "initialNpc": "keeper",
   "initialDevotion": 68,
-  "startingItems": ["key", "page", "candle", "beads"]
+  "startingItems": ["key", "candle", "beads"]
 }

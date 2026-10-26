@@ -90,18 +90,18 @@ func TestStoryItemsArriveAtTheirScenesAndResetClearsThem(t *testing.T) {
 		t.Fatalf("山门转入登记室时不应提前发放房间用品: %+v", registered)
 	}
 	registered = run(t, s, state.ID, "register-dialogue", "听入住对白").State
-	if len(registered.Inventory) != 4 || !registered.Flags["registration_items_given"] {
+	if len(registered.Inventory) != 3 || !registered.Flags["registration_items_given"] {
 		t.Fatalf("登记室登记后未发放房间用品: %+v", registered)
 	}
 	for _, item := range registered.Inventory {
-		if item.ID == "candle" {
-			t.Fatal("登记时提前发放了回廊红烛")
+		if item.ID == "candle" || item.ID == "page" {
+			t.Fatal("登记时发放了回廊红烛或已删除的残页")
 		}
 	}
 	for index, command := range []string{"去斋堂", "我不吃", "吃完晚膳", "拿红烛", "拿红烛"} {
 		state = run(t, s, state.ID, string(rune('a'+index)), command).State
 	}
-	if len(state.Inventory) != 5 || !state.Flags["red_candle_held"] {
+	if len(state.Inventory) != 4 || !state.Flags["red_candle_held"] {
 		t.Fatalf("回廊红烛没有正确发放或发生重复: %+v", state)
 	}
 	reset := run(t, s, state.ID, "reset", "重新开始").State

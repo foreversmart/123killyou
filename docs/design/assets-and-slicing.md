@@ -16,7 +16,6 @@
 | portrait-player.webp | 31, 5, 80, 77                | 主角头像                           |
 | portrait-keeper.webp | 23, 707, 182, 193            | 守夜人对话头像                     |
 | item-key.webp        | 1417, 181, 91, 127           | 铜钥匙                             |
-| item-page.webp       | 1544, 181, 91, 127           | 残页；通行凭原型暂时复用此图       |
 | item-candle.webp     | 1428, 378, 81, 124           | 红烛                               |
 | item-beads.webp      | 1539, 377, 95, 124           | 念珠                               |
 | ledger.webp          | 466, 576, 373, 91            | 账本局部，保留供后续观察特写使用   |

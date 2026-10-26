@@ -20,7 +20,7 @@ func (e *Engine) storyDouble(state *State, text string) (string, string, bool) {
 	}
 	if miniHasAny(text, "吹灭", "灭烛", "熄灭红烛") {
 		state.Flags["red_candle_lit"] = false
-		intent, speak := e.storyDeath(state, "红烛熄灭。熟悉的脸在黑暗里贴近，门闩在耳边断裂。")
+		intent, speak := e.storyDeath(state, "红烛熄灭。门闩在耳边断裂，鬼影从黑暗中冲入。")
 		return intent, speak, true
 	}
 	if miniHasAny(text, "朗读大念处", "念大念处", "读大念处", "朗读经文", "继续念经", "观身如身", "观受如受", "观心如心", "观法如法") {

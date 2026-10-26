@@ -25,7 +25,7 @@ func safeStoryContinuation(scene, next string) bool {
 	case "mini_register":
 		return next == "继续听" || next == "自动放好行李" || next == "自动去斋堂"
 	case "mini_refectory":
-		return next == "继续听" || next == "自动结束晚膳" || next == "自动离开斋堂"
+		return next == "继续听" || next == mealDiscussionAdvance || next == mealGroupAdvance || next == "自动结束晚膳" || next == "自动离开斋堂"
 	case "mini_corridor_candle", "mini_dawn":
 		return next == "继续听"
 	default:

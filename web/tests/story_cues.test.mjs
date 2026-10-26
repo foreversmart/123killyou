@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { storyCues, cueSignature, cueDuration } from '../src/features/story_audio/cues.ts';
 import {
+  DEATH_SOUND_EFFECT,
   NIGHT_BACKGROUND_MUSIC,
   NIGHT_BACKGROUND_MUSIC_DELAY_MS,
   shouldPlayNightBackground,
@@ -42,16 +43,50 @@ test('报时统一使用更锣，敲门仍保持独立计数', () => {
   const falseDawn = storyCues(state('dawn_gongs'));
   assert.deepEqual(
     falseDawn.map((cue) => cue.kind),
-    ['gong', 'gong', 'gong', 'gong', 'gong', 'gong'],
+    ['gong', 'gong', 'gong', 'gong', 'bell'],
   );
-  assert.ok(falseDawn[5].at > falseDawn[4].at);
-  assert.ok(cueDuration(falseDawn[5]) > cueDuration(falseDawn[0]));
+  assert.ok(falseDawn[4].at > falseDawn[3].at + cueDuration(falseDawn[3]));
+  assert.ok(cueDuration(falseDawn[4]) > cueDuration(falseDawn[0]));
+  assert.deepEqual(storyCues(state('', { sceneKey: 'mini_dawn_trap' })), falseDawn);
   const trueDawn = storyCues(state('dawn_courtyard'));
   assert.deepEqual(
     trueDawn.map((cue) => cue.kind),
     ['gong', 'gong', 'gong', 'gong', 'gong', 'rooster', 'bird', 'bird'],
   );
   assert.ok(trueDawn[5].at > trueDawn[4].at);
+});
+
+test('二更锣在发烛镜头播放，未点烛等待镜头使用两次重撞门', () => {
+  assert.deepEqual(
+    storyCues(state('corridor_candles')).map((cue) => cue.kind),
+    ['gong', 'gong'],
+  );
+  assert.deepEqual(
+    storyCues(state('corridor_two_gongs', { flags: { corridor_gongs_played: true } })),
+    [],
+  );
+  assert.deepEqual(
+    storyCues(state('room_ghost_wait')).map((cue) => cue.kind),
+    ['impact', 'impact'],
+  );
+  assert.deepEqual(
+    storyCues(state('wake_ghost_wait')).map((cue) => cue.kind),
+    ['impact', 'impact'],
+  );
+  const impacts = storyCues(state('room_ghost_wait'));
+  assert.ok(impacts[1].at > impacts[0].at + cueDuration(impacts[0]) + 0.5);
+});
+
+test('未点烛死亡先开门，半秒后鬼影冲入', () => {
+  const cues = storyCues(
+    state('death_mini_room', { sceneKey: 'mini_death', retryScene: 'mini_room' }),
+  );
+  assert.deepEqual(
+    cues.map((cue) => cue.kind),
+    ['door', 'death'],
+  );
+  assert.equal(cues[0].at, 0);
+  assert.equal(cues[1].at, 0.5);
 });
 
 test('三更醒来后才进入夜间背景音乐，并在天亮时停止', async () => {
@@ -101,21 +136,93 @@ test('三更醒来后才进入夜间背景音乐，并在天亮时停止', async
     },
   );
   const waking = state('wake_candle', { sceneKey: 'mini_wake_three_gongs' });
-  runtime.render(useStorySound, waking, true, 'idle');
+  runtime.render(useStorySound, waking, 'idle');
   listeners.get('pointerdown')();
   await Promise.resolve();
-  runtime.render(useStorySound, waking, true, 'idle');
+  runtime.render(useStorySound, waking, 'idle');
   assert.equal(players.length, 1);
   assert.equal(players[0].playCount || 0, 0);
   runtime.flushTimers();
   await Promise.resolve();
   assert.equal(players[0].playCount, 1);
 
-  runtime.render(useStorySound, state('dawn_gongs', { sceneKey: 'mini_dawn_trap' }), true, 'idle');
+  runtime.render(useStorySound, state('dawn_gongs', { sceneKey: 'mini_dawn_trap' }), 'idle');
   assert.equal(players[0].paused, false);
-  runtime.render(useStorySound, state('dawn_courtyard', { sceneKey: 'mini_dawn' }), true, 'idle');
+  runtime.render(useStorySound, state('dawn_courtyard', { sceneKey: 'mini_dawn' }), 'idle');
   assert.equal(players[0].paused, true);
   assert.equal(players[0].currentTime, 0);
+  runtime.dispose();
+});
+
+test('死亡画面的恐怖音效与背景音乐并行播放，不暂停背景音乐', async () => {
+  const runtime = hookRuntime(),
+    audio = audioFixture(),
+    listeners = new Map(),
+    players = [];
+  class FakeAudio {
+    paused = true;
+    currentTime = 0;
+    loop = false;
+    preload = '';
+    volume = 1;
+    constructor(source) {
+      this.source = source;
+      players.push(this);
+    }
+    play() {
+      this.paused = false;
+      this.playCount = (this.playCount || 0) + 1;
+      return Promise.resolve();
+    }
+    pause() {
+      this.paused = true;
+      this.pauseCount = (this.pauseCount || 0) + 1;
+    }
+  }
+  audio.AudioContext.prototype.createGain = () => ({ gain: {}, connect() {}, disconnect() {} });
+  const useStorySound = await loadHook(
+    '../../src/features/story_audio/useStorySound.ts',
+    'useStorySound',
+    runtime,
+    {
+      Audio: FakeAudio,
+      AudioContext: audio.AudioContext,
+      cueSignature,
+      cueDuration,
+      storyCues,
+      DEATH_SOUND_EFFECT,
+      NIGHT_BACKGROUND_MUSIC,
+      NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+      shouldPlayNightBackground,
+      document: {
+        addEventListener: (name, callback) => listeners.set(name, callback),
+        removeEventListener: (name) => listeners.delete(name),
+      },
+      playStoryCue: () => [{ stop() {} }],
+    },
+  );
+  const night = state('four_knocks', { sceneKey: 'mini_four_knocks' });
+  runtime.render(useStorySound, night, 'idle');
+  listeners.get('pointerdown')();
+  await Promise.resolve();
+  runtime.render(useStorySound, night, 'idle');
+  runtime.flushTimers();
+  await Promise.resolve();
+  const background = players.find((player) => player.source === NIGHT_BACKGROUND_MUSIC);
+  assert.ok(background);
+  assert.equal(background.playCount, 1);
+  const death = state('death_mini_four_knocks', {
+    sceneKey: 'mini_death',
+    retryScene: 'mini_four_knocks',
+  });
+  runtime.render(useStorySound, death, 'idle');
+  await Promise.resolve();
+  const effect = players.find((player) => player.source === DEATH_SOUND_EFFECT);
+  assert.ok(effect);
+  assert.equal(effect.playCount, 1);
+  assert.equal(effect.volume, 0.85);
+  assert.equal(background.paused, false);
+  assert.equal(background.pauseCount || 0, 0);
   runtime.dispose();
 });
 
@@ -161,21 +268,21 @@ test('同一声源自动只播一次；主动重听后普通调查不再额外�
     },
   );
   const original = state('four_knocks', { lastHeard: '等候敲门' });
-  runtime.render(useStorySound, original, true, 'idle');
+  runtime.render(useStorySound, original, 'idle');
   listeners.get('pointerdown')();
   await Promise.resolve();
-  runtime.render(useStorySound, original, true, 'idle');
+  runtime.render(useStorySound, original, 'idle');
   assert.deepEqual(heard, ['knock', 'knock', 'knock', 'knock']);
   runtime.flushTimers();
-  runtime.render(useStorySound, { ...original, revision: 2, lastHeard: '观察门缝' }, true, 'idle');
+  runtime.render(useStorySound, { ...original, revision: 2, lastHeard: '观察门缝' }, 'idle');
   assert.equal(heard.length, 4);
   const replay = { ...original, revision: 3, lastHeard: '重听敲门' };
-  runtime.render(useStorySound, replay, true, 'idle');
+  runtime.render(useStorySound, replay, 'idle');
   assert.equal(heard.length, 8);
   runtime.flushTimers();
-  runtime.render(useStorySound, { ...original, revision: 4, lastHeard: '观察门缝' }, true, 'idle');
+  runtime.render(useStorySound, { ...original, revision: 4, lastHeard: '观察门缝' }, 'idle');
   assert.equal(heard.length, 8);
-  runtime.render(useStorySound, { ...original, runId: 'new-run' }, true, 'idle');
+  runtime.render(useStorySound, { ...original, runId: 'new-run' }, 'idle');
   assert.equal(heard.length, 12);
   runtime.dispose();
 });
@@ -290,11 +397,11 @@ test('离开声源镜头会立即停止旧环境声，即使下一镜头暂在�
       ],
     },
   );
-  runtime.render(useStorySound, state('listen_skin'), true, 'idle');
+  runtime.render(useStorySound, state('listen_skin'), 'idle');
   listeners.get('pointerdown')();
   await Promise.resolve();
-  runtime.render(useStorySound, state('listen_skin'), true, 'idle');
-  runtime.render(useStorySound, state('room_table'), true, 'speaking');
+  runtime.render(useStorySound, state('listen_skin'), 'idle');
+  runtime.render(useStorySound, state('room_table'), 'speaking');
   assert.equal(stops, 2);
   runtime.dispose();
 });

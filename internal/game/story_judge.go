@@ -259,7 +259,7 @@ func (e *Engine) mealJudgeParticipants(state State, text string) []MealParticipa
 	if !mealSpeechLooksLikeChoice(text) {
 		return nil
 	}
-	all := miniExactMealGroup(text, "劝大家不吃", "劝大家不要吃", "大家都不吃", "全都不吃", "让大家别吃", "让所有人不吃")
+	all := miniVegetarianGroupRequest(text)
 	participants := make([]MealParticipant, 0, 3)
 	for _, id := range []string{"linlan", "zhouyan", "xuzhi"} {
 		npc, ok := e.content.NPC(id)
@@ -281,5 +281,5 @@ func mealSpeechLooksLikeChoice(text string) bool {
 	if miniHasAny(text, "吗", "什么", "为什么", "怎么", "昨天", "刚才", "觉得", "喜欢", "能不能", "要不要", "是否", "如果", "假如", "听说") {
 		return false
 	}
-	return miniHasAny(text, "粥", "肉", "吃", "喝", "馒头", "素菜", "咸菜", "不碰", "别碰", "劝", "说服")
+	return miniHasAny(text, "粥", "肉", "吃", "喝", "馒头", "素菜", "素材", "咸菜", "不碰", "别碰", "劝", "说服")
 }

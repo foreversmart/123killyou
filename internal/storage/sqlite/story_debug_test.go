@@ -41,7 +41,8 @@ func TestDebugSceneSkipUsesNormalCommandsAndPersistsEveryTarget(t *testing.T) {
 			t.Fatalf("自动存档没有保留目标镜头: %+v %v", resumed, err)
 		}
 		if scene == "mini_wake_three_gongs" {
-			dead := run(t, s, state.ID, "death-at-wake", "不续燃红烛").State
+			run(t, s, state.ID, "death-at-wake", "不续燃红烛")
+			dead := run(t, s, state.ID, "death-at-wake-resolve", "自动进入死亡结算").State
 			if dead.SceneKey != "mini_death" || dead.RetryScene != "mini_wake_three_gongs" {
 				t.Fatal("测试路线没有真实进入死亡镜头")
 			}

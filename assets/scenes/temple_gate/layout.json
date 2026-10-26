@@ -26,8 +26,8 @@
       "width": 1672,
       "height": 941,
       "hasAlpha": false,
-      "bytes": 2061328,
-      "sha256": "20f58d75f77aa4208cdae46a3594a98bae6220acd7e23b950561b0060b588db5",
+      "bytes": 2708014,
+      "sha256": "7d9527136dd2a946a12e308f1ecc0ed0ed8459429b62a497017ab91afab9b9f9",
       "sourceFrame": {
         "x": 0,
         "y": 0,
@@ -40,8 +40,8 @@
       "width": 1672,
       "height": 941,
       "hasAlpha": false,
-      "bytes": 2183047,
-      "sha256": "50fc1ef12c26c812f15f8882c74356781627b5ca5455f638ebcd79498cffade5",
+      "bytes": 2098802,
+      "sha256": "b50d38cea5778fa64edb870683ab7640ee89acca25c29b5347bad2e0c7308846",
       "sourceFrame": {
         "x": 0,
         "y": 0,
@@ -174,7 +174,8 @@
       },
       "zIndex": 10,
       "visibleWhen": {
-        "cat": true
+        "cat": true,
+        "time": "dawn"
       }
     },
     {
@@ -188,7 +189,8 @@
       },
       "zIndex": 12,
       "visibleWhen": {
-        "bags": true
+        "bags": true,
+        "time": "dawn"
       }
     },
     {
@@ -202,7 +204,8 @@
       },
       "zIndex": 15,
       "visibleWhen": {
-        "companions": true
+        "companions": true,
+        "time": "dawn"
       },
       "scaleMode": "uniform",
       "anchor": {
@@ -221,7 +224,8 @@
       },
       "zIndex": 15,
       "visibleWhen": {
-        "companions": true
+        "companions": true,
+        "time": "dawn"
       },
       "scaleMode": "uniform",
       "anchor": {
@@ -240,7 +244,8 @@
       },
       "zIndex": 15,
       "visibleWhen": {
-        "companions": true
+        "companions": true,
+        "time": "dawn"
       },
       "scaleMode": "uniform",
       "anchor": {
@@ -259,7 +264,8 @@
       },
       "zIndex": 11,
       "visibleWhen": {
-        "keeper": true
+        "keeper": true,
+        "time": "dawn"
       },
       "scaleMode": "uniform",
       "anchor": {
@@ -268,36 +274,11 @@
       }
     }
   ],
-  "labels": [
-    {
-      "id": "temple_name",
-      "text": "红烛寺",
-      "x": 859,
-      "y": 174,
-      "fontFamily": "serif",
-      "fontSize": 52,
-      "color": "#b49b65",
-      "align": "center",
-      "baseline": "middle",
-      "zIndex": 60,
-      "rotation": -0.08
-    },
-    {
-      "id": "old_name",
-      "text": "明照寺",
-      "x": 1120,
-      "y": 155,
-      "fontFamily": "serif",
-      "fontSize": 19,
-      "color": "#6a5740",
-      "align": "center",
-      "baseline": "middle",
-      "zIndex": 60
-    }
-  ],
+  "labels": [],
   "notes": [
     "回廊取回相机盖之后，晨间山门的林岚用原带盖站姿；疲惫表情在对白头像表现。",
-    "文字根据牌匾透视准确排字；旧名仅作为露边信息，不覆盖主匾。",
-    "抵达与晨间山门共用同一室外机位；人物脚底按石阶与地面定位，陆沉留在门内后景，禁止将山门人物坐标叠进车内底图。"
+    "寺名与标牌文字直接绘入下午及晨间背景：主匾红烛寺、露边旧匾明照寺、香客须知与接驳站牌；运行时不叠字。",
+    "抵达与晨间山门共用同一室外机位；人物脚底按石阶与地面定位，陆沉留在门内后景，禁止将山门人物坐标叠进车内底图。",
+    "下午到达使用人物、花猫、行李、建筑与光影统一绘制的完整插画；独立人物与道具图层仅在晨间启用，下午禁止重复叠加。"
   ]
 }

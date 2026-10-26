@@ -10,6 +10,7 @@ import { ActionNotice } from '@/shared/ui/action_notice';
 import { ProblemNotice } from '@/shared/ui/problem_notice';
 import { LoadingScreen } from '@/shared/ui/loading_screen';
 import { StartChoices } from '@/features/session/start_choices';
+import { OpeningJourney } from '@/scene/opening_journey';
 import { cx } from '@/shared/lib/cx';
 import styles from './style.module.css';
 
@@ -30,8 +31,10 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
     tour,
     voiceStarted,
     openingFlow,
+    openingPhase,
     selecting,
-    setOpeningReady,
+    finishOpeningVideo,
+    begin,
   } = game;
   if (!state) return <LoadingScreen error={error} />;
   return (
@@ -44,21 +47,37 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           playbackOn={voice.playbackOn}
           connected={connected}
         />
-        <Room state={state} phase={roomPhase} onAction={voice.submit} interactive={connected}>
+        <Room
+          state={state}
+          phase={roomPhase}
+          onAction={voice.submit}
+          interactive={connected && !openingFlow}
+        >
           <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
         </Room>
         <Inventory state={state} />
-        <DialoguePanel
-          state={state}
-          voice={voice}
-          demo={demo}
-          demoText={demoText}
-          connected={connected}
-          onTour={tour}
-        />
-        {openingFlow && (
-          <StartChoices busy={selecting} voiceActive={voiceStarted} onReady={setOpeningReady} />
+        {(!openingFlow || openingPhase === 'alighting') && (
+          <DialoguePanel
+            state={state}
+            voice={voice}
+            demo={demo}
+            demoText={demoText}
+            connected={connected}
+            onTour={tour}
+          />
+        )}
+        {(openingPhase === 'reel' || openingPhase === 'ready') && (
+          <StartChoices
+            ready={openingPhase === 'ready'}
+            busy={selecting}
+            voiceActive={voiceStarted}
+            onReady={finishOpeningVideo}
+            onBegin={begin}
+          />
+        )}
+        {(openingPhase === 'road' || openingPhase === 'alighting') && (
+          <OpeningJourney phase={openingPhase} />
         )}
       </section>
       <div className={styles['outside-caption']}>

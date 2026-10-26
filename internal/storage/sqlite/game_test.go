@@ -97,7 +97,7 @@ func TestGiveIsAtomicAndIdempotent(t *testing.T) {
 	if first.State.Revision != again.State.Revision {
 		t.Fatal("相同请求被重复结算")
 	}
-	if first.State.Devotion != 71 || len(first.State.Inventory) != 4 {
+	if first.State.Devotion != 71 || len(first.State.Inventory) != 3 {
 		t.Fatal("交付后的状态不正确")
 	}
 	for _, item := range first.State.Inventory {
@@ -119,7 +119,7 @@ func TestGiveRequiresNPCInCurrentRoom(t *testing.T) {
 	}
 	run(t, s, state.ID, "move", "去走廊")
 	r := run(t, s, state.ID, "give", "把铜钥匙给守夜人")
-	if r.Intent != "blocked" || r.State.Flags["keyDelivered"] || len(r.State.Inventory) != 4 {
+	if r.Intent != "blocked" || r.State.Flags["keyDelivered"] || len(r.State.Inventory) != 3 {
 		t.Fatal("隔着房间交付了道具")
 	}
 }
@@ -131,7 +131,7 @@ func TestAmbiguousGiveDoesNotConsumeItems(t *testing.T) {
 		t.Fatal(err)
 	}
 	r := run(t, s, state.ID, "unclear", "把这个给守夜人")
-	if r.Intent != "clarify" || len(r.State.Inventory) != 4 || r.State.Devotion != 68 {
+	if r.Intent != "clarify" || len(r.State.Inventory) != 3 || r.State.Devotion != 68 {
 		t.Fatal("歧义命令改变了状态")
 	}
 	run(t, s, state.ID, "focus", "看看铜钥匙")

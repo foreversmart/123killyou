@@ -12,120 +12,70 @@
   object-fit: cover;
   background: #050605;
 }
-.journeyVeil {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(0deg, #050605b8, transparent 30%, #05060518);
-}
-.journeyScene {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: #18231e;
-}
-.journeyScene img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.journeyRoad {
-  animation: road-drift 3.9s ease both;
-}
-.journeyGate {
-  opacity: 0;
-  animation: gate-arrive 3.9s ease 1.7s both;
-}
-.journeyGlow {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 10%, #fff0b20e 48%, #f7dc8d42 100%);
-  mix-blend-mode: screen;
-  animation: road-glow 3.9s ease both;
-}
 .startPrompt {
   position: absolute;
-  z-index: 1;
   left: 50%;
-  bottom: 8%;
+  top: 76%;
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 0.5cqw;
-  width: min(90%, 560px);
+  gap: 1cqw;
+  width: 90%;
   transform: translateX(-50%);
-  color: #f5e8cb;
+  color: #e1c6a3;
   text-align: center;
-  text-shadow: 0 2px 12px #000;
+  animation: prompt-appear 0.5s ease both;
 }
-.startPrompt span {
-  color: #d4c49f;
-  font-size: clamp(10px, 0.72cqw, 14px);
-  letter-spacing: 0.22em;
+.startPrompt button,
+.playPrompt {
+  min-width: 12cqw;
+  min-height: 44px;
+  padding: 0.7cqw 2cqw;
+  border: 1px solid #a74434;
+  background: #210c0abf;
+  color: #e1c6a3;
+  font: inherit;
+  font-size: clamp(16px, 1.5cqw, 28px);
+  letter-spacing: 0.25em;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
-.startPrompt strong {
-  color: #f1d69d;
-  font-size: clamp(18px, 2cqw, 30px);
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  animation: prompt-breathe 2.2s ease-in-out infinite;
+.startPrompt button:hover:not(:disabled),
+.startPrompt button:focus-visible,
+.playPrompt:hover,
+.playPrompt:focus-visible {
+  outline: 1px solid #da9a74;
+  outline-offset: 4px;
+  border-color: #dc7760;
+  background: #4b1913;
+}
+.startPrompt button:disabled {
+  cursor: wait;
+  opacity: 0.6;
 }
 .startPrompt small {
-  color: #c4b99e;
-  font-size: clamp(10px, 0.7cqw, 13px);
+  color: #ac9680;
+  font-size: clamp(10px, 0.75cqw, 14px);
   letter-spacing: 0.12em;
 }
-@keyframes road-drift {
-  from {
-    opacity: 0.25;
-    transform: scale(1.08) translateX(4%);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateX(-2%);
-  }
+.playPrompt {
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translateX(-50%);
 }
-@keyframes gate-arrive {
+@keyframes prompt-appear {
   from {
     opacity: 0;
-    transform: scale(1.08);
   }
   to {
     opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes road-glow {
-  from {
-    opacity: 0.2;
-    transform: translateX(-25%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(15%);
-  }
-}
-@keyframes prompt-breathe {
-  0%,
-  100% {
-    opacity: 0.76;
-    text-shadow: 0 2px 12px #000;
-  }
-  50% {
-    opacity: 1;
-    text-shadow: 0 2px 18px #d4a96366;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .journeyRoad,
-  .journeyGate,
-  .journeyGlow,
-  .startPrompt strong {
+  .startPrompt {
     animation: none;
-  }
-  .journeyGate {
-    opacity: 1;
   }
 }

@@ -1,4 +1,5 @@
 import { Lantern, PerspectiveFloor } from '@/scene/story_art/common';
+import { storyAssets } from '@/shared/lib/story_assets';
 
 export function DawnGateArt({ id }: { id: string }) {
   return (
@@ -100,83 +101,13 @@ export function DawnGateArt({ id }: { id: string }) {
   );
 }
 
-export function DepartureArt({ id }: { id: string }) {
+export function DepartureArt(_props: { id: string }) {
   return (
-    <g>
-      <rect width="1000" height="600" fill={`url(#${id}-sky)`} />
-      <path d="M0 101L219 85 332 172 468 139 627 204 816 146 1000 193V392H0Z" fill="#698b78" />
-      <path d="M0 184L179 157 314 240 552 196 738 257 1000 201V410H0Z" fill="#567766" />
-      <path d="M0 334Q508 301 1000 331V451H0Z" fill="#a8b19b" />
-      <path d="M0 348Q301 336 495 375T1000 356" fill="none" stroke="#e0d8b4" strokeWidth="12" />
-      <path d="M0 0H1000V110L0 95Z" fill="#667969" />
-      <path d="M0 74L1000 90M0 108L1000 122" stroke="#344f48" strokeWidth="9" />
-      <path d="M0 96H64V422H0ZM936 110H1000V433H936Z" fill="#405d54" />
-      <path d="M64 404H936V442H64Z" fill="#d1d1b2" />
-      <path d="M62 422H939" stroke="#6b8375" strokeWidth="7" />
-      {[281, 718].map((x) => (
-        <g key={x}>
-          <path d={`M${x} 111L${x + 15} 411`} stroke="#344e46" strokeWidth="15" />
-          <path d={`M${x + 5} 117L${x + 20} 405`} stroke="#b6c5ac" strokeWidth="3" />
-        </g>
-      ))}
-      <g transform="translate(500 144)">
-        <path d="M0-45V-3" stroke="#314c43" strokeWidth="9" />
-        <rect
-          x="-108"
-          y="-3"
-          width="216"
-          height="99"
-          rx="14"
-          fill="#243e39"
-          stroke="#8a9e86"
-          strokeWidth="5"
-        />
-        <rect x="-98" y="8" width="196" height="77" rx="8" fill="#a6bdae" />
-        <path d="M-93 49L-36 26 4 48 43 25 94 48V81H-93Z" fill="#708c77" />
-        <path d="M-56 60L-36 49 0 32 37 50 56 60Z" fill="#3e5d4b" />
-        <path d="M-44 61H44V83H-44Z" fill="#9ba58a" />
-        <rect x="-27" y="61" width="56" height="17" fill="#4c634b" />
-        <text
-          x="0"
-          y="74"
-          textAnchor="middle"
-          fontSize="12"
-          fill="#e5d9a3"
-          letterSpacing="2"
-          fontFamily="serif"
-        >
-          明照寺
-        </text>
-      </g>
-      <path d="M0 412H1000V600H0Z" fill="#344e46" />
-      <path d="M408 423H592L677 600H321Z" fill="#536c5e" />
-      {[
-        { x: -64, y: 388, width: 290 },
-        { x: 225, y: 366, width: 183 },
-        { x: 590, y: 366, width: 183 },
-        { x: 776, y: 388, width: 290 },
-      ].map((seat) => (
-        <g key={seat.x}>
-          <path
-            d={`M${seat.x} ${seat.y + 33}q0-33 27-33h${seat.width - 54}q27 0 27 33v180h-${seat.width}Z`}
-            fill="#718c7e"
-            stroke="#a4b6a0"
-            strokeWidth="4"
-          />
-          <path
-            d={`M${seat.x + 12} ${seat.y + 41}h${seat.width - 24}m-${seat.width - 37} 0v114m${seat.width - 50} -114v114`}
-            stroke="#425f53"
-            strokeWidth="3"
-          />
-          <path
-            d={`M${seat.x + 28} ${seat.y + 16}h${seat.width - 56}v34h-${seat.width - 56}Z`}
-            fill="#c0c9ad"
-            opacity=".8"
-          />
-        </g>
-      ))}
-      <path d="M81 0L463 600H581L160 0Z" fill="#f7ecc0" opacity=".06" />
-      <path d="M0 600V561Q170 539 349 565L362 600Z" fill="#213f38" />
-    </g>
+    <image
+      href={storyAssets.scenes.busDeparture}
+      width="1000"
+      height="600"
+      preserveAspectRatio="xMidYMid slice"
+    />
   );
 }

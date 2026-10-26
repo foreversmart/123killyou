@@ -90,8 +90,12 @@ func TestMiniScriptRedCandleDeathCanRestart(t *testing.T) {
 	applyStory(t, engine, &state, "点燃红烛")
 	applyStory(t, engine, &state, "睡下")
 	intent, _ := engine.Apply(&state, "不续燃红烛")
+	if intent != "sleep" || state.Flags["story_dead"] || !state.Flags["death_pending"] || state.ShotKey != "wake_ghost_wait" {
+		t.Fatalf("未进入延迟死亡等待: intent=%s flags=%v shot=%s", intent, state.Flags, state.ShotKey)
+	}
+	intent, _ = engine.Apply(&state, "自动进入死亡结算")
 	if intent != "death" || !state.Flags["story_dead"] {
-		t.Fatalf("未按规则进入死亡: intent=%s flags=%v", intent, state.Flags)
+		t.Fatalf("延迟后未按规则进入死亡: intent=%s flags=%v", intent, state.Flags)
 	}
 	intent, _ = engine.Apply(&state, "重新开始")
 	if intent != "reset" || state.SceneKey != "mini_arrival" || !state.StoryMode {
@@ -184,14 +188,13 @@ func TestMiniScriptKeepsSceneActorsWithoutNarratingCandleAction(t *testing.T) {
 func TestMiniScriptFirstChapterStagesEverySpeaker(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival")
-	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉"} {
-		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听", 5: "继续听"}
+	for index, want := range []string{"林岚", "许栀", "林岚", "周砚", "陆沉"} {
+		commands := map[int]string{0: "听第一话", 1: "继续听", 2: "继续听", 3: "继续听", 4: "继续听"}
 		intent, _ := engine.Apply(&state, commands[index])
 		if intent != "story" || state.Dialogue.Speaker != want {
 			t.Fatalf("第一话第 %d 句说话者错误: intent=%s dialogue=%+v", index+1, intent, state.Dialogue)
 		}
 	}
-	engine.Apply(&state, "继续听")
 	if !state.Flags["arrival_intro_done"] {
 		t.Fatal("第一话结束后没有记录完成状态")
 	}
@@ -204,7 +207,7 @@ func TestMiniScriptArrivalInvitationGoesToRegistrationRoom(t *testing.T) {
 	engine := newStoryTestEngine(t)
 	state := engine.Initial("story-arrival-invitation")
 	var lines []string
-	for index, command := range []string{"听第一话", "继续听", "继续听", "继续听", "继续听", "继续听"} {
+	for index, command := range []string{"听第一话", "继续听", "继续听", "继续听", "继续听"} {
 		intent, _ := engine.Apply(&state, command)
 		if intent != "story" {
 			t.Fatalf("第一话第 %d 句没有作为剧情对白返回: intent=%s", index+1, intent)
@@ -212,13 +215,13 @@ func TestMiniScriptArrivalInvitationGoesToRegistrationRoom(t *testing.T) {
 		lines = append(lines, state.Dialogue.Text)
 	}
 	joined := strings.Join(lines, "\n")
-	for _, forbidden := range []string{"夜里听见钟声", "先数声", "从哪里来"} {
+	for _, forbidden := range []string{"夜里听见钟声", "先数声", "从哪里来", "等登记完再一起带进房间"} {
 		if strings.Contains(joined, forbidden) {
 			t.Fatalf("第一话仍包含已移除的夜间数钟提示 %q: %s", forbidden, joined)
 		}
 	}
-	if !strings.Contains(lines[5], "登记室") || !strings.Contains(lines[5], "分配房间") {
-		t.Fatalf("陆沉没有邀请队伍前往登记室并分配房间: %q", lines[5])
+	if !strings.Contains(lines[4], "先参观一下") || !strings.Contains(lines[4], "登记室登记房间") {
+		t.Fatalf("陆沉没有邀请队伍前往登记室并分配房间: %q", lines[4])
 	}
 	if state.SceneKey != "mini_arrival" {
 		t.Fatalf("第一话对白结束前不应提前离开山门: %s", state.SceneKey)
@@ -284,11 +287,16 @@ func TestMiniScriptDawnMiscountSpeaksBeforeDanger(t *testing.T) {
 	state := engine.Initial("story-dawn-trap")
 	for _, command := range []string{
 		"登记入住", "去斋堂", "我不吃", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
-		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把锣声算作第六声",
+		"续燃红烛", "不开门", "跟同伴去偷听", "模仿猫叫", "把钟声算作第五声",
 	} {
 		applyStory(t, engine, &state, command)
 	}
-	if state.Dialogue.Speaker != miniDoubleName(&state)+"（门外）" || !state.Flags["fake_dawn_knocks"] {
-		t.Fatalf("误判五更没有先出现假人三敲对白: %+v flags=%v", state.Dialogue, state.Flags)
+	if state.Dialogue.Text != "" || !state.Flags["fake_dawn_knocks"] ||
+		!state.Flags["dawn_knocks_dialogue_pending"] || state.DialogueNext != dawnKnocksDialogueAdvance {
+		t.Fatalf("误判五更没有先播放假人三敲: %+v flags=%v", state.Dialogue, state.Flags)
+	}
+	applyStory(t, engine, &state, dawnKnocksDialogueAdvance)
+	if state.Dialogue.Speaker != miniDoubleName(&state)+"（门外）" {
+		t.Fatalf("三敲结束后没有播放假人对白: %+v flags=%v", state.Dialogue, state.Flags)
 	}
 }

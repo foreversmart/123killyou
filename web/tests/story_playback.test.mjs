@@ -67,6 +67,21 @@ test('斋堂吃饭镜头保留约五秒后先确认收碗', async () => {
   f.runtime.dispose();
 });
 
+test('晚膳解释后留四秒劝素，说话时取消计时并在回应后重新等待', async () => {
+  const f = await fixture();
+  const state = { ...f.state, dialogueNext: '自动继续晚膳讨论' };
+  f.render(state);
+  assert.deepEqual(f.runtime.pendingDelays, [4000]);
+  f.render(state, { ...f.voice, status: 'recording' });
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, []);
+  f.render({ ...state, revision: 2 });
+  assert.deepEqual(f.runtime.pendingDelays, [4000]);
+  f.runtime.flushTimers();
+  assert.deepEqual(f.submitted, ['自动继续晚膳讨论']);
+  f.runtime.dispose();
+});
+
 test('同行者确认吃完后快速交给守夜人带队', async () => {
   const f = await fixture();
   f.render({ ...f.state, dialogueNext: '自动离开斋堂', flags: { refectory_meal_finished: true } });
@@ -84,6 +99,32 @@ test('四敲空门静默五秒后自动进入三敲', async () => {
   assert.deepEqual(f.submitted, ['自动进入三敲']);
   f.runtime.dispose();
 });
+
+test('睡下、撞门和三敲对白都等环境声完成后再自动接续', async () => {
+  const cases = [
+    { dialogueNext: '自动进入三更', flags: { sleep_pending: true }, delay: 5000 },
+    { dialogueNext: '自动进入死亡结算', flags: { death_pending: true }, delay: 500 },
+    {
+      dialogueNext: '三敲后听同行',
+      flags: { three_knocks_dialogue_pending: true },
+      delay: 3200,
+    },
+    {
+      dialogueNext: '三敲后听假同行',
+      flags: { dawn_knocks_dialogue_pending: true },
+      delay: 3200,
+    },
+  ];
+  for (const testCase of cases) {
+    const f = await fixture();
+    f.render({ ...f.state, ...testCase });
+    assert.deepEqual(f.runtime.pendingDelays, [testCase.delay]);
+    f.runtime.flushTimers();
+    assert.deepEqual(f.submitted, [testCase.dialogueNext]);
+    f.runtime.dispose();
+  }
+});
+
 test('说话、录音、暂停、道具阅读、死亡或播放错误期间不自动触发下一动作', async () => {
   for (const override of [
     { voice: { status: 'speaking' } },

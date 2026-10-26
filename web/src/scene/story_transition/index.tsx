@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { RoomPhase } from '@/scene/room/useRoomTransition';
 import { storyAssets } from '@/shared/lib/story_assets';
-import { CharacterAvatar } from '@/shared/ui/character_avatar';
 import styles from './style.module.css';
 
 type TravelBeat = {
@@ -20,7 +19,7 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'arrival_walk_register',
     title: '跟随陆沉进入东院',
     kind: 'walk',
-    backdrop: storyAssets.scenes.eastCourtyardAfternoon,
+    backdrop: storyAssets.scenes.arrivalWalkRegister,
     durationMs: 3000,
   },
   mini_refectory: {
@@ -29,14 +28,15 @@ const travelBeats: Record<string, TravelBeat> = {
     kind: 'walk',
     backdrop: storyAssets.scenes.eastCourtyardAfternoon,
     interlude: storyAssets.scenes.mainHallAfternoon,
-    durationMs: 3000,
-    interludeDurationMs: 3000,
+    durationMs: 7000,
+    interludeDurationMs: 7000,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
     title: '晚膳后沿回廊返回',
     kind: 'walk',
-    backdrop: storyAssets.scenes.eastCourtyardDusk,
+    backdrop: storyAssets.scenes.refectoryWalkCorridor,
+    durationMs: 4000,
   },
   mini_room: {
     id: 'corridor_return_room',
@@ -48,14 +48,14 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'companion_walk_listen',
     title: '沿回廊走向半掩的偏房',
     kind: 'walk',
-    backdrop: storyAssets.scenes.eastCourtyardNight,
+    backdrop: storyAssets.scenes.companionWalkListen,
     durationMs: 3000,
   },
   mini_wake_three_gongs: {
     id: 'room_sleep_blackout',
     title: '红烛压低，三更入梦',
     kind: 'sleep',
-    backdrop: storyAssets.scenes.playerRoom,
+    backdrop: storyAssets.scenes.playerRoomSeatedUnlit,
   },
   mini_ending: {
     id: 'dawn_walk_bus',
@@ -84,15 +84,12 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
   }, [sceneKey, state.flags.companion_present, state.flags.debug_scene_skipped]);
 
   const beat = active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
-  if (!beat || state.flags.debug_scene_skipped) return null;
-  const showWalkers = beat.id === 'companion_walk_listen' && state.flags.companion_present;
-  const walkers = showWalkers
-    ? (state.actors || []).filter(
-        (actor) =>
-          actor.visible &&
-          (actor.id === 'player' || ['linlan', 'zhouyan', 'xuzhi'].includes(actor.id)),
-      )
-    : [];
+  if (
+    !beat ||
+    state.flags.debug_scene_skipped ||
+    (beat.id === 'companion_walk_listen' && !state.flags.companion_present)
+  )
+    return null;
   return (
     <div
       key={beat.id}
@@ -117,20 +114,6 @@ export function StoryTransition({ state, phase }: { state: GameState; phase: Roo
           alt="红竹寺大殿"
           aria-hidden="true"
         />
-      )}
-      {showWalkers && (
-        <div className={styles.walkers} aria-hidden="true">
-          {walkers.map((actor, index) => (
-            <div
-              className={styles.walker}
-              data-walker={actor.id}
-              key={actor.id}
-              style={{ '--walker-delay': `${index * -0.22}s` } as CSSProperties}
-            >
-              <CharacterAvatar id={actor.id} name={actor.name} />
-            </div>
-          ))}
-        </div>
       )}
       <div className={styles.shade} aria-hidden="true" />
       <div className={styles.copy}>

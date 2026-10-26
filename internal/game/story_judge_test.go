@@ -141,7 +141,7 @@ func TestStoryJudgeMapsAllRoomVoiceOptionsThroughJEV(t *testing.T) {
 		{name: "candle", text: "再看一眼烛火", action: RoomActionCandle, shot: "room_candle_detail"},
 		{name: "history", text: "翻翻四史", action: RoomActionHistory, shot: "room_history"},
 		{name: "scripture", text: "看看桌上的经书", action: RoomActionScripture, shot: "room_scripture"},
-		{name: "sleep", text: "躺下歇一会儿", action: RoomActionSleep, shot: "wake_candle"},
+		{name: "sleep", text: "躺下歇一会儿", action: RoomActionSleep, shot: "room_sleep_wait"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			catalog, err := content.Load()

@@ -1,5 +1,24 @@
 package game
 
+const (
+	delayedDeathAdvance = "自动进入死亡结算"
+	sleepAdvance        = "自动进入三更"
+)
+
+func (e *Engine) beginDelayedDeath(state *State, shot, message string) (string, string, bool) {
+	miniSetFlag(state, "death_pending")
+	miniShot(state, shot)
+	state.DialogueNext = delayedDeathAdvance
+	return "sleep", miniObserve(state, message), true
+}
+
+func (e *Engine) finishDelayedDeath(state *State, message string) (string, string, bool) {
+	delete(state.Flags, "death_pending")
+	state.DialogueNext = ""
+	intent, speak := e.storyDeath(state, message)
+	return intent, speak, true
+}
+
 func (e *Engine) storyCandleCorridor(state *State, text string) (string, string, bool) {
 	if miniContinue(text) || miniHasAny(text, "听回廊对白") {
 		return "story", miniSequence(state, "corridor_intro", corridorLines), true
@@ -8,11 +27,11 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 		miniSetFlag(state, "red_candle_held")
 		miniShot(state, "corridor_candles")
 		e.grantStoryItems(state, "candle")
-		return "story", miniDialogue(state, "陆沉", "红烛先拿稳。进房后务必点起来，红烛可以驱除邪祟；经文在桌上，心里担心害怕时就读几页，定定心神。"), true
+		return "story", miniDialogue(state, "陆沉", "晚上回房后务必点燃，红烛可以驱除邪祟；经文在桌上，无聊的时候施主们可以看看，定定心神。"), true
 	}
 	if miniHasAny(text, "回房", "去我的房间", "进门房", "回自己的房", "回偏房") {
 		if !state.Flags["red_candle_held"] {
-			return "blocked", miniDialogue(state, "陆沉", "你的红烛还在这里。拿稳，再回自己的房间。"), true
+			return "blocked", miniDialogue(state, "陆沉", "你的红烛还在这里。拿好，再回自己的房间。"), true
 		}
 		e.setMiniScene(state, "mini_room")
 		return "move", miniObserve(state, "门闩扣紧。矮桌上摊着寺史册和《大念处经》，未点燃的红烛立在桌角，窗外回廊渐暗。"), true
@@ -25,6 +44,13 @@ func (e *Engine) storyCandleCorridor(state *State, text string) (string, string,
 }
 
 func (e *Engine) storyRoom(state *State, text string, decision StoryDecision) (string, string, bool) {
+	if state.Flags["death_pending"] {
+		if text == delayedDeathAdvance {
+			return e.finishDelayedDeath(state, "你没有点燃红烛。门外的东西隔着一段时间连续撞门两次，停下半秒后撞开门闩，鬼影冲入房间。")
+		}
+		state.DialogueNext = delayedDeathAdvance
+		return "blocked", miniSystem(state, "过了一会儿，门外的撞击还没有停。先等这一阵声音过去。"), true
+	}
 	if !roomAmbiguous(text) && miniHasAny(text, "点燃红烛", "点红烛", "点烛", "把红烛点上", "点亮红烛", "点亮烛火", "把烛火点上") {
 		return e.lightRoomCandle(state)
 	}
@@ -64,7 +90,7 @@ func roomExplicitCommand(text string) bool {
 		return true
 	}
 	if miniHasAny(text,
-		"查看铜钥匙", "看看铜钥匙", "检查门闩", "看看门闩", "查看残页", "看残页", "读残页", "入住须知",
+		"查看铜钥匙", "看看铜钥匙", "检查门闩", "看看门闩",
 		"看念珠", "查看念珠", "握紧念珠", "看通行凭", "查看通行凭", "看油灯", "查看油灯",
 		"为什么五更", "为什么要听是谁",
 	) {
@@ -149,14 +175,16 @@ func (e *Engine) inspectRoomCandle(state *State) (string, string, bool) {
 
 func (e *Engine) applyRoomSleep(state *State) (string, string, bool) {
 	if !state.Flags["red_candle_lit"] {
-		intent, speak := e.storyDeath(state, "你没有点燃红烛就睡下。三声更锣后，黑影沿着没有烛光的门缝撞进来。")
-		return intent, speak, true
+		return e.beginDelayedDeath(state, "room_ghost_wait", "过了一会儿，门外有东西猛撞一下。隔了一会儿，第二次撞击震得门闩发响，黑暗里的脚步仍在靠近。")
 	}
 	miniSetFlag(state, "slept_before_three_gongs")
 	miniSetFlag(state, "candle_went_out")
+	miniSetFlag(state, "sleep_pending")
 	state.Flags["red_candle_lit"] = false
 	e.setMiniScene(state, "mini_wake_three_gongs")
-	message := "烛光淡入黑场。三声沉闷的更锣之后，黑烛芯和凝固蜡泪出现在眼前，门外有湿重的呼吸。"
+	miniShot(state, "room_sleep_wait")
+	state.DialogueNext = sleepAdvance
+	message := "你躺下歇着。过了好一会儿，烛光才淡入黑场；下一阵更锣还没有响，房内只剩自己的呼吸。"
 	// The candle goes out as part of falling asleep, so include this
 	// turn's small unlit penalty when deciding whether the threshold is
 	// crossed. The actual deduction is settled by story's deferred event
@@ -173,9 +201,29 @@ func (e *Engine) applyRoomSleep(state *State) (string, string, bool) {
 }
 
 func (e *Engine) storyWake(state *State, text string) (string, string, bool) {
+	if state.Flags["sleep_pending"] {
+		if text == sleepAdvance {
+			delete(state.Flags, "sleep_pending")
+			miniShot(state, "wake_candle")
+			state.DialogueNext = ""
+			return "sleep", miniObserve(state, "又过了好一会儿，三声沉闷的更锣终于把你惊醒。黑烛芯和凝固的蜡泪出现在眼前，门外传来湿重的呼吸。"), true
+		}
+		// A direct player action can resolve the waiting handoff early. The
+		// normal UI has no choices during this five-second beat, so this is only
+		// a voice/backward-compatibility path; the automatic path remains timed.
+		delete(state.Flags, "sleep_pending")
+		miniShot(state, "wake_candle")
+		state.DialogueNext = ""
+	}
+	if state.Flags["death_pending"] {
+		if text == delayedDeathAdvance {
+			return e.finishDelayedDeath(state, "红烛已经熄灭。门外的东西隔了一会儿又撞门一次，停下半秒后撞破门闩，鬼影扑进来。")
+		}
+		state.DialogueNext = delayedDeathAdvance
+		return "blocked", miniSystem(state, "过了一会儿，门外的撞门声还在回响。先等着，不要急着开门。"), true
+	}
 	if miniHasAny(text, "不开烛", "不续燃", "不点", "不用点", "不需要红烛", "算了") {
-		intent, speak := e.storyDeath(state, "你决定不续燃红烛。门板外的人形鼓起，黑影撞开了房门。")
-		return intent, speak, true
+		return e.beginDelayedDeath(state, "wake_ghost_wait", "红烛熄灭后，过了一会儿，门外有东西重重撞门。隔了一会儿，第二次撞击震动门闩，门外的脚步仍在靠近。")
 	}
 	if miniHasAny(text, "点燃红烛", "续燃红烛", "重新点燃", "把烛点上", "续烛") {
 		state.Flags["red_candle_lit"] = true

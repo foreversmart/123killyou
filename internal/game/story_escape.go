@@ -1,6 +1,12 @@
 package game
 
-const fourKnocksAutoAdvance = "自动进入三敲"
+const (
+	fourKnocksAutoAdvance      = "自动进入三敲"
+	threeKnocksDialogueAdvance = "三敲后听同行"
+	dawnKnocksDialogueAdvance  = "三敲后听假同行"
+	escapeDialogueAdvance      = "自动显示逃脱对白"
+	dawnSleepAdvance           = "自动进入四声更锣"
+)
 
 func (e *Engine) storyFourKnocks(state *State, text string) (string, string, bool) {
 	if text == fourKnocksAutoAdvance {
@@ -12,7 +18,7 @@ func (e *Engine) storyFourKnocks(state *State, text string) (string, string, boo
 		return e.silentFourKnocksUtterance(state)
 	}
 	if miniHasAny(text, "开门") && !miniHasAny(text, "不开门") {
-		intent, speak := e.storyDeath(state, "门闩被拉开。门外同行人的后背没有皮肤，一只手伸进门内。")
+		intent, speak := e.storyDeath(state, "门闩被拉开。门外的鬼影越过门槛，径直冲进房内。")
 		return intent, speak, true
 	}
 	// The four knocks are a one-way warning. Speaking through the door never
@@ -52,11 +58,15 @@ func scheduleFourKnocksAutoAdvance(state *State) {
 func (e *Engine) advanceAfterFourKnocks(state *State) (string, string, bool) {
 	miniSetFlag(state, "four_knocks_survived")
 	e.setMiniScene(state, "mini_three_knocks")
+	// Keep the three wooden knocks audible before the caller's line. The
+	// client waits for this explicit handoff until the sound cue has finished.
+	miniShot(state, "three_knocks")
+	miniSetFlag(state, "three_knocks_dialogue_pending")
+	state.DialogueNext = threeKnocksDialogueAdvance
 	if allCompanionsAte(state) {
-		miniObserve(state, "四敲后留下一段寂静，轻笑从门后退远。走廊另一端响起三下敲门，没有脚步靠近门前。")
-		return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
+		return "story", miniObserve(state, "四敲后留下一段寂静，轻笑从门后退远。走廊另一端先响起三下敲门，门外没有脚步靠近。"), true
 	}
-	return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
+	return "story", miniObserve(state, "四敲后的余响散去。走廊另一端先响起三下敲门，门外没有脚步靠近。"), true
 }
 
 func (e *Engine) silentFourKnocksUtterance(state *State) (string, string, bool) {
@@ -97,6 +107,21 @@ func miniCompanionLine(state *State) string {
 }
 
 func (e *Engine) storyThreeKnocks(state *State, text string) (string, string, bool) {
+	if state.Flags["three_knocks_dialogue_pending"] && text != threeKnocksDialogueAdvance {
+		// The normal client hides choices until the cue completes. A direct
+		// voice command can still acknowledge the sound early for older clients;
+		// clear the handoff and continue with that command below.
+		delete(state.Flags, "three_knocks_dialogue_pending")
+		state.DialogueNext = ""
+	}
+	if text == threeKnocksDialogueAdvance {
+		state.Flags["three_knocks_dialogue_pending"] = false
+		state.DialogueNext = ""
+		if allCompanionsAte(state) {
+			return "story", miniDialogue(state, miniDoubleName(state)+"（门外）", "跟我来……先跟我来。"), true
+		}
+		return "story", miniDialogue(state, miniCompanionName(state)+"（门外）", miniCompanionLine(state)), true
+	}
 	if miniContinue(text) || miniHasAny(text, "核对身份", "核对门外身份", "确认私物", "问是谁", "和门外说话", "与门外对话", "继续和鬼说话") {
 		if miniHasAny(text, "核对身份", "核对门外身份", "确认私物", "问是谁", "和门外说话", "与门外对话", "继续和鬼说话") || miniContinue(text) {
 			recordGhostDialogue(state)
@@ -178,7 +203,7 @@ func (e *Engine) storyListen(state *State, text string) (string, string, bool) {
 		return "move", miniObserve(state, "偏灯在地上拖出窄光，杯筊桌出现在殿侧。身后的脚步由远及近，与穿堂风错开。"), true
 	}
 	if miniHasAny(text, "往其他方向", "跑错", "冲向后山", "去钟楼", "陌生偏房") {
-		intent, speak := e.storyDeath(state, "视线冲入另一条黑廊，回声沿墙折返，慧普的背影再次出现在廊口。")
+		intent, speak := e.storyDeath(state, "视线冲入另一条黑廊，回声沿墙折返，鬼影从廊口冲了过来。")
 		return intent, speak, true
 	}
 	if miniHasAny(text, "听声音", "观察四周", "看地面") {
@@ -200,10 +225,19 @@ func (e *Engine) afterMiniEscape(state *State, message string) string {
 		e.setMiniScene(state, "mini_double")
 		return miniObserve(state, message+"隔壁先响起门闩，一只熟悉的鞋伸进门缝。同行人撞进房间，用肩膀把门合上，影子的边缘断在烛光外。")
 	}
-	e.setMiniScene(state, "mini_dawn_trap")
-	return miniObserve(state, message+"视线落在红烛后淡出。五声更锣之后，远处又响起一声低长的锣，窗纸仍黑着。")
+	return e.preparePostEscape(state, message+"视线落在红烛后淡出。")
 }
 func (e *Engine) finishMiniDouble(state *State, message string) string {
+	return e.preparePostEscape(state, message+"红烛缩成一点，画面淡入黑场。")
+}
+
+// preparePostEscape leaves a short, quiet beat after the player gets back to
+// the room. The protagonist's reaction is intentionally a separate handoff
+// so it cannot race the animal/door sound from the escape shot.
+func (e *Engine) preparePostEscape(state *State, message string) string {
 	e.setMiniScene(state, "mini_dawn_trap")
-	return miniObserve(state, message+"红烛缩成一点，画面淡入黑场。五声更锣之后，远处又响起一声低长的锣，窗纸仍黑着。")
+	miniShot(state, "escape_return")
+	miniSetFlag(state, "escape_dialogue_pending")
+	state.DialogueNext = escapeDialogueAdvance
+	return miniObserve(state, message+"过了一会儿，门房重新安静下来。")
 }

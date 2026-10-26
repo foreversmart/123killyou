@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { canShowScenePerson } from '../src/scene/scene_person/visibility.ts';
 import { actorComposition, propComposition } from '../src/scene/story_stage/compositions.ts';
 import { dayLayouts } from '../src/scene/story_stage/day_layouts.ts';
+import { nightLayouts } from '../src/scene/story_stage/night_layouts.ts';
 import { storyAssets } from '../src/shared/lib/story_assets.ts';
 
 test('主角和未确认声源不能回退成可见的未知立绘，已确认同行者可以显示', () => {
@@ -46,4 +47,8 @@ test('斋堂把陆沉放在饭桌边缘，并保留午后大殿过渡素材', ()
   assert.equal(dayLayouts.mini_refectory.actors.luchen.x, 89);
   assert.equal(dayLayouts.mini_refectory.actors.luchen.height, 36);
   assert.match(storyAssets.scenes.mainHallAfternoon, /main_hall\/hall_afternoon\.webp$/);
+});
+
+test('场景11标题使用惊魂未定在房内', () => {
+  assert.equal(nightLayouts.mini_dawn_trap.chapter, '11 · 惊魂未定在房内');
 });

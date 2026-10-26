@@ -7,23 +7,20 @@
   },
   "pathBase": "scene_directory",
   "rendering": {
-    "sourceFrame": "crop source pixels before mapping into rect",
-    "alpha": "preserve source alpha",
     "state": "visual contract; runtime authority remains backend",
-    "lighting": "tint prop/NPC layers to scene; no baked character shadow or breath",
-    "actorSizing": "人物以sourceFrame原始宽高比等比缩放，以头顶/脚底和遮挡线定位；禁止独立拉伸宽高。rect是最终取样后的等比矩形。"
+    "presentation": "single complete illustration; no actor, body-part, prop or lighting layers"
   },
   "defaultState": {
-    "hui": "rear"
+    "view": "rear"
   },
   "sprites": {
-    "background": {
+    "room_obscured": {
       "path": "room_night.png",
       "width": 1672,
       "height": 941,
       "hasAlpha": false,
-      "bytes": 1526836,
-      "sha256": "362517c798fb28a96c95c882276b4313c95e6ce3e9e70f6e99f82dfa52d13047",
+      "bytes": 1507179,
+      "sha256": "dffa1992a0e20577019bdaf58720b480deedfc2293ae9bfb9b57568356d33690",
       "sourceFrame": {
         "x": 0,
         "y": 0,
@@ -31,130 +28,55 @@
         "height": 941
       }
     },
-    "victim_detail": {
-      "path": "props/victim_partial.png",
-      "width": 1671,
+    "room_turned": {
+      "path": "room_turning.png",
+      "width": 1672,
       "height": 941,
-      "hasAlpha": true,
-      "bytes": 569203,
-      "sha256": "4b3c76ff40184d4934542844a97008136b9e9bb8677706ce866439486409e691",
+      "hasAlpha": false,
+      "bytes": 1467353,
+      "sha256": "09a5894a76d1251d99e38a7d76edbd3144a90177392ede14673e66071eeb0d39",
       "sourceFrame": {
-        "x": 120,
-        "y": 248,
-        "width": 1439,
-        "height": 500
-      }
-    },
-    "hui_rear": {
-      "path": "../../characters/hui_pu/rear_hollow.png",
-      "width": 1024,
-      "height": 1536,
-      "hasAlpha": true,
-      "bytes": 1811389,
-      "sha256": "51536649113f856bed34abc060d02eee352f15cd0525b3a42f6a3177f5e6b6ba",
-      "sourceFrame": {
-        "x": 110,
-        "y": 18,
-        "width": 771,
-        "height": 1478
-      }
-    },
-    "hui_turn": {
-      "path": "../../characters/hui_pu/turning_hollow.png",
-      "width": 1024,
-      "height": 1536,
-      "hasAlpha": true,
-      "bytes": 1790272,
-      "sha256": "1cb163b8f28cba19c0aba5ea2a8b838f33771db1eae0fc43a25126e4efeee614",
-      "sourceFrame": {
-        "x": 117,
-        "y": 24,
-        "width": 766,
-        "height": 1472
+        "x": 0,
+        "y": 0,
+        "width": 1672,
+        "height": 941
       }
     }
   },
   "layers": [
     {
-      "id": "background",
-      "sprite": "background",
+      "id": "room_obscured",
+      "sprite": "room_obscured",
       "rect": {
         "x": 0,
         "y": 0,
         "width": 1672,
         "height": 941
       },
-      "zIndex": 0
-    },
-    {
-      "id": "victim_detail",
-      "sprite": "victim_detail",
-      "rect": {
-        "x": 555,
-        "y": 485,
-        "width": 245,
-        "height": 85.12856150104238
-      },
-      "zIndex": 3,
-      "filter": "brightness(.8) saturate(.75)"
-    },
-    {
-      "id": "hui_rear",
-      "sprite": "hui_rear",
-      "rect": {
-        "x": 674.03,
-        "y": 194,
-        "width": 359.939,
-        "height": 690
-      },
-      "zIndex": 10,
+      "zIndex": 0,
       "visibleWhen": {
-        "hui": "rear"
-      },
-      "clipRect": {
-        "x": 320,
-        "y": 0,
-        "width": 870,
-        "height": 941
-      },
-      "filter": "brightness(.53) saturate(.7)",
-      "scaleMode": "uniform",
-      "anchor": {
-        "x": 0.5,
-        "y": 1
+        "view": "rear"
       }
     },
     {
-      "id": "hui_turn",
-      "sprite": "hui_turn",
+      "id": "room_turned",
+      "sprite": "room_turned",
       "rect": {
-        "x": 674.468,
-        "y": 194,
-        "width": 359.063,
-        "height": 690
-      },
-      "zIndex": 10,
-      "visibleWhen": {
-        "hui": "turn"
-      },
-      "clipRect": {
-        "x": 320,
+        "x": 0,
         "y": 0,
-        "width": 870,
+        "width": 1672,
         "height": 941
       },
-      "filter": "brightness(.53) saturate(.7)",
-      "scaleMode": "uniform",
-      "anchor": {
-        "x": 0.5,
-        "y": 1
+      "zIndex": 0,
+      "visibleWhen": {
+        "view": "turn"
       }
     }
   ],
   "labels": [],
   "notes": [
-    "从门隙观察；肩袖与前臂是独立透明局部，靠枕/慧普身体遮住肩部断面，不公开身份。",
-    "门板与门框在底图中遮挡两侧；人物clipRect不得越过门缝可见区域。",
-    "床上局部不公开受害者身份，具体受害房间与可靠同行者均由分支确定。"
+    "房内无灯，住持伏在床上一个人身上，人物身份与动作细节隐在黑暗中。",
+    "初窥与贴近观察共用伏身整图；花瓶打破后仅切换回头整图，机位与亮度一致。",
+    "不叠加站姿住持、床上局部或人物微动；碎花瓶近景显示在右侧；语音、逃生、受害者身份与存档仍由后端结算。"
   ]
 }

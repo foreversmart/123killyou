@@ -4,6 +4,7 @@ export type SoundEvent = {
     | 'gong'
     | 'bell'
     | 'knock'
+    | 'impact'
     | 'shatter'
     | 'bird'
     | 'door'
@@ -23,6 +24,7 @@ export type SoundEvent = {
   at: number;
   pan?: number;
   duration?: number;
+  distant?: boolean;
 };
 const repeat = (kind: SoundEvent['kind'], count: number, spacing = 0.85): SoundEvent[] =>
   Array.from({ length: count }, (_, index) => ({ kind, at: index * spacing }));
@@ -30,20 +32,36 @@ export function storyCues(state: GameState): SoundEvent[] {
   if (state.shotKey?.startsWith('death_')) {
     const sourceCue =
       state.retryScene === 'mini_listen' || state.retryScene === 'mini_oracle' ? 'step' : 'door';
+    if (state.retryScene === 'mini_room' || state.retryScene === 'mini_wake_three_gongs') {
+      return [
+        { kind: 'door', at: 0 },
+        { kind: 'death', at: 0.5, duration: 1.2 },
+      ];
+    }
     return [
       { kind: 'death', at: 0, duration: 1.2 },
       { kind: sourceCue, at: 0.62 },
     ];
   }
   switch (state.shotKey || state.sceneKey) {
-    case 'corridor_two_gongs':
+    case 'corridor_candles':
       return repeat('gong', 2);
+    case 'corridor_two_gongs':
+      return state.flags?.corridor_gongs_played ? [] : repeat('gong', 2);
     case 'wake_candle':
     case 'mini_wake_three_gongs':
       return [
         ...repeat('gong', 3),
-        { kind: 'breath', at: 3, pan: 0.55 },
-        { kind: 'scrape', at: 4.6, pan: 0.55 },
+        { kind: 'breath', at: 4.15, pan: 0.55 },
+        { kind: 'scrape', at: 5.75, pan: 0.55 },
+      ];
+    case 'room_ghost_wait':
+    case 'wake_ghost_wait':
+      return [
+        // This is a heavy body hitting the door, rather than a person's
+        // deliberate knock. Leave a real gap between the two impacts.
+        { kind: 'impact', at: 0.25, pan: 0.55 },
+        { kind: 'impact', at: 1.85, pan: 0.55 },
       ];
     case 'wake_door':
       return [
@@ -91,7 +109,6 @@ export function storyCues(state: GameState): SoundEvent[] {
       ];
     case 'room_history':
     case 'room_scripture':
-    case 'room_page':
     case 'room_permit':
       return [{ kind: 'rustle', at: 0 }];
     case 'register_camera_bell':
@@ -110,7 +127,10 @@ export function storyCues(state: GameState): SoundEvent[] {
       ];
     case 'dawn_gongs':
     case 'mini_dawn_trap':
-      return [...repeat('gong', 5), { kind: 'gong', at: 4.6, pan: 0.8, duration: 3.3 }];
+      return [
+        ...repeat('gong', 4),
+        { kind: 'bell', at: 5.1, pan: 0.2, duration: 3.3, distant: true },
+      ];
     case 'dawn_courtyard':
       return [
         ...repeat('gong', 5),
@@ -139,6 +159,8 @@ export function storyCues(state: GameState): SoundEvent[] {
 }
 export function cueDuration(cue: SoundEvent): number {
   if (cue.duration) return cue.duration;
+  if (cue.kind === 'gong') return 2.3;
+  if (cue.kind === 'impact') return 0.85;
   if (cue.kind === 'death') return 1.2;
   if (cue.kind === 'bell') return 3.3;
   if (cue.kind === 'bus') return 3.1;
@@ -146,10 +168,11 @@ export function cueDuration(cue: SoundEvent): number {
   return 1.1;
 }
 export function cueSignature(state: GameState): string {
-  const replay = /重听|再听|听钟|听敲门|听声音|检查猫食碟|检查鸟笼|听猫叫|听鸟叫/.test(
-    state.lastHeard || '',
-  )
-    ? `:${state.revision}`
-    : '';
+  const replay =
+    /重听|再听|听钟|听锣|辨认锣声|辨认钟声|听敲门|听声音|检查猫食碟|检查鸟笼|听猫叫|听鸟叫/.test(
+      state.lastHeard || '',
+    )
+      ? `:${state.revision}`
+      : '';
   return `${state.runId}:${state.sceneKey}:${state.shotKey || ''}${replay}`;
 }

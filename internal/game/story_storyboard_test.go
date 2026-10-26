@@ -43,18 +43,18 @@ func storyAtListen(t *testing.T, meat bool) (*Engine, State) {
 func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("staged")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "许栀", "陆沉", "陆沉"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"林岚", "许栀", "林岚", "周砚", "陆沉"}) {
 		t.Fatalf("山门说话者: %v", got)
 	}
 	e.Apply(&s, "登记入住")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀", "陆沉"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "陆沉"}) {
 		t.Fatalf("入住说话者: %v", got)
 	}
 	if s.ShotKey != "register_key_tags" {
 		t.Fatal("没有演出钥匙和房牌交接")
 	}
 	e.Apply(&s, "去斋堂")
-	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉", "林岚", "许栀"}) {
+	if got := drainMiniDialogue(t, e, &s); !reflect.DeepEqual(got, []string{"周砚", "陆沉"}) {
 		t.Fatalf("晚膳说话者: %v", got)
 	}
 	if s.Flags["meal_player_ate"] || s.Flags["meal_player_refused"] {
@@ -153,7 +153,7 @@ func TestStoryboardCompanionsFollowTheirIndividualMeals(t *testing.T) {
 		t.Run(want, func(t *testing.T) {
 			e := newStoryTestEngine(t)
 			s := e.Initial("meals")
-			storyCommands(e, &s, "登记入住", "去斋堂", "查看施食记")
+			storyCommands(e, &s, "登记入住", "去斋堂", "查看碗签")
 			for _, id := range []string{"linlan", "zhouyan", "xuzhi"} {
 				choice := "吃粥"
 				if id == want {
@@ -265,9 +265,13 @@ func TestStoryboardOracleWeightedCastAndSafeRetry(t *testing.T) {
 
 func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 	e, s := storyAtListen(t, false)
-	storyCommands(e, &s, "模仿鸟叫", "把锣声算作第六声")
-	if !strings.HasSuffix(s.Dialogue.Speaker, "（门外）") || s.ShotKey != "dawn_knocks" {
-		t.Fatal("假晓未定位声源")
+	storyCommands(e, &s, "模仿鸟叫", "把钟声算作第五声")
+	if s.Dialogue.Text != "" || s.ShotKey != "dawn_knocks" || s.DialogueNext != dawnKnocksDialogueAdvance {
+		t.Fatalf("假晓未先定位三敲声源: %+v", s)
+	}
+	storyCommands(e, &s, dawnKnocksDialogueAdvance)
+	if !strings.HasSuffix(s.Dialogue.Speaker, "（门外）") {
+		t.Fatal("三敲后未定位假晓对白声源")
 	}
 	storyCommands(e, &s, "不开门等待真正的五更")
 	if s.SceneKey != "mini_dawn_trap" || s.ShotKey != "dawn_wait" {
@@ -291,8 +295,8 @@ func TestStoryboardDawnRequiresWaitingAndKeepsFalseVoiceOutside(t *testing.T) {
 			t.Fatalf("山门送客仍使用偏房站位: %+v", actor)
 		}
 	}
-	storyCommands(e, &s, "把残页留下", "坐大巴回家")
-	if s.ShotKey != "ending_bus" || !s.Flags["page_left"] || !s.Flags["story_finished"] {
+	storyCommands(e, &s, "坐大巴回家")
+	if s.ShotKey != "ending_bus" || !s.Flags["permit_returned"] || !s.Flags["story_finished"] {
 		t.Fatal("没有完成离寺后视镜分镜")
 	}
 }

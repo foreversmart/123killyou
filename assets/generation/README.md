@@ -4,8 +4,11 @@
 
 [素材用途](asset_usage.md)说明已有素材的使用边界；[完整流程制作清单](production_manifest.json)记录各幕所需图像、参考、提示词与当前完成状态。清单中的 verified 表示原图已生成并检查。首夜十二幕的图像状态已补齐，人物等比、叠加和遮挡配置已核对。
 
+固定细节规范：后续生成或替换素材时，不需要随剧情状态独立变化的固定场景细节（门牌、牌匾、标牌及其准确文字等）直接画入图片，匹配材质、透视和光照；仅需随剧情变化、移动或交互的内容保留独立图层。沿用当前设定，不擅自更改无需替换的细节。
+
 | 素材                      | 原图                                                                            | 尺寸              | 用途                                                                                       |
 | ------------------------- | ------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------ |
+| 东院行进·跟随陆沉         | [arrival_walk_register.png](../scenes/east_courtyard/arrival_walk_register.png) | 1672 × 941 | 山门到登记室的专用转场；陆沉持铜钥匙领路，三位同伴自然跟随，四块房牌文字直接绘入 |
 | 东院回廊·晴日下午         | [corridor_afternoon.png](../scenes/east_courtyard/corridor_afternoon.png)       | 1672 × 941        | 东院回廊·晴日下午                                                                          |
 | 主角门房·夜间亮烛底图     | [room_candlelit.png](../scenes/player_room/room_candlelit.png)                  | 1672 × 941        | 主角门房·夜间亮烛底图                                                                      |
 | 林岚·正常站姿             | [standing.png](../characters/lin_lan/standing.png)                              | 1024 × 1536，透明 | 01正常带盖同行、12取回盖后使用；入住放盖后切 standing_cap_removed                          |
@@ -14,7 +17,7 @@
 | 许栀·正常站姿             | [standing.png](../characters/xu_zhi/standing.png)                               | 1024 × 1536，透明 | 正常同行与关切交谈；保持短圆脸和平刘海，蓝发圈在独立纸张上                                 |
 | 慧普·正常站姿             | [standing.png](../characters/hui_pu/standing.png)                               | 1024 × 1536，透明 | 正常外貌与服装定型；帘后、背身空背和回望使用专用状态                                       |
 | 神公·持筊站姿             | [standing_jiaobei.png](../characters/shen_gong/standing_jiaobei.png)            | 1024 × 1536，透明 | 神公与杯筊造型参考；09初见用坐姿，结果后切石化或持烛引路                                   |
-| 山门·晴日下午             | [gate_afternoon.png](../scenes/temple_gate/gate_afternoon.png)                  | 1672 × 941        | 下午抵达的山门背景；牌匾准确排字，人物、花猫与行李另行叠加                                 |
+| 山门·晴日下午             | [gate_afternoon.png](../scenes/temple_gate/gate_afternoon.png)                  | 1672 × 941        | 下午山门完整插画；人物、花猫、行李与光影统一绘入，不再叠加独立图层                                 |
 | 登记处·下午               | [registration_afternoon.png](../scenes/registration/registration_afternoon.png) | 1672 × 941        | 登记处分层背景，与独立桌前景、登记簿、钥匙、通行凭及四块房牌组合                           |
 | 林岚·普通对话头像         | [portrait_neutral.png](../characters/lin_lan/portrait_neutral.png)              | 1254 × 1254，透明 | 林岚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份                                   |
 | 周砚·普通对话头像         | [portrait_neutral.png](../characters/zhou_yan/portrait_neutral.png)             | 1254 × 1254，透明 | 周砚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份                                   |
@@ -24,10 +27,9 @@
 | 神公·普通对话头像         | [portrait_neutral.png](../characters/shen_gong/portrait_neutral.png)            | 1254 × 1254，透明 | 神公普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份                                   |
 | 未知人物·占位头像         | [unknown.png](../portraits/unknown.png)                                         | 1254 × 1254，透明 | 帘后人物及尚未看清、未核实的门外发言占位；保留NPC头像框，由界面叠加问号                    |
 | 铜钥匙·物品图             | [inventory.png](../props/copper_key/inventory.png)                              | 1254 × 1254，透明 | 单枚铜钥匙的道具栏、背包与调查图；沿用登记处钥匙身份                                       |
-| 残页·物品图               | [inventory.png](../props/torn_page/inventory.png)                               | 1254 × 1254，透明 | 残页的道具栏与调查底图；末行警告由准确排字提供                                             |
 | 红烛·物品图               | [unlit.png](../props/red_candle/unlit.png)                                      | 1254 × 1254，透明 | 未点燃红烛的道具栏与调查图；不是场景中燃烧或短芯状态                                       |
 | 念珠·物品图               | [inventory.png](../props/prayer_beads/inventory.png)                            | 1254 × 1254，透明 | 木念珠的道具栏与调查图；保留一颗更深的珠子                                                 |
-| 通行凭·物品图             | [inventory.png](../props/permit/inventory.png)                                  | 1254 × 1254，透明 | 通行凭的道具栏与正反面调查底图；不再与残页共用图片                                         |
+| 通行凭·物品图             | [inventory.png](../props/permit/inventory.png)                                  | 1254 × 1254，透明 | 通行凭的道具栏与正反面调查底图                                         |
 | 林岚·警觉                 | [portrait_alert.png](../characters/lin_lan/portrait_alert.png)                  | 1254 × 1254，透明 | 林岚·警觉                                                                                  |
 | 林岚·害怕                 | [portrait_afraid.png](../characters/lin_lan/portrait_afraid.png)                | 1254 × 1254，透明 | 林岚·害怕                                                                                  |
 | 周砚·怀疑                 | [portrait_doubtful.png](../characters/zhou_yan/portrait_doubtful.png)           | 1254 × 1254，透明 | 周砚·怀疑                                                                                  |
@@ -36,31 +38,37 @@
 | 许栀·坚定拒绝             | [portrait_resolute.png](../characters/xu_zhi/portrait_resolute.png)             | 1254 × 1254，透明 | 许栀·坚定拒绝                                                                              |
 | 陆沉·审视                 | [portrait_scrutinizing.png](../characters/lu_chen/portrait_scrutinizing.png)    | 1254 × 1254，透明 | 陆沉·审视                                                                                  |
 | 陆沉·欲言又止             | [portrait_hesitant.png](../characters/lu_chen/portrait_hesitant.png)            | 1254 × 1254，透明 | 陆沉·欲言又止                                                                              |
-| 斋堂·夕照                 | [dining_sunset.png](../scenes/dining_hall/dining_sunset.png)                    | 1672 × 941        | 斋堂·夕照                                                                                  |
+| 斋堂·夕照                 | [dining_sunset.png](../scenes/dining_hall/dining_sunset.png)                    | 1672 × 941        | 三位同伴自然围坐的完整晚膳插画；食物、餐具、人物和夕照统一绘入，进食选择不切换画面 |
 | 东侧偏殿·夜间             | [shrine_night.png](../scenes/east_shrine/shrine_night.png)                      | 1671 × 941        | 东侧偏殿·夜间                                                                              |
 | 陆沉·白日接待             | [standing_reception.png](../characters/lu_chen/standing_reception.png)          | 1024 × 1536，透明 | 陆沉·白日接待                                                                              |
 | 回廊铜铃                  | [bell.png](../scenes/east_courtyard/props/bell.png)                             | 1024 × 1536，透明 | 回廊铜铃                                                                                   |
 | 回廊花瓶·完整             | [vase_intact.png](../scenes/east_courtyard/props/vase_intact.png)               | 1263 × 1245，透明 | 回廊花瓶·完整                                                                              |
 | 红烛烛台·燃烧             | [candle_burning.png](../scenes/player_room/props/candle_burning.png)            | 1263 × 1246，透明 | 红烛烛台·燃烧                                                                              |
 | 大念处经·桌面               | [scripture_closed.png](../scenes/player_room/props/scripture_closed.png)        | 1536 × 1024，透明 | 大念处经·桌面                                                                                |
-| 入住残页·桌面             | [torn_page.png](../scenes/player_room/props/torn_page.png)                      | 1536 × 1024，透明 | 入住残页·桌面                                                                              |
 | 寺史册·桌面               | [history_closed.png](../scenes/player_room/props/history_closed.png)            | 1536 × 1024，透明 | 寺史册·桌面                                                                                |
 | 斋堂桌前景                | [table_foreground.png](../scenes/dining_hall/table_foreground.png)              | 1672 × 941，透明  | 斋堂桌前景                                                                                 |
+| 门房独坐·红烛点亮 | [room_seated_lit.png](../scenes/player_room/room_seated_lit.png) | 1672 × 941 | 主角独坐床边的完整点亮插画；窗外近黑，人物与所有桌面物件直接绘入 |
+| 门房独坐·红烛未亮 | [room_seated_unlit.png](../scenes/player_room/room_seated_unlit.png) | 1672 × 941 | 同机位未亮状态；三更醒来使用此图，微弱冷暗环境光，只有主角一人 |
+| 东院回廊·围聚发烛 | [candle_distribution.png](../scenes/east_courtyard/candle_distribution.png) | 1672 × 941 | 主角与三位同伴围着陆沉的完整发烛插画，夜色延续返回回廊图；不再叠加人物和道具 |
+| 晚膳后回廊·队伍返回 | [refectory_walk_corridor.png](../scenes/east_courtyard/refectory_walk_corridor.png) | 1672 × 941 | 晚膳后返回专用完整插画：陆沉带三名同伴，院外近黑，保留局部灯光；沿用整图转场 |
+| 回廊偏房·两人偷听 | [companion_walk_listen.png](../scenes/east_courtyard/companion_walk_listen.png) | 1672 × 941 | “沿回廊走向半掩的偏房”约3秒转场使用用户确认的完整两人门口偷听插画，人物、门缝与夜间檐灯统一绘入；保留整图运动和淡入淡出，不再叠加或单独动画化合成人物，不提前展示门内剧情。 |
 | 东院回廊·入夜             | [corridor_dusk.png](../scenes/east_courtyard/corridor_dusk.png)                 | 1672 × 941        | 东院回廊·入夜                                                                              |
 | 东院回廊·午夜             | [corridor_night.png](../scenes/east_courtyard/corridor_night.png)               | 1672 × 941        | 东院回廊·午夜                                                                              |
 | 斋碗·肉粥                 | [bowl_full.png](../props/porridge/bowl_full.png)                                | 1254 × 1254，透明 | 斋碗·肉粥                                                                                  |
 | 杯筊桌前景                | [table_foreground.png](../scenes/east_shrine/table_foreground.png)              | 1672 × 941，透明  | 杯筊桌前景                                                                                 |
 | 门房油灯·未燃             | [oil_lamp_unlit.png](../scenes/player_room/props/oil_lamp_unlit.png)            | 1254 × 1254，透明 | 门房油灯·未燃                                                                              |
-| 东院回廊·真实清晨         | [corridor_dawn.png](../scenes/east_courtyard/corridor_dawn.png)                 | 1672 × 941        | 东院回廊·真实清晨                                                                          |
+| 东院回廊·真实清晨 | [corridor_dawn.png](../scenes/east_courtyard/corridor_dawn.png) | 1672 × 941 | 三位同伴分别在听、灯、纸房门口打哈欠、伸懒腰和收拾包；完整晨起插画，不叠加人物 |
 | 门房·红烛熄灭             | [room_moonlit.png](../scenes/player_room/room_moonlit.png)                      | 1672 × 941        | 门房·红烛熄灭                                                                              |
 | 门房·假报晓               | [room_false_dawn.png](../scenes/player_room/room_false_dawn.png)                | 1672 × 941        | 门房·假报晓                                                                                |
 | 门房·真实清晨             | [room_dawn.png](../scenes/player_room/room_dawn.png)                            | 1672 × 941        | 门房·真实清晨                                                                              |
 | 山门·晨光                 | [gate_dawn.png](../scenes/temple_gate/gate_dawn.png)                            | 1672 × 941        | 山门·晨光                                                                                  |
-| 大巴·午后抵达             | [bus_arrival.png](../scenes/bus/bus_arrival.png)                                | 1672 × 941        | 大巴·午后抵达                                                                              |
+| 大巴·午后抵达             | [bus_arrival.png](../scenes/bus/bus_arrival.png)                                | 1672 × 941        | 开始后的下车停门镜头，渐进淡入并缓慢横移约4秒，镜头结束切入正片后首句与字幕同步开始；陆沉合十迎接，三位同伴自然下车，寺名及标牌直接绘入图片                                                                              |
 | 大雄宝殿·夜间入口         | [hall_night.png](../scenes/main_hall/hall_night.png)                            | 1672 × 941        | 大雄宝殿·夜间入口                                                                          |
-| 大雄宝殿·午后经过           | [hall_afternoon.png](../scenes/main_hall/hall_afternoon.png)                    | 2944 × 1270       | 去斋堂途中经过红竹寺大殿的过渡画面；运行时按 16:9 容器裁切显示                         |
-| 偏房·门隙观察             | [room_night.png](../scenes/guest_room/room_night.png)                           | 1672 × 941        | 偏房·门隙观察                                                                              |
-| 大巴·晨间返程             | [bus_departure.png](../scenes/bus/bus_departure.png)                            | 1672 × 941        | 大巴·晨间返程                                                                              |
+| 大雄宝殿·午后经过           | [hall_afternoon.png](../scenes/main_hall/hall_afternoon.png)                    | 1672 × 941       | 巨佛下方四人以小比例通行的完整插画；保持阴森感，约4.8秒整图横向平移                         |
+| 偏房·门隙观察             | [room_night.png](../scenes/guest_room/room_night.png)                           | 1672 × 941        | 无灯、近黑的完整伏身插画；住持与床上人统一绘入，不叠加人物局部 |
+| 偏房·无灯回头 | [room_turning.png](../scenes/guest_room/room_turning.png) | 1672 × 941 | 同机位、同夜色的回头完整图；打碎花瓶后切换，碎瓷近景在右侧 |
+| 大巴·山路驶离远景 | [bus_departure.png](../scenes/bus/bus_departure.png) | 1672 × 941 | 结尾外部远景，客车驶向山路弯道，远处树林和薄雾间隐约可见寺庙 |
+| 大巴·开场山路顶视远景 | [bus_journey.png](../scenes/bus/bus_journey.png) | 1672 × 941 | 点击或语音开始后播放约3秒，山林顶视远景与小大巴，整图由上往下缓慢移动，再以柔和渐变接下车镜头 |
 | 门眼·空回廊               | [peephole_empty.png](../scenes/player_room/peephole_empty.png)                  | 1672 × 941        | 门眼·空回廊                                                                                |
 | 回廊花瓶·碎裂             | [vase_broken.png](../scenes/east_courtyard/props/vase_broken.png)               | 1536 × 1024，透明 | 回廊花瓶·碎裂                                                                              |
 | 林岚相机盖                | [scene.png](../props/camera_cap/scene.png)                                      | 1254 × 1254，透明 | 林岚相机盖                                                                                 |
@@ -95,7 +103,6 @@
 | 神公·指尖石化             | [seated_stone_partial.png](../characters/shen_gong/seated_stone_partial.png)    | 1024 × 1536，透明 | 神公·指尖石化                                                                              |
 | 神公·完全石化             | [seated_stone.png](../characters/shen_gong/seated_stone.png)                    | 1024 × 1536，透明 | 神公·完全石化                                                                              |
 | 慧普·空背剥皮             | [rear_hollow.png](../characters/hui_pu/rear_hollow.png)                         | 1024 × 1536，透明 | 慧普·空背剥皮                                                                              |
-| 偏房·床上局部             | [victim_partial.png](../scenes/guest_room/props/victim_partial.png)             | 1671 × 941，透明  | 偏房·床上局部                                                                              |
 | 慧普·停手回望             | [turning_hollow.png](../characters/hui_pu/turning_hollow.png)                   | 1024 × 1536，透明 | 慧普·停手回望                                                                              |
 | 林岚·换皮者抓脸           | [double_scratching.png](../characters/lin_lan/double_scratching.png)            | 1024 × 1536，透明 | 林岚·换皮者抓脸                                                                            |
 | 林岚·缝线显露头像         | [portrait_revealed.png](../characters/lin_lan/portrait_revealed.png)            | 1254 × 1254，透明 | 林岚·缝线显露头像                                                                          |
@@ -138,7 +145,7 @@
 ## 文件与生成规范
 
 - 每个语义状态使用唯一固定路径；修改直接替换，清理废稿与被替换的生成缓存，不保留版本副本或迭代历史文稿。
-- 不同动作、表情、时段、机位或剧情状态使用语义名称；文字、边框、人物影子和呼吸等由对应界面或效果层提供。
+- 不同动作、表情、时段、机位或剧情状态使用语义名称；固定门牌、牌匾和标牌等细节及准确文字直接绘入素材。需随状态变化的文字、界面边框、人物影子和呼吸等由对应图层或效果层提供。
 - [文件目录与校验信息](asset_catalog.json)记录尺寸、透明通道和校验值；[生成规范](generation_specs.json)与[完整流程制作清单](production_manifest.json)记录当前派生约束。
 - [登记处分层说明](../scenes/registration/README.md)与[定位配置](../scenes/registration/layout.json)记录背景、桌前景和道具组合。
 - [物品图说明](../props/README.md)、[物品提示词](inventory_prompts.json)和[显示与文字配置](inventory_presentation.json)记录背包与调查图。
@@ -150,7 +157,7 @@
 
 [十二幕用途与接入边界](asset_usage.md)、[场景展示配置](scene_presentation.json)与七个场景目录中的 layout.json 共同记录固定机位、取样、位置、遮挡和切换。人物严格按原始宽高比等比缩放。回廊半掩门使用完整午夜底图，铜铃、花瓶与私人物件独立叠加。
 
-正式游戏按后端场景与旗标选择组合，语音事件与存档由会话层维护。到达正片使用山门外机位，车内只用于片头结束等待；房间转场使用黑场与环境图，不以正面站姿立绘模拟行走。斋堂使用真实馒头、咸菜和香菇青菜透明素材；调查使用对应物件近景。[开场短片](opening_video_prompt.md)使用独立的电影质感规范。
+正式游戏按后端场景与旗标选择组合，语音事件与存档由会话层维护。片头结束保留视频片名终帧，在标题下方显示开始按钮，也可按住空格说“开始游戏”。开始后依次播放约3秒山路顶视远景、约4秒车内下车停门镜头（两张画面柔和渐变，车内图缓慢横移），镜头结束进入山门外“大巴抵达红烛寺”正片后，首句对白与完整字幕同步开始；车内图为包含陆沉合十迎接与三位同伴下车的完整叙事画面，不额外叠加人物。车内图与下午、晨间山门图的主匾“红烛寺”、旧匾“明照寺”、香客须知及接驳站牌直接绘入材质，运行时不叠字；房间转场使用黑场与环境图，不以正面站姿立绘模拟行走。山门下午与斋堂晚膳使用完整叙事插画，人物、食物、餐具、花猫或行李与场景光影统一绘制，不重复叠加旧图层。斋堂不再切换满碗、空碗或碗签近景；进食选择与调查仍由后端结算并影响后续剧情。其他调查使用对应物件近景。[开场短片](opening_video_prompt.md)使用独立的电影质感规范。
 
 ## 完整真人片头
 

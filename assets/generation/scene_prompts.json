@@ -3,31 +3,89 @@
   "generator": "built-in image_gen",
   "assets": [
     {
-      "id": "temple_gate",
-      "path": "assets/scenes/temple_gate/gate_afternoon.png",
-      "use_case": "style-transfer",
+      "id": "companion_walk_listen",
+      "path": "assets/scenes/east_courtyard/companion_walk_listen.png",
+      "use_case": "illustration-story",
       "transparent_background": false,
-      "prompt": "Use case: style-transfer.\nImage 1 is the EDIT TARGET, the temple gate on a clear sunny afternoon. Images 2–4 are the user's PRIMARY VISUAL STYLE references; Image 5 is the existing game gallery and the ensemble environment continuity reference.\n\nCHANGE ONLY THE RENDERING LANGUAGE AND SURFACE DETAIL. Preserve the exact gate geometry, doorway, open doors, roof outline, visible layered blank plaques, bronze bell, steps, paving, blank signposts, trees, foreground standing space, viewpoint, framing and afternoon conditions.\n\nRepaint Image 1 as a distinctly two-dimensional hand-drawn narrative-adventure-game background matching Images 2–4. Make architecture and props read through clear fine dark contours and broad MATTE LOCAL-COLOR PLANES. Use a few broad simply drawn shadows and limited soft transitions.\nStrongly simplify the stone steps, paving and wall base: calm flat warm-gray and beige planes, only joints and a few worn edge lines. Remove the dense chipped speckles, random mottling and finely broken stone texture.\nSimplify wooden doors and beams to warm-brown planes with sparse grain lines; no all-over detailed weathering.\nTrees should read as grouped olive-green foliage silhouettes in a small number of broad light/dark color masses, with very few individually outlined leaves. Reduce the intricacy of dappled leaf shadows into a few soft broad shapes.\nWalls mostly smooth cream-gray, with isolated age marks. All materials share a very light uniform drawn/paper quality. Keep the original linework construction readable, not photorealistic or painterly microtextured.\nPreserve soft pale-gold afternoon sunlight and subtly cool under-eave shade. Keep natural realistic architectural proportions and the ordinary maintained temple feeling. No color-filter-only treatment, glossy 3D, fantasy concept-art spectacle, sterile vector icon, children's cartoon or posterized photo.\nDo not add or remove any object. No people, silhouettes, animals, lettering, pseudo-calligraphy, interface, borders, black bars, captions or watermark. The two plaque layers and all signs stay BLANK for later typesetting. One full-bleed wide landscape 16:9 opaque game background.",
+      "prompt": "这个沿回廊走向半掩的偏房，这个重新生成，不要用我给的图里的奇怪的合成的人物，直接整张图来表示两个人在门口偷听偷看，夜色保持和前面生图一致",
+      "presentation": "“沿回廊走向半掩的偏房”约3秒转场使用用户确认的完整两人门口偷听插画，人物、门缝与夜间檐灯统一绘入；保留整图运动和淡入淡出，不再叠加或单独动画化合成人物，不提前展示门内剧情。"
+    },
+    {
+      "id": "refectory_walk_corridor",
+      "path": "assets/scenes/east_courtyard/refectory_walk_corridor.png",
+      "use_case": "lighting-weather",
+      "transparent_background": false,
+      "prompt": "Use case: lighting-weather / compositing.\nAsset type: ONE complete 16:9 narrative-game walking-transition illustration, refectory_walk_corridor, “晚膳后沿回廊返回”.\nImage 1 is the exact daylight scene EDIT TARGET and sole identity/composition reference: preserve its corridor camera, four closed room doors, beams, lattice windows, floor, hanging lanterns, far opening and exactly the SAME FOUR recognizable people, clothing, bags, camera, face identities, walking poses, order, scale, silhouette and positions.\nImage 2 is ONLY a dusk corridor mood reference. Ignore/remove all of its screenshot UI, lettering overlay, cursor and framing. Make the requested new night much darker outside than image 2.\nPrimary request: repaint Image 1 as the same party returning along the east-courtyard corridor AFTER DINNER in full night. The unseen player follows Lu Chen and three companions. Lu Chen in grey-brown robes leads in middle distance, Lin Lan with sand jacket and camera at left, Xu Zhi with grey-green cardigan and cream tote nearest center, Zhou Yan in navy with small crossbody satchel at right. Keep natural back/three-quarter walking poses, not frontal sprites, with all four people fully painted into one coherent image. The same relative positions and architecture as Image 1 make the day/night continuity immediately recognizable.\nLighting: the courtyard opening is nearly BLACK night; no sunset, no bright blue sky, no orange daytime windows, no strong moonbeam. Far roof and tree are only faint charcoal silhouettes disappearing into blackness. Most of the corridor is in deep cool charcoal/olive shadow. The two existing ceiling lanterns cast small, restrained amber pools on the stone floor and soft side/rim light onto the people's shoulders, hair, clothing and hands. Dark corners and a barely readable far end create quiet unease. Maintain sufficient local contrast to distinguish all four identities and their feet even after the game applies a slight dark tint. Do not turn the whole image into a flat black silhouette: nearby wood grain, faces in profile, bags, door rings and floor joints remain subtly readable.\nLu Chen may carry a SMALL dim hooded oil lantern low beside him and a modest wooden candle box with four UNLIT red candles under the other arm, consistent with leading the group back before distributing candles. No other new held props, no extra people, no giant luggage, no tableware or bowls, no monsters, no supernatural figures.\nPreserve exactly the brass room plaques already in Image 1, in their physical perspective: nearest LEFT 听, farther LEFT 灯, nearest RIGHT 门, farther RIGHT 纸. Those four single engraved characters are the only lettering. Do not add glowing runes or text.\nStyle: same restrained realistic-proportion 2D hand-drawn Chinese narrative-game illustration as Image 1, fine dark structural contours, broad matte colors, soft light falloff, sparse texture. No photorealism, 3D gloss, anime faces, horror gore or gaudy blue/orange grading.\nOne still image, wide 16:9 full bleed, preferably 1672x941. Walking remains only a painted pose; the game will move the whole image with its existing transition effect. Leave lower-left floor readable for a separate caption overlay. NO UI, caption, subtitle, button, name label, cursor, watermark, frame or black bars.",
       "references": [
         {
-          "path": "assets/scenes/temple_gate/gate_afternoon.png",
-          "role": "scene_edit_target"
+          "path": "assets/scenes/east_courtyard/arrival_walk_register.png",
+          "role": "composition_and_character_identity_reference"
         },
         {
-          "path": "assets/references/style_reference/ref_02_character_counter.png",
-          "role": "primary_visual_style_reference"
+          "path": "assets/scenes/east_courtyard/corridor_dusk.png",
+          "role": "night_lighting_reference"
+        }
+      ]
+    },
+    {
+      "id": "candle_distribution",
+      "path": "assets/scenes/east_courtyard/candle_distribution.png",
+      "use_case": "compositing",
+      "transparent_background": false,
+      "prompt": "Use case: compositing / illustration-story.\nAsset type: ONE complete 1672x941 (16:9) static narrative-game scene illustration, corridor_candle_distribution.\nInput roles: Image 1 is the exact established corridor, nighttime lighting and companion identity reference (the approved party returning after dinner). Image 2 is Lu Chen's exact face, clothing and candle-distribution gesture reference. Images 3–5 are exact identity/clothing references for Lin Lan, Zhou Yan and Xu Zhi.\nPrimary request: the party has STOPPED after dinner, and Lu Chen is handing out red candles. Paint the entire scene and all people together. Exactly FIVE people total: Lu Chen plus the protagonist Zhao Xi and the three companions, naturally gathered around him in an informal, loosely spaced semicircle. No pasted sprites, no empty corridor with a lone monk.\nPreserve the same corridor architecture as Image 1: same four closed wood doors, lattice windows, beams, warm hanging lanterns, stone floor, far courtyard opening. The outdoors beyond is nearly black with faint tree/roof silhouettes, matching the preceding approved night illustration exactly; no sunset or bright blue daylight. Soft lantern pools and dim charcoal shadows, amber rim light and subtle coherent contact shadows, quietly eerie but figures readable.\nComposition: human-eye-level over-the-shoulder group view, not a lineup or an overhead map. Lu Chen near center-right around x=57%, grey-brown robes and shaven middle-aged face, left arm cradling a small plain wooden box with THREE unlit short red candles, right hand gently offering the FOURTH unlit short red candle toward the foreground player. The action is a paused offer BEFORE the player accepts, not a forced completed transfer. Exactly four red candles total, all unlit; no duplicate candle in someone's hand, no flames or ceremonial candlesticks.\nThe player Zhao Xi is visible at the foreground LEFT in back/three-quarter profile, an adult young Chinese man with natural short black hair, wearing a restrained dark charcoal casual jacket over a muted light shirt and grey trousers. One relaxed hand is slightly forward, ready to receive but NOT yet holding the candle. This is the requested special group illustration where the player is visible; keep him a secondary part of the gathering, not a new front-facing portrait.\nLin Lan stands to Lu Chen's left in sand jacket with shoulder-length dark hair and small camera on neck strap, observing the handoff; Zhou Yan stands to the right/far right in navy jacket, grey collar and small canvas crossbody bag, turned toward Lu Chen; Xu Zhi in grey-green cardigan, dark fringe/collarbone hair and cream tote stands between player and monk but offset so the candle gesture is unobstructed. Space them asymmetrically, vary natural foot placement and posture, let them look at Lu Chen or the offered candle, no equal-spaced lineup, crossed limbs, floating feet, duplicated people or oversized heads. Faces and hands entirely visible; shoulders may overlap naturally without hiding anyone completely. Small personal bags only.\nKeep the group within the central 70% of the frame, leaving the upper-left doorway/wall fairly clear for an independent scene-heading overlay, and bottom 15% mostly floor for independent choices. Realistic scale relative to the doors, coherent architecture-relative perspective and unified lighting. Do not make all people huge foreground busts.\nUse the project's restrained, realistic-proportion two-dimensional hand-drawn Chinese narrative game aesthetic: fine dark structure lines, broad matte colors, economical wood texture, soft shadow masses. Match Image 1's darkness and muted amber/olive-charcoal palette, no glossy 3D, photorealism, anime faces, rainbow lighting, ghosts or monsters.\nThe four brass door plaques remain engraved into the image: near left 听, far left 灯, near right 门, far right 纸. No other text, no floating clue notes or labels. NO UI, captions, buttons, player names, subtitle, watermark, cursor, border or black bars.\nONE opaque still image including environment, all five people, candle box, candles, light and shadows. All relevant candle ownership, granting and later story consequences remain backend state; this is a fixed visual of the offering, not independently swapping layers.",
+      "references": [
+        {
+          "path": "assets/scenes/east_courtyard/refectory_walk_corridor.png",
+          "role": "night_corridor_and_lighting_reference"
         },
         {
-          "path": "assets/references/style_reference/ref_03_group_interior.png",
-          "role": "primary_visual_style_reference"
+          "path": "assets/characters/lu_chen/offering_candle.png",
+          "role": "character_identity_and_gesture_reference"
         },
         {
-          "path": "assets/references/style_reference/ref_04_night_exterior.png",
-          "role": "primary_visual_style_reference"
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "character_identity_and_gesture_reference"
         },
         {
-          "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
-          "role": "environment_continuity_reference"
+          "path": "assets/characters/zhou_yan/standing.png",
+          "role": "character_identity_and_gesture_reference"
+        },
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "character_identity_and_gesture_reference"
+        }
+      ]
+    },
+    {
+      "id": "temple_gate",
+      "path": "assets/scenes/temple_gate/gate_afternoon.png",
+      "use_case": "compositing",
+      "transparent_background": false,
+      "prompt": "Use case: compositing / illustration-story. One complete 1672x941 sunny afternoon temple gate illustration. Preserve the established temple architecture, camera and recognizable character faces, hairstyles, clothing and bags. Lin Lan in a sand jacket holds her camera at left; Zhou Yan in navy stands near the center facing the gate; Xu Zhi in a grey-green cardigan with cream tote stands at right. Lu Chen in grey-brown robes greets them with palms together inside the gate. A calico cat rests on the left paving and travel luggage sits at lower right. Redraw all subjects naturally into the scene with unified perspective, realistic scale, ground contact, warm afternoon light and tree shadows. Preserve the physical signage: 红烛寺, 明照寺, 香客须知 / 入寺请静心 / 请至门内登记, 接驳 / 红烛寺. Restrained realistic-proportion 2D hand-drawn narrative game illustration, fine contours and matte color planes. No interface text, buttons, captions, name labels, watermark or frame.",
+      "references": [
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "identity_reference"
+        },
+        {
+          "path": "assets/characters/zhou_yan/standing.png",
+          "role": "identity_reference"
+        },
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "identity_reference"
+        },
+        {
+          "path": "assets/characters/lu_chen/standing_reception.png",
+          "role": "identity_reference"
+        },
+        {
+          "path": "assets/props/animals/cat_resting.png",
+          "role": "identity_reference"
+        },
+        {
+          "path": "assets/props/travel_bags/group.png",
+          "role": "identity_reference"
         }
       ]
     },
@@ -60,6 +118,139 @@
         }
       ],
       "layerPrompts": "assets/generation/registration_layer_prompts.json"
+    },
+    {
+      "id": "main_hall_afternoon",
+      "path": "assets/scenes/main_hall/hall_afternoon.png",
+      "use_case": "illustration-story",
+      "transparent_background": false,
+      "prompt": "Use case: illustration-story.\nAsset type: one original fully painted game transition background, replacing an externally sourced main-hall image.\nInput roles: Image 1 is ONLY a mood/composition reference (the supplied screenshot of enormous Buddha statues in a dark temple), NOT an image to copy or a UI template. Images 2–5 are precise identity, hair and clothing references for Lin Lan, Zhou Yan, Xu Zhi and Lu Chen respectively.\nCreate an ORIGINAL wide 16:9 complete illustration, ideally 2560x1440. A dim, cavernous Chinese Buddhist main hall seen laterally from the adjoining passage, with TWO monumental seated gilt/ochre Buddha statues dominating the upper 75 percent of the picture. Traditional dark red-brown timber columns, deep shadowed rafters, massive lotus plinths, a few dim votive candles and thin drifting incense. Modest gray-green light leaks through distant lattice windows; muted amber grazes the statues' inscrutable faces and weathered gilding. Preserve the reference's oppressive, quiet, eerie sense of monumental sacred architecture, not a bright tourist hall. New architecture, carving and statue designs; no screenshot replication, cursor or text.\nAt the BOTTOM of the image beneath the statues, on the stone passage in front of the monumental plinths, paint exactly FOUR SMALL full-body people naturally passing from LEFT to RIGHT in understated walking poses: Lu Chen the shaven middle-aged monk in grey-brown robes leads at the right; Zhou Yan with short dark hair, navy jacket and small crossbody satchel, Lin Lan with shoulder-length dark hair, sand jacket and black camera, and Xu Zhi with dark fringe/collarbone hair, grey-green cardigan and cream tote follow at unequal distances. Use the exact established clothing and identities, recognizable through silhouette and colors even at this scale. Side/back three-quarter profiles facing the direction of travel, no posing for the camera. Lu Chen may carry a small dim lantern low, without brightening the hall. No large travel luggage. The unseen player viewpoint remains outside the visible group.\nCRITICAL SCALE: people only about 14–17 percent of total image height; each monumental seated statue including its plinth is at least FIVE TIMES their height. Their heads and feet fit comfortably inside the image, feet around y=88 percent; all four people fit within central x=25–75 percent and y=69–90 percent so the existing horizontal image pan and subtle crop keep them visible. Most visual weight belongs to the huge statues, shadow and columns, not the travelers.\nRender everything together with coherent perspective, small contact shadows, unified dim light and realistic proportions. Match the project's restrained two-dimensional Chinese narrative-adventure illustration: fine dark structural contours, broad matte color planes, economical texture, soft shadow masses. Eerie but readable, low key charcoal/olive-brown and muted tarnished gold; avoid pure-black unreadable figures, cheerful daylight, cartoon/anime faces, photorealism or glossy 3D.\nThis is ONE STILL ILLUSTRATION: walking is conveyed by the painted pose only. Runtime will pan the entire image exactly as before; do not add animated sprites, motion streaks or duplicate figures. Leave lower-left room for an independent caption overlay. NO UI, captions, buttons, lettering, names, logo, watermark, cursor, border or black bars.",
+      "references": [
+        {
+          "path": "assets/scenes/main_hall/hall_afternoon.png",
+          "role": "scene_mood_and_composition_reference"
+        },
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "character_identity_reference"
+        },
+        {
+          "path": "assets/characters/zhou_yan/standing.png",
+          "role": "character_identity_reference"
+        },
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "character_identity_reference"
+        },
+        {
+          "path": "assets/characters/lu_chen/standing_reception.png",
+          "role": "character_identity_reference"
+        }
+      ]
+    },
+    {
+      "id": "room_seated_lit",
+      "path": "assets/scenes/player_room/room_seated_lit.png",
+      "use_case": "compositing",
+      "transparent_background": false,
+      "prompt": "Use case: compositing / illustration-story.\nAsset type: ONE complete opaque 16:9 (1672x941) narrative-game bedroom scene, room_seated_lit.\nInput roles: Image 1 is the exact room geometry, camera, furniture and tabletop composition reference, a game screenshot. IGNORE and REMOVE every UI panel, button, caption, border and cursor from it; repaint those covered regions as the room itself. Image 2 is the game's approved night lighting/style and protagonist clothing reference: the protagonist is the young black-haired man seen from the back on the left of the candle-distribution group. Image 3 is his established face/hair reference only.\nCreate a complete illustration of the SAME small Chinese temple guest bedroom at night, but show ONLY THE PROTAGONIST ZHAO XI, sitting quietly on the side of the bed at left. Exactly ONE person in the entire image. No monk, no companions, no second person, reflected people, human shadow in the window, intruder or supernatural silhouette.\nKeep the same room layout and camera as Image 1: wood bed with cream blanket and muted blue bolster/bedding on LEFT, square lattice window above/behind the bed, closed and bolted wood door toward center-right with metal ring and horizontal latch, small towel and wooden bin at door's left, right foreground wood desk, right wall shelving with vase and brush holder. The established two bound books, folded papers, one red candle in a plain bronze saucer/holder, and one unlit brass/glass oil lamp all belong naturally on the desk with coherent proportions and perspective. Include them directly in this single image, no independent pasted layers.\nThe player Zhao Xi has natural short black hair and the young adult Chinese male face of Image 3, same restrained dark charcoal/navy casual jacket over a muted light shirt, dark grey trousers and plain walking shoes as Image 2. He sits in a plausible relaxed but alert pose on the FRONT/SIDE edge of the bed, feet on floor, hands resting on thighs, looking toward the closed door and/or the candle; a three-quarter view shows his face. Keep his head below the upper-left overlay region, not oversized. Normal human scale relative to the bed and door, the bed bears his weight naturally, no floating feet, fused hands or duplicated limbs. No extra wearable accessories or held props.\nLighting state: the single RED CANDLE ON THE DESK IS LIT, with one small clear warm flame. The oil lamp is OFF with no flame. The candle emits a restrained coherent amber pool over the books, tabletop, nearby wall, the player's cheek/jacket and bedding, with soft warm shadows. Moody, subdued, not bright uniform orange. Warm candlelight is the sole interior source.\nMake the OUTSIDE of the lattice window MUCH DARKER than Image 1: nearly black night, faint charcoal shapes of a roof and trees, at most a tiny very distant weak amber point. NO bright blue sky, no bright moon, no strong blue rectangle or intense lattice shadow across the floor. Only a faint cool reflected ambient light makes the room's unlit corners readable. A thin muted dark red wax line can remain at the bottom of the closed door, not a glowing neon strip. The near-black window, quiet bolted door and deep corners feel eerie while the player and objects stay recognizable.\nStyle: match the game's restrained realistic-proportion two-dimensional Chinese narrative-adventure illustrations, fine dark structural contours, broad matte colors, soft light falloff and economical material texture. Match Image 2's amber/olive-charcoal night, no photorealism, glossy 3D or anime/doll faces.\nFull-bleed wide complete environment, no crop of the protagonist's face, generous lower foreground for separate UI choices. No text even on book covers, no interface, subtitles, buttons, labels, watermark, cursor, border or black bars. One cohesive still picture; no independent character, furniture, books or candle layers. This lit image will have an otherwise pixel-aligned unlit counterpart.",
+      "references": [
+        {
+          "path": "assets/scenes/player_room/room_candlelit.png",
+          "role": "room_camera_and_composition_reference"
+        },
+        {
+          "path": "assets/scenes/east_courtyard/candle_distribution.png",
+          "role": "protagonist_identity_reference"
+        },
+        {
+          "path": "web/public/art/portrait-player.webp",
+          "role": "protagonist_identity_reference"
+        }
+      ]
+    },
+    {
+      "id": "room_seated_unlit",
+      "path": "assets/scenes/player_room/room_seated_unlit.png",
+      "use_case": "lighting-weather",
+      "transparent_background": false,
+      "prompt": "Use case: lighting-weather / precise-object-edit.\nAsset type: the UNLIT counterpart of this exact complete 1672x941 room illustration, room_seated_unlit.\nThe supplied image is the EXACT edit target. Preserve the EXACT camera, composition, architecture, door/window dimensions, furniture, all tabletop books and papers, object positions, candle holder and brass oil lamp, the seated protagonist's identity, face, hair, clothing, hands, sitting pose, proportions and feet. Do NOT add, remove or move any person or object. Exactly ONE person remains, seated on the bed; no other people, visitors, ghosts, human silhouettes, reflections or creatures anywhere.\nChange ONLY the lighting state of the RED CANDLE on the desk and the illumination it produces:\n- Extinguish its flame completely. Same red candle and holder in the exact same position, intact red body, short dark black wick, NO flame, NO glowing ember, NO large smoke plume.\n- Remove all warm light emitted by that red candle: no amber halo, bright tabletop pool, warm wall glow, orange cast across the protagonist, bedding or floor.\n- The oil lamp remains OFF, no flame or glow. The room is now dark, quietly ominous and cool charcoal/olive-grey, lit ONLY by faint night ambient through the lattice window and very weak distant outdoor corridor light. Deepen the corners and under-bed shadows while keeping the player's face and silhouette, book shapes, candle, lamp and closed door legible at game size. Do not make a completely black unreadable image.\n- The OUTDOORS remains nearly BLACK and oppressive exactly as in the target, faint tree/roof silhouettes and one tiny weak distant amber point; no bright blue sky, bright moon, strong moonbeam or saturated blue lattice projections.\n- Preserve the thin subdued wax-colored line beneath the shut bolted door without making it a new interior light source.\nKeep EXACTLY the same restrained realistic-proportion 2D hand-drawn Chinese narrative-game aesthetic, fine contours, matte color planes, economical texture. This image must register spatially with the lit counterpart when switching the whole picture: no camera movement, no rescaling, no changes to the character or objects. No text, UI, captions, buttons, labels, watermark, border or cursor. One full-bleed opaque wide still illustration.",
+      "references": [
+        {
+          "path": "assets/scenes/player_room/room_seated_lit.png",
+          "role": "room_camera_and_composition_reference"
+        }
+      ]
+    },
+    {
+      "id": "victim_room_night",
+      "path": "assets/scenes/guest_room/room_night.png",
+      "use_case": "compositing",
+      "transparent_background": false,
+      "prompt": "Use case: compositing / illustration-story.\nAsset type: ONE full-screen finished opaque 16:9 (1672x941) narrative horror-game illustration, guest room seen through a half-open door. This is the crouched/face-hidden state, NOT a sprite, not separated layers, not a collage.\nImage 1 is the exact room/camera and drawing-style reference. Image 2 is ONLY the abbot Hui Pu's adult face, shaved head and muted ochre/brown robes identity reference; do NOT copy his standing pose, smile or portrait lighting.\nPrimary change: the room is ALMOST PITCH BLACK, WITHOUT ANY INTERIOR LIGHTS. Preserve the first-person viewpoint outside the partly open door, left doorframe, large right wood door and brass ring, bed left-center and rear lattice window. Repaint ALL surfaces and characters together with coherent deep-night lighting.\nOn the bed a fully clothed adult lies motionless lengthwise, mostly hidden by bedding and darkness; their face/identity cannot be discerned. The abbot is crouched/kneeling on the bed and hunched very LOW over this person's upper torso, his robe-covered body making a single sinister arch, his head bowed away from camera almost touching the person's shoulder. Hands mostly concealed. The posture must clearly read as looming over a person ON the bed, NOT standing beside an empty bed. Exactly two adults total, no bystanders. Nonsexual supernatural suspense, no visible blood, wounds, exposed organs or explicit violence.\nLighting is essential: most interior values are near-black charcoal, with barely discernible desaturated brown/blue edges. NO candle, lamp, flame, lit fixture, warm bright bed, spotlight, clear bright moon disk or bright blue sky. Existing window is almost black, revealing only faint roof/tree silhouettes. Only an extremely faint cool nocturnal ambient trace and a tiny hint of warm corridor spill on the NEAREST door wood outside the room; that warm light must NOT illuminate the bed. Bed, monk's bowed bald head, shoulder/robe contour and the covered person's shape are dimly distinguishable after the eye adjusts, their details indistinct and softly lost in shadows. Do not make it pure featureless black; silhouettes must be readable. Interior details deliberately obscure, haunted quiet unease.\nStyle: restrained mature Chinese 2D hand-drawn narrative game illustration, realistic proportions, thin structural contours and broad matte shadow shapes; same architectural perspective as image 1. No photorealism, 3D render, anime/chibi, pasted standing figures or visual cutout edges. Full bleed one single composition, no UI, text, panels, frames or watermarks.",
+      "presentation": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
+    },
+    {
+      "id": "victim_room_turning",
+      "path": "assets/scenes/guest_room/room_turning.png",
+      "use_case": "precise-object-edit",
+      "transparent_background": false,
+      "prompt": "Use case: precise-object-edit / illustration-story.\nAsset type: ONE complete opaque 1672x941 16:9 narrative game scene, the \"he heard you and turns his head\" state.\nImage 1 is the exact approved full-scene EDIT TARGET and must be preserved almost pixel-for-pixel. Image 2 is only the adult abbot Hui Pu identity reference (his face, shaved head, age and ochre-brown robes), not its lighting, smile or pose.\nChange ONLY the abbot's HEAD and the minimum connected neck/shoulder folds needed for a natural turn. Keep him crouched/kneeling on the bed and bent over the same covered motionless adult. He stops and turns his bald head back over his near shoulder toward the half-open door, looking directly at the hidden observer/camera with a still, unsettling, watchful expression. Not a big smile, screaming, open mouth or monstrous face. Keep anatomy natural. Head should stay small and located by the same shoulders; do not stand him up or move his torso away from the body. The clothed victim remains mostly hidden and identity unreadable. Nonsexual quiet horror, no blood or graphic wounds.\nPreserve EXACT original crop, camera, perspective, bed, window, bedding, covered person's position, the monk's robe silhouette/body/knees/hands, foreground left doorframe, right wooden door and brass ring. Keep EVERYTHING at precisely the same place so the game can switch between two complete images without a jump.\nPreserve the existing extreme darkness. Room has NO light/lamp/candle. Face is only dimly readable as a subtle plane emerging from charcoal shadow, not spotlighted; keep all original black interior, muted blue edges and tiny warm corridor edge spill. Do not brighten the bed, window, sky, walls, skin or robes. No glowing eyes, light beams or visible moon disk. Same restrained thin-line 2D hand-drawn illustration. No extra objects, no UI, text, collage, transparent layers, watermark or black bars. One finished full-scene illustration.",
+      "presentation": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
+    },
+    {
+      "id": "corridor_dawn",
+      "path": "assets/scenes/east_courtyard/corridor_dawn.png",
+      "use_case": "compositing",
+      "transparent_background": false,
+      "prompt": "Use case: compositing / illustration-story.\nAsset type: ONE complete opaque 1672x941 wide 16:9 narrative-game scene, the east courtyard guest-room corridor at early morning. Paint people, their poses, rooms and lighting together as one illustration; no separated sprite layers.\nImage 1 is the exact architecture/camera and illustration style edit target. Images 2, 3, 4 are ONLY exact character face, clothing and identity references for Lin Lan, Zhou Yan, Xu Zhi respectively, not their reference standing poses.\nPrimary request: early morning after an overnight stay, three companions are gradually emerging from their OWN rooms, each in a different candid sleepy morning activity. Some room doors ajar, somebody still inside packing up, one stretching, one yawning. Natural asymmetrical lived-in moment, no posed line-up.\nMaintain the original corridor geometry, strong depth, wood beams, pale plaster, lattice windows, brass door rings, stone floor, far courtyard roof/tree, unlit hanging lanterns and soft low warm dawn light with cool shadows. Keep the four door positions and only open existing doors realistically on their hinges, do not invent extra doors. Preserve long morning shadows, a little pale morning haze, peaceful relief after the strange night.\nRoom/character staging is essential:\n1. NEAREST LEFT door is Lin Lan's 听 room. Paint the same short dark-haired woman in sand/beige jacket, off-white shirt, charcoal trousers and practical shoes coming halfway out through this door into the corridor, one hand resting on the partly open door while the other loosely covers her mouth in a sleepy yawn. Her familiar black camera hangs naturally on its neck strap, do not turn it into luggage. Half-closed eyes, tired but relieved, natural facial proportions. Full adult scale fitted to actual doorway.\n2. FARTHER LEFT door is Zhou Yan's 灯 room. The same short-haired Chinese man in navy jacket, gray shirt, charcoal trousers and small gray-brown crossbody satchel stands just outside his own open door, seen smaller in perspective. He is stretching with both arms raised comfortably above his head, perhaps one elbow bent, shoulders lifted and torso slightly lengthened. Believable hands, joints and stride, no giant head or limbs crossing beams. Drowsy small expression, not theatrical.\n3. FARTHER RIGHT door is Xu Zhi's 纸 room. Leave this door open only a narrow crack (about 25 degrees), with most of her figure still INSIDE the softly shadowed room, visibly tidying/packing a cream canvas tote near the threshold. Same rounded face, straight bangs and collarbone-length dark hair, gray-green cardigan, white shirt and gray trousers as image 4. Leaning slightly forward looking down at her bag, not looking at viewer. The door edge naturally hides part of her body; she must read as a person packing inside her own room, not a pasted torso stuck in a door.\nNEAREST RIGHT door is the unseen protagonist's 门 room, partly open or resting near closed; do NOT add a visible protagonist.\nExactly THREE distinct visible adult companions in total, one person per companion room. No monk in the foreground, no additional people, no cloned heads. Small bags placed naturally near their own thresholds if needed, no line of four identical suitcases cluttering the center. Keep center aisle open and readable. Room plaques directly engraved in brass with exactly one correct Chinese character each: nearest left 听, farther left 灯, nearest right 门, farther right 纸. No other writing, UI or labels.\nStyle: same mature restrained 2D hand-drawn Chinese narrative game illustration, realistic human/architecture proportions, fine dark structural contours, broad matte colors, sparse texture, simple coherent morning shadows. Natural weight and feet contact, correct diminishing perspective and matched sunlight on every figure. No frontal standing cutouts, no sticker edges, no anime/chibi, glossy 3D or photorealism. Full bleed, no caption, panel, watermark or black bars.",
+      "presentation": "清早三位同伴从各自房间出来：林岚在近左听房门口掩嘴打哈欠，周砚在远左灯房外伸懒腰，许栀在远右纸房的门缝内整理帆布包；近右门房为主角房间。人物、半开的门、房牌、行李与晨光统一绘入完整插画，不叠加旧人物、道具、房牌文字或人物微动。",
+      "references": [
+        {
+          "path": "assets/characters/lin_lan/standing.png",
+          "role": "character_identity_reference"
+        },
+        {
+          "path": "assets/characters/zhou_yan/standing.png",
+          "role": "character_identity_reference"
+        },
+        {
+          "path": "assets/characters/xu_zhi/standing.png",
+          "role": "character_identity_reference"
+        }
+      ]
+    },
+    {
+      "id": "bus_departure",
+      "path": "assets/scenes/bus/bus_departure.png",
+      "use_case": "illustration-story",
+      "transparent_background": false,
+      "prompt": "Use case: illustration-story.\nAsset type: ONE opaque 1672x941 full-bleed wide 16:9 final ending illustration for the Chinese narrative game 红烛无声.\nImage 1 is ONLY a reference for the existing hand-drawn style, Chinese mountain landscape, early morning haze and muted warm/cool palette. Absolutely discard its bus-interior viewpoint and all seats/window frames/mirrors. Image 2 is ONLY a temple architecture/identity reference: a modest timber Chinese Buddhist temple, gray tiled roofs, pale plaster, tucked among trees. Do NOT reproduce the close-up gate or any readable signage.\nPrimary request: an EXTERIOR DISTANT ESTABLISHING SHOT of a passenger coach BUS DRIVING AWAY down a winding road through the mountains in the early morning. Camera is far outside the vehicle, on an opposite hillside above road level, looking over the entire landscape. The road and mountains dominate; the bus is modest in scale, roughly 12–16 percent of image width, fully visible, seen from a rear three-quarter angle with its back and one side, visibly following the downhill road AWAY from the temple and observer, toward a distant bend. Clear road contact under wheels, credible road engineering and perspective, ordinary safety guardrail along the outer road edge.\nComposition: broad quiet layered mountain valley, forested slopes, a curving gray paved two-lane mountain road with restrained yellow center line, low roadside stonework and guardrail; the small white/cream regional passenger coach with a muted blue-green lower stripe and dark windows is on the middle-distance road curving into the valley. The bus must look like an everyday Chinese mountain shuttle coach, no brand, no readable route labels, no giant luxury vehicle. No cars or pedestrians around it. The temple remains BEHIND the departing bus, high on the far slope, small and faint through leaves and pale mist, just a cluster of gray curved tiled roofs and a hint of pale walls among trees. It must be discoverable on a second look without dominating the landscape, not a grand palace or pagoda. Preserve spatial clarity: winding road leads away from that distant hillside temple toward the valley.\nLighting/mood: soft early morning golden light grazing yellow-green trees, cool blue-gray distant ridges and fine white valley mist, restrained natural contrast, not a dramatic sunset. Peaceful departure and open air after an uneasy night, a subtle lingering feeling of mystery in the barely visible temple. No ghosts, horror figures, fog inside vehicle or supernatural effects.\nStyle: match the project's restrained mature two-dimensional hand-drawn Chinese narrative-game illustration: realistic landscape/vehicle proportions, thin precise structural contours, broad matte local colors, economical texture and soft atmospheric depth, subtle shading. No glossy 3D render, photorealism, anime/chibi or oversaturated fantasy mountains.\nOne continuous finished landscape image. NO vehicle interior, bus seats, window border framing the scene, first-person view, dashboard, mirror, foreground people, readable text, plaques, UI, captions, buttons, watermark, border or black bars. Keep some quiet sky/foliage at upper left and unobstructed scenery near the bottom for independent game interface overlays.",
+      "presentation": "结尾使用远处山坡上的外部远景机位：大巴沿清晨山区弯路驶离，远处灰瓦寺庙隐在树林和薄雾间；单张完整插画，不显示车内、后视镜、乘客或旧匾文字叠层。",
+      "references": [
+        {
+          "path": "assets/scenes/bus/bus_journey.png",
+          "role": "style_and_mountain_morning_reference_only"
+        },
+        {
+          "path": "assets/scenes/temple_gate/gate_dawn.png",
+          "role": "temple_architecture_reference_only"
+        }
+      ]
+    },
+    {
+      "id": "bus_journey",
+      "path": "assets/scenes/bus/bus_journey.png",
+      "use_case": "illustration-story",
+      "transparent_background": false,
+      "prompt": "Use case: illustration-story.\nAsset type: one full-bleed 16:9 narrative game opening still, mountain road aerial extreme wide establishing shot.\nInput image roles: Image 1 (aerial forest road screenshot) is ONLY the camera/composition reference: extremely high almost vertical TOP-DOWN drone view, winding road running roughly from top to bottom through a steep densely forested mountain. Image 2 (bus interior) is ONLY the established game's restrained hand-drawn style, warm afternoon colors and bus identity reference; DO NOT copy its interior camera.\nPrimary request: create an exterior aerial bird's-eye establishing view of ONE very SMALL ivory/grey passenger shuttle BUS driving along a narrow winding paved mountain road in rural China, surrounded by an immense forested mountain. The bus is distant, seen from its roof, only about 2.5–3% of the entire image width, clearly tiny compared with the landscape. Its long axis follows the road toward the TOP of frame, located close to the central road section, with a soft grounded afternoon shadow. A naturally winding S-shaped road traverses the frame vertically from bottom to top. Deep green/olive trees, a few subdued golden afternoon leaves and exposed rock on steep slopes; no visible sky/horizon. Dense forest occupies at least 85% of the composition. Road occupies a narrow strip, plenty of vertical road before and behind the bus; no other cars, no pedestrians, no temple, no buildings.\nStyle: match the existing game's 2D illustrated narrative scenes, realistic landscape proportions, fine dark structural contours, broad matte color shapes, softly dappled sunny afternoon light, warm muted olive/gold/charcoal palette and natural soft shadows. Quiet remote mountain feeling. No photorealism, no 3D render, no anime, no isometric toy map, no giant foreground vehicle.\nThe app will gently pan the whole picture DOWNWARD over two seconds to imply the bus continuing up the mountain. Compose with generous forest and road toward top and bottom for overscan cropping. Wide landscape 16:9, 1672x941 or larger 16:9. NO UI, text, road labels, captions, watermark, frame, black bars or collage.",
+      "references": [
+        {
+          "path": "assets/scenes/bus/bus_arrival.png",
+          "role": "game_style_and_bus_reference"
+        }
+      ],
+      "presentation": "点击或说“开始游戏”后播放约3秒：山林公路顶视远景，大巴很小，整张图由上往下缓慢平移；随后车内下车图渐进淡入并横移约4秒，两个镜头以柔和渐变衔接，镜头结束进入山门外“大巴抵达红烛寺”正片后，首句对白与完整字幕同步开始。"
     }
   ]
 }

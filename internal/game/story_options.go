@@ -4,6 +4,11 @@ package game
 // the story UI. It is also the constrained set sent to JEV when ASR text does
 // not match an option locally.
 func StoryOptionChoices(state State) []StoryOption {
+	if state.Flags["death_pending"] || state.Flags["sleep_pending"] ||
+		state.Flags["three_knocks_dialogue_pending"] || state.Flags["escape_dialogue_pending"] ||
+		state.Flags["escape_sleep_pending"] || state.Flags["dawn_knocks_dialogue_pending"] {
+		return nil
+	}
 	option := func(id, command, description string) StoryOption {
 		return StoryOption{ID: id, Command: command, Description: description}
 	}
@@ -101,17 +106,22 @@ func StoryOptionChoices(state State) []StoryOption {
 			option("scripture", "朗读大念处经", "朗读经文"),
 		}
 	case "mini_dawn_trap":
+		if state.ShotKey == "escape_return" || state.ShotKey == "escape_outside" {
+			return []StoryOption{
+				option("sleep", "躺下睡觉", "躺下歇一会儿，等待下一段声音"),
+				option("outside", "再去看看外面", "靠近门边再听一会儿"),
+			}
+		}
 		return []StoryOption{
 			option("wait", "不开门等待真正的五更", "留在房内等待天亮"),
-			option("replay", "重听五更和锣声", "重听更锣"),
-			option("count_six", "把锣声算作第六声", "把假晓当作天亮"),
+			option("replay", "重听锣声和钟声", "重听更锣"),
+			option("count_five", "把钟声算作第五声", "把假晓当作天亮"),
 			option("open", "开门", "打开房门"),
 		}
 	case "mini_dawn":
 		return []StoryOption{
 			option("listen", "听天亮对白", "听同伴讲述昨夜经历"),
 			option("ask_abbot", "询问住持去了哪里", "询问住持去向"),
-			option("leave_page", "留下残页", "把残页留在寺里"),
 			option("bus", "坐大巴回家", "上车离寺"),
 		}
 	case "mini_ending":

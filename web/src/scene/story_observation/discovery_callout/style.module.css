@@ -1,0 +1,55 @@
+.callout {
+  position: absolute;
+  z-index: 6;
+  left: 3%;
+  bottom: 8%;
+  display: flex;
+  flex-direction: column;
+  width: clamp(170px, 25cqw, 360px);
+  aspect-ratio: 434 / 275;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #eadbb977;
+  border-radius: 0.65cqw;
+  background: #17262866;
+  box-shadow: 0 0.35cqw 1.2cqw #0005;
+  backdrop-filter: blur(10px) saturate(1.15);
+  pointer-events: none;
+  animation: discover 0.42s ease both;
+}
+
+.callout figcaption {
+  flex: 0 0 auto;
+  z-index: 1;
+  padding: 0.42cqw 0.7cqw;
+  color: #f0e4c5;
+  background: #17262880;
+  font-size: clamp(9px, 0.7cqw, 13px);
+  letter-spacing: 0.1em;
+  text-shadow: 0 1px 2px #0008;
+}
+
+.callout > img {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  opacity: 0.86;
+}
+@keyframes discover {
+  from {
+    opacity: 0;
+    transform: translateY(0.5cqw);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .callout {
+    animation: none;
+  }
+}

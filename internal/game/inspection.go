@@ -13,7 +13,7 @@ func (e *Engine) inspection(state *State, text string) (string, string, bool) {
 		return "inspect", feedback(state, "一行名字被反复划掉，只留下旁边一行小字：第三声钟响后，不可回头。"), true
 	}
 	for _, item := range state.Inventory {
-		if Has(text, item.Name) || (item.ID == "key" && Has(text, "钥匙")) || (item.ID == "page" && Has(text, "纸页")) {
+		if Has(text, item.Name) || (item.ID == "key" && Has(text, "钥匙")) {
 			state.Overlay, state.FocusItem = "item", item.ID
 			return "inspect", feedback(state, item.Description), true
 		}

@@ -15,7 +15,6 @@ const regions = {
   'portrait-player': [31, 5, 80, 77],
   'portrait-keeper': [23, 707, 182, 193],
   'item-key': [1417, 181, 91, 127],
-  'item-page': [1544, 181, 91, 127],
   'item-candle': [1428, 378, 81, 124],
   'item-beads': [1539, 377, 95, 124],
   'ledger': [466, 576, 373, 91],

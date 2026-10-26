@@ -6,12 +6,6 @@
     "description": "一把磨损的铜钥匙。钥匙柄上刻着一个模糊的符号，守夜人似乎认得它。"
   },
   {
-    "id": "page",
-    "name": "残页",
-    "image": "/art/story/items/torn_page.webp",
-    "description": "从旧册子上撕下的残页。最后一行写着：钟响之后，不要回答自己的名字。"
-  },
-  {
     "id": "candle",
     "name": "红烛",
     "image": "/art/story/items/red_candle.webp",

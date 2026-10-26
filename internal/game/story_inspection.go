@@ -32,11 +32,12 @@ func (e *Engine) storyInspection(state *State, text string) (string, string, boo
 			return "inspect", miniDialogue(state, "神公", "这支烛只替有活路的人引灯。先把问题问清，再掷；长明灯照不到你要回的那扇门。"), true
 		}
 
-	case miniHasAny(text, "查看残页", "看残页", "读残页", "入住须知"):
-		answer = "纸页末行是‘钟响之后，不要回答自己的名字’。墨迹比别处深，像有人反复描过这几个字。"
 	case miniHasAny(text, "看念珠", "查看念珠", "握紧念珠"):
 		answer = "深色木珠停在指间，握珠的手渐渐不再发抖。烛光照出珠面细密的旧纹。"
 	case miniHasAny(text, "看通行凭", "查看通行凭"):
+		if state.Flags["permit_returned"] {
+			return "inspect", miniSystem(state, "通行凭已经交还陆沉了。"), true
+		}
 		answer = "暗红印章压在通行凭边角，背面写着‘只许去，不许问’。"
 	case miniHasAny(text, "看相机盖", "检查相机盖", "看铜铃上的"):
 		answer, shot = "相机盖挂在听房门边的铜铃旁，镜头贴近盖沿的划痕和静止的铃舌。", "register_camera_bell"
@@ -49,12 +50,12 @@ func (e *Engine) storyInspection(state *State, text string) (string, string, boo
 			return "", "", false
 		}
 		answer = "桌中央有一笼热馒头、一碟咸菜，还有本地笋干和香菇青菜。它们都是素的，配热水也够吃一顿晚膳，不必勉强喝那碗粥。"
-	case miniHasAny(text, "看施食记", "查看施食记", "看碗签"):
+	case miniHasAny(text, "看碗签", "查看碗签"):
 		if state.SceneKey != "mini_refectory" {
 			return "", "", false
 		}
 		miniSetFlag(state, "bowl_tags_seen")
-		answer, shot = "施食记残页只剩‘远客’两个字。四只碗签背面各有一道刻痕，周砚的那只最深。", "refectory_porridge"
+		answer, shot = "四只碗签背面各有一道刻痕，周砚的那只最深。", "refectory_porridge"
 	case miniHasAny(text, "看油灯", "查看油灯"):
 		answer = "油灯的灯芯没有火，灯碗里的油面凝着暗光。"
 	case miniHasAny(text, "为什么五更", "为什么要听是谁"):
@@ -75,8 +76,6 @@ func (e *Engine) storyInspection(state *State, text string) (string, string, boo
 			shot = "oracle_cat"
 		case miniHasAny(text, "鸟笼"):
 			shot = "oracle_bird"
-		case miniHasAny(text, "残页", "入住须知"):
-			shot = "room_page"
 		case miniHasAny(text, "念珠"):
 			shot = "room_beads"
 		case miniHasAny(text, "通行凭"):

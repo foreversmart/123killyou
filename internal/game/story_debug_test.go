@@ -92,7 +92,7 @@ func TestDebugSkipRecoversDeathPauseAndPanelsWithoutResettingChoices(t *testing.
 	s.Flags["bowl_tags_seen"] = true
 	e.setMiniScene(&s, "mini_wake_three_gongs")
 	e.storyDeath(&s, "烛火未续燃")
-	s.Paused, s.Caught, s.Overlay, s.FocusItem = true, true, "map", "page"
+	s.Paused, s.Caught, s.Overlay, s.FocusItem = true, true, "map", "key"
 	intent, _ := e.Apply(&s, debugNextScene)
 	if intent != "debug_skip" || s.SceneKey != "mini_four_knocks" || s.Paused || s.Caught || s.Flags["story_dead"] || s.RetryScene != "" || s.Overlay != "" || s.FocusItem != "" || s.Effect.Kind != "none" {
 		t.Fatalf("没有跳过死亡来源并恢复可交互状态: %+v", s)

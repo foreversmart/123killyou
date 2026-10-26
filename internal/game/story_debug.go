@@ -43,13 +43,11 @@ func (e *Engine) skipMiniScene(state *State) (string, string) {
 // Supply only prerequisites of the target. Existing meal decisions, discoveries
 // and clues remain authoritative; optional scenes are included for inspection.
 func (e *Engine) prepareMiniDebugScene(state *State, index int) {
+	clearMiniDebugFlags(state, "three_knocks_dialogue_pending", "dawn_knocks_dialogue_pending", "escape_dialogue_pending", "escape_sleep_pending")
 	miniSetFlag(state, "arrived")
 	if index >= 1 {
 		miniSetFlag(state, "checked_in")
 		e.grantStoryItems(state, "key", "beads")
-		if !state.Flags["page_left"] {
-			e.grantStoryItems(state, "page")
-		}
 		if !state.Flags["permit_returned"] {
 			e.grantStoryItems(state, "permit")
 		}
@@ -109,12 +107,13 @@ func (e *Engine) prepareMiniDebugScene(state *State, index int) {
 		clearMiniDebugFlags(state, "double_calm", "double_frenzy", "double_refused_candle", "double_scripture_1", "double_scripture_2", "double_scripture_3", "double_scripture_4")
 	}
 	if index == 11 {
-		clearMiniDebugFlags(state, "fake_dawn_knocks", "dawn_waited")
+		clearMiniDebugFlags(state, "fake_dawn_knocks", "dawn_knocks_dialogue_pending", "dawn_waited")
 	}
 	if index >= 12 {
 		miniSetFlag(state, "dawn_waited")
 	}
 	if index == 13 {
+		e.returnMiniPermit(state)
 		miniSetFlag(state, "story_finished")
 	}
 }
@@ -130,9 +129,9 @@ func miniDebugOpening(state *State) string {
 	case "mini_register":
 		return miniDialogue(state, "陆沉", "这是各位的钥匙，请各位施主妥善保管。")
 	case "mini_refectory":
-		return miniDialogue(state, "陆沉", "粥、馒头、咸菜和本地素菜都在，想吃什么由施主自己决定。")
+		return miniDialogue(state, "陆沉", "各位施主，晚膳已经备好了，请入座。")
 	case "mini_corridor_candle":
-		return miniDialogue(state, "陆沉", "晚膳收了。跟我回东院，路上每人领一支红烛。")
+		return miniDialogue(state, "陆沉", "吃好了各位，跟我回东院把，路上把红烛给你们。")
 	case "mini_room":
 		return miniObserve(state, "门房的门关上，红烛已经点稳，桌上的寺史册和《大念处经》还没有收起。")
 	case "mini_wake_three_gongs":
@@ -154,10 +153,10 @@ func miniDebugOpening(state *State) string {
 	case "mini_double":
 		return miniObserve(state, "隔壁先响起门闩，门缝里伸进一只熟悉的鞋。同行人撞进门房，红烛照亮了衣服，影子的边缘却缺了一块。")
 	case "mini_dawn_trap":
-		return miniObserve(state, "五声更锣停下后，另一声低长的锣才从更远的地方传来。窗纸仍然黑着，红烛还亮着。")
+		return miniObserve(state, "四声更锣停下后，一声低沉悠长的钟才从更远的地方传来。窗纸仍然黑着，红烛还亮着。")
 	case "mini_dawn":
-		return miniObserve(state, "五声更锣再次响起。鸡鸣先起，檐鸟跟着应声，晨光才越过东院；林岚、周砚、许栀都站在各自的房门前。")
+		return miniObserve(state, "真正的五声更锣响起。鸡鸣先起，檐鸟跟着应声，晨光才越过东院；林岚、周砚、许栀都站在各自的房门前。")
 	default:
-		return miniObserve(state, "四只行李放进大巴，车门合拢。晨雾退到车后，后视镜里‘明照寺’三个旧字闪了一下。")
+		return miniObserve(state, "四只行李放进大巴，车门合拢。大巴沿清晨山路驶离，寺庙的灰瓦隐约留在远处树影与薄雾里。")
 	}
 }

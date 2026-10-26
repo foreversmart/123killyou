@@ -18,7 +18,6 @@
     "candle": "burning",
     "door": "closed",
     "books": true,
-    "page": true,
     "actor": "none"
   },
   "sprites": {
@@ -104,20 +103,6 @@
         "y": 101,
         "width": 1213,
         "height": 861
-      }
-    },
-    "page": {
-      "path": "props/torn_page.png",
-      "width": 1536,
-      "height": 1024,
-      "hasAlpha": true,
-      "bytes": 1489719,
-      "sha256": "de628c496d84ac06d0568538699daaf5ba7d46bccd15a50b58e0f9d87c74077f",
-      "sourceFrame": {
-        "x": 59,
-        "y": 237,
-        "width": 1435,
-        "height": 718
       }
     },
     "oil_lamp": {
@@ -442,20 +427,6 @@
       "zIndex": 30,
       "visibleWhen": {
         "books": true
-      }
-    },
-    {
-      "id": "page",
-      "sprite": "page",
-      "rect": {
-        "x": 1354,
-        "y": 731,
-        "width": 170,
-        "height": 78
-      },
-      "zIndex": 31,
-      "visibleWhen": {
-        "page": true
       }
     },
     {

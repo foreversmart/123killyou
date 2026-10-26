@@ -8,7 +8,7 @@ func (e *Engine) storyDeath(state *State, message string) (string, string) {
 	e.setMiniScene(state, "mini_death")
 	state.ShotKey = "death_" + source
 	state.SceneText = message
-	return "death", miniObserve(state, message+"画面停在烛光熄灭的一刻。")
+	return "death", miniObserve(state, message+"鬼影猛地扑近，烛光暗下，地面留下一滩血。")
 }
 
 func (e *Engine) retryMiniStory(state *State) (string, string, bool) {
@@ -19,7 +19,7 @@ func (e *Engine) retryMiniStory(state *State) (string, string, bool) {
 	if scene == "mini_oracle" {
 		scene = "mini_listen"
 	}
-	for _, flag := range []string{"story_dead", "double_calm", "double_frenzy", "double_refused_candle", "double_scripture_1", "double_scripture_2", "double_scripture_3", "double_scripture_4", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark", "oracle_sincerity_question", "oracle_sincerity_judged", "oracle_sincere", "oracle_sincerity_score", "fake_dawn_knocks", "dawn_waited"} {
+	for _, flag := range []string{"story_dead", "death_pending", "sleep_pending", "double_calm", "double_frenzy", "double_refused_candle", "double_scripture_1", "double_scripture_2", "double_scripture_3", "double_scripture_4", "cup_cast_counted", "cup_jiao_rescue", "cup_failed", "cup_roll_sacred", "cup_roll_laugh", "cup_roll_dark", "oracle_sincerity_question", "oracle_sincerity_judged", "oracle_sincere", "oracle_sincerity_score", "fake_dawn_knocks", "dawn_knocks_dialogue_pending", "dawn_waited", "escape_sleep_pending", "escape_dialogue_pending", "three_knocks_dialogue_pending"} {
 		delete(state.Flags, flag)
 	}
 	state.Flags["red_candle_lit"] = scene != "mini_wake_three_gongs" && scene != "mini_room"

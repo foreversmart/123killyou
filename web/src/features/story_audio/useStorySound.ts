@@ -3,6 +3,7 @@ import type { GameState } from '@/shared/types/game';
 import type { VoiceStatus } from '@/features/voice/types';
 import { cueDuration, cueSignature, storyCues } from './cues';
 import {
+  DEATH_SOUND_EFFECT,
   NIGHT_BACKGROUND_MUSIC,
   NIGHT_BACKGROUND_MUSIC_DELAY_MS,
   shouldPlayNightBackground,
@@ -16,6 +17,8 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
   const finishTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const volumeNode = useRef<GainNode | null>(null);
   const music = useRef<HTMLAudioElement | null>(null);
+  const deathSound = useRef<HTMLAudioElement | null>(null);
+  const deathSoundKey = useRef('');
   const musicTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const musicRunId = useRef('');
   const musicStarted = useRef(false);
@@ -45,12 +48,16 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
       });
       music.current?.pause();
       music.current = null;
+      deathSound.current?.pause();
+      deathSound.current = null;
       void context.current?.close();
     };
   }, []);
 
   const nightBackgroundActive = shouldPlayNightBackground(state);
   const nightRunId = state?.runId || '';
+  const deathActive = state?.sceneKey === 'mini_death';
+  const bellPlaying = busy && Boolean(state && storyCues(state).some((cue) => cue.kind === 'bell'));
   useEffect(() => {
     if (!nightBackgroundActive) {
       clearTimeout(musicTimer.current);
@@ -90,26 +97,73 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
       music.current = player;
     }
     if (!music.current) return;
+    // Keep the whole four-gong / one-bell phrase clear above the chant.
+    music.current.volume = bellPlaying ? 0.055 : 0.22;
 
     if (musicStarted.current) {
       if (music.current.paused) void music.current.play().catch(() => {});
       return;
     }
+    if (deathActive && musicTimer.current) {
+      clearTimeout(musicTimer.current);
+      musicTimer.current = undefined;
+    }
     if (musicTimer.current) return;
 
-    musicTimer.current = setTimeout(() => {
-      musicTimer.current = undefined;
-      if (!music.current || state?.paused) return;
-      void music.current.play().then(
-        () => {
-          musicStarted.current = true;
-        },
-        () => {
-          musicStarted.current = false;
-        },
-      );
-    }, NIGHT_BACKGROUND_MUSIC_DELAY_MS);
-  }, [nightBackgroundActive, nightRunId, state?.paused, unlocked]);
+    musicTimer.current = setTimeout(
+      () => {
+        musicTimer.current = undefined;
+        if (!music.current || state?.paused) return;
+        void music.current.play().then(
+          () => {
+            musicStarted.current = true;
+          },
+          () => {
+            musicStarted.current = false;
+          },
+        );
+      },
+      deathActive ? 0 : NIGHT_BACKGROUND_MUSIC_DELAY_MS,
+    );
+  }, [
+    bellPlaying,
+    deathActive,
+    nightBackgroundActive,
+    nightRunId,
+    state?.paused,
+    state?.sceneKey,
+    unlocked,
+  ]);
+
+  const deathKey =
+    state?.sceneKey === 'mini_death'
+      ? `${state.runId}:${state.shotKey || ''}:${state.retryScene || ''}`
+      : '';
+  useEffect(() => {
+    if (!deathKey) {
+      deathSoundKey.current = '';
+      deathSound.current?.pause();
+      if (deathSound.current) deathSound.current.currentTime = 0;
+      return;
+    }
+    if (!unlocked || state?.paused || typeof Audio === 'undefined') {
+      deathSound.current?.pause();
+      return;
+    }
+    if (!deathSound.current) {
+      const player = new Audio(DEATH_SOUND_EFFECT);
+      player.preload = 'auto';
+      player.volume = 0.85;
+      deathSound.current = player;
+    }
+    if (deathSoundKey.current !== deathKey) {
+      deathSoundKey.current = deathKey;
+      deathSound.current.pause();
+      deathSound.current.currentTime = 0;
+    }
+    void deathSound.current.play().catch(() => {});
+  }, [deathKey, state?.paused, unlocked]);
+
   const signature = state ? cueSignature(state) : '';
   useEffect(
     () => () => {
@@ -174,10 +228,13 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
     sources.current = cues.flatMap((cue) => playStoryCue(context.current!, cue, volume));
     setBusy(true);
     const duration = Math.max(...cues.map((cue) => cue.at + cueDuration(cue)));
-    finishTimer.current = setTimeout(() => {
-      setBusy(false);
-      volume.disconnect();
-    }, duration * 1000);
+    finishTimer.current = setTimeout(
+      () => {
+        setBusy(false);
+        volume.disconnect();
+      },
+      (duration + 0.06) * 1000,
+    );
   }, [signature, unlocked, state?.paused, voiceStatus]);
   return busy;
 }

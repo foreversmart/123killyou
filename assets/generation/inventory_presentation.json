@@ -30,44 +30,6 @@
       "referenceOnly": "assets/scenes/registration/props/copper_key.png"
     },
     {
-      "itemId": "page",
-      "name": "残页",
-      "catalogId": "inventory_page",
-      "image": "assets/props/torn_page/inventory.png",
-      "state": "default",
-      "display": {
-        "sourceFrame": {
-          "x": 0,
-          "y": 0,
-          "width": 1254,
-          "height": 1254
-        },
-        "objectFit": "contain",
-        "preserveAspectRatio": true
-      },
-      "referenceOnly": "assets/scenes/player_room/room_candlelit.png",
-      "views": [
-        {
-          "id": "inspect",
-          "overlays": [
-            {
-              "id": "warning",
-              "text": "钟响之后，\n不要回答自己的名字。",
-              "center": {
-                "x": 0.5,
-                "y": 0.73
-              },
-              "fontFamily": "serif",
-              "fontSizeRatio": 0.042,
-              "color": "#44382a",
-              "lineHeight": 1.6,
-              "align": "center"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "itemId": "candle",
       "name": "红烛",
       "catalogId": "inventory_candle",

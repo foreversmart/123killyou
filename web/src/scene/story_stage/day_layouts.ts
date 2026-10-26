@@ -26,7 +26,6 @@ export const dayLayouts: Record<string, StageLayout> = {
       p('register', '登记簿', 'book', 42, 70, '看登记簿', 9),
       p('keys', '铜钥匙', 'key', 52, 72, '查看铜钥匙', 5),
       p('permit', '通行凭', 'paper', 35, 77, '查看通行凭', 6),
-      p('page', '残页', 'paper', 31, 68, '查看残页', 5),
       p('beads', '念珠', 'beads', 57, 69, '查看念珠', 5),
       p('bags', '四人的行李', 'bag', 14, 84, '放好行李', 10),
       p('camera', '相机盖', 'camera', 24, 57, '看相机盖', 4),
@@ -57,7 +56,6 @@ export const dayLayouts: Record<string, StageLayout> = {
       p('local_vegetables', '本地香菇青菜', 'plate', 58, 71, '查看香菇青菜', 8),
       p('water', '热水', 'bowl', 69, 83, '查看热水', 6),
       p('bamboo', '本地笋干', 'plate', 58, 69, '查看笋干', 6),
-      p('offering', '施食记残页', 'paper', 18, 82, '谁供的肉', 6),
       p('curtain_lamp', '帘后长明灯', 'lamp', 84, 48, '看帘后', 5),
     ],
   },
@@ -82,7 +80,7 @@ export const dayLayouts: Record<string, StageLayout> = {
   mini_dawn: {
     chapter: '12 · 天亮离寺',
     title: '四个人，一个不少',
-    atmosphere: '鸡鸣与檐鸟同时响起，晨光照到四只旅行包。',
+    atmosphere: '鸡鸣与檐鸟响起，三位同伴在各自门口打哈欠、伸懒腰、收拾东西。',
     daylight: true,
     actors: {
       linlan: { x: 23, y: 77, height: 35 },
@@ -96,13 +94,12 @@ export const dayLayouts: Record<string, StageLayout> = {
       p('ribbon', '蓝色发圈', 'ribbon', 67, 66, '看看蓝色发圈', 4),
       p('bags', '四只旅行包', 'bag', 53, 84, '整理行李', 10),
       p('permit', '通行凭', 'paper', 78, 72, '交还通行凭', 5),
-      p('page', '残页', 'paper', 36, 83, '留下残页', 5),
     ],
   },
   mini_ending: {
     chapter: '尾声 · 平安离寺',
-    title: '旧匾在后视镜里闪了一下',
-    atmosphere: '车门合拢，寺里的钟声终于被引擎盖过。',
+    title: '山路弯向远方',
+    atmosphere: '大巴沿山路驶离，寺庙隐在远处树影与晨雾里。',
     daylight: true,
     actors: {
       linlan: { x: 23, y: 74, height: 33 },

@@ -13,6 +13,11 @@
   pointer-events: none;
   animation: settle 0.55s ease both;
 }
+.closeup[data-observation='listen_vase'] {
+  left: auto;
+  right: 4%;
+}
+
 .closeup figcaption {
   position: absolute;
   top: 0;

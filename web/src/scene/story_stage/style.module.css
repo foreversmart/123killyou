@@ -47,18 +47,7 @@
   object-position: center;
   pointer-events: none;
 }
-.victimPartial {
-  position: absolute;
-  z-index: 2;
-  top: 35%;
-  right: 3%;
-  width: 31%;
-  height: 42%;
-  object-fit: contain;
-  object-position: center;
-  pointer-events: none;
-  filter: drop-shadow(0 0.3cqw 0.3cqw #130f0d88);
-}
+
 .choices {
   position: absolute;
   z-index: 7;
@@ -129,26 +118,6 @@
   background: #efd6a0;
   margin-right: 0.5cqw;
   animation: breathe 1s ease infinite;
-}
-.soundLines {
-  position: absolute;
-  top: 22%;
-  left: 4%;
-  padding: 0.8cqw;
-  background: #142329b5;
-  border: 1px solid #b5c7c22b;
-  font-size: 0.65cqw;
-}
-.soundLines span {
-  display: block;
-  margin: 0.3cqw 0;
-  color: #97ada8;
-}
-.soundLines i {
-  color: #c6b484;
-  margin-left: 1cqw;
-  font-style: normal;
-  letter-spacing: 0.1cqw;
 }
 .scripture {
   position: absolute;

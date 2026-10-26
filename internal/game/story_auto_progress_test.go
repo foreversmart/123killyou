@@ -47,6 +47,7 @@ func TestSilentRefectoryHandoffDefaultsToVegetarianMeal(t *testing.T) {
 	e.Apply(&s, "登记入住")
 	e.Apply(&s, "去斋堂")
 	advanceScriptedLines(t, e, &s)
+	advanceMealDiscussion(t, e, &s)
 	if s.DialogueNext != "自动结束晚膳" || s.Dialogue.Speaker == "慧普" {
 		t.Fatalf("斋堂无响应仍播出了帘后支线或没有自动收束: speaker=%s next=%q", s.Dialogue.Speaker, s.DialogueNext)
 	}
@@ -94,6 +95,7 @@ func TestAutomaticMealClosurePreservesExplicitPorridgeChoice(t *testing.T) {
 	}
 	e.Apply(&s, "继续听")
 	advanceScriptedLines(t, e, &s)
+	advanceMealDiscussion(t, e, &s)
 	if s.DialogueNext != "自动结束晚膳" {
 		t.Fatalf("斋堂安全对白没有进入自动收束: %q", s.DialogueNext)
 	}

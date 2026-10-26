@@ -16,29 +16,43 @@
   "bus": {
     "arrival": {
       "path": "assets/scenes/bus/bus_arrival.png",
-      "usage": "片头结束后的车内等待画面；说开始游戏后切到山门外机位，不叠加室外人物、猫或行李。"
+      "usage": "开始后的第二镜，第一视角从车内跟随三位同伴下车，陆沉在山门内合十迎客；整图缓慢横移约3秒并渐进淡入，镜头结束进入山门外正片后，首句对白与完整字幕同步开始。主匾红烛寺、旧匾明照寺、香客须知及接驳站牌直接绘入图片，运行时不叠字。",
+      "durationMs": 3000
     },
     "departure": {
       "path": "assets/scenes/bus/bus_departure.png",
-      "reflectedPlaque": {
-        "text": "明照寺",
-        "x": 126,
-        "y": 129,
-        "fontSize": 12,
-        "mirrorHorizontally": true,
-        "visibleWhen": "ending_old_name_flash"
-      }
+      "usage": "结尾使用远处山坡上的外部远景机位：大巴沿清晨山区弯路驶离，远处灰瓦寺庙隐在树林和薄雾间；单张完整插画，不显示车内、后视镜、乘客或旧匾文字叠层。"
+    },
+    "openingJourney": {
+      "path": "assets/scenes/bus/bus_journey.png",
+      "usage": "点击或说“开始游戏”后播放约3秒：山林公路顶视远景，大巴很小，整张图由上往下缓慢平移；随后车内下车图渐进淡入并横移约4秒，两个镜头以柔和渐变衔接，镜头结束进入山门外正片后，首句对白与完整字幕同步开始。",
+      "durationMs": 2000
     }
   },
   "arrivalGameplay": {
     "path": "assets/scenes/temple_gate/gate_afternoon.png",
     "layout": "assets/scenes/temple_gate/layout.json",
-    "camera": "下车后的正常眼高山门外第一视角；人物、猫、行李和牌匾共用同一坐标系。"
+    "camera": "下车后的正常眼高山门外第一视角；人物、猫、行李和牌匾共用同一坐标系。",
+    "signage": {
+      "rendering": "painted_into_background",
+      "mainPlaque": "红烛寺",
+      "oldPlaque": "明照寺",
+      "notice": [
+        "香客须知",
+        "入寺请静心",
+        "请至门内登记"
+      ],
+      "shuttleSign": [
+        "接驳",
+        "红烛寺"
+      ]
+    },
+    "presentation": "山门下午完整插画：三位同伴、陆沉合十迎客、花猫和行李统一透视、日光与站位；不再叠加人物或道具，界面文字和按钮由游戏叠加。"
   },
   "keeperActions": {
     "writing": "assets/characters/lu_chen/writing_ledger.png",
     "offering": "assets/characters/lu_chen/offering_candle.png",
-    "presentation": "登记时俯身书写，发烛时递烛并抱盒；手势必须对应分镜，钥匙、灯和烛盒不同时硬叠。"
+    "presentation": "登记写字使用专用动作；发烛的抱盒与递烛姿势作为完整群像插画的参考，运行时不另叠人物或烛盒。"
   },
   "calmCompanions": {
     "poses": {
@@ -49,10 +63,10 @@
     "presentation": "安抚成功后使用低头跪伏的独立透明姿态，置于床脚；不旋转或压扁普通站姿。"
   },
   "diningFood": {
-    "steamedBuns": "assets/props/steamed_buns/scene.png",
-    "pickledVegetables": "assets/props/pickled_vegetables/scene.png",
-    "mushroomGreens": "assets/props/mushroom_greens/scene.png",
-    "presentation": "三道素食为独立透明道具；与粥碗、木勺、笋干和热水共享桌面透视与左侧夕光。"
+    "path": "assets/scenes/dining_hall/dining_sunset.png",
+    "layout": "assets/scenes/dining_hall/layout.json",
+    "presentation": "斋堂完整晚膳插画：三位同伴自然围坐，人物、餐具、食物、桌面与夕照统一绘制；所有进食选择共用同图，结算仍由后端负责。",
+    "state": "进食、拒绝、暂缓与劝说仍由后端meal_choices和flags结算并存档，不驱动画面细节切换。"
   },
   "observationDetails": {
     "drag_marks": "assets/details/drag_marks.png",
@@ -60,28 +74,62 @@
     "broken_shadow": "assets/details/broken_shadow.png"
   },
   "transitions": {
-    "presentation": "场景切换以环境图、黑场淡出和淡入交接；经过大殿时环境图连续约 3 秒并缓慢横向平移；不使用正面站姿立绘平移或缩放模拟行走。",
-    "state": "转场只负责视觉衔接，进入场景、物品归属和存档继续由后端确认。"
+    "presentation": "场景切换以环境图或完整行进插画、黑场淡出和淡入交接；经过大殿时环境图连续约 4.8 秒并缓慢横向平移；不使用正面站姿立绘平移或缩放模拟行走。",
+    "state": "转场只负责视觉衔接，进入场景、物品归属和存档继续由后端确认。",
+    "arrivalWalkRegister": {
+      "path": "assets/scenes/east_courtyard/arrival_walk_register.png",
+      "usage": "仅用于山门到登记室“跟随陆沉进入东院”的约3秒转场；陆沉持铜钥匙在前，三位同伴自然背向行进。人物与光影统一绘入，固定房牌近左听、远左灯、近右门、远右纸直接绘入。不代替可交互回廊空背景，不再叠加站姿或房牌文字。",
+      "durationMs": 3000,
+      "roomPlaques": {
+        "nearLeft": "听",
+        "farLeft": "灯",
+        "nearRight": "门",
+        "farRight": "纸"
+      }
+    },
+    "mainHallPassage": {
+      "path": "assets/scenes/main_hall/hall_afternoon.png",
+      "usage": "去斋堂途中经过大殿的完整插画：两尊巨佛占据主体，陆沉与三位同伴以小比例从底部通行；暗金佛像、冷灰窗光和香烟保留阴森感，连续播放约4.8秒并让整张插画缓慢横向平移，不叠加或动画化人物。",
+      "durationMs": 4800,
+      "motion": "整张插画横向平移，人物固定绘入画面；不使用人物立绘移动或步行动画。"
+    },
+    "refectoryWalkCorridor": {
+      "path": "assets/scenes/east_courtyard/refectory_walk_corridor.png",
+      "usage": "仅用于“晚膳后沿回廊返回”的完整队伍插画：延续白天入住图的人物造型、站位和回廊空间，陆沉提灯并带着未分发红烛领路，林岚、许栀和周砚背向跟随；院外近黑夜色，灯笼局部暖光保持人物可辨，营造阴森感。人物、光影统一绘入，沿用原有整图转场，不叠加独立行走人物。",
+      "durationMs": 2200,
+      "lighting": "院外近黑；保留吊灯与陆沉提灯的局部琥珀暖光，人物可辨。",
+      "state": "仅替换转场美术；进入回廊、发烛、物品归属与存档继续由后端确认。"
+    },
+    "companionWalkListen": {
+      "path": "assets/scenes/east_courtyard/companion_walk_listen.png",
+      "usage": "“沿回廊走向半掩的偏房”约3秒转场使用用户确认的完整两人门口偷听插画，人物、门缝与夜间檐灯统一绘入；保留整图运动和淡入淡出，不再叠加或单独动画化合成人物，不提前展示门内剧情。",
+      "durationMs": 3000
+    }
   },
   "documents": {
     "scripture": {
       "cover": "大念处经",
-      "body": ["观身如身、", "观受如受、", "观心如心、", "观法如法。"],
+      "body": [
+        "观身如身、",
+        "观受如受、",
+        "观心如心、",
+        "观法如法。"
+      ],
       "learnedOnlyAfterReading": true
     },
     "history": {
       "cover": "红烛寺简史",
-      "body": ["七年前方丈顾怀山于方丈室圆寂，灯灭即成佛。"],
+      "body": [
+        "七年前方丈顾怀山于方丈室圆寂，灯灭即成佛。"
+      ],
       "missingField": "验身"
     },
     "notice": {
       "title": "入住须知",
-      "knownText": ["只许去，不许问。", "夜间如需用水，先叫陆沉。"]
-    },
-    "foodRecord": {
-      "reusePaper": "assets/props/torn_page/inventory.png",
-      "title": "施食记",
-      "textReveal": "只显示剧本已公开内容；不补写肉来源或皮号"
+      "knownText": [
+        "只许去，不许问。",
+        "夜间如需用水，先叫陆沉。"
+      ]
     },
     "busTicket": {
       "reusePaper": "assets/props/permit/inventory.png",
@@ -113,5 +161,62 @@
     "cameraCap": "camera before check-in; bell-side after placing; camera after dawn retrieval",
     "roomTags": "标识按场景展示，不自动四块都成为背包物品"
   },
-  "notCovered": ["完整扩展主线人物与后山/钟楼内部"]
+  "notCovered": [
+    "完整扩展主线人物与后山/钟楼内部"
+  ],
+  "candleDistribution": {
+    "path": "assets/scenes/east_courtyard/candle_distribution.png",
+    "usage": "东院回廊发烛与叮嘱共用的完整夜间插画：陆沉、主角赵熙、林岚、周砚与许栀自然围成松散半圈，陆沉抱烛盒递出一支未燃红烛。人物、道具与夜色统一绘入，延续晚膳后返回图的近黑院外与局部灯光；不再叠加独立人物、纸条、房牌文字、提灯或蜡烛图层。领烛、回房和存档仍由后端结算。",
+    "sceneKey": "mini_corridor_candle",
+    "shots": "发烛、低声叮嘱与两声更锣均使用同一完整插画，不按领烛旗标增删图层。",
+    "viewpoint": "特定群像镜头：赵熙以背侧身与三位同伴共同围着陆沉。",
+    "state": "未领取时仍需说拿红烛；插画不自动发物品。红烛归属、离场条件与存档以服务端状态为准。"
+  },
+  "solitaryRoom": {
+    "lit": "assets/scenes/player_room/room_seated_lit.png",
+    "unlit": "assets/scenes/player_room/room_seated_unlit.png",
+    "scenes": [
+      "mini_room",
+      "mini_wake_three_gongs",
+      "mini_four_knocks",
+      "mini_three_knocks",
+      "mini_dawn_trap"
+    ],
+    "presentation": "主角独自坐在床边，窗外近黑；环境、人物、家具、书本、油灯和红烛统一绘入。每次只显示一张完整图，不再叠加房间道具或人物立绘。",
+    "selection": "red_candle_lit 为真显示点亮版，否则显示未亮版；三更醒来固定显示未亮版。点烛、续燃、拒绝、读书和存档继续由后端确认。",
+    "exceptions": "门眼调查保留专用门眼图；同伴入室与死亡分镜继续使用各自剧情构图，不将其他人物绘入这两张独处图。",
+    "documents": "读书仍显示精确文本 UI；调查近景与操作 UI 不作为房间家具叠加层。"
+  },
+  "listenRoom": {
+    "layout": "assets/scenes/guest_room/layout.json",
+    "obscured": "assets/scenes/guest_room/room_night.png",
+    "turned": "assets/scenes/guest_room/room_turning.png",
+    "presentation": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。",
+    "turnWhen": "vase_broken or listen_vase",
+    "shardsCloseup": {
+      "visibleWhen": "listen_vase",
+      "position": "right"
+    }
+  },
+  "dawnCourtyard": {
+    "path": "assets/scenes/east_courtyard/corridor_dawn.png",
+    "presentation": "清早三位同伴从各自房间出来：林岚在近左听房门口掩嘴打哈欠，周砚在远左灯房外伸懒腰，许栀在远右纸房的门缝内整理帆布包；近右门房为主角房间。人物、半开的门、房牌、行李与晨光统一绘入完整插画，不叠加旧人物、道具、房牌文字或人物微动。",
+    "roomPlaques": {
+      "nearLeft": "听",
+      "farLeft": "灯",
+      "nearRight": "门",
+      "farRight": "纸"
+    },
+    "state": "mini_dawn除dawn_gate外共用完整清晨插画；山门送客、返程、语音、物品和存档仍使用现有状态结算。"
+  },
+  "opening": {
+    "title": "片头播放结束保留视频片名终帧，在标题下方显示开始按钮；也支持按住空格说“开始游戏”。",
+    "sequence": [
+      "title_wait",
+      "bus_journey",
+      "bus_arrival",
+      "gate_afternoon"
+    ],
+    "dialogue": "两段开场镜头全部播放后才提交“听第一话”，随后由现有会话与对白流程接续。"
+  }
 }

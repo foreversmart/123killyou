@@ -25,7 +25,11 @@
 | --- | --- | --- |
 | `web/public/art/story/scenes/temple_gate.webp` | `assets/scenes/temple_gate/gate_afternoon.png` | 抵达山门、到达页 |
 | `web/public/art/story/scenes/registration.webp` | `assets/scenes/registration/registration_afternoon.png` | 登记处背景 |
-| `web/public/art/story/scenes/main_hall/hall_afternoon.webp` | `assets/scenes/main_hall/hall_afternoon.png` | 去斋堂途中经过红竹寺大殿的午后过渡画面 |
+| `web/public/art/story/scenes/player_room/room_seated_lit.webp` | `assets/scenes/player_room/room_seated_lit.png` | 独处房间红烛点亮；主角、家具、书本与道具统一绘入 |
+| `web/public/art/story/scenes/player_room/room_seated_unlit.webp` | `assets/scenes/player_room/room_seated_unlit.png` | 独处房间未亮或三更熄灭；主角独坐，窗外近黑 |
+| `web/public/art/story/scenes/east_courtyard/candle_distribution.webp` | `assets/scenes/east_courtyard/candle_distribution.png` | 发烛与叮嘱的完整夜间群像插画；主角与三名同伴围着陆沉，独立人物、道具和房牌文字图层关闭 |
+| `web/public/art/story/scenes/east_courtyard/refectory_walk_corridor.webp` | `assets/scenes/east_courtyard/refectory_walk_corridor.png` | 晚膳后沿回廊返回的完整夜间队伍插画，沿用原有整图转场 |
+| `web/public/art/story/scenes/main_hall/hall_afternoon.webp` | `assets/scenes/main_hall/hall_afternoon.png` | 去斋堂途中经过大殿；巨佛与底部小比例队伍统一绘入的阴森插画，沿用整图平移 |
 | `web/public/art/story/scenes/east_courtyard.webp` | `assets/scenes/east_courtyard/corridor_afternoon.png` | 东院回廊背景 |
 | `web/public/art/story/scenes/player_room.webp` | `assets/scenes/player_room/room_candlelit.png` | 门房亮烛背景 |
 | `web/public/art/story/scenes/registration_desk.webp` | `assets/scenes/registration/desk_foreground.png` | 登记桌前景 |
@@ -49,7 +53,6 @@
 | `web/public/art/story/portraits/shen_gong.webp` | `assets/characters/shen_gong/portrait_neutral.png` | 神公对白头像 |
 | `web/public/art/story/portraits/unknown.webp` | `assets/portraits/unknown.png` | 未知门外/帘后声音 |
 | `web/public/art/story/items/copper_key.webp` | `assets/props/copper_key/inventory.png` | 铜钥匙物品图 |
-| `web/public/art/story/items/torn_page.webp` | `assets/props/torn_page/inventory.png` | 残页物品图 |
 | `web/public/art/story/items/red_candle.webp` | `assets/props/red_candle/unlit.png` | 红烛物品图 |
 | `web/public/art/story/items/prayer_beads.webp` | `assets/props/prayer_beads/inventory.png` | 念珠物品图 |
 | `web/public/art/story/items/permit.webp` | `assets/props/permit/inventory.png` | 通行凭物品图 |

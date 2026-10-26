@@ -10,14 +10,14 @@ import styles from './style.module.css';
 import openingStyles from './opening_reel.module.css';
 import interaction from './interaction.module.css';
 
-// Gameplay begins after stepping off the bus. The opening end card keeps its
-// own bus interior; all gate props and people share this exterior coordinate space.
+// The arrival illustration already contains the people, cat and luggage.
+// Dawn still uses the reusable layered layout; arrival must not duplicate them.
 const arrivalComposition = composeLayout(gateLayout as unknown as AuthoredLayout, 'temple_gate', {
   time: 'afternoon',
-  bags: true,
-  cat: true,
-  companions: true,
-  keeper: true,
+  bags: false,
+  cat: false,
+  companions: false,
+  keeper: false,
 });
 
 export function ArrivalBackdrop() {
@@ -25,7 +25,7 @@ export function ArrivalBackdrop() {
     <div
       className={styles.arrival}
       role="img"
-      aria-label="下车后站在红烛寺山门前，三位同伴在石阶旁等候，陆沉从门内迎来；花猫与行李放在地面上。"
+      aria-label="下车后站在红烛寺山门前，三位同伴在石阶旁等候，陆沉在门内合十迎客；花猫与行李放在地面上。"
     >
       <AuthoredScene composition={arrivalComposition} />
       <details className={openingStyles.reel}>

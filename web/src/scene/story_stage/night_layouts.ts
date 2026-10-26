@@ -13,7 +13,6 @@ const roomProps: StageProp[] = [
   p('candle', '红烛', 'candle', 35, 73, '点燃红烛', 6),
   p('history', '游客版寺史册', 'book', 28, 78, '查看寺庙历史', 7),
   p('scripture', '大念处经', 'book', 42, 79, '阅读大念处经', 7),
-  p('page', '入住须知残页', 'paper', 27, 68, '查看残页', 5),
   p('matches', '火柴', 'match', 39, 69, '点燃红烛', 4),
   p('latch', '门闩', 'latch', 65, 52, '检查门闩', 8),
   p('lamp', '未点的油灯', 'lamp', 46, 69, '看看油灯', 4),
@@ -92,7 +91,7 @@ export const nightLayouts: Record<string, StageLayout> = {
   },
   mini_dawn_trap: {
     ...room,
-    chapter: '11 · 五更与远处一声锣',
+    chapter: '11 · 惊魂未定在房内',
     title: '窗外，还是黑的',
     atmosphere: '近处的震响停后，远处又拖来一声漫长的余音。',
   },

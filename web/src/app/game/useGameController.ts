@@ -4,6 +4,7 @@ import { useRoomTransition } from '@/scene/room/useRoomTransition';
 import { useVoice } from '@/features/voice/useVoice';
 import { useDemoTour } from './useDemoTour';
 import { useStoryPlayback } from './useStoryPlayback';
+import { useOpeningFlow } from './useOpeningFlow';
 import { useStorySound } from '@/features/story_audio/useStorySound';
 import type { GameResult, TurnControls } from '@/shared/types/game';
 
@@ -21,28 +22,30 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
   const { state, phase: roomPhase } = useRoomTransition(incomingState);
   const [notice, setNotice] = useState('');
   const [systemNotice, setSystemNotice] = useState(false);
-  const [openingFlow, setOpeningFlow] = useState(true);
-  const [openingReady, setOpeningReady] = useState(false);
-  const openingGate = useRef<'video' | 'ready' | 'done'>('video');
+  const { openingPhase, openingGate, finishOpeningVideo, startOpening, finishOpening } =
+    useOpeningFlow();
+  const openingFlow = openingPhase !== 'done';
+  const openingAnnounced = useRef(false);
   const voicePriming = useRef(false);
   const latestAction = useRef(0);
   const act = useCallback(
     async (text: string, controls?: Partial<TurnControls>) => {
       const action = ++latestAction.current;
       const gate = openingGate.current;
-      if (gate !== 'done') {
+      const openingAlightingDialogue =
+        gate === 'alighting' && text.replace(/[“”"。，！？!?\s]/g, '') === '听第一话';
+      if (gate !== 'done' && !openingAlightingDialogue) {
         if (gate !== 'ready') {
-          setNotice('片头播放结束后，请说“开始游戏”。');
+          setNotice(gate === 'reel' ? '片头播放结束后，请说“开始游戏”。' : '山门将近，请稍候。');
           return { text: '', streamed: false, problem: '', sceneOnly: true };
         }
         if (!/(开始游戏|开始旅程|进入游戏)/.test(text.replace(/[“”"。，！？!?\s]/g, ''))) {
           setNotice('请说“开始游戏”开始旅程。');
           return { text: '', streamed: false, problem: '', sceneOnly: true };
         }
-        openingGate.current = 'done';
-        setOpeningReady(false);
-        setOpeningFlow(false);
-        text = '听第一话';
+        startOpening();
+        setNotice('');
+        return { text: '', streamed: false, problem: '', sceneOnly: true };
       }
       let announced = false;
       const announce = (result: GameResult) => {
@@ -90,7 +93,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
         : result.speak?.trim() || result.state.lastAction?.trim() || '';
       return { text: textReply, streamed, problem: result.voiceError, sceneOnly };
     },
-    [send],
+    [openingGate, send, startOpening],
   );
   const voiceSession = useVoice(act, openTranscription);
   const connectVoice = useCallback(
@@ -120,20 +123,38 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     });
   }, [connectVoice, openingFlow, voiceReady, voiceSession.microphoneOn]);
   const soundBusy = useStorySound(state, voice.status);
-  useStoryPlayback(incomingState, voice, connected && roomPhase === 'idle' && !soundBusy);
+  useStoryPlayback(
+    incomingState,
+    voice,
+    !openingFlow && connected && roomPhase === 'idle' && !soundBusy,
+  );
+  useEffect(() => {
+    // Start the first line as the stopped-bus frame fades in. send() creates a
+    // session if needed, and the dialogue panel is mounted over that frame.
+    const alighting = openingPhase === 'alighting';
+    if ((openingFlow && !alighting) || openingAnnounced.current || !connected || !state) return;
+    if (state.sceneKey !== 'mini_arrival' || state.flags.arrival_intro_linlan) return;
+    openingAnnounced.current = true;
+    void voiceSession.submit('听第一话');
+  }, [openingFlow, openingPhase, connected, state, voiceSession.submit]);
   const begin = useCallback(async () => {
-    await act('开始游戏');
-  }, [act]);
+    void voiceSession.enablePlayback();
+    await voiceSession.submit('开始游戏');
+  }, [voiceSession.enablePlayback, voiceSession.submit]);
   const resume = useCallback(async () => {
+    const announced = openingAnnounced.current;
+    openingAnnounced.current = true;
     try {
       const playback = voiceSession.enablePlayback();
       await enter('resume');
       await playback;
+      finishOpening();
       await voiceSession.submit('重听当前对白');
     } catch {
+      openingAnnounced.current = announced;
       // Keep the opening choices available so the player can retry.
     }
-  }, [enter, voiceSession.enablePlayback, voiceSession.submit]);
+  }, [enter, finishOpening, voiceSession.enablePlayback, voiceSession.submit]);
   const voiceStarted = voice.microphoneOn;
 
   useEffect(() => {
@@ -157,11 +178,8 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     connected,
     opening,
     openingFlow,
-    openingReady,
-    setOpeningReady: useCallback(() => {
-      openingGate.current = 'ready';
-      setOpeningReady(true);
-    }, []),
+    openingPhase,
+    finishOpeningVideo,
     selecting,
     begin,
     resume,

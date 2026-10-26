@@ -1,0 +1,35 @@
+.departure {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.landscape {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  /* Keep the full illustration beyond the frame throughout the camera move. */
+  transform: translateX(-3.5%) scale(1.08);
+  animation: drive-away 2s var(--departure-delay) linear both;
+}
+
+.departure[data-paused='true'] .landscape {
+  animation-play-state: paused;
+}
+
+@keyframes drive-away {
+  from {
+    transform: translateX(3.5%) scale(1.08);
+  }
+  to {
+    transform: translateX(-3.5%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landscape {
+    animation: none;
+    transform: none;
+  }
+}

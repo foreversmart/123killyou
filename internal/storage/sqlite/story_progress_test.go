@@ -13,7 +13,8 @@ func TestStoryRelightAndRepeatedSafeRetriesPersist(t *testing.T) {
 	}
 	commands := []string{
 		"登记入住", "去斋堂", "劝大家不要吃粥", "吃完晚膳", "拿红烛", "回房", "点燃红烛", "睡下",
-		"不续燃红烛", "从最近安全节点重试", "不续燃红烛", "从最近安全节点重试", "续燃红烛",
+		"不续燃红烛", "自动进入死亡结算", "从最近安全节点重试",
+		"不续燃红烛", "自动进入死亡结算", "从最近安全节点重试", "续燃红烛",
 	}
 	for index, command := range commands {
 		state = run(t, s, state.ID, fmt.Sprint(index), command).State

@@ -8,9 +8,11 @@ export type SceneLayer = {
   rect: Rect;
   zIndex: number;
   clipRect?: Rect;
+  clipPath?: string;
   actorId?: string;
   /** Semantic movement used by scene-layer animation. */
-  motion?: 'idle' | 'walk' | 'run' | 'write' | 'write_hand' | 'eat' | 'turn';
+  motion?: 'still' | 'idle' | 'walk' | 'run' | 'write_hand' | 'eat' | 'turn' | 'glance';
+  motionOrigin?: { x: number; y: number };
   rotation?: number;
   filter?: string;
 };

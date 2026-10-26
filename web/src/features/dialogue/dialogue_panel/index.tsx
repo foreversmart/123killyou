@@ -23,12 +23,9 @@ export function DialoguePanel({
   connected: boolean;
   onTour: () => Promise<void>;
 }) {
-  const mealEating = state.sceneKey === 'mini_refectory' && state.shotKey === 'refectory_eating';
-  const dialogue = mealEating
-    ? { speaker: '', text: '', portrait: '' }
-    : voice.caption?.text
-      ? voice.caption
-      : state.dialogue;
+  // The eating plate hides action choices, but each companion's short line
+  // still belongs to that character and must remain visible and voiced.
+  const dialogue = voice.caption?.text ? voice.caption : state.dialogue;
   const hasDialogue = Boolean(dialogue.text.trim());
   const portraitAsset = getPortraitAsset(dialogue.portrait, dialogue.speaker, state);
   const hasPortrait =

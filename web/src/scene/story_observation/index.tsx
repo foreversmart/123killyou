@@ -1,8 +1,9 @@
 import type { GameState } from '@/shared/types/game';
 import { storyAssets } from '@/shared/lib/story_assets';
 import { DoorDetail, ShadowDetail } from './detail_art';
-import { DragMarkDetail, BowlTagDetail } from './evidence_art';
+import { BowlTagDetail } from './evidence_art';
 import { OracleCups } from './oracle_cups';
+import { DiscoveryCallout } from '@/scene/story_observation/discovery_callout';
 import styles from './style.module.css';
 
 const props = storyAssets.props;
@@ -25,10 +26,11 @@ export function StoryObservation({ state }: { state: GameState }) {
   const closeup = closeups[shot];
   const latch = ['room_latch', 'wake_door'].includes(shot);
   const shadow = ['double_enter', 'double_candle', 'double_exit'].includes(shot);
-  const drag = shot === 'register_drag_mark';
+  if (shot === 'register_drag_mark')
+    return <DiscoveryCallout drawing={/图/.test(state.lastHeard)} />;
   const bowlTags = shot === 'refectory_porridge' && Boolean(state.flags.bowl_tags_seen);
   const cups = ['oracle_cast', 'oracle_stone', 'oracle_rescue'].includes(shot);
-  if (!closeup && !latch && !shadow && !drag && !bowlTags && !cups) return null;
+  if (!closeup && !latch && !shadow && !bowlTags && !cups) return null;
   return (
     <figure
       className={styles.closeup}
@@ -38,20 +40,10 @@ export function StoryObservation({ state }: { state: GameState }) {
     >
       <figcaption>
         {closeup?.title ||
-          (cups
-            ? '地砖上的杯面'
-            : latch
-              ? '门内侧'
-              : drag
-                ? '灯房门边'
-                : bowlTags
-                  ? '施食记与碗签'
-                  : '烛光边缘')}
+          (cups ? '地砖上的杯面' : latch ? '门内侧' : bowlTags ? '四只木碗签' : '烛光边缘')}
       </figcaption>
       {cups ? (
         <OracleCups flags={state.flags} falling={shot === 'oracle_cast'} />
-      ) : drag ? (
-        <DragMarkDetail drawing={/图/.test(state.lastHeard)} />
       ) : bowlTags ? (
         <BowlTagDetail />
       ) : closeup ? (

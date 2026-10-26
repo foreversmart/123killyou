@@ -20,17 +20,17 @@ func TestRefectoryOpensWithNpcMealDiscussionBeforeChoices(t *testing.T) {
 	}
 
 	e.Apply(&s, "继续听")
-	if s.Dialogue.Speaker != "周砚" || !strings.Contains(s.Dialogue.Text, "粥里好像有肉") || !strings.Contains(s.Dialogue.Text, "想不想吃") {
-		t.Fatalf("没有由同行者讨论是否吃肉粥并邀请大家决定: %+v", s.Dialogue)
+	if s.Dialogue.Speaker != "周砚" || !strings.Contains(s.Dialogue.Text, "粥里好像有肉") || !strings.Contains(s.Dialogue.Text, "寺庙里面平时不是都应该吃素吗") {
+		t.Fatalf("没有由周砚发现肉粥并质疑寺庙供荤: %+v", s.Dialogue)
 	}
-	if strings.Contains(s.Dialogue.Text, "为什么会有肉") || strings.Contains(s.Dialogue.Text, "和尚庙不是应该") {
-		t.Fatalf("晚膳开场仍把讨论写成质疑寺庙: %s", s.Dialogue.Text)
+	if strings.Contains(s.Dialogue.Text, "想不想吃") || strings.Contains(s.Dialogue.Text, "先问问彼此") {
+		t.Fatalf("晚膳开场仍要求逐人表态: %s", s.Dialogue.Text)
 	}
 	e.Apply(&s, "继续听")
-	if s.Dialogue.Speaker != "陆沉" || !strings.Contains(s.Dialogue.Text, "门边") {
-		t.Fatalf("陆沉没有在边上说明选择: %+v", s.Dialogue)
+	if s.Dialogue.Speaker != "陆沉" || s.DialogueNext != mealDiscussionAdvance {
+		t.Fatalf("陆沉解释后没有留出劝素窗口: %+v", s.Dialogue)
 	}
-	for _, fact := range []string{"外来客", "吃不惯", "斋饭", "僧人自己不吃肉"} {
+	for _, fact := range []string{"外来客", "吃不惯", "斋饭", "僧人有戒律，是不能吃荤的"} {
 		if !strings.Contains(s.Dialogue.Text, fact) {
 			t.Fatalf("解释缺少%s: %s", fact, s.Dialogue.Text)
 		}
@@ -50,9 +50,10 @@ func TestRefectoryQuestionsExplainGuestMeatWithoutSettlingMeal(t *testing.T) {
 			storyCommands(e, &s, "登记入住", "去斋堂")
 			before := Clone(s)
 			intent, speak := e.Apply(&s, question)
-			if intent != "dialogue" || s.Dialogue.Speaker != "陆沉" || !strings.Contains(speak, "僧人自己不吃肉") {
+			if intent != "dialogue" || s.Dialogue.Speaker != "陆沉" || !strings.Contains(speak, "僧人有戒律，是不能吃荤的") {
 				t.Fatalf("没有回答当下供荤疑问: intent=%s dialogue=%+v", intent, s.Dialogue)
 			}
+			before.Flags["meal_guest_explained"] = true
 			if s.SceneKey != before.SceneKey || s.Devotion != before.Devotion || !reflect.DeepEqual(s.Flags, before.Flags) {
 				t.Fatalf("追问供荤错误改变了游戏结算: %+v", s)
 			}

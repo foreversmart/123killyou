@@ -8,6 +8,15 @@ const c = (thought: string, command: string, tone?: StoryChoice['tone']): StoryC
 
 export function sceneChoices(state: GameState): StoryChoice[] {
   const shot = state.shotKey || '';
+  if (
+    state.flags.death_pending ||
+    state.flags.sleep_pending ||
+    state.flags.three_knocks_dialogue_pending ||
+    state.flags.escape_dialogue_pending ||
+    state.flags.escape_sleep_pending ||
+    state.flags.dawn_knocks_dialogue_pending
+  )
+    return [];
   switch (state.sceneKey) {
     case 'mini_register':
       return [c('先听听大家怎么安排', '继续听'), c('把行李放好，去吃晚膳', '去斋堂吃晚膳')];
@@ -85,17 +94,18 @@ export function sceneChoices(state: GameState): StoryChoice[] {
         c('先念起大念处经', '朗读大念处经'),
       ];
     case 'mini_dawn_trap':
+      if (['escape_return', 'escape_outside'].includes(shot))
+        return [c('躺下歇一会儿', '躺下睡觉'), c('再去看看外面', '再去看看外面')];
       return [
         c('留在房内等待', '不开门等待真正的五更'),
-        c('把刚才那段声音再听一遍', '重听五更和锣声'),
-        c('将末尾锣声算作第六声', '把锣声算作第六声', 'quiet'),
+        c('把刚才那段声音再听一遍', '重听锣声和钟声'),
+        c('将末尾钟声算作第五声', '把钟声算作第五声', 'quiet'),
         c('打开房门', '开门', 'quiet'),
       ];
     case 'mini_dawn':
       return [
         c('听听他们昨晚的经历', '听天亮对白'),
         c('问陆沉，住持去哪了', '询问住持去了哪里'),
-        c('将残页留在寺里', '留下残页'),
         c('四个人都在，上车回家', '坐大巴回家'),
       ];
     case 'mini_ending':

@@ -10,6 +10,27 @@
   ],
   "assets": [
     {
+      "id": "companion_walk_listen",
+      "name": "回廊偏房·两人偷听",
+      "kind": "illustration",
+      "path": "assets/scenes/east_courtyard/companion_walk_listen.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1884027,
+      "sha256": "700b60ddc87353aabacba96442cac13ab90ec4611d51ab41f2da761d2555112b",
+      "status": "generated",
+      "promptSet": "assets/generation/scene_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "07",
+          "08"
+        ],
+        "purpose": "“沿回廊走向半掩的偏房”约3秒转场使用用户确认的完整两人门口偷听插画，人物、门缝与夜间檐灯统一绘入；保留整图运动和淡入淡出，不再叠加或单独动画化合成人物，不提前展示门内剧情。"
+      }
+    },
+    {
       "id": "corridor_afternoon",
       "name": "东院回廊·晴日下午",
       "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
@@ -31,6 +52,68 @@
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
     },
     {
+      "id": "arrival_walk_register",
+      "name": "东院行进·跟随陆沉",
+      "kind": "background",
+      "path": "assets/scenes/east_courtyard/arrival_walk_register.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1853343,
+      "sha256": "8e9190b04cd4ea2b2cc675def9c466194f29993b4bd6743cd206e7d2870ece95",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "01",
+          "02"
+        ],
+        "purpose": "仅用于山门到登记室“跟随陆沉进入东院”的约3秒转场；陆沉持铜钥匙在前，三位同伴自然背向行进。人物与光影统一绘入，固定房牌近左听、远左灯、近右门、远右纸直接绘入。不代替可交互回廊空背景，不再叠加站姿或房牌文字。"
+      }
+    },
+    {
+      "id": "refectory_walk_corridor",
+      "name": "晚膳后回廊·队伍返回",
+      "kind": "illustration",
+      "path": "assets/scenes/east_courtyard/refectory_walk_corridor.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1678974,
+      "sha256": "6d82fd87905cdd0100a6c3f6288b9ece60385a299baa8fe8ed72a9c0aab42d19",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "03",
+          "04"
+        ],
+        "purpose": "仅用于“晚膳后沿回廊返回”的完整队伍插画：延续白天入住图的人物造型、站位和回廊空间，陆沉提灯并带着未分发红烛领路，林岚、许栀和周砚背向跟随；院外近黑夜色，灯笼局部暖光保持人物可辨，营造阴森感。人物、光影统一绘入，沿用原有整图转场，不叠加独立行走人物。"
+      }
+    },
+    {
+      "id": "candle_distribution",
+      "name": "东院回廊·围聚发烛",
+      "kind": "illustration",
+      "path": "assets/scenes/east_courtyard/candle_distribution.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1896788,
+      "sha256": "e6267bcd3006be3543a70cac4b4040c146b6c4ea3e694e74aebcaf4565418cb7",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "04"
+        ],
+        "purpose": "东院回廊发烛与叮嘱共用的完整夜间插画：陆沉、主角赵熙、林岚、周砚与许栀自然围成松散半圈，陆沉抱烛盒递出一支未燃红烛。人物、道具与夜色统一绘入，延续晚膳后返回图的近黑院外与局部灯光；不再叠加独立人物、纸条、房牌文字、提灯或蜡烛图层。领烛、回房和存档仍由后端结算。"
+      }
+    },
+    {
       "id": "player_room_candlelit",
       "name": "主角门房·夜间亮烛底图",
       "path": "assets/scenes/player_room/room_candlelit.png",
@@ -48,7 +131,7 @@
           "07",
           "10"
         ],
-        "purpose": "主角门房·夜间亮烛底图"
+        "purpose": "同伴入室、危险实体与死亡分镜的第一视角分层底图；独处房间与三更醒来使用 room_seated_lit / room_seated_unlit 完整插画。"
       },
       "kind": "background",
       "promptSet": "assets/generation/production_manifest.json",
@@ -234,15 +317,17 @@
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 2061328,
-      "sha256": "20f58d75f77aa4208cdae46a3594a98bae6220acd7e23b950561b0060b588db5",
+      "bytes": 2708014,
+      "sha256": "7d9527136dd2a946a12e308f1ecc0ed0ed8459429b62a497017ab91afab9b9f9",
       "status": "generated",
       "usage": {
         "storyBeats": [
           "01"
         ],
-        "purpose": "下午抵达的山门背景；牌匾准确排字，人物、花猫与行李另行叠加"
-      }
+        "purpose": "山门下午完整插画：三位同伴、陆沉合十迎客、花猫和行李统一透视、日光与站位；不再叠加人物或道具，界面文字和按钮由游戏叠加。"
+      },
+      "promptSet": "assets/generation/production_manifest.json",
+      "kind": "illustration"
     },
     {
       "id": "registration",
@@ -515,41 +600,6 @@
       }
     },
     {
-      "id": "inventory_page",
-      "name": "残页·物品图",
-      "kind": "inventory_item",
-      "itemId": "page",
-      "path": "assets/props/torn_page/inventory.png",
-      "width": 1254,
-      "height": 1254,
-      "format": "png",
-      "hasAlpha": true,
-      "bytes": 1426298,
-      "sha256": "b68bba9513928373845af3ab462a7c34bb900a319ab9448bcb1cdfad92d23ff0",
-      "status": "generated",
-      "alphaCheck": {
-        "transparentPixels": 772022,
-        "nearOpaquePixels": 772834,
-        "silhouetteBounds": {
-          "minX": 229,
-          "minY": 108,
-          "maxX": 1056,
-          "maxY": 1156
-        }
-      },
-      "presentation": "assets/generation/inventory_presentation.json",
-      "usage": {
-        "storyBeats": [
-          "02",
-          "05",
-          "07",
-          "11",
-          "12"
-        ],
-        "purpose": "残页的道具栏与调查底图；末行警告由准确排字提供"
-      }
-    },
-    {
       "id": "inventory_candle",
       "name": "红烛·物品图",
       "kind": "inventory_item",
@@ -648,7 +698,7 @@
           "02",
           "12"
         ],
-        "purpose": "通行凭的道具栏与正反面调查底图；不再与残页共用图片"
+        "purpose": "通行凭的道具栏与正反面调查底图"
       }
     },
     {
@@ -901,21 +951,21 @@
     {
       "id": "dining_sunset",
       "name": "斋堂·夕照",
-      "kind": "background",
+      "kind": "illustration",
       "path": "assets/scenes/dining_hall/dining_sunset.png",
       "width": 1672,
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 2101154,
-      "sha256": "12de54317d806c8f892ada4505643474bd5195e870956bcf7294bb691c68eff0",
+      "bytes": 2411849,
+      "sha256": "7c5ff30dcf5a5dea0a6de2444258903ba03d47ffcc17ec3562695ac565674a3f",
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
         "storyBeats": [
           "03"
         ],
-        "purpose": "斋堂·夕照"
+        "purpose": "斋堂完整晚膳插画：三位同伴自然围坐，人物、餐具、食物、桌面与夕照统一绘制；所有进食选择共用同图，结算仍由后端负责。"
       },
       "layerLayout": "assets/scenes/dining_hall/layout.json"
     },
@@ -1096,37 +1146,6 @@
           "minY": 199,
           "maxX": 1338,
           "maxY": 886
-        }
-      }
-    },
-    {
-      "id": "room_page",
-      "name": "入住残页·桌面",
-      "kind": "prop",
-      "path": "assets/scenes/player_room/props/torn_page.png",
-      "width": 1536,
-      "height": 1024,
-      "format": "png",
-      "hasAlpha": true,
-      "bytes": 1489719,
-      "sha256": "de628c496d84ac06d0568538699daaf5ba7d46bccd15a50b58e0f9d87c74077f",
-      "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
-      "usage": {
-        "storyBeats": [
-          "05",
-          "07"
-        ],
-        "purpose": "入住残页·桌面"
-      },
-      "alphaCheck": {
-        "transparentPixels": 1045511,
-        "nearOpaquePixels": 508253,
-        "silhouetteBounds": {
-          "minX": 59,
-          "minY": 237,
-          "maxX": 1493,
-          "maxY": 954
         }
       }
     },
@@ -1332,21 +1351,21 @@
     {
       "id": "corridor_dawn",
       "name": "东院回廊·真实清晨",
-      "kind": "background",
+      "kind": "illustration",
       "path": "assets/scenes/east_courtyard/corridor_dawn.png",
       "width": 1672,
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 1921753,
-      "sha256": "cf43f90580bcccb029685cd0c1c0e21adc866bb0423d8a97bcebbca17f3c9d1a",
+      "bytes": 2094335,
+      "sha256": "23e2df40d863aba352a1637d502c4460bb927071b8f810327f0246ca6d3ddfc5",
       "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
+      "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
         "storyBeats": [
           "12"
         ],
-        "purpose": "东院回廊·真实清晨"
+        "purpose": "清早三位同伴从各自房间出来：林岚在近左听房门口掩嘴打哈欠，周砚在远左灯房外伸懒腰，许栀在远右纸房的门缝内整理帆布包；近右门房为主角房间。人物、半开的门、房牌、行李与晨光统一绘入完整插画，不叠加旧人物、道具、房牌文字或人物微动。"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
     },
@@ -1369,7 +1388,7 @@
           "06",
           "10"
         ],
-        "purpose": "门房·红烛熄灭"
+        "purpose": "同伴入室、危险实体与死亡分镜的第一视角分层底图；独处房间与三更醒来使用 room_seated_lit / room_seated_unlit 完整插画。"
       },
       "layerLayout": "assets/scenes/player_room/layout.json"
     },
@@ -1425,15 +1444,15 @@
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 2183047,
-      "sha256": "50fc1ef12c26c812f15f8882c74356781627b5ca5455f638ebcd79498cffade5",
+      "bytes": 2098802,
+      "sha256": "b50d38cea5778fa64edb870683ab7640ee89acca25c29b5347bad2e0c7308846",
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
         "storyBeats": [
           "12"
         ],
-        "purpose": "山门·晨光"
+        "purpose": "山门·晨光；红烛寺、明照寺、香客须知和接驳站牌文字直接绘入背景，运行时不叠字。"
       },
       "layerLayout": "assets/scenes/temple_gate/layout.json"
     },
@@ -1446,15 +1465,15 @@
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 1984218,
-      "sha256": "19bd5c0b61dd8d60952bfaa0cc843821a10334aef03699b5bc3eaf6b5c40ddab",
+      "bytes": 2034936,
+      "sha256": "a725bda355d46c69c10633084b68657e851913572ba7a6eeb7c7312694b0fcba",
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
         "storyBeats": [
           "01"
         ],
-        "purpose": "仅用于片头结束后的车内等待画面；正式抵达场景下车后使用山门外机位。"
+        "purpose": "开始后的第二镜，第一视角从车内跟随三位同伴下车，陆沉在山门内合十迎客；整图渐进淡入并缓慢横移约3秒，镜头结束进入山门外正片后，首句对白与完整字幕同步开始。主匾红烛寺、旧匾明照寺、香客须知及接驳站牌直接绘入图片，运行时不叠字。"
       }
     },
     {
@@ -1479,44 +1498,23 @@
       }
     },
     {
-      "id": "victim_room_night",
-      "name": "偏房·门隙观察",
+      "id": "bus_journey",
+      "name": "大巴·开场山路顶视远景",
       "kind": "background",
-      "path": "assets/scenes/guest_room/room_night.png",
+      "path": "assets/scenes/bus/bus_journey.png",
       "width": 1672,
       "height": 941,
       "format": "png",
       "hasAlpha": false,
-      "bytes": 1526836,
-      "sha256": "362517c798fb28a96c95c882276b4313c95e6ce3e9e70f6e99f82dfa52d13047",
+      "bytes": 3262287,
+      "sha256": "c6d7a8451bebcde377cb6eb0539c7e9e6e793baefdaa1e49f54e2a5ddd3383f6",
       "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
+      "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
         "storyBeats": [
-          "08"
+          "01"
         ],
-        "purpose": "偏房·门隙观察"
-      },
-      "layerLayout": "assets/scenes/guest_room/layout.json"
-    },
-    {
-      "id": "bus_departure",
-      "name": "大巴·晨间返程",
-      "kind": "background",
-      "path": "assets/scenes/bus/bus_departure.png",
-      "width": 1672,
-      "height": 941,
-      "format": "png",
-      "hasAlpha": false,
-      "bytes": 2016200,
-      "sha256": "c75387409a46040cdbfb965a7d8684badc416d9b4ec1423be7c8cce2e91fabe0",
-      "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
-      "usage": {
-        "storyBeats": [
-          "12"
-        ],
-        "purpose": "大巴·晨间返程"
+        "purpose": "点击或说“开始游戏”后播放约3秒：山林公路顶视远景，大巴很小，整张图由上往下缓慢平移；随后车内下车图渐进淡入并横移约4秒，两个镜头以柔和渐变衔接，镜头结束进入山门外“大巴抵达红烛寺”正片后，首句对白与完整字幕同步开始。"
       }
     },
     {
@@ -2557,36 +2555,6 @@
       }
     },
     {
-      "id": "victim_detail",
-      "name": "偏房·床上局部",
-      "kind": "prop",
-      "path": "assets/scenes/guest_room/props/victim_partial.png",
-      "width": 1671,
-      "height": 941,
-      "format": "png",
-      "hasAlpha": true,
-      "bytes": 569203,
-      "sha256": "4b3c76ff40184d4934542844a97008136b9e9bb8677706ce866439486409e691",
-      "status": "generated",
-      "promptSet": "assets/generation/production_manifest.json",
-      "usage": {
-        "storyBeats": [
-          "08"
-        ],
-        "purpose": "偏房·床上局部"
-      },
-      "alphaCheck": {
-        "transparentPixels": 1275865,
-        "nearOpaquePixels": 278799,
-        "silhouetteBounds": {
-          "minX": 120,
-          "minY": 248,
-          "maxX": 1558,
-          "maxY": 747
-        }
-      }
-    },
-    {
       "id": "hui_pu_turn",
       "name": "慧普·停手回望",
       "kind": "character",
@@ -3353,6 +3321,137 @@
           "04"
         ],
         "purpose": "晚膳后发烛分镜，右手递出未燃红烛、左臂抱烛盒；不是提灯噤声的复用姿态。"
+      }
+    },
+    {
+      "id": "main_hall_afternoon",
+      "name": "大雄宝殿·午后经过",
+      "kind": "illustration",
+      "path": "assets/scenes/main_hall/hall_afternoon.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 2333597,
+      "sha256": "ce7087eb35c6e2fbb39e9b09582b529155263ad411362a7eb35bfd4122572f83",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "02",
+          "03"
+        ],
+        "purpose": "去斋堂途中经过大殿的完整插画：两尊巨佛占据主体，陆沉与三位同伴以小比例从底部通行；暗金佛像、冷灰窗光和香烟保留阴森感。人物与环境统一绘入，仅使用约3秒的整图横向平移，不叠加或动画化人物。"
+      }
+    },
+    {
+      "id": "room_seated_lit",
+      "name": "门房独坐·红烛点亮",
+      "kind": "illustration",
+      "path": "assets/scenes/player_room/room_seated_lit.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1666698,
+      "sha256": "ccfce47997f19db8a5279be17770fe07e6c4a8a001ebbfcb1e68cf307d645583",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "07",
+          "08",
+          "11"
+        ],
+        "purpose": "主角赵熙独自坐在床边的完整房间插画，红烛点亮；人物、床、桌、书本、油灯、蜡烛和暖光统一绘入，窗外近黑，只有一名人物。"
+      }
+    },
+    {
+      "id": "room_seated_unlit",
+      "name": "门房独坐·红烛未亮",
+      "kind": "illustration",
+      "path": "assets/scenes/player_room/room_seated_unlit.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1529283,
+      "sha256": "3b6c77e4780ae43ebbe93106e117a250281f4344255e5d4bad157aa706884833",
+      "status": "generated",
+      "promptSet": "assets/generation/production_manifest.json",
+      "usage": {
+        "storyBeats": [
+          "05",
+          "06",
+          "07",
+          "08",
+          "11"
+        ],
+        "purpose": "与点亮版同一机位、人物姿势和物件位置的完整房间插画，红烛未点亮或已熄灭；主角独坐床边，窗外近黑，室内仅有微弱冷暗环境光。"
+      }
+    },
+    {
+      "id": "victim_room_night",
+      "name": "偏房·无灯伏身",
+      "kind": "illustration",
+      "path": "assets/scenes/guest_room/room_night.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1507179,
+      "sha256": "dffa1992a0e20577019bdaf58720b480deedfc2293ae9bfb9b57568356d33690",
+      "status": "generated",
+      "promptSet": "assets/generation/scene_prompts.json",
+      "layerLayout": "assets/scenes/guest_room/layout.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
+      }
+    },
+    {
+      "id": "victim_room_turning",
+      "name": "偏房·无灯回头",
+      "kind": "illustration",
+      "path": "assets/scenes/guest_room/room_turning.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 1467353,
+      "sha256": "09a5894a76d1251d99e38a7d76edbd3144a90177392ede14673e66071eeb0d39",
+      "status": "generated",
+      "promptSet": "assets/generation/scene_prompts.json",
+      "layerLayout": "assets/scenes/guest_room/layout.json",
+      "usage": {
+        "storyBeats": [
+          "08"
+        ],
+        "purpose": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
+      }
+    },
+    {
+      "id": "bus_departure",
+      "name": "大巴·山路驶离远景",
+      "kind": "illustration",
+      "path": "assets/scenes/bus/bus_departure.png",
+      "width": 1672,
+      "height": 941,
+      "format": "png",
+      "hasAlpha": false,
+      "bytes": 3048886,
+      "sha256": "ec1f554150249aa84badc98789158d4d5fedb5a49905eb0ef6c704dc16225b7a",
+      "status": "generated",
+      "promptSet": "assets/generation/scene_prompts.json",
+      "usage": {
+        "storyBeats": [
+          "12"
+        ],
+        "purpose": "结尾使用远处山坡上的外部远景机位：大巴沿清晨山区弯路驶离，远处灰瓦寺庙隐在树林和薄雾间；单张完整插画，不显示车内、后视镜、乘客或旧匾文字叠层。"
       }
     }
   ],

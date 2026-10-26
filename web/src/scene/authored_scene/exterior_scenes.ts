@@ -5,6 +5,9 @@ import shrineLayout from '../../../../assets/scenes/east_shrine/layout.json';
 import templeGateLayout from '../../../../assets/scenes/temple_gate/layout.json';
 import type { AuthoredLayout, SceneComposition, SceneLayer } from './types';
 import { composeLayout, runtimeSource } from './compose';
+import { candleScene } from './candle_scene';
+import { completeScene } from './complete_scene';
+import { storyAssets } from '@/shared/lib/story_assets';
 
 type Selection = Record<string, string | boolean>;
 
@@ -31,18 +34,21 @@ export function exteriorScene(state: GameState): SceneComposition | undefined {
         return courtyardScene(state);
       return undefined;
     case 'mini_corridor_candle':
-      return courtyardScene(state);
+      return candleScene();
     case 'mini_listen':
       return listenScene(state);
     case 'mini_oracle':
       return oracleScene(state);
     case 'mini_dawn':
-      return state.shotKey === 'dawn_gate' ? gateScene(state) : courtyardScene(state);
+      return state.shotKey === 'dawn_gate'
+        ? gateScene(state)
+        : completeScene(storyAssets.scenes.eastCourtyardDawn, 'dawn_morning');
     case 'mini_ending':
       return departureScene();
     case 'mini_death':
-      if (state.shotKey === 'death_mini_listen') return listenScene(state);
-      if (state.shotKey === 'death_mini_oracle') return oracleScene(state);
+      const retry = state.retryScene || state.shotKey?.replace(/^death_/, '') || '';
+      if (retry === 'mini_listen') return listenScene(state);
+      if (retry === 'mini_oracle') return oracleScene(state);
       return undefined;
     default:
       return undefined;
@@ -65,7 +71,7 @@ function courtyardScene(state: GameState): SceneComposition {
     door: 'closed',
   };
   const result = composeLayout(authored(courtyardLayout), 'east_courtyard', selection);
-  const wanted = state.shotKey === 'corridor_candles' ? 'luchen' : actorForCourtyard(state);
+  const wanted = actorForCourtyard(state);
   const composition = withActors(
     result,
     authored(courtyardLayout),
@@ -85,9 +91,7 @@ function courtyardScene(state: GameState): SceneComposition {
     const sprite =
       time === 'afternoon' || time === 'dawn'
         ? courtyardLayout.sprites.actor_lu_chen_reception
-        : state.shotKey === 'corridor_candles'
-          ? courtyardLayout.sprites.actor_lu_chen_offering
-          : undefined;
+        : undefined;
     if (!sprite) continue;
     layer.src = runtimeSource('east_courtyard', sprite.path);
     layer.imageWidth = sprite.width;
@@ -110,35 +114,18 @@ function actorForCourtyard(state: GameState): string | undefined {
     if (state.shotKey === 'dawn_axis') return 'zhouyan';
     if (state.shotKey === 'dawn_courtyard') return 'luchen';
   }
-  if (state.shotKey === 'corridor_warning' || state.shotKey === 'corridor_two_gongs')
-    return 'luchen';
   return undefined;
 }
 
 function listenScene(state: GameState): SceneComposition {
-  const result = composeLayout(authored(guestRoomLayout), 'guest_room', {
-    hui: !state.flags.skin_seen ? 'hidden' : state.flags.vase_broken ? 'turn' : 'rear',
+  return composeLayout(authored(guestRoomLayout), 'guest_room', {
+    view: state.flags.vase_broken || state.shotKey === 'listen_vase' ? 'turn' : 'rear',
   });
-  const layers = result.layers.map((layer) => {
-    const actorLayer = layer.id === 'hui_rear' || layer.id === 'hui_turn';
-    return {
-      ...layer,
-      ...(actorLayer
-        ? {
-            actorId: 'huipu',
-            motion: state.shotKey === 'listen_vase' ? ('turn' as const) : ('idle' as const),
-          }
-        : {}),
-      ...(layer.id === 'victim_detail' && !state.flags.skin_seen
-        ? { rect: { ...layer.rect, width: 0, height: 0 } }
-        : {}),
-    };
-  });
-  return { ...result, layers };
 }
 
 function oracleScene(state: GameState): SceneComposition {
-  const elder = state.flags.cup_failed ? 'stone' : state.flags.cup_jiao_rescue ? 'alive' : 'alive';
+  const elder =
+    state.sceneKey === 'mini_death' ? 'hidden' : state.flags.cup_failed ? 'stone' : 'alive';
   const result = composeLayout(authored(shrineLayout), 'east_shrine', {
     elder,
     jiaobei: cupState(state),
@@ -179,29 +166,9 @@ function gateScene(_state: GameState): SceneComposition {
   };
 }
 
-/**
- * The departure background is a first-person bus plate. It already contains
- * all visible geometry, so adding standing character cutouts would put people
- * in front of the windows and break the intended camera. Keep the composition
- * to the authored plate and its mirror reflection.
- */
+/** The ending is a single exterior landscape with the coach leaving the temple. */
 function departureScene(): SceneComposition {
-  return {
-    width: 1672,
-    height: 941,
-    layers: [
-      {
-        id: 'departure_background',
-        src: '/art/story/scenes/bus/bus_departure.webp',
-        imageWidth: 1672,
-        imageHeight: 941,
-        frame: { x: 0, y: 0, width: 1672, height: 941 },
-        rect: { x: 0, y: 0, width: 1672, height: 941 },
-        zIndex: 0,
-      },
-    ],
-    labels: [],
-  };
+  return completeScene(storyAssets.scenes.busDeparture, 'departure_background');
 }
 
 function withActors(
@@ -260,7 +227,6 @@ function actorLayer(
 }
 
 function actorMotion(state: GameState, actorId: string): NonNullable<SceneLayer['motion']> {
-  if (state.sceneKey === 'mini_corridor_candle' && actorId === 'luchen') return 'walk';
   if (
     state.sceneKey === 'mini_dawn' &&
     actorId === 'luchen' &&

@@ -9,10 +9,10 @@ export function AuthoredScene({ composition }: { composition: SceneComposition }
       <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
         <defs>
           {composition.layers
-            .filter((layer) => layer.clipRect)
+            .filter((layer) => layer.clipRect || layer.clipPath)
             .map((layer) => (
               <clipPath id={`clip-${layer.id}`} key={`clip-${layer.id}`}>
-                <rect {...layer.clipRect} />
+                {layer.clipPath ? <path d={layer.clipPath} /> : <rect {...layer.clipRect} />}
               </clipPath>
             ))}
         </defs>
@@ -55,11 +55,19 @@ function Layer({ layer }: { layer: SceneLayer }) {
       data-layer-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
       data-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
       data-actor-id={layer.actorId || inferActorId(layer.id) || undefined}
+      style={
+        layer.motionOrigin
+          ? {
+              transformBox: 'view-box',
+              transformOrigin: `${layer.motionOrigin.x}px ${layer.motionOrigin.y}px`,
+            }
+          : undefined
+      }
     >
       <g
         data-layer={layer.id}
         transform={layer.rotation ? `rotate(${layer.rotation} ${centerX} ${centerY})` : undefined}
-        clipPath={layer.clipRect ? `url(#clip-${layer.id})` : undefined}
+        clipPath={layer.clipRect || layer.clipPath ? `url(#clip-${layer.id})` : undefined}
         style={layer.filter ? { filter: layer.filter } : undefined}
       >
         <svg

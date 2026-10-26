@@ -81,11 +81,9 @@ function getPropAsset(id: string, state: GameState, lit: boolean): string | unde
   if (id === 'beads') return props.prayerBeads;
   if (id === 'map') return props.repairDrawing;
   if (id === 'notice') return props.blueTieNotice;
-  if (id === 'offering') return props.tornPage;
   if (id === 'seal') return props.permit;
   if (id === 'history') return props.historyClosed;
   if (id === 'scripture') return props.scriptureClosed;
-  if (id === 'page') return props.tornPage;
   if (id === 'lamp') return props.oilLampUnlit;
   if (id === 'keeper_lamp' || id === 'curtain_lamp') return props.oilLampUnlit;
   if (id === 'torch') return props.flashlight;

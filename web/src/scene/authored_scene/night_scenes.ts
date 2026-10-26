@@ -2,6 +2,7 @@ import type { GameState } from '@/shared/types/game';
 import roomLayout from '../../../../assets/scenes/player_room/layout.json';
 import { composeLayout } from './compose';
 import type { AuthoredLayout, SceneComposition } from './types';
+import { seatedRoomScene } from './seated_room_scene';
 
 const roomScenes = new Set([
   'mini_room',
@@ -25,6 +26,8 @@ export function nightScene(state: GameState): SceneComposition | undefined {
   if (!roomScenes.has(scene) && !(death && !['mini_listen', 'mini_oracle'].includes(source)))
     return undefined;
   if (state.shotKey === 'four_peephole') return peepholeScene();
+  const seated = seatedRoomScene(state);
+  if (seated) return seated;
 
   const flags = state.flags;
   const lit = !death && Boolean(flags.red_candle_lit);
@@ -50,16 +53,12 @@ export function nightScene(state: GameState): SceneComposition | undefined {
     door:
       death || ['double_exit', 'double_frenzy'].includes(state.shotKey || '') ? 'open' : 'closed',
     actor: death
-      ? 'intrusion'
+      ? 'none'
       : identity
         ? `${identity}${state.shotKey === 'double_calm' ? '_calm' : revealed ? '' : '_familiar'}`
         : 'none',
   });
   for (const layer of composition.layers) {
-    if (layer.id === 'intrusion') {
-      layer.actorId = 'evil';
-      layer.motion = death ? 'run' : 'idle';
-    }
     if (
       layer.id.startsWith('familiar_') ||
       layer.id.startsWith('double_') ||

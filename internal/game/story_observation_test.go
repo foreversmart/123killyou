@@ -23,7 +23,7 @@ func TestStoryObservationsShowTheSceneWithoutSpeakingItsDescription(t *testing.T
 		{"mini_listen", "碰倒花瓶", "listen_vase", "碎瓷"},
 		{"mini_oracle", "检查猫食碟", "oracle_cat", "猫叫"},
 		{"mini_oracle", "检查鸟笼", "oracle_bird", "短鸣"},
-		{"mini_dawn_trap", "重听锣声", "dawn_gongs", "低长"},
+		{"mini_dawn_trap", "重听锣声", "dawn_gongs", "低沉悠长的钟"},
 	} {
 		t.Run(tt.scene+tt.command, func(t *testing.T) {
 			s := e.Initial("observations")
@@ -72,7 +72,7 @@ func TestRoomVoiceFallbackUsesVisibleObjectsAndActions(t *testing.T) {
 		{name: "candle", text: "再看一眼烛火", shot: "room_candle_detail", intent: "inspect", scene: "mini_room"},
 		{name: "history homophone", text: "翻翻四史", shot: "room_history", intent: "inspect", scene: "mini_room", wantClue: "游客版寺史"},
 		{name: "scripture", text: "看看桌上的经书", shot: "room_scripture", intent: "inspect", scene: "mini_room", wantClue: "大念处经末页"},
-		{name: "sleep", text: "躺下歇一会儿", shot: "wake_candle", intent: "sleep", scene: "mini_room"},
+		{name: "sleep", text: "躺下歇一会儿", shot: "room_sleep_wait", intent: "sleep", scene: "mini_room"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			s := e.Initial("room-voice-fallback")
@@ -123,7 +123,7 @@ func TestFourKnocksQuietWindowAdvancesToThreeKnocks(t *testing.T) {
 	}
 
 	intent, speak := e.Apply(&s, fourKnocksAutoAdvance)
-	if intent != "story" || speak == "" || s.SceneKey != "mini_three_knocks" || !s.Flags["four_knocks_survived"] {
+	if intent != "story" || speak != "" || s.SceneKey != "mini_three_knocks" || !s.Flags["four_knocks_survived"] || !s.Flags["three_knocks_dialogue_pending"] {
 		t.Fatalf("静默窗口结束后未进入三敲: intent=%s speak=%q scene=%s flags=%v", intent, speak, s.SceneKey, s.Flags)
 	}
 }

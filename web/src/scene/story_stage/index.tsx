@@ -2,7 +2,6 @@ import type { GameState } from '@/shared/types/game';
 import { ScenePerson } from '@/scene/scene_person';
 import { canShowScenePerson } from '@/scene/scene_person/visibility';
 import { SceneProp } from '@/scene/scene_prop';
-import { MealDiscussion } from '@/scene/meal_discussion';
 import { StoryReading } from '@/scene/story_reading';
 import { StoryObservation } from '@/scene/story_observation';
 import { SceneHeading } from '@/scene/scene_heading';
@@ -30,7 +29,10 @@ export function StoryStage({
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
   const speaker = state.dialogue.speaker;
   const actors = (state.actors || []).filter(
-    (actor) => canShowScenePerson(actor) && !(actor.id === 'victim' && state.flags.skin_seen),
+    (actor) =>
+      state.sceneKey !== 'mini_death' &&
+      canShowScenePerson(actor) &&
+      !(actor.id === 'victim' && state.flags.skin_seen),
   );
   const unseenSpeaker = state.actors?.find(
     (actor) =>
@@ -137,14 +139,6 @@ export function StoryStage({
             aria-hidden="true"
           />
         )}
-        {!authored && state.sceneKey === 'mini_listen' && state.flags.skin_seen && (
-          <img
-            className={styles.victimPartial}
-            src={storyAssets.scenes.victimPartial}
-            alt="房内床沿垂下一只手"
-            aria-hidden="true"
-          />
-        )}
         {!authored &&
           layout.props.map((prop) => (
             <SceneProp
@@ -166,21 +160,8 @@ export function StoryStage({
           {speaker} · 声音从门外传来
         </div>
       )}
-      {state.sceneKey === 'mini_refectory' && !mealEating && (
-        <MealDiscussion state={state} enabled={enabled} onAction={onAction} />
-      )}
       <StoryReading shot={state.shotKey || ''} />
       <StoryObservation state={state} />
-      {state.sceneKey === 'mini_dawn_trap' && (
-        <div className={styles.soundLines} aria-label="近处与远处两段声音">
-          <span>
-            廊外近处 <i>▂▆▃▁ ▂▆▃▁ ▂▆▃▁ ▂▆▃▁ ▂▆▃▁</i>
-          </span>
-          <span>
-            钟楼方向 <i>▁▂▄▆████▆▄▂▁</i>
-          </span>
-        </div>
-      )}
       {state.shotKey?.startsWith('double_scripture_') && (
         <div className={styles.scripture} aria-label="念诵进度">
           {['观身如身', '观受如受', '观心如心', '观法如法'].map((line, index) => (

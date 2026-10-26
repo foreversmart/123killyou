@@ -103,15 +103,13 @@ func (e *Engine) arrivalIntro(state *State) string {
 	case !state.Flags["arrival_intro_zhouyan"]:
 		miniSetFlag(state, "arrival_intro_zhouyan")
 		miniShot(state, "arrival_zhouyan")
-		return miniDialogue(state, "周砚", "先看看周围。新匾旁边露着旧字，梁架也像补过，我想把牌匾和檐梁一起看清楚。")
-	case !state.Flags["arrival_intro_luggage"]:
-		miniSetFlag(state, "arrival_intro_luggage")
-		miniShot(state, "arrival_luggage")
-		return miniDialogue(state, "许栀", "行李先放在这里，等登记完再一起带进房间，好吗？")
+		return miniDialogue(state, "周砚", "太有意思了，我想把牌匾和屋梁一起研究一下。")
 	case !state.Flags["arrival_intro_luchen"]:
 		miniSetFlag(state, "arrival_intro_luchen")
+		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_luchen")
-		return miniDialogue(state, "陆沉", "四位施主，远道而来辛苦了。请随我去登记室，把各位的名字登记好，再分配房间。")
+		state.DialogueNext = "自动登记入住"
+		return miniDialogue(state, "陆沉", "各位施主可以先参观一下，参观完，大家可以随我去登记室登记房间。")
 	default:
 		miniSetFlag(state, "arrival_intro_done")
 		miniShot(state, "arrival_inner")
@@ -134,9 +132,9 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 		miniSetFlag(state, "luggage_placed")
 		miniShot(state, "register_luggage")
 		state.DialogueNext = "自动去斋堂"
-		return "story", miniDialogue(state, "许栀", "行李先放到门边吧。残页和念珠留在桌上，红烛等晚膳后再领。"), true
+		return "story", miniDialogue(state, "许栀", "行李先放到门边吧。念珠留在桌上，红烛等晚膳后再领。"), true
 	}
-	if miniHasAny(text, "看登记簿", "看看登记", "看房牌", "看残页", "查看通行凭") {
+	if miniHasAny(text, "看登记簿", "看看登记", "看房牌", "查看通行凭") {
 		miniSetFlag(state, "registration_seen")
 		miniClue(state, "东院四间偏房分别标为听、灯、纸、门；登记簿边角有被反复划掉的旧名字")
 		return "inspect", miniDialogue(state, "周砚", "四把房牌是‘听、灯、纸、门’。这道拖痕从偏殿过来，先看就好，别用手摸。"), true
@@ -144,7 +142,7 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 	if miniHasAny(text, "去斋堂", "去斋房", "去吃饭", "晚膳", "晚饭", "吃晚饭", "自动去斋堂") {
 		e.completeMiniRegistration(state)
 		e.setMiniScene(state, "mini_refectory")
-		return "move", miniDialogue(state, "陆沉", "先去斋堂。粥、馒头、咸菜，还有本地的笋干和香菇青菜，都摆好了。想吃什么由施主自己决定。"), true
+		return "move", miniDialogue(state, "陆沉", "请各位随我去斋堂用晚膳。"), true
 	}
 	if miniHasAny(text, "谁是守夜人", "你是谁", "为什么不能出门") {
 		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘，只替这里看门、记名。夜里要出门，先叫我；没有必要，就留在房里。"), true
@@ -158,5 +156,5 @@ func (e *Engine) completeMiniRegistration(state *State) {
 	}
 	miniSetFlag(state, "checked_in")
 	miniSetFlag(state, "registration_items_given")
-	e.grantStoryItems(state, "key", "permit", "page", "beads")
+	e.grantStoryItems(state, "key", "permit", "beads")
 }
