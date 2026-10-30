@@ -6,6 +6,7 @@ import { characterHead } from '@/scene/world_character/head';
 import { accessories } from '@/scene/world_character/accessories';
 import { characterDetails } from '@/scene/world_character/details';
 import { bendingJoint, bend } from '@/scene/world_character/joints';
+import { camera as cameraModel } from '@/scene/world_prop/household';
 import { node, type Material, type WorldNode } from '@/scene/world/types';
 
 export type CharacterRig = {
@@ -17,6 +18,7 @@ export type CharacterRig = {
   elbows: WorldNode[];
   hands: WorldNode[];
   knees: WorldNode[];
+  camera?: WorldNode;
   pose: 'standing' | 'seated' | 'kneeling';
 };
 
@@ -85,6 +87,14 @@ export function characterModel(
   body.children.push(characterDetails(id, monk, cloth, shirt));
   const head = characterHead(id, stone);
   body.children.push(head);
+  let camera: WorldNode | undefined;
+  if (id === 'linlan') {
+    const b = new Builder();
+    cameraModel(b);
+    camera = b.mesh('held_camera');
+    camera.position = [0, 1.03, 0.23];
+    body.children.push(camera);
+  }
   const arms: WorldNode[] = [],
     legs: WorldNode[] = [],
     elbows: WorldNode[] = [],
@@ -179,5 +189,5 @@ export function characterModel(
       bend(l, knees[i], 1.25);
     });
   }
-  return { root, body, head, arms, legs, elbows, hands, knees, pose };
+  return { root, body, head, arms, legs, elbows, hands, knees, camera, pose };
 }

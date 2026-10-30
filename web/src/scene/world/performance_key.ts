@@ -17,7 +17,7 @@ export function performanceKey(state: GameState, mode: WorldMode) {
       return [
         actor.id,
         actor.portrait,
-        action === 'talk' ? 'idle' : action,
+        action,
         state.shotKey === 'refectory_eating' && Boolean(state.flags['meal_' + actor.id + '_ate']),
       ];
     }),

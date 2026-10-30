@@ -7,6 +7,7 @@ import { identityOf } from '@/scene/world_character/identity';
 import { characterModel } from '@/scene/world_character/model';
 import { animateCharacter } from '@/scene/world_character/animation';
 import { ease } from '@/scene/world_character/joints';
+import { actorFacing, actorMovement, movementPosition } from '@/scene/world/movement';
 
 export function addCast(world: World, state: GameState, place: Place, mode: WorldMode) {
   visibleActors(state, mode).forEach((actor, index) => {
@@ -15,12 +16,11 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     const walking =
       (mode === 'travel' || mode === 'hall') &&
       !(state.sceneKey === 'mini_ending' && actor.id === 'luchen');
-    const latching =
-      actor.id === 'skin_double' && state.shotKey === 'double_exit' && !state.flags.double_calm;
     const seated =
-      (place === 'register' && actor.id === 'luchen') ||
-      (place === 'refectory' && ['linlan', 'zhouyan', 'xuzhi'].includes(actor.id)) ||
-      (place === 'oracle' && !state.flags.cup_jiao_rescue);
+      !walking &&
+      ((place === 'register' && actor.id === 'luchen') ||
+        (place === 'refectory' && ['linlan', 'zhouyan', 'xuzhi'].includes(actor.id)) ||
+        (place === 'oracle' && !state.flags.cup_jiao_rescue));
     const rig = characterModel(
       identity,
       actor.id === 'skin_double' && state.flags.double_calm
@@ -59,14 +59,12 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.position = [-2.8, 0, 0.25];
       rig.root.rotation[1] = 0.1;
     }
-    const duration = latching
-      ? 1.6
-      : mode === 'hall'
-        ? 7
-        : state.sceneKey === 'mini_corridor_candle'
-          ? 4
-          : 3;
-    const { held, heldBowl } = animateCharacter(rig, actor, state, walking, duration);
+    const movement = actorMovement(actor, state, mode, rig.root.position);
+    const { held, heldBowl } = animateCharacter(rig, actor, state, {
+      walkDuration: movement?.duration,
+      traveling: walking,
+      speaker: () => world.speaker || '',
+    });
     if (actor.id !== 'victim') {
       world.lighting.contacts ||= [];
       for (const knee of rig.knees)
@@ -79,26 +77,32 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
               : { node: knee.children[0], offset: [0, -0.045, 0.015] },
         });
     }
-    if (walking || latching) {
+    const facing = actorFacing(
+      actor,
+      state,
+      rig.root.position,
+      actor.id === 'skin_double' ? Math.PI : rig.root.rotation[1],
+    );
+    if (movement) {
       const perform = rig.root.animate!;
-      const origin = [...rig.root.position] as V3;
+      const heading = Math.atan2(
+        movement.to[0] - movement.from[0],
+        movement.to[2] - movement.from[2],
+      );
+      const turn = Math.atan2(Math.sin(facing - heading), Math.cos(facing - heading));
+      rig.root.position = [...movement.from];
       rig.root.animate = (t, dt) => {
         perform(t, dt);
-        if (latching) {
-          const progress = ease(t, duration);
-          rig.root.position = [
-            origin[0] + (2.55 - origin[0]) * progress,
-            0,
-            origin[2] + (-3.2 - origin[2]) * progress,
-          ];
-          rig.root.rotation[1] = Math.PI - 0.4 * (1 - progress);
-          return;
-        }
-        const distance = Math.min(t, duration) * 0.43 * ease(t, 0.35);
-        rig.root.position =
-          mode === 'hall'
-            ? [origin[0] + distance, origin[1], origin[2]]
-            : [origin[0], origin[1], origin[2] - distance];
+        rig.root.position = movementPosition(movement, t);
+        rig.root.rotation[1] = heading + turn * ease(t - movement.duration + 0.45, 0.45);
+      };
+    } else if (facing !== rig.root.rotation[1]) {
+      const perform = rig.root.animate!;
+      const origin = rig.root.rotation[1];
+      const turn = Math.atan2(Math.sin(facing - origin), Math.cos(facing - origin));
+      rig.root.animate = (t, dt) => {
+        perform(t, dt);
+        rig.root.rotation[1] = origin + turn * ease(t, 1.1);
       };
     }
     if (held) {

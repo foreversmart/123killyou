@@ -1,11 +1,9 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
-import { camera } from '@/scene/world_prop/household';
 import type { Identity } from '@/scene/world_character/identity';
 
 export function accessories(id: Identity) {
   const b = new Builder();
   if (id === 'linlan') {
-    camera(b, [0, 1.03, 0.19]);
     for (const s of [-1, 1]) b.rod([s * 0.09, 1.37, 0.08], [s * 0.07, 1.06, 0.18], 0.009, M.black);
   } else {
     const fabric = { color: id === 'xuzhi' ? 0xc5bda2 : 0x514c3e, rough: 0.95, pattern: 2 };

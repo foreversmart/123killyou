@@ -9,6 +9,7 @@ import styles from './style.module.css';
 
 export function Room({
   state,
+  speaker,
   phase,
   children,
   onAction,
@@ -17,6 +18,7 @@ export function Room({
   onTravelActive,
 }: {
   state: GameState;
+  speaker?: string;
   phase: RoomPhase;
   children: ReactNode;
   onAction: (command: string) => Promise<void>;
@@ -32,6 +34,7 @@ export function Room({
     >
       <Scene
         state={state}
+        speaker={speaker}
         onAction={onAction}
         interactive={interactive}
         onAvailability={onAvailability}

@@ -39,6 +39,7 @@ export type Lighting = {
   contacts?: { position: V3; radius: number; anchor: Anchor }[];
 };
 export type World = {
+  speaker?: string;
   root: WorldNode;
   hotspots: Hotspot[];
   camera: CameraShot;

@@ -16,6 +16,7 @@ export function performanceFor(actor: SceneActor, state: GameState, walking = fa
     return state.flags.vase_broken ? 'startled' : 'lean';
   if (actor.id === 'luchen') {
     if (shot === 'register_desk') return 'write';
+    if (shot === 'arrival_luchen') return 'welcome';
     if (shot === 'refectory_glance') return 'glance';
     if (state.sceneKey === 'mini_corridor_candle')
       return shot === 'corridor_warning' ? 'hush' : 'offer';
@@ -29,13 +30,15 @@ export function performanceFor(actor: SceneActor, state: GameState, walking = fa
     if (actor.id === 'zhouyan' && ['register_drag_mark', 'dawn_axis'].includes(shot))
       return 'inspect';
     if (actor.id === 'zhouyan' && shot === 'arrival_zhouyan') return 'look_up';
-    if (actor.id === 'linlan' && ['arrival_weather', 'dawn_courtyard'].includes(shot))
-      return 'camera';
+    if (actor.id === 'xuzhi' && shot === 'arrival_gate_beauty') return 'admire';
+    if (actor.id === 'linlan') {
+      if (shot === 'arrival_unload') return 'stretch';
+      if (shot === 'arrival_weather') return 'camera';
+      if (shot === 'dawn_courtyard') return 'review_camera';
+    }
     if (actor.id === 'xuzhi' && shot === 'dawn_gate') return 'ribbon';
   }
-  return state.dialogue.speaker.startsWith(actor.name) && !state.dialogue.speaker.includes('心声')
-    ? 'talk'
-    : 'idle';
+  return 'idle';
 }
 
 export type Performance = ReturnType<typeof performanceFor>;

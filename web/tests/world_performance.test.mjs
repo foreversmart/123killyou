@@ -88,9 +88,11 @@ test('meal choices retain one bowl, with hands lifting and lowering without anim
   animateCharacter(rig, actor('zhouyan'), game);
   const low = frame(rig.root, 0),
     high = frame(rig.root, 2),
-    settled = frame(rig.root, 5);
+    settled = frame(rig.root, 5),
+    nextBite = frame(rig.root, 6.8);
   assert.ok(high.get(rig.hands[0])[13] > low.get(rig.hands[0])[13] + 0.1);
   assert.ok(settled.get(rig.hands[0])[13] < high.get(rig.hands[0])[13] - 0.1);
+  assert.ok(nextBite.get(rig.hands[0])[13] > settled.get(rig.hands[0])[13] + 0.1);
   game.flags.refectory_meal_finished = true;
   assert.notEqual(performanceFor(actor('zhouyan'), game), 'eat');
 });

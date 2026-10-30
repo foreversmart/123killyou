@@ -8,16 +8,18 @@ import { performanceFor } from '@/scene/world_character/performance';
 import { dayAction, armPose, mealLift } from '@/scene/world_character/day_actions';
 import { nightAction } from '@/scene/world_character/night_actions';
 import { bend, ease } from '@/scene/world_character/joints';
+import { speechMotion } from '@/scene/world_character/speech';
 
 export function animateCharacter(
   rig: CharacterRig,
   actor: SceneActor,
   state: GameState,
-  walking = false,
-  duration = 3,
+  options: { walkDuration?: number; traveling?: boolean; speaker?: () => string } = {},
 ) {
   const { root, body, head, arms, legs, elbows, hands, knees } = rig;
-  const action = performanceFor(actor, state, walking);
+  const action = performanceFor(actor, state, options.traveling);
+  const duration = options.walkDuration || 0;
+  const speak = speechMotion(rig, actor, options.speaker || (() => ''));
   const seed = [...actor.id].reduce((n, letter) => n + letter.charCodeAt(0), 0) * 0.13;
   const bodyY = body.position[1],
     bodyPitch = body.rotation[0];
@@ -26,6 +28,7 @@ export function animateCharacter(
   let held: WorldNode | undefined;
   let heldBowl: WorldNode | undefined;
   let utensilsGrip: WorldNode | undefined;
+  let heldBread: WorldNode | undefined;
   if (actor.id === 'skin_double' && state.flags.double_refused_candle) {
     const seam = new Builder();
     for (let i = 0; i < 7; i++)
@@ -55,6 +58,11 @@ export function animateCharacter(
     } else {
       for (const x of [-0.008, 0.008])
         utensils.rod([x, -0.04, -0.03], [x, 0.03, 0.2], 0.003, M.wood, 0.002);
+      utensils.ball([0.012, 0.008, 0.025], [0, 0.03, 0.19], { color: 0x45633a, rough: 0.8 });
+      heldBread = new Builder()
+        .ball([0.055, 0.04, 0.05], [0, 0.045, 0.03], { color: 0xeadcbc, rough: 0.95 })
+        .mesh('held_bread');
+      hands[1].children.push(heldBread);
     }
     utensilsGrip = node('utensil_grip');
     utensilsGrip.children.push(utensils.mesh('meal_utensils'));
@@ -62,14 +70,17 @@ export function animateCharacter(
   }
   if (
     action === 'rescue' ||
-    (actor.id === 'luchen' && state.sceneKey === 'mini_corridor_candle' && !walking)
+    (actor.id === 'luchen' && state.sceneKey === 'mini_corridor_candle' && !options.traveling)
   ) {
     held = candle(action === 'rescue');
     held.scale = [0.75, 0.75, 0.75];
     held.position = [0, 0.02, 0.03];
     hands[1].children.push(held);
   }
-  root.animate = (t) => {
+  root.animate = (t, delta) => {
+    const moving = duration > 0 && t < duration;
+    const currentAction = moving ? 'walk' : action === 'walk' ? 'idle' : action;
+    const actionTime = Math.max(0, t - duration);
     body.scale[1] = 1 + (still || action === 'write' ? 0 : Math.sin(t * 1.6 + seed) * 0.002);
     body.position[1] = bodyY;
     body.rotation = [bodyPitch, 0, 0];
@@ -77,38 +88,37 @@ export function animateCharacter(
     hands.forEach((hand) => {
       hand.rotation = [0, 0, 0];
     });
-    arms.forEach((_, i) => armPose(rig, i, -0.06, -0.09, (i ? -1 : 1) * 0.035));
+    arms.forEach((arm, i) => {
+      arm.rotation[1] = 0;
+      armPose(rig, i, -0.06, -0.09, (i ? -1 : 1) * 0.035);
+    });
     if (still) return;
-    if (action === 'talk') {
-      const gesture = Math.sin(Math.min(t, 4) * 1.3) ** 2 * ease(t, 0.5);
-      armPose(rig, 0, -0.13, -0.15 - gesture * 0.55, 0.06 + gesture * 0.06);
-      head.rotation[0] = Math.sin(t * 2.2) * 0.02;
-    }
-    if (walking || action === 'latch') {
-      const stride = t * 5.2 + seed;
-      const moving = ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5));
-      body.position[1] += Math.abs(Math.sin(stride)) * 0.015 * moving;
-      body.rotation[1] = Math.sin(stride) * 0.025 * moving;
+    if (duration > 0) {
+      const stride = ease(t, duration) * duration * 5.2 + seed;
+      const weight = ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5));
+      body.position[1] += Math.abs(Math.sin(stride)) * 0.025 * weight;
+      body.rotation[1] = Math.sin(stride) * 0.045 * weight;
       legs.forEach((leg, i) => {
         const cycle = stride + i * Math.PI;
-        leg.rotation[0] = Math.sin(cycle) * 0.3 * moving;
-        bend(leg, knees[i], Math.max(0, Math.cos(cycle)) * 0.48 * moving);
-        armPose(rig, i, -Math.sin(cycle) * 0.24 * moving, -0.15);
+        leg.rotation[0] = Math.sin(cycle) * 0.36 * weight;
+        bend(leg, knees[i], Math.max(0, Math.cos(cycle)) * 0.55 * weight);
+        armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
       });
     }
-    dayAction(rig, action, t, seed);
-    if (action !== 'latch' || t >= duration)
-      nightAction(rig, action, action === 'latch' ? t - duration : t, verse);
+    dayAction(rig, currentAction, actionTime, seed);
+    nightAction(rig, currentAction, actionTime, verse);
+    speak(currentAction, delta);
     const upright = -(body.rotation[0] + arms[1].rotation[0] + elbows[1].rotation[0]);
     if (held) held.rotation = [upright, 0, -arms[1].rotation[2]];
     if (heldBowl) heldBowl.rotation = [upright, 0, -arms[1].rotation[2]];
+    if (heldBread) heldBread.rotation = [upright, 0, -arms[1].rotation[2]];
     if (utensilsGrip) {
       utensilsGrip.rotation = [
         -(body.rotation[0] + arms[0].rotation[0] + elbows[0].rotation[0]),
         0,
         -arms[0].rotation[2],
       ];
-      const lift = mealLift(t, seed);
+      const lift = mealLift(actionTime, seed);
       utensilsGrip.children[0].rotation = [0.6 * (1 - lift), 2.5 * lift, 0];
     }
   };

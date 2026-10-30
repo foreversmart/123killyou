@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import { createWorld } from '@/scene/world/create_world';
 import { performanceKey } from '@/scene/world/performance_key';
+import { visualKey } from '@/scene/world/visual_key';
 import type { WorldMode, V3 } from '@/scene/world/types';
 import { TempleRenderer } from '@/scene/renderer/engine';
 import { project } from '@/scene/renderer/frame';
@@ -9,6 +10,7 @@ import styles from '@/scene/world_view/style.module.css';
 
 type Props = {
   state: GameState;
+  speaker?: string;
   mode?: WorldMode;
   interactive?: boolean;
   onAction?: (command: string) => Promise<void>;
@@ -17,6 +19,7 @@ type Props = {
 
 export function WorldView({
   state,
+  speaker = '',
   mode = 'story',
   interactive = false,
   onAction,
@@ -25,10 +28,11 @@ export function WorldView({
   const canvas = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
   const engine = useRef<TempleRenderer | null>(null);
-  const world = useMemo(() => createWorld({ state, mode }), [state, mode]);
+  const sceneKey = visualKey(state, mode);
+  const world = useMemo(() => createWorld({ state, mode }), [sceneKey]);
   const actionKey = performanceKey(state, mode);
-  const latest = useRef({ world, actionKey, paused: state.paused, onAvailability });
-  latest.current = { world, actionKey, paused: state.paused, onAvailability };
+  const latest = useRef({ world, actionKey, speaker, paused: state.paused, onAvailability });
+  latest.current = { world, actionKey, speaker, paused: state.paused, onAvailability };
   const aim = useRef<V3>([0, 0, 0]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState('');
@@ -75,11 +79,14 @@ export function WorldView({
             activeActionKey = latest.current.actionKey;
           }
           if (!latest.current.paused) clock += delta;
+          activeWorld.speaker = latest.current.speaker;
           try {
             const matrix = renderer.render(
               activeWorld,
-              reduced ? 10 : clock,
-              delta,
+              // Essential story actions still play with reduced motion; only
+              // decorative pointer parallax is suppressed below.
+              clock,
+              latest.current.paused ? 0 : delta,
               reduced ? [0, 0, 0] : aim.current,
             );
             for (const button of hotspots.current?.querySelectorAll<HTMLButtonElement>('button') ||

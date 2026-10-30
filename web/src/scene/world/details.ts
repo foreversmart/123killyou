@@ -21,6 +21,10 @@ const focusProps: Record<string, string> = {
 };
 
 export function applyDetailCamera(world: World, state: GameState) {
+  if (state.sceneKey === 'mini_register' && state.shotKey === 'register_desk') {
+    world.camera = { eye: [0.45, 1.65, 2.35], target: [-0.15, 1.05, -0.35], fov: 49 };
+    return;
+  }
   if (state.shotKey === 'oracle_stone' || state.shotKey === 'oracle_rescue') {
     world.camera = { eye: [1.9, 1.65, 3.7], target: [0.65, 0.9, -0.1], fov: 55 };
     return;

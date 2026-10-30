@@ -35,8 +35,14 @@ export function reachHand(rig: CharacterRig, side: number, y: number, z: number)
 }
 
 export function mealLift(t: number, seed: number) {
-  const time = Math.max(0, t - (seed % 0.6));
+  const time = Math.max(0, t - (seed % 0.6)) % 4.8;
   return ease(time - 0.6, 0.9) * (1 - ease(time - 2.7, 1.1));
+}
+
+function reachAcross(rig: CharacterRig, side: number, x: number, y: number, z: number) {
+  const offset = x - rig.arms[side].position[0];
+  reachHand(rig, side, y, Math.hypot(offset, z));
+  rig.arms[side].rotation[1] = Math.atan2(offset, z);
 }
 
 export function dayAction(rig: CharacterRig, action: Performance, t: number, seed: number) {
@@ -46,13 +52,13 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     // The supporting hand stays fixed; the brush hand makes short strokes.
     const seat = body.position[1] - 0.46;
     reachHand(rig, 1, -0.07 - seat, 0.38);
-    reachHand(rig, 0, 0.15 - seat + Math.sin(t * 4.1) * 0.002, 0.49 + Math.sin(t * 3.1) * 0.006);
+    reachHand(rig, 0, 0.15 - seat + Math.sin(t * 4.1) * 0.002, 0.49 + Math.sin(t * 3.1) * 0.025);
     rig.hands[0].rotation[0] = -(rig.arms[0].rotation[0] + rig.elbows[0].rotation[0]);
     head.rotation[0] = 0.25;
     body.rotation[0] = 0;
   }
   if (action === 'eat') {
-    // One complete meal beat, with staggered starts so companions do not move in unison.
+    // Repeat until the backend ends the meal, with staggered bites.
     const time = Math.max(0, t - (seed % 0.6));
     const lift = mealLift(t, seed);
     reachHand(rig, 0, 0.02 + lift * 0.14, 0.43 - lift * 0.16);
@@ -82,11 +88,40 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     head.rotation[0] = 0.35 * arrive;
     armPose(rig, 0, -0.3, -0.7, 0.08);
   }
-  if (action === 'look_up') head.rotation[0] = -0.25 * arrive;
-  if (action === 'camera') {
-    armPose(rig, 0, -0.3, -1.08, 0.2);
-    armPose(rig, 1, -0.3, -1.08, -0.2);
-    head.rotation[0] = 0.26 * arrive;
+  if (action === 'admire' || action === 'look_up') {
+    head.rotation[0] = -0.3 * arrive;
+    head.rotation[1] = (0.28 + Math.sin(t * 0.65) * 0.24) * arrive;
+    body.rotation[1] = 0.12 * arrive;
+    if (action === 'look_up') armPose(rig, 0, -0.4 * arrive, -0.9 * arrive, 0.14 * arrive);
+  }
+  if (action === 'stretch') {
+    const lean = Math.sin(ease(t, 2.6) * Math.PI);
+    body.rotation[0] = 0.35 * lean;
+    head.rotation[0] = 0.25 * lean;
+    armPose(rig, 0, 0.1 * lean, -0.1, 0.08);
+  }
+  if (action === 'welcome') {
+    const invite = Math.sin(ease(t, 3.4) * Math.PI);
+    armPose(rig, 0, -0.4 * invite, -0.65 * invite, 0.3 * invite);
+    head.rotation[0] = 0.1 * invite;
+  }
+  if (action === 'camera' || action === 'review_camera') {
+    const lift = ease(t, 1.2);
+    const height = action === 'camera' ? 0.18 : -0.12;
+    for (const side of [0, 1]) {
+      reachAcross(
+        rig,
+        side,
+        (side ? 1 : -1) * (0.215 - 0.13 * lift),
+        -0.27 + (height + 0.27) * lift,
+        0.22,
+      );
+    }
+    if (rig.camera) {
+      rig.camera.position = [0, 0.21 + (height + 0.27) * lift, 0.23];
+      rig.camera.rotation[0] = action === 'camera' ? -0.1 * lift : 0.35 * lift;
+    }
+    head.rotation[0] = (action === 'camera' ? -0.08 : 0.26) * lift;
   }
   if (action === 'ribbon') {
     armPose(rig, 1, -0.3, -2.1 * arrive, -0.32);

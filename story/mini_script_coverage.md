@@ -21,7 +21,8 @@
 - scene/world/scene_state.ts 将原 sceneKey / shotKey 映射到山门、登记室、斋堂、回廊、门房、半掩偏房、偏殿、大殿与山路。placement.ts 保存米制空间中的机位、人物和道具锚点，热点由投影矩阵定位。
 - scene/world_character 保持可动关节，使用 Rocketbox 解剖头模、游客衣褶与手部网格，僧人使用无帽头模、解剖手部和连续僧袍；肘膝采用连续混合变形，掌心锚点带动笔、餐具和烛台，坐姿不缩腿；对白栏的所有表情头像及云端音色保持原资源。actors.visible、帘后镜头、同行身份和换皮旗标控制实体显示。
 - scene/world_environment/terrain.ts 构建连续地形，vegetation.ts/meadow.ts 放置 Poly Haven 近远树、苔石、蕨类和随风草地；doors.ts 建立门板、门轴、铜环和门闩；double_exit 保持关闭，double_frenzy 才抽闩并开门；statue.ts 挂载 Minneapolis Institute of Art 的 CC0 观音扫描和本作木石供座，保留原雕塑的面孔、手势与旧彩绘。roof_tile.ts 构建带厚度的阴阳瓦。昼夜全景跟随摄像机方向，假报晓保持夜景；来源见 assets/environment/README.md。
-- world_character/performance.ts 按人物与分镜选择动作；day_actions.ts 处理书写、用膳、递烛、噤声和观察，night_actions.ts 处理伏身、延时回头、摸门闩、逐句减弱的抓挠和安抚伏地。cast.ts 负责行走位移与到站停步，performance_key.ts 避免保存、暂停或重听确认重播动作；renderer 更新掌心道具、灯光与脚底接触阴影。
+- world_character/performance.ts 按人物与分镜选择动作；details.ts 在登记书写时靠近桌面；day_actions.ts 处理笔尖落纸书写、错峰循环用膳、观景抬头、举相机与晨间查看相机、迎客、递烛、噤声和观察。相机独立于胸前背带并随双手抬起，拒绝或暂缓肉粥的同伴持馒头与素菜筷，肉粥选择者只保留一只持碗。night_actions.ts 处理伏身、延时回头、摸门闩、逐句减弱的抓挠和安抚伏地。world/movement.ts 与 cast.ts 将下车、看牌匾、迎客及转场的位移与步态同步，到站再进入剧情动作，观景人物朝向实际目标。
+- app/game 将语音播放状态与当前说话者传给 WorldView；world_character/speech.ts 用独立计时控制下颌开合、持续点头和手势，播完或打断后收手，系统、心声、门外声源与隐藏人物不触发。剧情持物动作优先。world/visual_key.ts 避免同镜头接话、保存、背包与暂停重建人物及 GPU 网格，performance_key.ts 保留动作计时；暂停时场景时间与说话时间同时冻结。减少动态效果只关闭鼠标视差，仍播放必要剧情动作。renderer 更新掌心道具、灯光与脚底接触阴影。
 - scene/world_prop 构建烛台、书册、钥匙、念珠、杯筊、碗勺、素菜、花瓶和鸟笼。烛光、各人空满碗、碎瓷、杯面和神公石化均读取已保存的后端旗标，不自行生成判定。
 - scene/story_transition 沿用 3 / 7 / 4 秒等既定过渡时长，替换为回廊推进、大殿横移与人物步态；过渡期间不开放新的动作。scene/opening_journey 使用 3D 大巴与山路；原片头视频保留。
 - 文字证据、原经文和死亡重试入口保留。实体物件的调查由 3D 摄像机靠近完成；书页文字和碗签另保留可阅读视图。

@@ -7,6 +7,8 @@ export function characterHead(id: Identity, stone = false) {
   head.position[1] = ['luchen', 'huipu', 'shangong'].includes(id) ? 1.52 : 1.57;
   const face = node('anatomical_face');
   face.asset = (id === 'huipu' ? 'luchen' : id) + '_head';
+  // Reuse the continuous joint deformation for a small lower-jaw movement.
+  face.bend = { pivot: [0, -0.045, 0.035], angle: 0 };
   if (stone) face.surface = 'stone';
   // Distinct cranial and jaw proportions keep the cast readable in profile.
   face.scale =

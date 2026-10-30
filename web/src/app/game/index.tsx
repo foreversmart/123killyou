@@ -36,6 +36,8 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
     finishOpeningVideo,
     begin,
   } = game;
+  const speaker =
+    voice.status === 'speaking' ? voice.caption?.speaker || state?.dialogue.speaker : '';
   if (!state) return <LoadingScreen error={error} />;
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
@@ -49,6 +51,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
         />
         <Room
           state={state}
+          speaker={speaker}
           phase={roomPhase}
           onAction={voice.submit}
           interactive={connected && !openingFlow && game.sceneReady}
@@ -82,6 +85,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           <OpeningJourney
             phase={openingPhase}
             state={state}
+            speaker={speaker}
             onAvailability={game.setJourneyReady}
           />
         )}
