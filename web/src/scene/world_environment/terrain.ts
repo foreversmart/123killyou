@@ -36,11 +36,11 @@ export function terrainHeight(x: number, z: number, road = false) {
 export function landscape(b: Builder, road = false) {
   const g: Shape = { positions: [], normals: [], uv: [], indices: [] };
   const columns = 112,
-    rows = 144;
+    rows = road ? 184 : 144;
   for (let j = 0; j <= rows; j++)
     for (let i = 0; i <= columns; i++) {
       const x = -85 + (i / columns) * 170,
-        z = 30 - (j / rows) * 180;
+        z = road ? 80 - (j / rows) * 230 : 30 - (j / rows) * 180;
       const dx = terrainHeight(x - 0.15, z, road) - terrainHeight(x + 0.15, z, road);
       const dz = terrainHeight(x, z - 0.15, road) - terrainHeight(x, z + 0.15, road);
       const length = Math.hypot(dx, 0.3, dz);

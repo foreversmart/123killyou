@@ -4,7 +4,8 @@ import { cameras } from '@/scene/world/placement';
 import { sceneLighting } from '@/scene/world/lighting';
 import { templeGate, corridor } from '@/scene/world_environment/exterior';
 import { interior } from '@/scene/world_environment/interiors';
-import { bus, road } from '@/scene/world_environment/road';
+import { road } from '@/scene/world_environment/road';
+import { coach } from '@/scene/world_vehicle/coach';
 import { addProps } from '@/scene/world/props';
 import { addCast } from '@/scene/world/cast';
 import { applyDetailCamera } from '@/scene/world/details';
@@ -34,13 +35,13 @@ export function createWorld({ state, mode = 'story' }: WorldInput): World {
       : place === 'corridor'
         ? corridor(day)
         : place === 'road'
-          ? road(state.sceneKey === 'mini_ending')
+          ? road(state.sceneKey === 'mini_ending', world.camera)
           : interior(place, doorState, day);
   world.root.children.push(environment);
   if (place === 'gate') {
-    const vehicle = bus();
-    vehicle.position = [-6.8, 0, 3];
-    vehicle.rotation[1] = -0.2;
+    const vehicle = coach().root;
+    vehicle.position = [-6.4, 0, 3.5];
+    vehicle.rotation[1] = Math.PI;
     world.root.children.push(vehicle);
   }
   const death = state.sceneKey === 'mini_death';
@@ -64,6 +65,6 @@ export function createWorld({ state, mode = 'story' }: WorldInput): World {
       world.camera.eye = [-1.5 + Math.min(t, 7) * 0.3, 1.68, 6.5];
     };
   if (mode === 'alighting')
-    world.camera = { eye: [-3.7, 1.68, 6.4], target: [0, 1.6, -0.5], fov: 56 };
+    world.camera = { eye: [-1.1, 2.4, 11.8], target: [-3.2, 1.55, 1.2], fov: 56 };
   return world;
 }

@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { OPENING_ROAD_DURATION_MS, OPENING_ALIGHTING_DURATION_MS } from '@/shared/lib/story_timing';
 
 type OpeningPhase = 'reel' | 'ready' | 'road' | 'alighting' | 'done';
-
-// Keep the two opening shots long enough for the route and the stopped bus to
-// register before the story dialogue starts. The journey gets an extra second
-// and the gate shot an extra second compared with the original cut.
-export const OPENING_ROAD_DURATION_MS = 3000;
-export const OPENING_ALIGHTING_DURATION_MS = 4000;
 
 export function useOpeningFlow() {
   const [openingPhase, setOpeningPhase] = useState<OpeningPhase>('reel');
