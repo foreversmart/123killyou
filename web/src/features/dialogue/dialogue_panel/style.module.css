@@ -114,3 +114,46 @@
   color: #d3e0d4;
   font-style: italic;
 }
+
+@media (max-width: 600px) {
+  .dialogue-panel {
+    grid-column: 1;
+    grid-row: 3;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px;
+    min-height: 110px;
+    align-self: stretch;
+  }
+  .dialogue-panel--narrator,
+  .quiet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .quiet > :last-child,
+  .dialogue-panel > :last-child {
+    grid-column: 1 / -1;
+  }
+  .speaker-portrait {
+    width: 42px;
+    max-width: none;
+    margin: 0;
+    padding: 2px;
+  }
+  .dialogue-content {
+    padding: 0 4px;
+  }
+  .dialogue-text {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  .speaker-name {
+    font-size: 12px;
+  }
+  .speaker-name small {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+  .speaker-name .heard-text {
+    font-size: 10px;
+  }
+}

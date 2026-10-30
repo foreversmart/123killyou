@@ -18,14 +18,18 @@
   "dependencies": {
     "pixi.js": "8.22.0",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "wgpu-matrix": "^3.4.2"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@webgpu/types": "^0.1.74",
+    "meshoptimizer": "^1.0.1",
     "prettier": "3.9.10",
     "sharp": "0.35.5",
+    "three": "^0.180.0",
     "typescript": "7.0.2",
     "vite": "8.3.5"
   }

@@ -99,3 +99,34 @@
     box-shadow: 0 0 17px #e3a64b77;
   }
 }
+
+@media (max-width: 600px) {
+  .voice-dock {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 6px 0 0;
+  }
+  .voice-wave-row {
+    width: 65px;
+    gap: 5px;
+  }
+  .voice-light {
+    width: 5px;
+    height: 5px;
+  }
+  .voice-state {
+    font-size: 11px;
+  }
+  .voice-dock small {
+    font-size: 10px;
+  }
+  .start-voice {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  .talk-key {
+    padding: 1px 4px;
+  }
+}

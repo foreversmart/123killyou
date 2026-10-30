@@ -36,15 +36,17 @@ export function BrowserRequirements({ support }: { support: HtmlCanvasSupport })
           <p className={styles['eyebrow']}>进入之前 · 浏览器检查</p>
           <h1 id="requirements-title">暂时无法进入游戏</h1>
           <p className={styles['intro']}>
-            本作需要 HTML-in-Canvas
-            来呈现文字与画面的特效。启动时会实际绘制并核对像素，检测通过后才能进入。
+            本作使用 WebGPU 呈现 3D 场景，并使用 HTML-in-Canvas
+            呈现文字特效。启动时会实际绘制并核对两种画面的像素，检测通过后才能进入。
           </p>
           {support.error && (
             <p className={styles['failure-reason']} role="alert">
               {support.error}
             </p>
           )}
-          <p className={styles['browser-tip']}>请参考官方试用说明检查以下开关，并重启浏览器：</p>
+          <p className={styles['browser-tip']}>
+            请开启浏览器设置中的图形加速，再参考官方试用说明检查以下开关，并重启浏览器：
+          </p>
           <ol className={styles['steps']}>
             {flags.map((flag) => (
               <li key={flag.url}>
@@ -109,7 +111,7 @@ export function BrowserRequirements({ support }: { support: HtmlCanvasSupport })
             )}
           </details>
         </div>
-        <footer className={styles['card-footer']}>固定视角 · 全程语音 · 红烛无声</footer>
+        <footer className={styles['card-footer']}>第一视角 3D · 全程语音 · 红烛无声</footer>
       </section>
     </main>
   );

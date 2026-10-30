@@ -5,7 +5,14 @@ import { hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
 async function fixture() {
   const runtime = hookRuntime();
   const hook = await loadHook('../../src/app/game/useOpeningFlow.ts', 'useOpeningFlow', runtime);
-  return { runtime, render: () => runtime.render(hook) };
+  return {
+    runtime,
+    render: () => {
+      const flow = runtime.render(hook);
+      flow.setJourneyReady(true);
+      return runtime.render(hook);
+    },
+  };
 }
 
 test('片头结束停在标题等待开始，随后山路3秒、门口停留4秒，最后交给正片', async () => {

@@ -65,3 +65,13 @@
 .caption-line:last-child {
   transform: rotate(180deg);
 }
+
+@media (max-width: 600px) {
+  .room {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .scene-caption {
+    display: none;
+  }
+}

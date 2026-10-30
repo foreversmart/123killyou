@@ -2,7 +2,20 @@
   "purpose": "以 mini_script.md 为准的完整流程美术制作清单",
   "storySource": "story/mini_script.md",
   "status": "images_complete",
-  "runtimeIntegration": "integrated",
+  "runtimeIntegration": {
+    "renderer": "native_webgpu_3d",
+    "entry": "web/src/scene/world_view/index.tsx",
+    "sceneModels": "web/src/scene/world_environment",
+    "characterModels": "web/src/scene/world_character",
+    "propModels": "web/src/scene/world_prop",
+    "portraits": "对白沿用原头像；3D 使用 Rocketbox 头模与皮肤贴图",
+    "plates": "完整场景图与站姿图保留为美术依据，运行时以网格与灯光呈现场景",
+    "guide": "docs/3d_scene.md",
+    "assetLibrary": "web/public/art/world/library.json",
+    "sources": "assets/environment/README.md",
+    "statue": "MIA CC0 观音扫描，来源见 assets/environment/guanyin_source.json",
+    "articulation": "完整肢体的肘膝连续变形、髋部伏身、掌心道具绑定、步行实际位移与脚底接触阴影"
+  },
   "spatialPlan": {
     "eastCourtyard": {
       "nearLeft": "听：林岚",
@@ -23,10 +36,7 @@
       "name": "回廊偏房·两人偷听",
       "path": "assets/scenes/east_courtyard/companion_walk_listen.png",
       "kind": "illustration",
-      "beats": [
-        "07",
-        "08"
-      ],
+      "beats": ["07", "08"],
       "references": [],
       "transparent": false,
       "prompt": "这个沿回廊走向半掩的偏房，这个重新生成，不要用我给的图里的奇怪的合成的人物，直接整张图来表示两个人在门口偷听偷看，夜色保持和前面生图一致",
@@ -37,13 +47,8 @@
       "name": "林岚·警觉",
       "path": "assets/characters/lin_lan/portrait_alert.png",
       "kind": "portrait",
-      "beats": [
-        "04",
-        "08"
-      ],
-      "references": [
-        "assets/characters/lin_lan/portrait_neutral.png"
-      ],
+      "beats": ["04", "08"],
+      "references": ["assets/characters/lin_lan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nHer playful half-smile is gone. Eyebrows draw slightly inward, eyelids open a little and gaze concentrates as she listens to an unexpected sound. Mouth closed with lightly pressed lips. Alert, attentive and trying to stay composed; not angry, evil, panicked or blank.",
       "status": "verified"
@@ -53,13 +58,8 @@
       "name": "林岚·害怕",
       "path": "assets/characters/lin_lan/portrait_afraid.png",
       "kind": "portrait",
-      "beats": [
-        "08",
-        "10"
-      ],
-      "references": [
-        "assets/characters/lin_lan/portrait_neutral.png"
-      ],
+      "beats": ["08", "10"],
+      "references": ["assets/characters/lin_lan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nFear interrupts her attempt to stay casual: inner brows subtly raised, eyes noticeably wider but anatomically natural, lips part slightly and lower lip tenses. Keep her narrow oval face and slight head tilt exactly. Contained fear, no screaming, giant mouth, sobbing or caricature.",
       "status": "verified"
@@ -69,13 +69,8 @@
       "name": "周砚·怀疑",
       "path": "assets/characters/zhou_yan/portrait_doubtful.png",
       "kind": "portrait",
-      "beats": [
-        "03",
-        "04"
-      ],
-      "references": [
-        "assets/characters/zhou_yan/portrait_neutral.png"
-      ],
+      "beats": ["03", "04"],
+      "references": ["assets/characters/zhou_yan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nAnalytical doubt: brows subtly asymmetrical with a small inward crease, eyes focused, one corner of closed lips slightly tightened. He is examining an explanation that does not fit. No sneer, anger or exaggerated raised eyebrow.",
       "status": "verified"
@@ -85,12 +80,8 @@
       "name": "周砚·紧张",
       "path": "assets/characters/zhou_yan/portrait_tense.png",
       "kind": "portrait",
-      "beats": [
-        "08"
-      ],
-      "references": [
-        "assets/characters/zhou_yan/portrait_neutral.png"
-      ],
+      "beats": ["08"],
+      "references": ["assets/characters/zhou_yan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nHe is afraid but maintaining control: brows inward and a little upward at their inner ends, eyes more alert, lips pressed with subtle jaw tension. His focused adult rectangular face remains unchanged. Not shouting, scowling aggressively or widening the eyes into anime proportions.",
       "status": "verified"
@@ -100,13 +91,8 @@
       "name": "许栀·关切",
       "path": "assets/characters/xu_zhi/portrait_concerned.png",
       "kind": "portrait",
-      "beats": [
-        "03",
-        "08"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/portrait_neutral.png"
-      ],
+      "beats": ["03", "08"],
+      "references": ["assets/characters/xu_zhi/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nQuiet concern for a companion: inner brows gently raised, attentive soft eyes, lips part just enough to begin a careful question. Keep her SHORT ROUND face, fuller cheeks, round chin, straight fringe and upright head exactly. Adult warmth and concern, not childish sadness, coy smile or tears.",
       "status": "verified"
@@ -116,13 +102,8 @@
       "name": "许栀·坚定拒绝",
       "path": "assets/characters/xu_zhi/portrait_resolute.png",
       "kind": "portrait",
-      "beats": [
-        "03",
-        "10"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/portrait_neutral.png"
-      ],
+      "beats": ["03", "10"],
+      "references": ["assets/characters/xu_zhi/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nCalm firm refusal: brows slightly lowered and steady, gaze level and direct, lips set in a small clear speaking shape as she says no. Self-possession and boundaries, not aggression, shouting, smugness or a frightened shrinking pose. Preserve her short round face, rounded chin and fringe exactly.",
       "status": "verified"
@@ -132,13 +113,8 @@
       "name": "陆沉·审视",
       "path": "assets/characters/lu_chen/portrait_scrutinizing.png",
       "kind": "portrait",
-      "beats": [
-        "02",
-        "04"
-      ],
-      "references": [
-        "assets/characters/lu_chen/portrait_neutral.png"
-      ],
+      "beats": ["02", "04"],
+      "references": ["assets/characters/lu_chen/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nGuarded scrutiny: eyebrows draw inward slightly, eyelids narrow modestly, gaze assesses the player, closed mouth straightens. Preserve tired middle-aged eyes, thin cheeks, shaved stubble and subtle upper-lip stubble. Suspicion without a villain sneer or rage.",
       "status": "verified"
@@ -148,13 +124,8 @@
       "name": "陆沉·欲言又止",
       "path": "assets/characters/lu_chen/portrait_hesitant.png",
       "kind": "portrait",
-      "beats": [
-        "03",
-        "12"
-      ],
-      "references": [
-        "assets/characters/lu_chen/portrait_neutral.png"
-      ],
+      "beats": ["03", "12"],
+      "references": ["assets/characters/lu_chen/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit.\nImage 1 is the exact edit target and sole character identity reference: an existing square transparent dialogue portrait for 《红烛无声》.\nPreserve EXACTLY its facial bone structure, age, hairstyle, hairline, ears, nose shape, jaw, chin, skin color, head angle, shoulders, clothing, straps, collar, crop, scale, linework, broad matte shading and transparent alpha. Change ONLY eyebrows, eyelids/gaze, mouth expression and the minimal expression creases needed below. No new props, hands, accessories, tears, scars or facial identity. Maintain realistic understated 2D hand-drawn acting, readable at 120px. Preserve the 1254x1254 square framing. No background, haze, shadow cloud, text, UI, frame or watermark. This is a distinct current emotion state of the same person, not a new portrait design.\n\nEXPRESSION:\nGuilt and hesitation: inner brow slightly lifted, gaze shifts just a little downward, lips part faintly then hold as if he stopped before saying more. Preserve the same head angle and tired watchful middle-aged identity. Restrained vulnerability, no tears, smile or theatrical anguish.",
       "status": "verified"
@@ -164,9 +135,7 @@
       "name": "斋堂·夕照",
       "path": "assets/scenes/dining_hall/dining_sunset.png",
       "kind": "illustration",
-      "beats": [
-        "03"
-      ],
+      "beats": ["03"],
       "references": [
         "assets/characters/lin_lan/standing.png",
         "assets/characters/zhou_yan/standing.png",
@@ -182,9 +151,7 @@
       "name": "东侧偏殿·夜间",
       "path": "assets/scenes/east_shrine/shrine_night.png",
       "kind": "background",
-      "beats": [
-        "09"
-      ],
+      "beats": ["09"],
       "references": [
         "assets/scenes/player_room/room_candlelit.png",
         "assets/references/style_reference/ref_03_group_interior.png"
@@ -198,12 +165,7 @@
       "name": "陆沉·白日接待",
       "path": "assets/characters/lu_chen/standing_reception.png",
       "kind": "character",
-      "beats": [
-        "01",
-        "02",
-        "03",
-        "12"
-      ],
+      "beats": ["01", "02", "03", "12"],
       "references": [
         "assets/characters/lu_chen/standing_lantern.png",
         "assets/characters/lu_chen/portrait_neutral.png"
@@ -217,13 +179,8 @@
       "name": "回廊铜铃",
       "path": "assets/scenes/east_courtyard/props/bell.png",
       "kind": "prop",
-      "beats": [
-        "02",
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["02", "08"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: background-extraction. Input1 is the exact source composition and object reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Extract ONLY the small brass bell, its short hanging chain and dangling blank narrow tag from the near left door. The fixed wall hook is NOT part of this sprite Preserve its design, perspective, local lighting and color. Place isolated subject centered at useful high resolution; do not include surrounding architecture or other objects. Do not add any text.",
       "status": "verified",
@@ -234,13 +191,8 @@
       "name": "回廊花瓶·完整",
       "path": "assets/scenes/east_courtyard/props/vase_intact.png",
       "kind": "prop",
-      "beats": [
-        "02",
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["02", "08"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: background-extraction. Input1 is the exact source composition and object reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Extract ONLY the blue-and-white porcelain vase AND its existing thin blossoming branches at the far right console table; no table or floor Preserve its design, perspective, local lighting and color. Place isolated subject centered at useful high resolution; do not include surrounding architecture or other objects. Do not add any text.",
       "status": "verified",
@@ -251,13 +203,8 @@
       "name": "大念处经·桌面",
       "path": "assets/scenes/player_room/props/scripture_closed.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: background-extraction. Input1 is the exact source composition and object reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Extract ONLY the closed thin dark muted blue cloth-bound scripture on the foreground table, including pale empty vertical cover label, no other books, table or hard-edged floor shadow Preserve its design, perspective, local lighting and color. Place isolated subject centered at useful high resolution; do not include surrounding architecture or other objects. Do not add any text.",
       "status": "verified",
@@ -268,12 +215,8 @@
       "name": "寺史册·桌面",
       "path": "assets/scenes/player_room/props/history_closed.png",
       "kind": "prop",
-      "beats": [
-        "05"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Image1 is the approved room, exact art/material/perspective reference. Create ONLY the PALE TAN thin thread-bound book at the RIGHT of its tabletop, not the blue book on the left. The output is one isolated tan temple history booklet. Cover is warm PALE BUFF/TAN paper, no blue/grey cloth anywhere. Thin pale paper pages and beige thread binding at right edge. Same oblique tabletop view as the tan book in reference. One small empty cream vertical cover-label rectangle for UI typesetting. Fine dark contours, broad matte flat shading. Full booklet visible centered at high resolution on a genuine transparent alpha background. No blue book, no table, no sheet, no lamp, no light cloud or shadow cloud, no writing, numbers, symbols or watermark. This must be visibly distinct in pale tan color from the blue scripture.",
       "status": "verified",
@@ -284,15 +227,8 @@
       "name": "红烛烛台·燃烧",
       "path": "assets/scenes/player_room/props/candle_burning.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "07",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "07", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: background-extraction. Input1 is the exact source composition and object reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Extract ONLY the red candle WITH its dark shallow brass holder and saucer, small flame fully included and minimal flame transparency; preserve same wax geometry, nail-like scratches, height and perspective. No surrounding illumination cloud or table Preserve its design, perspective, local lighting and color. Place isolated subject centered at useful high resolution; do not include surrounding architecture or other objects. Do not add any text.",
       "status": "verified",
@@ -303,29 +239,19 @@
       "name": "东院回廊·晴日下午",
       "path": "assets/scenes/east_courtyard/corridor_afternoon.png",
       "kind": "background",
-      "beats": [
-        "02"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["02"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. Input1 exact edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Keep EXACT camera, geometry, all four doors and their metalwork/blank plaques, lattice windows, beams, stone tiles, distant courtyard, hanging lanterns, small console table, existing daylight and every architectural detail. Remove ONLY the small hanging bell/chain/tag from the near left wall hook, and the vase/branches from the far right console. Keep the fixed hook and empty console table. Inpaint those small vacated areas naturally. Nothing else moves. No added objects.",
       "status": "verified",
-      "needs": [
-        "corridor_bell",
-        "corridor_vase"
-      ]
+      "needs": ["corridor_bell", "corridor_vase"]
     },
     {
       "id": "arrival_walk_register",
       "name": "东院行进·跟随陆沉",
       "path": "assets/scenes/east_courtyard/arrival_walk_register.png",
       "kind": "background",
-      "beats": [
-        "01",
-        "02"
-      ],
+      "beats": ["01", "02"],
       "references": [
         "assets/scenes/east_courtyard/corridor_afternoon.png",
         "assets/characters/lu_chen/standing_reception.png",
@@ -343,10 +269,7 @@
       "name": "晚膳后回廊·队伍返回",
       "path": "assets/scenes/east_courtyard/refectory_walk_corridor.png",
       "kind": "illustration",
-      "beats": [
-        "03",
-        "04"
-      ],
+      "beats": ["03", "04"],
       "references": [
         "assets/scenes/east_courtyard/arrival_walk_register.png",
         "assets/scenes/east_courtyard/corridor_dusk.png"
@@ -360,9 +283,7 @@
       "name": "东院回廊·围聚发烛",
       "path": "assets/scenes/east_courtyard/candle_distribution.png",
       "kind": "illustration",
-      "beats": [
-        "04"
-      ],
+      "beats": ["04"],
       "references": [
         "assets/scenes/east_courtyard/refectory_walk_corridor.png",
         "assets/characters/lu_chen/offering_candle.png",
@@ -379,72 +300,43 @@
       "name": "主角门房·夜间亮烛底图",
       "path": "assets/scenes/player_room/room_candlelit.png",
       "kind": "background",
-      "beats": [
-        "05",
-        "06",
-        "07",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "07", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. Input1 exact edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Keep EXACT camera/geometry, bed, bedding, window/lattice/blind, outside courtyard, closed bolted wooden door with ring handle, hanging towel, box, basket, foreground table/chair, shelf, all architecture. Remove ONLY both books, single torn page, unlit glass oil lamp, and the red candle WITH holder/saucer from the table. Inpaint clean timber tabletop. Preserve existing warm candle-light cast on room/table despite removing candle object, for later independent candle sprite. Keep red wax line under door. No other changes.",
       "status": "verified",
-      "needs": [
-        "room_scripture",
-        "room_history",
-        "room_candle_burning",
-        "room_oil_lamp"
-      ]
+      "needs": ["room_scripture", "room_history", "room_candle_burning", "room_oil_lamp"]
     },
     {
       "id": "corridor_dusk",
       "name": "东院回廊·入夜",
       "path": "assets/scenes/east_courtyard/corridor_dusk.png",
       "kind": "background",
-      "beats": [
-        "04"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["04"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather. Input1 exact clean environment edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Change ONLY time/lighting: Late blue hour after sunset. Sky/courtyard indigo, same hanging lanterns now dim warm amber. Warm small light islands on doors and floor, readable silhouettes. No sunlight shafts. Lock exact geometry, framing, all four CLOSED doors, plaques, windows, floor seams, console table, hook, hanging lantern fixture locations. Keep bell and vase absent, no new props.",
       "status": "verified",
-      "needs": [
-        "corridor_afternoon"
-      ]
+      "needs": ["corridor_afternoon"]
     },
     {
       "id": "corridor_night",
       "name": "东院回廊·午夜",
       "path": "assets/scenes/east_courtyard/corridor_night.png",
       "kind": "background",
-      "beats": [
-        "07",
-        "08",
-        "10",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["07", "08", "10", "11"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather. Input1 exact clean environment edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Change ONLY time/lighting: Midnight blue-black sky, cool moonlit courtyard. Same lanterns very low amber, dark but playable doors/window frames and stone path still legible. No daylight shadows. Lock exact geometry, framing, all four CLOSED doors, plaques, windows, floor seams, console table, hook, hanging lantern fixture locations. Keep bell and vase absent, no new props.",
       "status": "verified",
-      "needs": [
-        "corridor_afternoon"
-      ]
+      "needs": ["corridor_afternoon"]
     },
     {
       "id": "corridor_dawn",
       "name": "东院回廊·真实清晨",
       "path": "assets/scenes/east_courtyard/corridor_dawn.png",
       "kind": "illustration",
-      "beats": [
-        "12"
-      ],
+      "beats": ["12"],
       "references": [
         "assets/characters/lin_lan/standing.png",
         "assets/characters/zhou_yan/standing.png",
@@ -461,69 +353,44 @@
       "name": "门房·红烛熄灭",
       "path": "assets/scenes/player_room/room_moonlit.png",
       "kind": "background",
-      "beats": [
-        "05",
-        "06",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather. Input1 exact clean environment edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Change ONLY illumination/time: Red candle is out/absent: remove all warm candle illumination from tabletop, door and right wall. Cold blue moonlight from same window is the ONLY main light, weak warm lantern line far outside. Closed door bottom retains thin material red wax seal, no glowing neon. Room dark yet readable. Preserve exact geometry, closed door/hardware/red wax line, bed, shelf, tabletop/chair, empty prop spots. Do not add or move anything.",
       "status": "verified",
-      "needs": [
-        "player_room_candlelit"
-      ]
+      "needs": ["player_room_candlelit"]
     },
     {
       "id": "room_false_dawn",
       "name": "门房·假报晓",
       "path": "assets/scenes/player_room/room_false_dawn.png",
       "kind": "background",
-      "beats": [
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["11"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather. Input1 exact clean environment edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Change ONLY illumination/time: It is STILL night before real dawn. Cloud has covered moon, window outdoors almost black, lattice blue-grey dim with NO sunlight. Warm illumination from separately layered short candle remains on right table/door, otherwise deep brown shadow. No actual candle in this base. Preserve exact geometry, closed door/hardware/red wax line, bed, shelf, tabletop/chair, empty prop spots. Do not add or move anything.",
       "status": "verified",
-      "needs": [
-        "player_room_candlelit"
-      ]
+      "needs": ["player_room_candlelit"]
     },
     {
       "id": "room_dawn",
       "name": "门房·真实清晨",
       "path": "assets/scenes/player_room/room_dawn.png",
       "kind": "background",
-      "beats": [
-        "11",
-        "12"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["11", "12"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather. Input1 exact clean environment edit target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. Change ONLY illumination/time: True dawn: natural soft golden morning daylight enters left lattice window, courtyard clearly light with pale warm sky. Warm candle cast is now subordinate. Fixed oil lamp remains unlit. No candle/book/page in base. Preserve exact geometry, closed door/hardware/red wax line, bed, shelf, tabletop/chair, empty prop spots. Do not add or move anything.",
       "status": "verified",
-      "needs": [
-        "player_room_candlelit"
-      ]
+      "needs": ["player_room_candlelit"]
     },
     {
       "id": "gate_dawn",
       "name": "山门·晨光",
       "path": "assets/scenes/temple_gate/gate_dawn.png",
       "kind": "background",
-      "beats": [
-        "12"
-      ],
-      "references": [
-        "assets/scenes/temple_gate/gate_dawn.png"
-      ],
+      "beats": ["12"],
+      "references": ["assets/scenes/temple_gate/gate_dawn.png"],
       "transparent": false,
       "prompt": "Use case: text-localization / precise-object-edit.\nThe single supplied image is the exact EDIT TARGET. Change ONLY the existing blank plaques/signboards by painting authentic readable Chinese characters DIRECTLY INTO their wood/metal surfaces. Preserve the EXACT camera, composition, architecture, tree leaves, light, shadows, colors, linework, objects and every person/pose present. Do not move, add or remove people, alter their hands, or add signs.\nText placement and exact wording:\n1. The LARGE horizontal wooden plaque above the temple doorway: exactly “红烛寺”, THREE large graceful gold-ochre brush-calligraphy characters, one horizontal line, left to right. Each character clearly formed: 红 / 烛 / 寺. Balanced central placement within the actual wood border, ample margins. Hand-painted/engraved, with subtle age and believable oblique perspective matching the plaque. It must look like part of this maintained Chinese temple.\n2. The smaller old rectangular plaque partially exposed just to the RIGHT BEHIND the main plaque: exactly “明照寺”, three smaller subdued weathered dark characters. Treat this as an old sign behind the newer sign; letters fit the exposed surface without extending beyond its edges. No fourth character.\n3. The existing little ROOFED WOODEN NOTICE BOARD to the LEFT of the steps: fill with a legible, modestly inked heading “香客须知”, and two shorter neat rows beneath, “入寺请静心” and “请至门内登记”. Follow the board's perspective and wood grain, handwritten brush/ink rather than a modern digitally pasted label. Natural spacing; no extra unreadable microtext.\n4. The existing round shuttle STOP SIGN at the far left: “接驳” in dark simple characters inside the circular disk; the small rectangular plate beneath it says “红烛寺” vertically. Lettering obeys the surface perspective, weathering and light.\nKeep the same restrained 2D hand-drawn Chinese narrative-game style. The letters are part of the painted illustrated scene with matching shading, NOT floating UI text. No subtitles, UI overlays, frames, logos or watermarks. Keep original full-frame 1672x941 16:9 size and precise framing. Everything except these previously blank surfaces stays unchanged.",
       "status": "verified",
@@ -534,9 +401,7 @@
       "name": "大巴·午后抵达",
       "path": "assets/scenes/bus/bus_arrival.png",
       "kind": "background",
-      "beats": [
-        "01"
-      ],
+      "beats": ["01"],
       "references": [
         "assets/scenes/bus/bus_arrival.png",
         "assets/characters/lu_chen/standing_reception.png",
@@ -554,18 +419,12 @@
       "name": "大巴·开场山路顶视远景",
       "path": "assets/scenes/bus/bus_journey.png",
       "kind": "background",
-      "beats": [
-        "01"
-      ],
-      "references": [
-        "assets/scenes/bus/bus_arrival.png"
-      ],
+      "beats": ["01"],
+      "references": ["assets/scenes/bus/bus_arrival.png"],
       "transparent": false,
       "prompt": "Use case: illustration-story.\nAsset type: one full-bleed 16:9 narrative game opening still, mountain road aerial extreme wide establishing shot.\nInput image roles: Image 1 (aerial forest road screenshot) is ONLY the camera/composition reference: extremely high almost vertical TOP-DOWN drone view, winding road running roughly from top to bottom through a steep densely forested mountain. Image 2 (bus interior) is ONLY the established game's restrained hand-drawn style, warm afternoon colors and bus identity reference; DO NOT copy its interior camera.\nPrimary request: create an exterior aerial bird's-eye establishing view of ONE very SMALL ivory/grey passenger shuttle BUS driving along a narrow winding paved mountain road in rural China, surrounded by an immense forested mountain. The bus is distant, seen from its roof, only about 2.5–3% of the entire image width, clearly tiny compared with the landscape. Its long axis follows the road toward the TOP of frame, located close to the central road section, with a soft grounded afternoon shadow. A naturally winding S-shaped road traverses the frame vertically from bottom to top. Deep green/olive trees, a few subdued golden afternoon leaves and exposed rock on steep slopes; no visible sky/horizon. Dense forest occupies at least 85% of the composition. Road occupies a narrow strip, plenty of vertical road before and behind the bus; no other cars, no pedestrians, no temple, no buildings.\nStyle: match the existing game's 2D illustrated narrative scenes, realistic landscape proportions, fine dark structural contours, broad matte color shapes, softly dappled sunny afternoon light, warm muted olive/gold/charcoal palette and natural soft shadows. Quiet remote mountain feeling. No photorealism, no 3D render, no anime, no isometric toy map, no giant foreground vehicle.\nThe app will gently pan the whole picture DOWNWARD over two seconds to imply the bus continuing up the mountain. Compose with generous forest and road toward top and bottom for overscan cropping. Wide landscape 16:9, 1672x941 or larger 16:9. NO UI, text, road labels, captions, watermark, frame, black bars or collage.",
       "status": "verified",
-      "needs": [
-        "bus_arrival"
-      ],
+      "needs": ["bus_arrival"],
       "promptSet": "assets/generation/scene_prompts.json"
     },
     {
@@ -573,10 +432,7 @@
       "name": "大雄宝殿·夜间入口",
       "path": "assets/scenes/main_hall/hall_night.png",
       "kind": "background",
-      "beats": [
-        "08",
-        "09"
-      ],
+      "beats": ["08", "09"],
       "references": [
         "assets/scenes/east_shrine/shrine_night.png",
         "assets/scenes/east_courtyard/corridor_afternoon.png"
@@ -584,59 +440,39 @@
       "transparent": false,
       "prompt": "Use case: illustration-story. Input1 approved side-shrine reference; input2 matching timber architecture. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. From standing player just inside south doorway, look north into modest Chinese temple main hall at midnight. Main altar and seated Buddha at far north, very dim long-burning lamps; face partly obscured naturally. Clearly visible open passage into east side shrine on VIEWER RIGHT, a small warm light from that room matches reference1. Empty still room, no characters or foreground loose props. Dark floor readable and safe route to right obvious through composition, no glowing path/arrows/text. Keep scale modest, not palace.",
       "status": "verified",
-      "needs": [
-        "shrine_night"
-      ]
+      "needs": ["shrine_night"]
     },
     {
       "id": "peephole_empty",
       "name": "门眼·空回廊",
       "path": "assets/scenes/player_room/peephole_empty.png",
       "kind": "background",
-      "beats": [
-        "07"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_night.png"
-      ],
+      "beats": ["07"],
+      "references": ["assets/scenes/east_courtyard/corridor_night.png"],
       "transparent": false,
       "prompt": "Use case: illustration-story. Input1 exact midnight corridor architecture reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Wide 16:9 1672x941 frame, fixed first-person camera. No people or animals baked into this environment. First person extremely narrow peephole view from inside NEAR RIGHT guest room looking across corridor toward near left door and a sliver of moonlit tiles. Natural dark timber rim at left/right is OUT OF FOCUS only slightly; no fisheye surveillance lens. Same near-left closed wooden door, brass plate/ring handle, lattice window and timber beams. Completely EMPTY corridor, no faces, hands, silhouettes, feet, animal, breath or shadows suggesting somebody. A sharply divided moonlight patch on floor. Maintain realistic eye height and restrained clarity.",
       "status": "verified",
-      "needs": [
-        "corridor_night"
-      ]
+      "needs": ["corridor_night"]
     },
     {
       "id": "vase_broken",
       "name": "回廊花瓶·碎裂",
       "path": "assets/scenes/east_courtyard/props/vase_broken.png",
       "kind": "prop",
-      "beats": [
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/props/vase_intact.png"
-      ],
+      "beats": ["08"],
+      "references": ["assets/scenes/east_courtyard/props/vase_intact.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact object identity. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. The SAME blue-white porcelain vase now broken into 7-10 readable large shards and a few small chips on a flat stone floor plane, fallen flowering branches lying among them. Match porcelain pattern/color and branch species. No intact vase, table, floor or explosion dust, no duplicate full object. Horizontal small scatter viewed slightly downward, midnight cool light and faint amber edge. Transparent negative spaces between shards.",
       "status": "verified",
-      "needs": [
-        "corridor_vase"
-      ]
+      "needs": ["corridor_vase"]
     },
     {
       "id": "camera_cap",
       "name": "林岚相机盖",
       "path": "assets/props/camera_cap/scene.png",
       "kind": "prop",
-      "beats": [
-        "02",
-        "08",
-        "12"
-      ],
-      "references": [
-        "assets/characters/lin_lan/standing.png"
-      ],
+      "beats": ["02", "08", "12"],
+      "references": ["assets/characters/lin_lan/standing.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 camera design reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One small plain black camera lens cap with short black tether loop, hanging vertically from tether so it can be hooked beside the corridor brass bell. Generic unbranded round snap cap, visible squeeze tabs, same lens diameter as camera in reference, no camera body, face or bell. Three-quarter frontal view, centered square sprite, subdued daylight. No embossed letters.",
       "status": "verified",
@@ -647,14 +483,8 @@
       "name": "周砚折叠修缮图",
       "path": "assets/props/repair_drawing/inventory.png",
       "kind": "prop",
-      "beats": [
-        "01",
-        "02",
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["01", "02", "08"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 material/style reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Single folded pale offwhite architectural repair floorplan for a small temple courtyard. Half unfolded accordion sheet, simple fine brown structural lines showing four rooms around one corridor with window/door arcs, fold creases. Large blank margin reserved for accurate UI annotation, no gibberish letters or printed characters/numbers. Three-quarter tabletop view, compact readable paper silhouette; can be tucked under a lantern frame in scene. No hands, lamp or other props.",
       "status": "verified",
@@ -665,13 +495,8 @@
       "name": "许栀蓝发圈夹入住须知",
       "path": "assets/props/blue_tie_notice/scene.png",
       "kind": "prop",
-      "beats": [
-        "02",
-        "08"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/standing.png"
-      ],
+      "beats": ["02", "08"],
+      "references": ["assets/characters/xu_zhi/standing.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 restrained art/material style reference only; do not include character. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One narrow slightly folded offwhite check-in notice, completely BLANK for later accurate UI text, held folded at upper edge by a small soft muted BLUE elastic hair tie loop. Plausibly wrap tie around folded top corner so paper stays together; blue tie clearly distinct against cream paper. Frontal hanging view, paper vertical, ordinary clean office paper with mild folds, no aged spooky stains. No metal clip, no hairpin, no hands or hair. Entire paper and elastic visible.",
       "status": "verified",
@@ -682,14 +507,8 @@
       "name": "火柴",
       "path": "assets/props/matches/inventory.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "08"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "08"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact scene art/material reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One opened plain small kraft-paper matchbox, a few red-brown headed wooden matches inside and one spare match beside it. No burning flame, brand, label or lettering. Centered square inventory master at 1254x1254, object large and legible at48px.",
       "status": "verified",
@@ -700,14 +519,8 @@
       "name": "手电",
       "path": "assets/props/flashlight/inventory.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "08"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "08"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact scene art/material reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One ordinary compact charcoal handheld flashlight with simple cylindrical body and glass lens, unlit, no beam, strap short and plain, three-quarter view. No modern tactical spikes or branding. Centered square inventory master at 1254x1254, object large and legible at48px.",
       "status": "verified",
@@ -718,27 +531,19 @@
       "name": "斋堂桌前景",
       "path": "assets/scenes/dining_hall/table_foreground.png",
       "kind": "foreground",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/scenes/dining_hall/dining_sunset.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/scenes/dining_hall/dining_sunset.png"],
       "transparent": true,
       "prompt": "Use case: compositing. Input1 exact background camera/lighting. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Create only one ordinary long rectangular dark honey-brown timber communal dining table in matched seated eye-level perspective, spanning full bottom width of a 1672x941 transparent canvas. Top surface extends from y610 to near y920, front edge/apron finishes at bottom. Far edge horizontal slightly perspective receding, no chairs or legs covering character faces. Entire upper y0-600 transparent. Empty tabletop, no food, plates, bowls, people or objects. Warm sunset illumination stronger on left. Smooth plain wood with sparse grain.",
       "status": "verified",
-      "needs": [
-        "dining_sunset"
-      ]
+      "needs": ["dining_sunset"]
     },
     {
       "id": "hui_pu_curtain",
       "name": "慧普·帘后轮廓",
       "path": "assets/characters/hui_pu/curtain_presence.png",
       "kind": "character",
-      "beats": [
-        "03"
-      ],
+      "beats": ["03"],
       "references": [
         "assets/scenes/dining_hall/dining_sunset.png",
         "assets/characters/hui_pu/standing.png"
@@ -746,21 +551,15 @@
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact dining curtain texture/lighting; input2 identity only to set elder seated silhouette, never reveal face. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. An indistinct soft-edged SEATED elderly monk shadow visible THROUGH the same muted brown curtain fabric. Head and folded shoulders/hands only as broad low contrast dark shapes; face completely unknowable, no eyes/nose/mouth/ears/hair/robe details. Render as a matching full curtain PANEL with the indistinct silhouette transmitted through cloth; panel is opaque cloth within a genuinely transparent outer boundary. This replaces the existing curtain section, rather than adding a person in front. No chair/table. It will be placed entirely within curtain, not in front. Restrained presence, not monster or black eye holes.",
       "status": "verified",
-      "needs": [
-        "dining_sunset"
-      ]
+      "needs": ["dining_sunset"]
     },
     {
       "id": "porridge_full",
       "name": "斋碗·肉粥",
       "path": "assets/props/porridge/bowl_full.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/scenes/dining_hall/dining_sunset.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/scenes/dining_hall/dining_sunset.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 style and sunset palette. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One ordinary small offwhite ceramic rice-porridge bowl, three-quarter tabletop view about25 degrees down. Filled with grey-white rice porridge, several small persistent yellow-brown oil circles and a tiny thin beige meat fiber partly visible, not gore. Small BLANK rectangular paper bowl-tag tied to rim, for UI names. No spoon, hands or table. High-resolution1254square object silhouette legible at100px. Rim complete.",
       "status": "verified",
@@ -771,165 +570,104 @@
       "name": "斋碗·食用后",
       "path": "assets/props/porridge/bowl_empty.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/porridge/bowl_full.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/porridge/bowl_full.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact bowl target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT bowl shape, perspective, offwhite material, blank paper tag, lighting and crop. Change ONLY contents: now eaten with thin oily rice residue at bottom, no generous full porridge. No new spoon or props.",
       "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
+      "needs": ["porridge_full"]
     },
     {
       "id": "wooden_spoon",
       "name": "木勺",
       "path": "assets/props/porridge/spoon.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/scenes/dining_hall/dining_sunset.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/scenes/dining_hall/dining_sunset.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 STYLE AND LIGHT ONLY, not an edit target. Create one SINGLE WOODEN SPOON ALONE on genuine transparent background. Long plain brown wooden handle and shallow oval spoon bowl, one tiny beige cooked meat fiber on it. Fine hand-drawn dark outlines, broad matte shading, warm light from left. Diagonal spoon, fully visible from tip to handle. NO ceramic bowl, NO porridge bowl, NO plate, NO table, NO food dish, NO person, NO shadows or surrounding objects. Center the spoon large on a square canvas; all space around spoon transparent.",
       "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
+      "needs": ["porridge_full"]
     },
     {
       "id": "hot_water",
       "name": "热水",
       "path": "assets/props/hot_water/scene.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/porridge/bowl_full.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/porridge/bowl_full.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact bowl material and tabletop camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One plain small offwhite handleless ceramic cup with clear hot water, small restrained semi-transparent wisp of steam above. No tea leaves, logo or extra cup. Match bowl perspective and warm sunset lighting; no tabletop.",
       "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
+      "needs": ["porridge_full"]
     },
     {
       "id": "bamboo_shoots",
       "name": "腌笋",
       "path": "assets/props/bamboo_shoots/scene.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/porridge/bowl_full.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/porridge/bowl_full.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact bowl material and tabletop camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One plain shallow small offwhite ceramic dish holding a modest portion of muted ochre pickled bamboo shoots cut into simple strips. No garnish or luxury styling. Match bowl perspective and warm sunset lighting; no tabletop.",
       "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
+      "needs": ["porridge_full"]
     },
     {
       "id": "room_candle_unlit",
       "name": "红烛烛台·未燃",
       "path": "assets/scenes/player_room/props/candle_unlit.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "10",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/props/candle_burning.png"
-      ],
+      "beats": ["05", "06", "10", "11"],
+      "references": ["assets/scenes/player_room/props/candle_burning.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact candle/holder target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact camera, holder geometry/color, saucer, central wick position and base placement; Only remove flame and flame glow, leaving a fresh dark wick and same full-height red candle and holder. Wax nail scratches stay. Centered standalone sprite, no light cloud, room, table, hand or text.",
       "status": "verified",
-      "needs": [
-        "room_candle_burning"
-      ]
+      "needs": ["room_candle_burning"]
     },
     {
       "id": "room_candle_out",
       "name": "红烛烛台·熄灭",
       "path": "assets/scenes/player_room/props/candle_extinguished.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "10",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/props/candle_burning.png"
-      ],
+      "beats": ["05", "06", "10", "11"],
+      "references": ["assets/scenes/player_room/props/candle_burning.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact candle/holder target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact camera, holder geometry/color, saucer, central wick position and base placement; Same candle partly burned shorter by about15 percent, wax drips now cooled dark red and one black wick, NO flame or smoke. Same holder and saucer, cold moonlight. Centered standalone sprite, no light cloud, room, table, hand or text.",
       "status": "verified",
-      "needs": [
-        "room_candle_burning"
-      ]
+      "needs": ["room_candle_burning"]
     },
     {
       "id": "room_candle_short",
       "name": "红烛烛台·短芯燃烧",
       "path": "assets/scenes/player_room/props/candle_short.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "10",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/props/candle_burning.png"
-      ],
+      "beats": ["05", "06", "10", "11"],
+      "references": ["assets/scenes/player_room/props/candle_burning.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact candle/holder target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact camera, holder geometry/color, saucer, central wick position and base placement; Same candle burned to one third of initial wax height, pooled red wax in exact same holder/saucer, very small stable warm flame. No extra candles. Centered standalone sprite, no light cloud, room, table, hand or text.",
       "status": "verified",
-      "needs": [
-        "room_candle_burning"
-      ]
+      "needs": ["room_candle_burning"]
     },
     {
       "id": "shrine_table",
       "name": "杯筊桌前景",
       "path": "assets/scenes/east_shrine/table_foreground.png",
       "kind": "foreground",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/scenes/east_shrine/shrine_night.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/scenes/east_shrine/shrine_night.png"],
       "transparent": true,
       "prompt": "Use case: compositing. Input1 exact shrine camera/lighting target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Only one plain small rectangular dark wooden divination table foreground at eye level, on a wide1672x941 transparent canvas. Table top far edge y640, near edge y875, wooden apron to bottom frame, table spans x260 to1430. No chairs/people or desk props. Upper y0-630 all transparent. Match warm weak lamp from left and cool moonlight side. Large enough surface for separate cage on right, jiaobei middle and cat dish left.",
       "status": "verified",
-      "needs": [
-        "shrine_night"
-      ]
+      "needs": ["shrine_night"]
     },
     {
       "id": "jiaobei_sealed",
       "name": "杯筊·封存",
       "path": "assets/props/jiaobei/sealed.png",
       "kind": "prop",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/characters/shen_gong/standing_jiaobei.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/characters/shen_gong/standing_jiaobei.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact paired divination block design/material. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. The SAME two reddish-brown wooden Chinese jiaobei crescent blocks tied together with a narrow plain pale paper seal band, absolutely BLANK band for UI text if needed. Compact pair on a table viewed25 degrees downward, each one flat face and one curved back shape plausible. Not dice, coins, bowls or clamshell. No hands, table or other objects.",
       "status": "verified",
@@ -940,12 +678,8 @@
       "name": "杯筊单块·平面朝上",
       "path": "assets/props/jiaobei/flat_up.png",
       "kind": "prop",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/characters/shen_gong/standing_jiaobei.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/characters/shen_gong/standing_jiaobei.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact jiaobei wooden material and shape reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. ONE and only one Chinese wooden crescent divination block, reddish-brown wood, tabletop three-quarter view25 degrees down. FLAT CUT FACE is clearly facing UP and visible, curved convex back rests down. Elongated kidney/crescent silhouette, same size/material as reference pair. No cup, dice, seal, text, hands, surface or second block.",
       "status": "verified",
@@ -956,30 +690,20 @@
       "name": "杯筊单块·凸面朝上",
       "path": "assets/props/jiaobei/curved_up.png",
       "kind": "prop",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/props/jiaobei/flat_up.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/props/jiaobei/flat_up.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Image1 is ONLY the material/color/size identity reference of a Chinese wooden divination moon block. Generate a NEW VIEW of ONE jiaobei turned completely over so its FLAT CUT FACE lies DOWN on the floor, invisible. Visible UPWARD surface must be a strongly CONVEX ROUNDED DOME, like a half-almond or a shallow half-oval wooden pebble. Elongated crescent outline with a raised smooth central back ridge and highlight on top; surface slopes DOWN from middle toward BOTH edges. It is SOLID wood with NO hollow, NO concave bowl interior, NO rim or lip, NO large flat visible plane. Reddish brown wood matching reference, simple matte hand-drawn 2D shading and fine dark outlines. View from25 degrees above imaginary tabletop, same approximate long crescent proportions, entire single block centered on genuine transparent alpha, no floor, background, hands, text or shadow cloud. The dome should be unmistakably different from the reference flat face.",
       "status": "verified",
-      "needs": [
-        "jiaobei_flat"
-      ]
+      "needs": ["jiaobei_flat"]
     },
     {
       "id": "birdcage",
       "name": "偏殿鸟笼",
       "path": "assets/props/birdcage/scene.png",
       "kind": "prop",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/scenes/east_shrine/shrine_night.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/scenes/east_shrine/shrine_night.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact shrine style and weak warm lamp light. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One small ordinary round bamboo birdcage with thin fine vertical bars and curved dome, bottom tray, a single horizontal perch inside and small closed door. Cage EMPTY, interior gaps genuinely transparent between bars, no flat opaque interior. Three-quarter eye-level tabletop view, no table, bird, hand, text, exotic decor. Sparse clean linework, silhouette complete.",
       "status": "verified",
@@ -990,12 +714,8 @@
       "name": "偏殿猫食碟",
       "path": "assets/props/cat_dish/scene.png",
       "kind": "prop",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/scenes/east_shrine/shrine_night.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/scenes/east_shrine/shrine_night.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 shrine style. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One small shallow chipped plain offwhite cat-food saucer with modest leftover rice and a few dull brown food morsels. Tabletop view25 degrees down, weak warm lamp light, no cat, text, hands or table. Readable ordinary prop.",
       "status": "verified",
@@ -1006,13 +726,8 @@
       "name": "寺猫·花猫",
       "path": "assets/props/animals/cat_resting.png",
       "kind": "animal",
-      "beats": [
-        "01",
-        "09"
-      ],
-      "references": [
-        "assets/scenes/temple_gate/gate_afternoon.png"
-      ],
+      "beats": ["01", "09"],
+      "references": ["assets/scenes/temple_gate/gate_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 approved style and temple sun lighting. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One ordinary adult Chinese calico temple cat, white/ginger/dark patches, reclining naturally with paws forward, head slightly lifted and mouth just barely open as if meowing once. Realistic cat anatomy/proportion, calm watchful gaze, no glowing eyes or magical markings. Complete ears/tail/paws, no ground or shadow cloud. Soft neutral warm light reusable with scene tint.",
       "status": "verified",
@@ -1023,14 +738,8 @@
       "name": "檐鸟·麻雀",
       "path": "assets/props/animals/sparrow.png",
       "kind": "animal",
-      "beats": [
-        "01",
-        "09",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/temple_gate/gate_afternoon.png"
-      ],
+      "beats": ["01", "09", "11"],
+      "references": ["assets/scenes/temple_gate/gate_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 same restrained 2D game art. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. One small ordinary Eurasian tree sparrow, side three-quarter view, brown crown, white cheek dark spot, beige chest, short beak slightly open mid-chirp, feet grasping empty air at same baseline so can sit on independent cage perch or window ledge. No branch, cage, ground or shadow cloud. Natural anatomy, muted warm neutral light, no fantasy or cartoon eyes.",
       "status": "verified",
@@ -1041,14 +750,8 @@
       "name": "四人旅行行李",
       "path": "assets/props/travel_bags/group.png",
       "kind": "prop",
-      "beats": [
-        "01",
-        "02",
-        "12"
-      ],
-      "references": [
-        "assets/scenes/temple_gate/gate_afternoon.png"
-      ],
+      "beats": ["01", "02", "12"],
+      "references": ["assets/scenes/temple_gate/gate_afternoon.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 style/material reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. A compact GROUP OF EXACTLY FOUR distinct modest weekend travel bags on floor: one dark blue small duffel, one muted grey hiking backpack, one tan soft weekender, one charcoal small soft suitcase. Ordinary unbranded bags, straps and handles legible, no extra loose fifth bag, no camera or personal tote. Three-quarter eye-level downward view, soft neutral daylight; no ground, people or shadow cloud.",
       "status": "verified",
@@ -1059,15 +762,8 @@
       "name": "林岚·相机去盖站姿",
       "path": "assets/characters/lin_lan/standing_cap_removed.png",
       "kind": "character",
-      "beats": [
-        "02",
-        "04",
-        "08",
-        "12"
-      ],
-      "references": [
-        "assets/characters/lin_lan/standing.png"
-      ],
+      "beats": ["02", "04", "08", "12"],
+      "references": ["assets/characters/lin_lan/standing.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 EXACT body sprite target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Keep EXACT face, pose, clothing, hairstyle, straps, body silhouette, crop, scale, lighting. Change ONLY camera: remove round black lens cap from lens, showing dark clear glass lens with subtle muted reflection and ring. Cap and tether are absent from body, no spare cap on wrist/bag/neck. The same cap is now an independent corridor clue. Nothing else changes. Preserve1024x1536 framing.",
       "status": "verified",
@@ -1078,9 +774,7 @@
       "name": "林岚·斋堂坐姿",
       "path": "assets/characters/lin_lan/seated_dining.png",
       "kind": "character",
-      "beats": [
-        "03"
-      ],
+      "beats": ["03"],
       "references": [
         "assets/characters/lin_lan/standing_cap_removed.png",
         "assets/characters/lin_lan/portrait_neutral.png",
@@ -1089,19 +783,14 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact body/costume, input2 exact facial identity, input3 sunset seating/camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. The SAME adult character seated upright on invisible chair behind communal table. Same narrow oval face/pointed chin, arched brows/upturned eyes, side-part short bob, sand jacket and camera strap, uncapped same camera hanging naturally. Slight interested half smile, leaning a little toward conversation, hands relaxed near table edge, no held spoon/food. Show complete head, torso, both arms and hands to upper thighs, facing mostly viewer with slight natural angle, 1024x1536 transparent cutout. Do NOT include chair/table/background, no new accessories. Warm soft sunset light from left, restrained natural human acting, face remains precisely identifiable. Feet not needed because hidden below table.",
       "status": "verified",
-      "needs": [
-        "dining_sunset",
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["dining_sunset", "lin_lan_cap_removed"]
     },
     {
       "id": "zhou_yan_seated",
       "name": "周砚·斋堂坐姿",
       "path": "assets/characters/zhou_yan/seated_dining.png",
       "kind": "character",
-      "beats": [
-        "03"
-      ],
+      "beats": ["03"],
       "references": [
         "assets/characters/zhou_yan/standing.png",
         "assets/characters/zhou_yan/portrait_neutral.png",
@@ -1110,19 +799,14 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact body/costume, input2 exact facial identity, input3 sunset seating/camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. The SAME adult character seated upright on invisible chair behind communal table. Same long rectangular face, short side-part dark hair, navy field jacket, grey collar and canvas crossbody strap. Serious skeptical gaze downward toward porridge, one relaxed empty hand near table edge. No drawing or held spoon/food. Show complete head, torso, both arms and hands to upper thighs, facing mostly viewer with slight natural angle, 1024x1536 transparent cutout. Do NOT include chair/table/background, no new accessories. Warm soft sunset light from left, restrained natural human acting, face remains precisely identifiable. Feet not needed because hidden below table.",
       "status": "verified",
-      "needs": [
-        "dining_sunset",
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["dining_sunset", "lin_lan_cap_removed"]
     },
     {
       "id": "xu_zhi_seated",
       "name": "许栀·斋堂坐姿",
       "path": "assets/characters/xu_zhi/seated_dining.png",
       "kind": "character",
-      "beats": [
-        "03"
-      ],
+      "beats": ["03"],
       "references": [
         "assets/characters/xu_zhi/standing.png",
         "assets/characters/xu_zhi/portrait_neutral.png",
@@ -1131,19 +815,14 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact body/costume, input2 exact facial identity, input3 sunset seating/camera reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. The SAME adult character seated upright on invisible chair behind communal table. Same SHORT ROUND fuller-cheek face, rounded chin/nose, straight brows/horizontal eyes, straight fringe and collarbone hair, grey-green cardigan/white shirt/ivory tote strap. Concerned composed gaze toward viewer, open empty hand in small reassuring gesture, no hair tie on body or hand, no held food/spoon. Show complete head, torso, both arms and hands to upper thighs, facing mostly viewer with slight natural angle, 1024x1536 transparent cutout. Do NOT include chair/table/background, no new accessories. Warm soft sunset light from left, restrained natural human acting, face remains precisely identifiable. Feet not needed because hidden below table.",
       "status": "verified",
-      "needs": [
-        "dining_sunset",
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["dining_sunset", "lin_lan_cap_removed"]
     },
     {
       "id": "lu_chen_hush",
       "name": "陆沉·示意噤声",
       "path": "assets/characters/lu_chen/standing_hush.png",
       "kind": "character",
-      "beats": [
-        "04"
-      ],
+      "beats": ["04"],
       "references": [
         "assets/characters/lu_chen/standing_lantern.png",
         "assets/characters/lu_chen/portrait_neutral.png"
@@ -1158,9 +837,7 @@
       "name": "神公·守桌坐姿",
       "path": "assets/characters/shen_gong/seated.png",
       "kind": "character",
-      "beats": [
-        "09"
-      ],
+      "beats": ["09"],
       "references": [
         "assets/characters/shen_gong/standing_jiaobei.png",
         "assets/characters/shen_gong/portrait_neutral.png",
@@ -1169,54 +846,38 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact body/robes, input2 exact face, input3 shrine camera/lighting. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same thin73-year-old Chinese monk Shen Gong, prominent cheekbones/downturned tired eyes, shaved head, charcoal crossed robes/white inner collar. Seated upright behind invisible desk, facing visitor mostly front, both EMPTY hands resting near imaginary desk edge, long fingers visible. Neutral guarded tired living man, not smiling or already stone. Frame entire head/body to upper thighs, no chair/table/blocks/candle. Warm weak light from left. Preserve exact identity, age and costume.",
       "status": "verified",
-      "needs": [
-        "shrine_night"
-      ]
+      "needs": ["shrine_night"]
     },
     {
       "id": "shen_gong_stone_partial",
       "name": "神公·指尖石化",
       "path": "assets/characters/shen_gong/seated_stone_partial.png",
       "kind": "character",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/characters/shen_gong/seated.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/characters/shen_gong/seated.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact seated pose target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT silhouette, crop, head angle, hand positions and clothing folds; Change ONLY fingertips and both hands to cold matte grey stone with subtle hairline cracks, transformation beginning at fingertips up to wrists. Face/neck and robes still living/cloth, fear barely reaches eyes. Same shrine lighting. No table/chair/props. Transformation registered to identical body alignment.",
       "status": "verified",
-      "needs": [
-        "shen_gong_seated"
-      ]
+      "needs": ["shen_gong_seated"]
     },
     {
       "id": "shen_gong_stone",
       "name": "神公·完全石化",
       "path": "assets/characters/shen_gong/seated_stone.png",
       "kind": "character",
-      "beats": [
-        "09"
-      ],
-      "references": [
-        "assets/characters/shen_gong/seated.png"
-      ],
+      "beats": ["09"],
+      "references": ["assets/characters/shen_gong/seated.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact seated pose target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT silhouette, crop, head angle, hand positions and clothing folds; The same man and ALL his clothing are now a single cold weathered grey stone statue, exact pose and facial anatomy frozen, eyes opaque stone without living highlights. Subtle restrained cracks, no missing limbs or rubble. No golden Buddha conversion or extra arms. Same shrine lighting. No table/chair/props. Transformation registered to identical body alignment.",
       "status": "verified",
-      "needs": [
-        "shen_gong_seated"
-      ]
+      "needs": ["shen_gong_seated"]
     },
     {
       "id": "shen_gong_guiding",
       "name": "神公·持烛引路",
       "path": "assets/characters/shen_gong/standing_guiding.png",
       "kind": "character",
-      "beats": [
-        "09"
-      ],
+      "beats": ["09"],
       "references": [
         "assets/characters/shen_gong/standing_jiaobei.png",
         "assets/props/red_candle/unlit.png"
@@ -1231,9 +892,7 @@
       "name": "慧普·空背剥皮",
       "path": "assets/characters/hui_pu/rear_hollow.png",
       "kind": "character",
-      "beats": [
-        "08"
-      ],
+      "beats": ["08"],
       "references": [
         "assets/characters/hui_pu/standing.png",
         "assets/scenes/guest_room/room_night.png"
@@ -1241,18 +900,14 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact abbot costume/body identity, input2 victim-room lighting and line-of-sight reference. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same elderly stockier abbot seen from REAR three-quarter, stooped toward low bed outside sprite. Same ochre robe and brown patchwork kasaya now parted at upper back enough to reveal impossible hollow dark empty cavity inside a thin skin shell; no spine, muscle, internal organs or graphic tissue. Both hands low at waist level hold one thin dull beige skin-like sheet being lifted, no bloody cut anatomy. Face completely turned away, no visible face in rear sprite. Quiet unsettling discovery, not action monster. Show complete body/feet but keep minimal cloth folds, night amber/blue low light. No bed/victim/background baked in. Both arms reach forward away from viewer toward low bed at front-left. Hands visible only beyond left edge of body, holding a small separate skin-like sheet. No hands touching or pulling his own back cavity.",
       "status": "verified",
-      "needs": [
-        "victim_room_night"
-      ]
+      "needs": ["victim_room_night"]
     },
     {
       "id": "hui_pu_turn",
       "name": "慧普·停手回望",
       "path": "assets/characters/hui_pu/turning_hollow.png",
       "kind": "character",
-      "beats": [
-        "08"
-      ],
+      "beats": ["08"],
       "references": [
         "assets/characters/hui_pu/rear_hollow.png",
         "assets/characters/hui_pu/portrait_neutral.png"
@@ -1260,19 +915,14 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact rear hollow-back sprite/costume, input2 exact abbot facial identity. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same body/robe/back hollow cavity and feet position. Change only head/upper torso turning a little over shoulder toward corridor after hearing vase, hands freeze holding same skin-like sheet low. Partial familiar plump elderly face visible with calm excessive gentleness, not screaming or glowing eyes. No blood/organs. Keep silhouette aligned closely enough to crossfade rear pose.",
       "status": "verified",
-      "needs": [
-        "hui_pu_rear"
-      ]
+      "needs": ["hui_pu_rear"]
     },
     {
       "id": "lin_lan_double",
       "name": "林岚·换皮者抓脸",
       "path": "assets/characters/lin_lan/double_scratching.png",
       "kind": "character",
-      "beats": [
-        "07",
-        "10"
-      ],
+      "beats": ["07", "10"],
       "references": [
         "assets/characters/lin_lan/standing_cap_removed.png",
         "assets/characters/lin_lan/portrait_neutral.png"
@@ -1280,21 +930,15 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact familiar body/costume, input2 exact face. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same identifiable adult traveller as reference, same body scale and clothes/straps/hair. Three-quarter front full body, slightly hunched toward viewer, one hand reaching forward and the other fingers scratching along own cheek/jaw. Face still mostly familiar, subtle seams now exposed just under collar at neck and a small loose edge at jaw. No flayed anatomical gore, no exposed muscle/bone or dripping blood; use thin waxy skin edge and dark stitched line. Eyes unfocused pleading, not glowing monster. Midnight restrained candle side light, NO cast shadow or breath cloud baked into sprite. Preserve all individual identity differences. No extra camera cap for Lin, no blue hairtie on Xu.",
       "status": "verified",
-      "needs": [
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["lin_lan_cap_removed"]
     },
     {
       "id": "lin_lan_portrait_revealed",
       "name": "林岚·缝线显露头像",
       "path": "assets/characters/lin_lan/portrait_revealed.png",
       "kind": "portrait",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/lin_lan/portrait_neutral.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/lin_lan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT bone structure/hairstyle/head angle/shoulders/crop/scale/costume of this square1254portrait. Change ONLY expression and small revealed clue: strained pleading eyes, tense parted lips, thin dark stitched seam just above collar at side of neck with a tiny lifted waxy skin edge at jaw. No fingers/hands added, no blood, exposed tissue, glowing eyes or new face. Familiar traveller remains recognizable, only used AFTER visible reveal, never before.",
       "status": "verified",
@@ -1305,12 +949,8 @@
       "name": "林岚·晨间疲惫",
       "path": "assets/characters/lin_lan/portrait_tired.png",
       "kind": "portrait",
-      "beats": [
-        "12"
-      ],
-      "references": [
-        "assets/characters/lin_lan/portrait_neutral.png"
-      ],
+      "beats": ["12"],
+      "references": ["assets/characters/lin_lan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact face geometry, age, hairstyle, angle, clothing, shoulder pose, square1254crop and linework. Change ONLY to tired but relieved after poor sleep: slight lower eyelid fatigue, relaxed lips, calm gaze without smile. No new injury, tears, stitches, makeup, blood, shadow cloud, hands or props. Ordinary living traveller, soft neutral morning light.",
       "status": "verified",
@@ -1321,10 +961,7 @@
       "name": "周砚·换皮者抓脸",
       "path": "assets/characters/zhou_yan/double_scratching.png",
       "kind": "character",
-      "beats": [
-        "07",
-        "10"
-      ],
+      "beats": ["07", "10"],
       "references": [
         "assets/characters/zhou_yan/standing.png",
         "assets/characters/zhou_yan/portrait_neutral.png"
@@ -1332,21 +969,15 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact familiar body/costume, input2 exact face. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same identifiable adult traveller as reference, same body scale and clothes/straps/hair. Three-quarter front full body, slightly hunched toward viewer, one hand reaching forward and the other fingers scratching along own cheek/jaw. Face still mostly familiar, subtle seams now exposed just under collar at neck and a small loose edge at jaw. No flayed anatomical gore, no exposed muscle/bone or dripping blood; use thin waxy skin edge and dark stitched line. Eyes unfocused pleading, not glowing monster. Midnight restrained candle side light, NO cast shadow or breath cloud baked into sprite. Preserve all individual identity differences. No extra camera cap for Lin, no blue hairtie on Xu.",
       "status": "verified",
-      "needs": [
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["lin_lan_cap_removed"]
     },
     {
       "id": "zhou_yan_portrait_revealed",
       "name": "周砚·缝线显露头像",
       "path": "assets/characters/zhou_yan/portrait_revealed.png",
       "kind": "portrait",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/zhou_yan/portrait_neutral.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/zhou_yan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT bone structure/hairstyle/head angle/shoulders/crop/scale/costume of this square1254portrait. Change ONLY expression and small revealed clue: strained pleading eyes, tense parted lips, thin dark stitched seam just above collar at side of neck with a tiny lifted waxy skin edge at jaw. No fingers/hands added, no blood, exposed tissue, glowing eyes or new face. Familiar traveller remains recognizable, only used AFTER visible reveal, never before.",
       "status": "verified",
@@ -1357,12 +988,8 @@
       "name": "周砚·晨间疲惫",
       "path": "assets/characters/zhou_yan/portrait_tired.png",
       "kind": "portrait",
-      "beats": [
-        "12"
-      ],
-      "references": [
-        "assets/characters/zhou_yan/portrait_neutral.png"
-      ],
+      "beats": ["12"],
+      "references": ["assets/characters/zhou_yan/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact face geometry, age, hairstyle, angle, clothing, shoulder pose, square1254crop and linework. Change ONLY to tired but relieved after poor sleep: slight lower eyelid fatigue, relaxed lips, calm gaze without smile. No new injury, tears, stitches, makeup, blood, shadow cloud, hands or props. Ordinary living traveller, soft neutral morning light.",
       "status": "verified",
@@ -1373,10 +1000,7 @@
       "name": "许栀·换皮者抓脸",
       "path": "assets/characters/xu_zhi/double_scratching.png",
       "kind": "character",
-      "beats": [
-        "07",
-        "10"
-      ],
+      "beats": ["07", "10"],
       "references": [
         "assets/characters/xu_zhi/standing.png",
         "assets/characters/xu_zhi/portrait_neutral.png"
@@ -1384,21 +1008,15 @@
       "transparent": true,
       "prompt": "Use case: identity-preserve. Input1 exact familiar body/costume, input2 exact face. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Same identifiable adult traveller as reference, same body scale and clothes/straps/hair. Three-quarter front full body, slightly hunched toward viewer, one hand reaching forward and the other fingers scratching along own cheek/jaw. Face still mostly familiar, subtle seams now exposed just under collar at neck and a small loose edge at jaw. No flayed anatomical gore, no exposed muscle/bone or dripping blood; use thin waxy skin edge and dark stitched line. Eyes unfocused pleading, not glowing monster. Midnight restrained candle side light, NO cast shadow or breath cloud baked into sprite. Preserve all individual identity differences. No extra camera cap for Lin, no blue hairtie on Xu.",
       "status": "verified",
-      "needs": [
-        "lin_lan_cap_removed"
-      ]
+      "needs": ["lin_lan_cap_removed"]
     },
     {
       "id": "xu_zhi_portrait_revealed",
       "name": "许栀·缝线显露头像",
       "path": "assets/characters/xu_zhi/portrait_revealed.png",
       "kind": "portrait",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/portrait_neutral.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/xu_zhi/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve EXACT bone structure/hairstyle/head angle/shoulders/crop/scale/costume of this square1254portrait. Change ONLY expression and small revealed clue: strained pleading eyes, tense parted lips, thin dark stitched seam just above collar at side of neck with a tiny lifted waxy skin edge at jaw. No fingers/hands added, no blood, exposed tissue, glowing eyes or new face. Familiar traveller remains recognizable, only used AFTER visible reveal, never before.",
       "status": "verified",
@@ -1409,12 +1027,8 @@
       "name": "许栀·晨间疲惫",
       "path": "assets/characters/xu_zhi/portrait_tired.png",
       "kind": "portrait",
-      "beats": [
-        "12"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/portrait_neutral.png"
-      ],
+      "beats": ["12"],
+      "references": ["assets/characters/xu_zhi/portrait_neutral.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact dialogue portrait target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. Preserve exact face geometry, age, hairstyle, angle, clothing, shoulder pose, square1254crop and linework. Change ONLY to tired but relieved after poor sleep: slight lower eyelid fatigue, relaxed lips, calm gaze without smile. No new injury, tears, stitches, makeup, blood, shadow cloud, hands or props. Ordinary living traveller, soft neutral morning light.",
       "status": "verified",
@@ -1425,86 +1039,56 @@
       "name": "回廊·灯房半掩",
       "path": "assets/scenes/east_courtyard/corridor_lamp_ajar.png",
       "kind": "background",
-      "beats": [
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_night.png"
-      ],
+      "beats": ["08"],
+      "references": ["assets/scenes/east_courtyard/corridor_night.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. Image1 is the EXACT approved midnight corridor edit target, 1672x941. Preserve the entire camera, architecture, perspective, windows, tile seams, two lit hanging lanterns, moonlit courtyard, empty console table and absent vase/bell precisely. Change ONLY ONE SPECIFIC DOOR: the FAR LEFT door, SECOND door on the left when counting away from viewer, SMALL panel centered approximately x650,y425. The LARGE near-left door centered x210 remains CLOSED. Open that specified far door inward about25 degrees, showing a narrow dark room aperture and the same wooden panel/bronze ring/blank brass plate on its leaf. Doorframe in SAME original location and footprint; no rectangle pasted over wall or window, no enlarged or recentered doorway. Every other door remains closed. Return COMPLETE OPAQUE full-frame scene with only this small architectural state changed. Do not extract a sprite, no transparency anywhere. Same restrained realistic-proportion 2D hand-drawn fine contour game art, broad matte colors, muted cool night and small amber lamps. No person/animal/face, loose props, text/letters, UI, frame or watermark.",
       "status": "verified",
-      "needs": [
-        "corridor_night"
-      ]
+      "needs": ["corridor_night"]
     },
     {
       "id": "corridor_paper_ajar",
       "name": "回廊·纸房半掩",
       "path": "assets/scenes/east_courtyard/corridor_paper_ajar.png",
       "kind": "background",
-      "beats": [
-        "08"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_night.png"
-      ],
+      "beats": ["08"],
+      "references": ["assets/scenes/east_courtyard/corridor_night.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. Image1 is the EXACT approved midnight corridor edit target, 1672x941. Preserve the entire camera, architecture, perspective, windows, tile seams, two lit hanging lanterns, moonlit courtyard, empty console table and absent vase/bell precisely. Change ONLY ONE SPECIFIC DOOR: the FAR RIGHT door, SECOND door on right when counting away from viewer, NARROW panel centered approximately x1255,y420. The LARGE near-right door centered x1550 remains CLOSED. Open that specified far door inward about25 degrees, showing a narrow dark room aperture and the same wooden panel/bronze ring/blank brass plate on its leaf. Doorframe in SAME original location and footprint; no rectangle pasted over wall or window, no enlarged or recentered doorway. Every other door remains closed. Return COMPLETE OPAQUE full-frame scene with only this small architectural state changed. Do not extract a sprite, no transparency anywhere. Same restrained realistic-proportion 2D hand-drawn fine contour game art, broad matte colors, muted cool night and small amber lamps. No person/animal/face, loose props, text/letters, UI, frame or watermark.",
       "status": "verified",
-      "needs": [
-        "corridor_night"
-      ]
+      "needs": ["corridor_night"]
     },
     {
       "id": "room_door_open",
       "name": "门房·开门",
       "path": "assets/scenes/player_room/props/door_open.png",
       "kind": "state_overlay",
-      "beats": [
-        "07",
-        "08",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["07", "08", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact full scene geometry/camera target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Use a FULL1672x941 canvas aligned exactly with reference; render only the requested replacement region in its original screen position, all other pixels transparent. Do not recenter/enlarge the patch. Only central wooden door doorway patch. Same room-internal camera: unbolt and swing panel inward toward viewer RIGHT, with exact existing door leaf and metalwork. Opaque dark midnight corridor is visible THROUGH entire aperture covering original closed panel; no ghost/person. Include new open leaf so it overlays right jamb/wall naturally. Outer patch boundary transparent. Existing frame/room geometry unchanged. Real alpha outside patch, no white/black rectangle outside region.",
       "status": "verified",
-      "needs": [
-        "player_room_candlelit"
-      ]
+      "needs": ["player_room_candlelit"]
     },
     {
       "id": "room_door_bulge",
       "name": "门房·人形鼓门",
       "path": "assets/scenes/player_room/props/door_bulging.png",
       "kind": "state_overlay",
-      "beats": [
-        "06"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["06"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: precise-object-edit. Input1 exact full scene geometry/camera target. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. Use a FULL1672x941 canvas aligned exactly with reference; render only the requested replacement region in its original screen position, all other pixels transparent. Do not recenter/enlarge the patch. Only central closed wooden door panel with EXACT original door bounds/hardware. Wood subtly bulges inward in vague head/shoulders/hand pressure silhouette, a few stressed plank seams. Still a wooden door, NO actual face/eyes/skin printed onto it. Preserve latch/ring location and original color. Opaque entire panel, transparent outside panel boundary. Match moonlit low light, no fragments yet. Real alpha outside patch, no white/black rectangle outside region.",
       "status": "verified",
-      "needs": [
-        "player_room_candlelit"
-      ]
+      "needs": ["player_room_candlelit"]
     },
     {
       "id": "intrusion_shadow",
       "name": "破门黑影",
       "path": "assets/scenes/player_room/props/intrusion_shadow.png",
       "kind": "effect",
-      "beats": [
-        "06"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["06"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 linework/night mood only. Style: exactly match the approved references of this game: realistic human/architectural proportions, restrained 2D hand-drawn Chinese narrative game illustration, fine dark contours, broad matte muted color planes, sparse surface texture and simple soft shading. Everyday maintained Chinese temple. No glossy 3D, photorealism, anime faces, excessive grunge, invented symbols, UI, captions, lettering, watermark or black bars. One independent transparent PNG production sprite. Preserve genuine alpha around all edges and between parts; no background, opaque rectangle, colored fog, vignette, halo or cast shadow cloud. Entire subject visible with small clear margins. A single vague adult-height human intrusion shadow seen frontally, head/shoulders and reaching forearm, lower body tapering into dark transparent edges. NO identifiable gender, clothing, face, eyes, mouth, anatomy or glowing features. Not a dialogue portrait: looming torso silhouette for immediate first-person death fade. Soft charcoal-black shape, not smoky fantasy creature. Centered tall transparent canvas, no door/background.",
       "status": "verified",
@@ -1515,16 +1099,8 @@
       "name": "门房油灯·未燃",
       "path": "assets/scenes/player_room/props/oil_lamp_unlit.png",
       "kind": "prop",
-      "beats": [
-        "05",
-        "06",
-        "07",
-        "10",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["05", "06", "07", "10", "11"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": true,
       "prompt": "Use case: background-extraction. Input1 exact oil lamp identity and art reference. Extract ONLY the unlit glass chimney oil lamp at FAR RIGHT on its table, no candle or saucer. Same plain amber-transparent bulbous glass chimney, dark brass burner/reservoir/round base, no carrying handle. Match its existing 3/4 view and understated dark contours/broad matte shading. Lamp is UNLIT: no flame, glow, fire, smoke or light cloud. Transparent glass with subtle amber edge reflections, genuine alpha around lamp and transparent interior where appropriate, no opaque rectangle, colored fog, cast shadow cloud, room, table or text. Entire lamp visible centered at high-resolution square. No added props.",
       "status": "verified",
@@ -1535,27 +1111,19 @@
       "name": "肉粥·勺底纤维调查",
       "path": "assets/props/porridge/bowl_inspect.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/porridge/bowl_full.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/porridge/bowl_full.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. Input1 exact porridge bowl/material identity. An investigative close-up of the same bowl of oily rice porridge, one wooden spoon raised just over the bowl with a tiny pale cooked meat fiber visible on spoon. Same offwhite ceramic bowl with two muted blue rings, warm sunset light, realistic proportions, fine hand-drawn outlines, broad matte shading, transparent outer background. No hand, text, gore or table. This is a distinct investigation view, used instead of the regular bowl during close examination.",
       "status": "verified",
-      "needs": [
-        "porridge_full"
-      ]
+      "needs": ["porridge_full"]
     },
     {
       "id": "opening_door_listening",
       "name": "开场镜头·林岚贴门听声",
       "path": "assets/video/opening/door_listening.png",
       "kind": "video_keyframe",
-      "beats": [
-        "opening"
-      ],
+      "beats": ["opening"],
       "references": [],
       "transparent": false,
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
@@ -1567,12 +1135,8 @@
       "name": "开场镜头·林岚惊惧双眼",
       "path": "assets/video/opening/lin_lan_eyes.png",
       "kind": "video_keyframe",
-      "beats": [
-        "opening"
-      ],
-      "references": [
-        "assets/video/opening/door_listening.png"
-      ],
+      "beats": ["opening"],
+      "references": ["assets/video/opening/door_listening.png"],
       "transparent": false,
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "prompt": "Use case: identity-preserve.\nAsset type: ONE landscape 16:9 extreme eye close-up live-action cinema reference frame for shot 2 of 《红烛无声》.\nInput image 1 role: ONLY the precise identity of the real Chinese actress, her natural eyes/eyebrows/skin and black bob, and the physical warm candle versus cool temple-night lighting. This is a reference for a NEW SHOT, not a request to retain its door composition. Preserve this exact actress; do not beautify, recast, or convert her into CGI.\nPrimary request: the instant she turns away from the temple door and notices something just behind her unseen companion. The viewer is very close in front of her. An aggressive cinematic EXTREME CLOSE-UP of BOTH EYES: eyebrows and both eyes dominate practically the whole horizontal frame. Crop out her mouth, lower nose, chin, shoulders, almost all forehead and nearly all hair. Her two eyes and eyeline must occupy at least 75 percent of the image width. Only a little upper nose bridge is visible. Not a normal face portrait.\nPerformance: a believable sudden fright caught in a fraction of a second. Her gaze darts just past the viewer toward an unseen thing; lower eyelids tighten, eyebrows draw slightly up and inward, upper lids lift naturally. A little moistness at the lower lash line and tiny temple sweat. Normal dark-brown human irises and normal pupil sizes, anatomically natural eyes, unretouched pores and individual real eyelashes. Fear comes from the gaze and very close camera, not an exaggerated fixed scream or digitally enormous eyes. There are no figures or supernatural shapes reflected in the eyes, only one or two small ordinary warm practical-light catchlights, never sparkling stars.\nPhotography: same convincingly live-action actress in the same real night location as the reference; 100mm macro cinema lens, razor sharp focus on her eye planes, natural edge falloff. A subdued warm candle edge on one side of her face, desaturated cool shadow on the other, sober Chinese folk-horror photography. Genuine fine skin texture and human asymmetry, slight optical grain, no glamour retouching or plastic gloss. Opaque full-bleed wide 16:9 shot, no panels or collage.\nNo text, subtitles, title, UI, border, watermark or black bars. No anime eyes, illustration, wax doll, videogame render, artificial starbursts, glowing pupils, extra eyes, tears streaming down cheeks, wounds, blood, monsters or plot spoilers.",
@@ -1583,12 +1147,8 @@
       "name": "开场镜头·回廊踉跄逃跑",
       "path": "assets/video/opening/corridor_running.png",
       "kind": "video_keyframe",
-      "beats": [
-        "opening"
-      ],
-      "references": [
-        "assets/video/opening/door_listening.png"
-      ],
+      "beats": ["opening"],
+      "references": ["assets/video/opening/door_listening.png"],
       "transparent": false,
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "prompt": "Use case: identity-preserve.\nAsset type: ONE full-bleed landscape 16:9 photographed action reference still for shot 3, subjective escape into the temple corridor in 《红烛无声》.\nInput image 1 role: the exact real actress, chin-length side-parted black bob, worn charcoal cotton jacket, gray shirt, small black camera and strap; also the real timber doorway and temple-night lighting. Preserve her human identity, clothes and the physical realism. This is a NEW CAMERA POSITION, now following her out into the same corridor, not a copy of her listening pose.\nScene/action: the viewer is her unseen companion, hurrying after her from the guest-room doorway. She has just pulled the viewer out and is now two quick steps ahead, running away from camera, seen in three-quarter back view near the center-left, slightly turning her head back enough to give a glimpse of the SAME cheek and black bob. Candid mid-stride, shoulders forward, weight really shifting, one arm swinging naturally, clothes and short hair moving from the hurried turn. Her camera rests by her hip on its strap. Not a fashion runway pose or a smiling portrait. No reaching hand in the foreground and no additional people.\nLocation: the ordinary covered Chinese Buddhist temple passage suggested outside the reference doorway. A finite, believable night corridor: weathered dark-brown wooden guest-room doors and Chinese lattice windows along the LEFT wall, chunky timber pillars on stone bases along the RIGHT open side, gray stone paving, a small shadowed courtyard with tree and gray clay tiles outside the right pillars. The near left doorway behind the viewer casts only a little candle warmth onto the threshold. Two small warm amber practical eave lamps along the passage, limited light islands; no rows of new red lanterns. The same aged wood, plaster and stone as the reference. Normal inhabitable real architecture, no fantasy, infinite tunnel or abandoned ruin.\nCamera/framing: subjective adult eye height about 1.5 metres, natural 32mm cinema lens, camera just inside the passage looking along the direction of running, a few degrees of natural handheld lean but not a fall yet. Frame the woman's figure from head to near ankles, leave visible stone floor and pillars to establish the escape path. She occupies less than one third of frame width; the corridor should remain clearly legible. Capture physical movement with slight localized blur at a swinging sleeve, heel and nearby frame edge; actress body and main building structure remain focused enough for video reference. The viewer's face, body, feet and camera equipment never appear.\nPhotographic style: completely REAL LIVE-ACTION HORROR FILM STILL from a practical location, natural skin glimpse, tactile real jacket fabric and flyaway hair, convincingly imperfect aged wood and real stone pores, near-black midnight shadows mixed with very limited amber lamplight. No glossy CGI, fake game lighting or painted contours, no excessive teal grade. Real low-light exposure with readable shadows, modest lens softness and subtle fine grain. Frightened urgency, no visible threat.\nNo ghost, monster, pursuer, silhouette, blood, injury, bodies, ritual decorations, fog machine clouds, text, signage letters, title, subtitles, logo, watermark, black bars, panels or collage. One actress only. No cartoon, illustration, 3D render, wax skin or motion smear across the entire image.\nExterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.\nPreserve her ordinary black travel backpack visible from behind.",
@@ -1599,12 +1159,8 @@
       "name": "开场镜头·回廊跌倒贴地",
       "path": "assets/video/opening/corridor_fallen.png",
       "kind": "video_end_frame",
-      "beats": [
-        "opening"
-      ],
-      "references": [
-        "assets/video/opening/corridor_running.png"
-      ],
+      "beats": ["opening"],
+      "references": ["assets/video/opening/corridor_running.png"],
       "transparent": false,
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "prompt": "Use case: photorealistic-natural.\nAsset type: ONE live-action subjective fallen-view END FRAME for shot 4 of the Chinese folk-horror opening 《红烛无声》, landscape 16:9.\nInput image 1 role: ONLY the exact physical corridor, its geometry, doors, pillars, stone bases, damp stone paving, courtyard and practical night lighting. Generate a new camera view of this SAME SET from the floor after the unseen viewer trips. The actress in the reference has continued ahead and is completely outside the new frame. Do not copy her or show any person.\nPrimary request: a person's eyes have dropped onto their RIGHT SIDE after a stumbling run. A physically plausible camera only 8 to 12 centimetres above the stone, very close to the base of a near right timber pillar. Strong approximately 45-degree CLOCKWISE CAMERA ROLL: normally vertical wood columns run dramatically diagonal across the photograph. The whole world appears tilted because the camera/body has fallen; no actual building is bent or slanted. This is explicitly a canted ground-level fallen-person POV, not an upright low-angle architecture photograph or a crop from the standing reference.\nPreserve real architecture from the reference: old guest-room wooden doors and lattice windows along one wall, stout timber pillars on rounded stone bases along the opposite open courtyard side, gray worn slightly damp stone paving, limited warm amber eave lamps, shadowed tree and gray-tiled roof outside. Keep finite believable corridor space and coherent vanishing direction. No adding doors, long tunnels, new furniture, costumes or decorations.\nComposition: coarse real stone paving extremely near the lens dominates about two thirds of the image, one narrow near patch of stone and a worn timber/stone pillar base is in crisp focus. Familiar door bottoms and the passage recede diagonally into a softly defocused background; a couple of distant warm lamp glows hang at a slant near the image edge. The camera is clearly at a human face's fallen height, giving a vulnerable physical closeness to the ground. No empty triangles at the frame corners, no decorative frame, no rotation of a rectangular picture pasted onto black. Render this new physical viewpoint fully to the edges.\nPhotographic medium: genuinely photographed real Chinese temple at night, tactile irregular stone pores and joints, natural slightly damp highlights, aged brown timber, realistic shallow optical focus of a 28-35mm lens this close to the ground, dark slate-blue ambient night and small warm practical lamps. Real sober psychological-horror cinema exposure with sufficient near-ground detail, subtle film grain, natural lens softness. The impact has just ended; this still is momentarily settled and readable rather than a complete motion-blur smear.\nNo people, actress, human silhouettes, hands, arms, legs, shoes, protagonist face/body, reflection of anyone or a visible camera. No pursuer, monster, blood, wound, injury, dead person or death implication. No floating viewpoint, 360-degree rotation, warped building, game CG, painted texture, illustration, glossy plastic, neon, artificial fog, text, title, UI, logo, watermark, panels or black bars.\nExterior lighting invariant: TRUE DEEP MIDNIGHT. The open courtyard, sky, trees and distant roofs are nearly black, with no broad blue fill, luminous moonlit foliage, dawn or dusk. Only very limited warm practical candle/eave lamps illuminate a nearby face, a small timber area or patch of floor. Large areas outside stay in deep shadow; preserve physical texture near the lamps without HDR or fake edge glow.",
@@ -1615,9 +1171,7 @@
       "name": "开场片名·粗粝毛笔红字",
       "path": "assets/video/opening/title_card.png",
       "kind": "video_title",
-      "beats": [
-        "opening"
-      ],
+      "beats": ["opening"],
       "references": [],
       "transparent": false,
       "promptSet": "assets/generation/opening_title_prompt.json",
@@ -1629,12 +1183,8 @@
       "name": "林岚·安静跪伏",
       "path": "assets/characters/lin_lan/slumped_calm.png",
       "kind": "character_pose",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/lin_lan/standing.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/lin_lan/standing.png"],
       "transparent": true,
       "prompt": "Use case: identity-preserve. 输入图是林岚当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
       "generator": "built-in image_gen",
@@ -1645,12 +1195,8 @@
       "name": "周砚·安静跪伏",
       "path": "assets/characters/zhou_yan/slumped_calm.png",
       "kind": "character_pose",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/zhou_yan/standing.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/zhou_yan/standing.png"],
       "transparent": true,
       "prompt": "Use case: identity-preserve. 输入图是周砚当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
       "generator": "built-in image_gen",
@@ -1661,12 +1207,8 @@
       "name": "许栀·安静跪伏",
       "path": "assets/characters/xu_zhi/slumped_calm.png",
       "kind": "character_pose",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/characters/xu_zhi/standing.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/characters/xu_zhi/standing.png"],
       "transparent": true,
       "prompt": "Use case: identity-preserve. 输入图是许栀当前定型的身份和服装参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。保持原图脸型、发型、年龄、体型、服装、配饰和配色一致；只改变姿态为疲惫地低头跪伏，双膝着地、身体蜷低，头靠近手臂，抓挠停止，表现平静而虚弱。用于烛光门房床脚的独立人物层，不绘制床、房间、地板或烛台。完整身体与四肢，保留少量透明边距、真实透明 alpha，不添加矩形底色、光雾、地面、阴影云或文字。",
       "generator": "built-in image_gen",
@@ -1677,12 +1219,8 @@
       "name": "热馒头蒸笼",
       "path": "assets/props/steamed_buns/scene.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/bamboo_shoots/scene.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/bamboo_shoots/scene.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只朴素浅竹色圆形蒸笼，里面放几只完整白面馒头，松软、无馅料，不是煎饼或素饼。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
       "generator": "built-in image_gen",
@@ -1693,12 +1231,8 @@
       "name": "咸菜",
       "path": "assets/props/pickled_vegetables/scene.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/bamboo_shoots/scene.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/bamboo_shoots/scene.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只普通小号灰白瓷碟，盛少量切细的腌咸菜，不要其他菜肴或餐具。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
       "generator": "built-in image_gen",
@@ -1709,12 +1243,8 @@
       "name": "香菇青菜",
       "path": "assets/props/mushroom_greens/scene.png",
       "kind": "prop",
-      "beats": [
-        "03"
-      ],
-      "references": [
-        "assets/props/bamboo_shoots/scene.png"
-      ],
+      "beats": ["03"],
+      "references": ["assets/props/bamboo_shoots/scene.png"],
       "transparent": true,
       "prompt": "Use case: illustration-story. 输入图仅作为瓷器、食物画法、视角和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。绘制一只普通灰白瓷盘，盛家常炒香菇与青菜，深色香菇和自然绿色菜叶可辨，无肉、无多余装饰。约25度上方低视角，暖夕光来自左侧，与斋堂现有笋干、粥碗的比例与材质协调。只画一份食物及容器，全部可见并保留小边距；真正透明背景，保留边缘与空隙 alpha，无桌面、背景、投影云、光雾、边框、文字或水印。",
       "generator": "built-in image_gen",
@@ -1725,12 +1255,8 @@
       "name": "回廊拖痕近景",
       "path": "assets/details/drag_marks.png",
       "kind": "observation_detail",
-      "beats": [
-        "02"
-      ],
-      "references": [
-        "assets/scenes/east_courtyard/corridor_afternoon.png"
-      ],
+      "beats": ["02"],
+      "references": ["assets/scenes/east_courtyard/corridor_afternoon.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。贴近东院回廊原有石板地面，旧而细长的拖擦痕沿砖缝斜向延伸；保持石材、砖缝方向和白日侧光一致，近景只显示这一条实际可见线索，不加人物或工具。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
       "generator": "built-in image_gen",
@@ -1741,13 +1267,8 @@
       "name": "门闩湿痕近景",
       "path": "assets/details/door_latch_wet.png",
       "kind": "observation_detail",
-      "beats": [
-        "07",
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["07", "10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。主角门房木门与门闩局部近景，旧木材、金属件和门缝红蜡保持原造型，门闩邻近留少量湿痕，局部暖烛光与冷暗边缘，不能凭空添加手、怪物或血迹。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
       "generator": "built-in image_gen",
@@ -1758,12 +1279,8 @@
       "name": "残缺影子近景",
       "path": "assets/details/broken_shadow.png",
       "kind": "observation_detail",
-      "beats": [
-        "10"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_candlelit.png"
-      ],
+      "beats": ["10"],
+      "references": ["assets/scenes/player_room/room_candlelit.png"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit. 输入图作为同一空间的建筑材质、色彩和光照参考。克制的二维手绘叙事游戏风格，写实人体与建筑比例、细暗轮廓线、哑光大色面、稀疏材质纹理和柔和分层阴影；匹配项目现有素材，不要摄影、3D、动漫夸张、界面、文字、水印或边框。门房烛光照到的地板与床脚局部近景，一道人形投影的边缘有明显不连续与缺口；房间木石材质与烛光方向不变，线索是地面影子，不画站姿人物、完整身体或新怪物。第一人称真实观察机位，画面边缘自然延续环境。输出完整不透明横向近景，不要UI、字幕、符号、边框或水印。",
       "generator": "built-in image_gen",
@@ -1774,12 +1291,8 @@
       "name": "陆沉·案后登记",
       "path": "assets/characters/lu_chen/writing_ledger.png",
       "kind": "character_pose",
-      "beats": [
-        "02"
-      ],
-      "references": [
-        "assets/characters/lu_chen/standing_reception.png"
-      ],
+      "beats": ["02"],
+      "references": ["assets/characters/lu_chen/standing_reception.png"],
       "transparent": true,
       "prompt": "Use case: identity-preserve. 输入图为陆沉白日接待站姿，保持原脸型、剃发、清瘦体型、灰褐交领僧衣、浅内领、布腰带、长裤与布鞋，保持细暗线、哑光色块和克制二维手绘风格。只改变全身姿态为向前俯身、眼睛望向低处纸页，右手执毛笔做登记书写动作，左手下压作固定纸页的手势。全身、双手与毛笔完整可见；不画桌、纸、本、钥匙、灯、背景或额外道具。真实透明背景，轮廓外透明，无投影云、光雾、边框、文字或水印。",
       "generator": "built-in image_gen",
@@ -1790,12 +1303,8 @@
       "name": "陆沉·递出红烛",
       "path": "assets/characters/lu_chen/offering_candle.png",
       "kind": "character_pose",
-      "beats": [
-        "04"
-      ],
-      "references": [
-        "assets/characters/lu_chen/standing_reception.png"
-      ],
+      "beats": ["04"],
+      "references": ["assets/characters/lu_chen/standing_reception.png"],
       "transparent": true,
       "prompt": "Use case: identity-preserve. 输入图为陆沉当前定型参考，保持原脸型、剃发、清瘦体型、灰褐交领僧衣、浅内领、腰带、长裤与布鞋，保持细暗线、哑光色块和克制二维手绘风格。全身三分之四朝向玩家，右手向前递出一支未点燃的红烛，左臂抱朴素小木盒，盒内恰好三支剩余红烛。手指与握持关系自然，双鞋完整可见。无钥匙、油灯或额外道具；真正透明背景，无地面、阴影云、光雾、文字、边框或水印。",
       "generator": "built-in image_gen",
@@ -1806,9 +1315,7 @@
       "name": "山门·晴日下午",
       "path": "assets/scenes/temple_gate/gate_afternoon.png",
       "kind": "illustration",
-      "beats": [
-        "01"
-      ],
+      "beats": ["01"],
       "transparent": false,
       "prompt": "Use case: compositing / illustration-story. One complete 1672x941 sunny afternoon temple gate illustration. Preserve the established temple architecture, camera and recognizable character faces, hairstyles, clothing and bags. Lin Lan in a sand jacket holds her camera at left; Zhou Yan in navy stands near the center facing the gate; Xu Zhi in a grey-green cardigan with cream tote stands at right. Lu Chen in grey-brown robes greets them with palms together inside the gate. A calico cat rests on the left paving and travel luggage sits at lower right. Redraw all subjects naturally into the scene with unified perspective, realistic scale, ground contact, warm afternoon light and tree shadows. Preserve the physical signage: 红烛寺, 明照寺, 香客须知 / 入寺请静心 / 请至门内登记, 接驳 / 红烛寺. Restrained realistic-proportion 2D hand-drawn narrative game illustration, fine contours and matte color planes. No interface text, buttons, captions, name labels, watermark or frame.",
       "status": "verified",
@@ -1826,10 +1333,7 @@
       "name": "大雄宝殿·午后经过",
       "path": "assets/scenes/main_hall/hall_afternoon.png",
       "kind": "illustration",
-      "beats": [
-        "02",
-        "03"
-      ],
+      "beats": ["02", "03"],
       "references": [
         "assets/scenes/main_hall/hall_afternoon.png",
         "assets/characters/lin_lan/standing.png",
@@ -1846,13 +1350,7 @@
       "name": "门房独坐·红烛点亮",
       "path": "assets/scenes/player_room/room_seated_lit.png",
       "kind": "illustration",
-      "beats": [
-        "05",
-        "06",
-        "07",
-        "08",
-        "11"
-      ],
+      "beats": ["05", "06", "07", "08", "11"],
       "references": [
         "assets/scenes/player_room/room_candlelit.png",
         "assets/scenes/east_courtyard/candle_distribution.png",
@@ -1867,16 +1365,8 @@
       "name": "门房独坐·红烛未亮",
       "path": "assets/scenes/player_room/room_seated_unlit.png",
       "kind": "illustration",
-      "beats": [
-        "05",
-        "06",
-        "07",
-        "08",
-        "11"
-      ],
-      "references": [
-        "assets/scenes/player_room/room_seated_lit.png"
-      ],
+      "beats": ["05", "06", "07", "08", "11"],
+      "references": ["assets/scenes/player_room/room_seated_lit.png"],
       "transparent": false,
       "prompt": "Use case: lighting-weather / precise-object-edit.\nAsset type: the UNLIT counterpart of this exact complete 1672x941 room illustration, room_seated_unlit.\nThe supplied image is the EXACT edit target. Preserve the EXACT camera, composition, architecture, door/window dimensions, furniture, all tabletop books and papers, object positions, candle holder and brass oil lamp, the seated protagonist's identity, face, hair, clothing, hands, sitting pose, proportions and feet. Do NOT add, remove or move any person or object. Exactly ONE person remains, seated on the bed; no other people, visitors, ghosts, human silhouettes, reflections or creatures anywhere.\nChange ONLY the lighting state of the RED CANDLE on the desk and the illumination it produces:\n- Extinguish its flame completely. Same red candle and holder in the exact same position, intact red body, short dark black wick, NO flame, NO glowing ember, NO large smoke plume.\n- Remove all warm light emitted by that red candle: no amber halo, bright tabletop pool, warm wall glow, orange cast across the protagonist, bedding or floor.\n- The oil lamp remains OFF, no flame or glow. The room is now dark, quietly ominous and cool charcoal/olive-grey, lit ONLY by faint night ambient through the lattice window and very weak distant outdoor corridor light. Deepen the corners and under-bed shadows while keeping the player's face and silhouette, book shapes, candle, lamp and closed door legible at game size. Do not make a completely black unreadable image.\n- The OUTDOORS remains nearly BLACK and oppressive exactly as in the target, faint tree/roof silhouettes and one tiny weak distant amber point; no bright blue sky, bright moon, strong moonbeam or saturated blue lattice projections.\n- Preserve the thin subdued wax-colored line beneath the shut bolted door without making it a new interior light source.\nKeep EXACTLY the same restrained realistic-proportion 2D hand-drawn Chinese narrative-game aesthetic, fine contours, matte color planes, economical texture. This image must register spatially with the lit counterpart when switching the whole picture: no camera movement, no rescaling, no changes to the character or objects. No text, UI, captions, buttons, labels, watermark, border or cursor. One full-bleed opaque wide still illustration.",
       "status": "verified"
@@ -1886,9 +1376,7 @@
       "name": "偏房·无灯伏身",
       "path": "assets/scenes/guest_room/room_night.png",
       "kind": "illustration",
-      "beats": [
-        "08"
-      ],
+      "beats": ["08"],
       "transparent": false,
       "prompt": "Use case: compositing / illustration-story.\nAsset type: ONE full-screen finished opaque 16:9 (1672x941) narrative horror-game illustration, guest room seen through a half-open door. This is the crouched/face-hidden state, NOT a sprite, not separated layers, not a collage.\nImage 1 is the exact room/camera and drawing-style reference. Image 2 is ONLY the abbot Hui Pu's adult face, shaved head and muted ochre/brown robes identity reference; do NOT copy his standing pose, smile or portrait lighting.\nPrimary change: the room is ALMOST PITCH BLACK, WITHOUT ANY INTERIOR LIGHTS. Preserve the first-person viewpoint outside the partly open door, left doorframe, large right wood door and brass ring, bed left-center and rear lattice window. Repaint ALL surfaces and characters together with coherent deep-night lighting.\nOn the bed a fully clothed adult lies motionless lengthwise, mostly hidden by bedding and darkness; their face/identity cannot be discerned. The abbot is crouched/kneeling on the bed and hunched very LOW over this person's upper torso, his robe-covered body making a single sinister arch, his head bowed away from camera almost touching the person's shoulder. Hands mostly concealed. The posture must clearly read as looming over a person ON the bed, NOT standing beside an empty bed. Exactly two adults total, no bystanders. Nonsexual supernatural suspense, no visible blood, wounds, exposed organs or explicit violence.\nLighting is essential: most interior values are near-black charcoal, with barely discernible desaturated brown/blue edges. NO candle, lamp, flame, lit fixture, warm bright bed, spotlight, clear bright moon disk or bright blue sky. Existing window is almost black, revealing only faint roof/tree silhouettes. Only an extremely faint cool nocturnal ambient trace and a tiny hint of warm corridor spill on the NEAREST door wood outside the room; that warm light must NOT illuminate the bed. Bed, monk's bowed bald head, shoulder/robe contour and the covered person's shape are dimly distinguishable after the eye adjusts, their details indistinct and softly lost in shadows. Do not make it pure featureless black; silhouettes must be readable. Interior details deliberately obscure, haunted quiet unease.\nStyle: restrained mature Chinese 2D hand-drawn narrative game illustration, realistic proportions, thin structural contours and broad matte shadow shapes; same architectural perspective as image 1. No photorealism, 3D render, anime/chibi, pasted standing figures or visual cutout edges. Full bleed one single composition, no UI, text, panels, frames or watermarks.",
       "status": "verified",
@@ -1899,9 +1387,7 @@
       "name": "偏房·无灯回头",
       "path": "assets/scenes/guest_room/room_turning.png",
       "kind": "illustration",
-      "beats": [
-        "08"
-      ],
+      "beats": ["08"],
       "transparent": false,
       "prompt": "Use case: precise-object-edit / illustration-story.\nAsset type: ONE complete opaque 1672x941 16:9 narrative game scene, the \"he heard you and turns his head\" state.\nImage 1 is the exact approved full-scene EDIT TARGET and must be preserved almost pixel-for-pixel. Image 2 is only the adult abbot Hui Pu identity reference (his face, shaved head, age and ochre-brown robes), not its lighting, smile or pose.\nChange ONLY the abbot's HEAD and the minimum connected neck/shoulder folds needed for a natural turn. Keep him crouched/kneeling on the bed and bent over the same covered motionless adult. He stops and turns his bald head back over his near shoulder toward the half-open door, looking directly at the hidden observer/camera with a still, unsettling, watchful expression. Not a big smile, screaming, open mouth or monstrous face. Keep anatomy natural. Head should stay small and located by the same shoulders; do not stand him up or move his torso away from the body. The clothed victim remains mostly hidden and identity unreadable. Nonsexual quiet horror, no blood or graphic wounds.\nPreserve EXACT original crop, camera, perspective, bed, window, bedding, covered person's position, the monk's robe silhouette/body/knees/hands, foreground left doorframe, right wooden door and brass ring. Keep EVERYTHING at precisely the same place so the game can switch between two complete images without a jump.\nPreserve the existing extreme darkness. Room has NO light/lamp/candle. Face is only dimly readable as a subtle plane emerging from charcoal shadow, not spotlighted; keep all original black interior, muted blue edges and tiny warm corridor edge spill. Do not brighten the bed, window, sky, walls, skin or robes. No glowing eyes, light beams or visible moon disk. Same restrained thin-line 2D hand-drawn illustration. No extra objects, no UI, text, collage, transparent layers, watermark or black bars. One finished full-scene illustration.",
       "status": "verified",
@@ -1912,9 +1398,7 @@
       "name": "大巴·山路驶离远景",
       "kind": "illustration",
       "path": "assets/scenes/bus/bus_departure.png",
-      "beats": [
-        "12"
-      ],
+      "beats": ["12"],
       "references": [
         "assets/scenes/bus/bus_journey.png",
         "assets/scenes/temple_gate/gate_dawn.png"
@@ -1926,16 +1410,16 @@
     }
   ],
   "reusePolicy": {
-    "normalAppearance": "换皮者尚未显露时复用对应普通立绘与头像，不以素材泄露真假。",
-    "nightCompanion": "可靠同伴复用各自去盖/普通站姿和警觉头像，场景着色；不另造同身份同语义立绘。",
+    "normalAppearance": "换皮者复用对应普通人物模型与对白头像，不泄露真假。",
+    "nightCompanion": "可靠同伴复用人物网格、私物状态和警觉头像，接收场景灯光。",
     "loopingCorridor": "回廊折返复用午夜机位与转场遮罩。",
     "effects": "烛光闪烁、压灯、人物影子、呼吸、声音波形与死亡淡出由渲染/声音层提供；环境观察不转写为心声或旁白TTS，仅保留少量真实心理活动。",
     "text": "牌匾、房名、簿册、凭证、书页、碗签及结尾旧匾均准确排字。",
-    "characterSizing": "严格保持每张取样区域原比例，使用头顶、脚底与遮挡线定位；禁止独立改变宽高。",
-    "transitions": "转场使用同机位环境图配黑场淡出、淡入，不使用正面站姿人物横向平移模拟行走。"
+    "characterSizing": "米制关节与整体体型缩放，头颈及四肢接缝在动作中核验。",
+    "transitions": "同一套 3D 空间、摄像机推进与角色步态，保持原持续时间。"
   },
   "openingVideoProduction": "assets/generation/opening_video_production.json",
-  "compositionStatus": "reviewed",
-  "compositionScope": "mini_script_01_12",
+  "compositionStatus": "runtime_3d",
+  "compositionScope": "原插画用于造型参照；场景采用原生 WebGPU、授权网格、连续地形和 PBR 材质，剧情保持原内容。",
   "openingVideoReview": "pending_user_review"
 }

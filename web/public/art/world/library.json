@@ -1,0 +1,353 @@
+{
+  "surfaces": [
+    {
+      "id": "soil",
+      "albedo": "soil_albedo.webp",
+      "normal": "soil_normal.webp",
+      "arm": "soil_arm.webp"
+    },
+    {
+      "id": "stone",
+      "albedo": "stone_albedo.webp",
+      "normal": "stone_normal.webp",
+      "arm": "stone_arm.webp"
+    },
+    {
+      "id": "wood",
+      "albedo": "wood_albedo.webp",
+      "normal": "wood_normal.webp",
+      "arm": "wood_arm.webp"
+    },
+    {
+      "id": "forest",
+      "albedo": "forest_albedo.webp",
+      "normal": "forest_normal.webp",
+      "arm": "forest_arm.webp"
+    },
+    {
+      "id": "roof",
+      "albedo": "roof_albedo.webp",
+      "normal": "roof_normal.webp",
+      "arm": "roof_arm.webp"
+    },
+    {
+      "id": "plaster",
+      "albedo": "plaster_albedo.webp",
+      "normal": "plaster_normal.webp",
+      "arm": "plaster_arm.webp"
+    },
+    {
+      "id": "tree_0",
+      "albedo": "tree_0_albedo.webp",
+      "normal": "tree_0_normal.webp",
+      "arm": "tree_0_arm.webp"
+    },
+    {
+      "id": "tree_1",
+      "albedo": "tree_1_albedo.webp",
+      "normal": "tree_1_normal.webp",
+      "arm": "tree_1_arm.webp"
+    },
+    {
+      "id": "tree_2",
+      "albedo": "tree_2_albedo.webp",
+      "normal": "tree_2_normal.webp",
+      "arm": "tree_2_arm.webp"
+    },
+    {
+      "id": "rock_0",
+      "albedo": "rock_0_albedo.webp",
+      "normal": "rock_0_normal.webp",
+      "arm": "rock_0_arm.webp"
+    },
+    {
+      "id": "fern_0",
+      "albedo": "fern_0_albedo.webp",
+      "normal": "fern_0_normal.webp",
+      "arm": "fern_0_arm.webp"
+    },
+    {
+      "id": "grass_0",
+      "albedo": "grass_0_albedo.webp",
+      "normal": "grass_0_normal.webp",
+      "arm": "grass_0_arm.webp"
+    },
+    {
+      "id": "joe_clothing",
+      "albedo": "joe_clothing_albedo.webp",
+      "normal": "joe_clothing_normal.webp",
+      "arm": "joe_clothing_arm.webp"
+    },
+    {
+      "id": "marta_clothing",
+      "albedo": "marta_clothing_albedo.webp",
+      "normal": "marta_clothing_normal.webp",
+      "arm": "marta_clothing_arm.webp"
+    },
+    {
+      "id": "linlan_skin",
+      "albedo": "linlan_skin_albedo.webp",
+      "normal": "linlan_skin_normal.webp",
+      "arm": "linlan_skin_arm.webp"
+    },
+    {
+      "id": "linlan_hair",
+      "albedo": "linlan_hair_albedo.webp",
+      "normal": "linlan_hair_normal.webp",
+      "arm": "linlan_hair_arm.webp"
+    },
+    {
+      "id": "xuzhi_skin",
+      "albedo": "xuzhi_skin_albedo.webp",
+      "normal": "xuzhi_skin_normal.webp",
+      "arm": "xuzhi_skin_arm.webp"
+    },
+    {
+      "id": "xuzhi_hair",
+      "albedo": "xuzhi_hair_albedo.webp",
+      "normal": "xuzhi_hair_normal.webp",
+      "arm": "xuzhi_hair_arm.webp"
+    },
+    {
+      "id": "zhouyan_skin",
+      "albedo": "zhouyan_skin_albedo.webp",
+      "normal": "zhouyan_skin_normal.webp",
+      "arm": "zhouyan_skin_arm.webp"
+    },
+    {
+      "id": "zhouyan_hair",
+      "albedo": "zhouyan_hair_albedo.webp",
+      "normal": "zhouyan_hair_normal.webp",
+      "arm": "zhouyan_hair_arm.webp"
+    },
+    {
+      "id": "luchen_skin",
+      "albedo": "luchen_skin_albedo.webp",
+      "normal": "luchen_skin_normal.webp",
+      "arm": "luchen_skin_arm.webp"
+    },
+    {
+      "id": "shangong_skin",
+      "albedo": "shangong_skin_albedo.webp",
+      "normal": "shangong_skin_normal.webp",
+      "arm": "shangong_skin_arm.webp"
+    },
+    {
+      "id": "guanyin",
+      "albedo": "guanyin_albedo.webp",
+      "normal": "guanyin_normal.webp",
+      "arm": "guanyin_arm.webp"
+    }
+  ],
+  "meshes": {
+    "tree": {
+      "vertexOffset": 0,
+      "vertexCount": 1466736,
+      "indexOffset": 5866944,
+      "indexCount": 167193
+    },
+    "tree_far": {
+      "vertexOffset": 6535716,
+      "vertexCount": 382288,
+      "indexOffset": 8064868,
+      "indexCount": 39240
+    },
+    "rock": {
+      "vertexOffset": 8221828,
+      "vertexCount": 41280,
+      "indexOffset": 8386948,
+      "indexCount": 13494
+    },
+    "rock1": {
+      "vertexOffset": 8440924,
+      "vertexCount": 41536,
+      "indexOffset": 8607068,
+      "indexCount": 13464
+    },
+    "rock2": {
+      "vertexOffset": 8660924,
+      "vertexCount": 39744,
+      "indexOffset": 8819900,
+      "indexCount": 13500
+    },
+    "fern": {
+      "vertexOffset": 8873900,
+      "vertexCount": 20560,
+      "indexOffset": 8956140,
+      "indexCount": 5397
+    },
+    "fern1": {
+      "vertexOffset": 8977728,
+      "vertexCount": 20576,
+      "indexOffset": 9060032,
+      "indexCount": 5400
+    },
+    "fern2": {
+      "vertexOffset": 9081632,
+      "vertexCount": 8704,
+      "indexOffset": 9116448,
+      "indexCount": 2352
+    },
+    "grass": {
+      "vertexOffset": 9125856,
+      "vertexCount": 10320,
+      "indexOffset": 9167136,
+      "indexCount": 2142
+    },
+    "grass1": {
+      "vertexOffset": 9175704,
+      "vertexCount": 25200,
+      "indexOffset": 9276504,
+      "indexCount": 5280
+    },
+    "grass2": {
+      "vertexOffset": 9297624,
+      "vertexCount": 17152,
+      "indexOffset": 9366232,
+      "indexCount": 3645
+    },
+    "hand_left": {
+      "vertexOffset": 9380812,
+      "vertexCount": 8368,
+      "indexOffset": 9414284,
+      "indexCount": 2553
+    },
+    "hand_right": {
+      "vertexOffset": 9424496,
+      "vertexCount": 8336,
+      "indexOffset": 9457840,
+      "indexCount": 2538
+    },
+    "zhouyan_torso": {
+      "vertexOffset": 9467992,
+      "vertexCount": 10544,
+      "indexOffset": 9510168,
+      "indexCount": 2856
+    },
+    "zhouyan_left_arm": {
+      "vertexOffset": 9521592,
+      "vertexCount": 10352,
+      "indexOffset": 9563000,
+      "indexCount": 3186
+    },
+    "zhouyan_right_arm": {
+      "vertexOffset": 9575744,
+      "vertexCount": 10368,
+      "indexOffset": 9617216,
+      "indexCount": 3186
+    },
+    "zhouyan_left_leg": {
+      "vertexOffset": 9629960,
+      "vertexCount": 4832,
+      "indexOffset": 9649288,
+      "indexCount": 1440
+    },
+    "zhouyan_right_leg": {
+      "vertexOffset": 9655048,
+      "vertexCount": 4688,
+      "indexOffset": 9673800,
+      "indexCount": 1386
+    },
+    "linlan_torso": {
+      "vertexOffset": 9679344,
+      "vertexCount": 17344,
+      "indexOffset": 9748720,
+      "indexCount": 4446
+    },
+    "linlan_left_arm": {
+      "vertexOffset": 9766504,
+      "vertexCount": 11232,
+      "indexOffset": 9811432,
+      "indexCount": 3294
+    },
+    "linlan_right_arm": {
+      "vertexOffset": 9824608,
+      "vertexCount": 12224,
+      "indexOffset": 9873504,
+      "indexCount": 3408
+    },
+    "linlan_left_leg": {
+      "vertexOffset": 9887136,
+      "vertexCount": 5600,
+      "indexOffset": 9909536,
+      "indexCount": 1554
+    },
+    "linlan_right_leg": {
+      "vertexOffset": 9915752,
+      "vertexCount": 5776,
+      "indexOffset": 9938856,
+      "indexCount": 1620
+    },
+    "xuzhi_torso": {
+      "vertexOffset": 9945336,
+      "vertexCount": 17344,
+      "indexOffset": 10014712,
+      "indexCount": 4446
+    },
+    "xuzhi_left_arm": {
+      "vertexOffset": 10032496,
+      "vertexCount": 11232,
+      "indexOffset": 10077424,
+      "indexCount": 3294
+    },
+    "xuzhi_right_arm": {
+      "vertexOffset": 10090600,
+      "vertexCount": 12224,
+      "indexOffset": 10139496,
+      "indexCount": 3408
+    },
+    "xuzhi_left_leg": {
+      "vertexOffset": 10153128,
+      "vertexCount": 5600,
+      "indexOffset": 10175528,
+      "indexCount": 1554
+    },
+    "xuzhi_right_leg": {
+      "vertexOffset": 10181744,
+      "vertexCount": 5776,
+      "indexOffset": 10204848,
+      "indexCount": 1620
+    },
+    "linlan_head": {
+      "vertexOffset": 10211328,
+      "vertexCount": 175392,
+      "indexOffset": 10912896,
+      "indexCount": 10962
+    },
+    "xuzhi_head": {
+      "vertexOffset": 10956744,
+      "vertexCount": 193056,
+      "indexOffset": 11728968,
+      "indexCount": 12066
+    },
+    "zhouyan_head": {
+      "vertexOffset": 11777232,
+      "vertexCount": 181728,
+      "indexOffset": 12504144,
+      "indexCount": 11358
+    },
+    "luchen_head": {
+      "vertexOffset": 12549576,
+      "vertexCount": 146688,
+      "indexOffset": 13136328,
+      "indexCount": 9168
+    },
+    "shangong_head": {
+      "vertexOffset": 13173000,
+      "vertexCount": 149760,
+      "indexOffset": 13772040,
+      "indexCount": 9360
+    },
+    "guanyin": {
+      "vertexOffset": 13809480,
+      "vertexCount": 627200,
+      "indexOffset": 16318280,
+      "indexCount": 164979
+    }
+  },
+  "binary": "library.bin",
+  "skies": [
+    "sky_day.webp",
+    "sky_night.webp"
+  ]
+}

@@ -23,10 +23,7 @@
       "status": "generated",
       "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "08"
-        ],
+        "storyBeats": ["07", "08"],
         "purpose": "“沿回廊走向半掩的偏房”约3秒转场使用用户确认的完整两人门口偷听插画，人物、门缝与夜间檐灯统一绘入；保留整图运动和淡入淡出，不再叠加或单独动画化合成人物，不提前展示门内剧情。"
       }
     },
@@ -42,9 +39,7 @@
       "sha256": "dfc307736f13e568adcb7a4d53872ddd921d8614a6999bba574bdc3b642eee68",
       "status": "generated",
       "usage": {
-        "storyBeats": [
-          "02"
-        ],
+        "storyBeats": ["02"],
         "purpose": "东院回廊·晴日下午"
       },
       "kind": "background",
@@ -65,10 +60,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "仅用于山门到登记室“跟随陆沉进入东院”的约3秒转场；陆沉持铜钥匙在前，三位同伴自然背向行进。人物与光影统一绘入，固定房牌近左听、远左灯、近右门、远右纸直接绘入。不代替可交互回廊空背景，不再叠加站姿或房牌文字。"
       }
     },
@@ -86,10 +78,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "04"
-        ],
+        "storyBeats": ["03", "04"],
         "purpose": "仅用于“晚膳后沿回廊返回”的完整队伍插画：延续白天入住图的人物造型、站位和回廊空间，陆沉提灯并带着未分发红烛领路，林岚、许栀和周砚背向跟随；院外近黑夜色，灯笼局部暖光保持人物可辨，营造阴森感。人物、光影统一绘入，沿用原有整图转场，不叠加独立行走人物。"
       }
     },
@@ -107,9 +96,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "东院回廊发烛与叮嘱共用的完整夜间插画：陆沉、主角赵熙、林岚、周砚与许栀自然围成松散半圈，陆沉抱烛盒递出一支未燃红烛。人物、道具与夜色统一绘入，延续晚膳后返回图的近黑院外与局部灯光；不再叠加独立人物、纸条、房牌文字、提灯或蜡烛图层。领烛、回房和存档仍由后端结算。"
       }
     },
@@ -125,12 +112,7 @@
       "sha256": "b8fe731e5c945ee97395dc5141bdaf7a7daaaa83efffaef6a4951d3772cdcffc",
       "status": "generated",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "07",
-          "10"
-        ],
+        "storyBeats": ["05", "06", "07", "10"],
         "purpose": "同伴入室、危险实体与死亡分镜的第一视角分层底图；独处房间与三更醒来使用 room_seated_lit / room_seated_unlit 完整插画。"
       },
       "kind": "background",
@@ -149,10 +131,7 @@
       "sha256": "44781db08da1f7f847c7d7ed4c244546eee40fd640697db18c766d445c011a1e",
       "status": "selected",
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "01正常带盖同行、12取回盖后使用；入住放盖后切 standing_cap_removed"
       },
       "alphaCheck": {
@@ -178,9 +157,7 @@
       "sha256": "493c3d16664cd1fddd949ab63c1df9eb42fccbd5b36da2f3c7f50f0375425e84",
       "status": "selected",
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "04入夜带路和巡门的提灯站姿；登记与清晨回收使用白日接待姿态"
       },
       "alphaCheck": {
@@ -216,10 +193,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "正常同行与古建观察；用斋、显露缝线和晨间头像使用各自状态"
       }
     },
@@ -245,10 +219,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "正常同行与关切交谈；保持短圆脸和平刘海，蓝发圈在独立纸张上"
       }
     },
@@ -274,10 +245,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "03",
-          "08"
-        ],
+        "storyBeats": ["03", "08"],
         "purpose": "正常外貌与服装定型；帘后、背身空背和回望使用专用状态"
       }
     },
@@ -303,9 +271,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公与杯筊造型参考；09初见用坐姿，结果后切石化或持烛引路"
       }
     },
@@ -321,9 +287,7 @@
       "sha256": "7d9527136dd2a946a12e308f1ecc0ed0ed8459429b62a497017ab91afab9b9f9",
       "status": "generated",
       "usage": {
-        "storyBeats": [
-          "01"
-        ],
+        "storyBeats": ["01"],
         "purpose": "山门下午完整插画：三位同伴、陆沉合十迎客、花猫和行李统一透视、日光与站位；不再叠加人物或道具，界面文字和按钮由游戏叠加。"
       },
       "promptSet": "assets/generation/production_manifest.json",
@@ -342,9 +306,7 @@
       "status": "generated",
       "layerLayout": "assets/scenes/registration/layout.json",
       "usage": {
-        "storyBeats": [
-          "02"
-        ],
+        "storyBeats": ["02"],
         "purpose": "登记处分层背景，与独立桌前景、登记簿、钥匙、通行凭及四块房牌组合"
       }
     },
@@ -371,10 +333,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "林岚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -402,10 +361,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "周砚普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -433,10 +389,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "01",
-          "02"
-        ],
+        "storyBeats": ["01", "02"],
         "purpose": "许栀普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -464,9 +417,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "陆沉普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -494,10 +445,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "03",
-          "08"
-        ],
+        "storyBeats": ["03", "08"],
         "purpose": "慧普普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "帘后初见使用通用黑影加问号占位；面容已按分镜可见时使用普通头像，不提前展示怪物结构。"
       }
@@ -525,9 +473,7 @@
         }
       },
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公普通对话的头肩头像，用于下方对白栏；沿用当前立绘身份",
         "visibilityRule": "面容可见且可辨时使用；外貌不可见的门外发言使用通用黑影加问号占位。换皮者按玩家已见外貌选择头像，不提前泄露真假。"
       }
@@ -556,12 +502,7 @@
       },
       "presentation": "assets/generation/portrait_presentation.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "07",
-          "08",
-          "11"
-        ],
+        "storyBeats": ["03", "07", "08", "11"],
         "purpose": "帘后人物及尚未看清、未核实的门外发言占位；保留NPC头像框，由界面叠加问号",
         "visibilityRule": "依据玩家已见信息选择通用黑影或可见人物外貌，不依据后台真实身份暗示真假"
       }
@@ -591,11 +532,7 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "07",
-          "08"
-        ],
+        "storyBeats": ["02", "07", "08"],
         "purpose": "单枚铜钥匙的道具栏、背包与调查图；沿用登记处钥匙身份"
       }
     },
@@ -624,15 +561,7 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": [
-          "04",
-          "05",
-          "06",
-          "08",
-          "09",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["04", "05", "06", "08", "09", "10", "11"],
         "purpose": "未点燃红烛的道具栏与调查图；不是场景中燃烧或短芯状态"
       }
     },
@@ -661,11 +590,7 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "05",
-          "06"
-        ],
+        "storyBeats": ["02", "05", "06"],
         "purpose": "木念珠的道具栏与调查图；保留一颗更深的珠子"
       }
     },
@@ -694,10 +619,7 @@
       },
       "presentation": "assets/generation/inventory_presentation.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "12"
-        ],
+        "storyBeats": ["02", "12"],
         "purpose": "通行凭的道具栏与正反面调查底图"
       }
     },
@@ -715,10 +637,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "04",
-          "08"
-        ],
+        "storyBeats": ["04", "08"],
         "purpose": "林岚·警觉"
       },
       "alphaCheck": {
@@ -746,10 +665,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08",
-          "10"
-        ],
+        "storyBeats": ["08", "10"],
         "purpose": "林岚·害怕"
       },
       "alphaCheck": {
@@ -777,10 +693,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "04"
-        ],
+        "storyBeats": ["03", "04"],
         "purpose": "周砚·怀疑"
       },
       "alphaCheck": {
@@ -808,9 +721,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "周砚·紧张"
       },
       "alphaCheck": {
@@ -838,10 +749,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "08"
-        ],
+        "storyBeats": ["03", "08"],
         "purpose": "许栀·关切"
       },
       "alphaCheck": {
@@ -869,10 +777,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "10"
-        ],
+        "storyBeats": ["03", "10"],
         "purpose": "许栀·坚定拒绝"
       },
       "alphaCheck": {
@@ -900,10 +805,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "04"
-        ],
+        "storyBeats": ["02", "04"],
         "purpose": "陆沉·审视"
       },
       "alphaCheck": {
@@ -931,10 +833,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03",
-          "12"
-        ],
+        "storyBeats": ["03", "12"],
         "purpose": "陆沉·欲言又止"
       },
       "alphaCheck": {
@@ -962,9 +861,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋堂完整晚膳插画：三位同伴自然围坐，人物、餐具、食物、桌面与夕照统一绘制；所有进食选择共用同图，结算仍由后端负责。"
       },
       "layerLayout": "assets/scenes/dining_hall/layout.json"
@@ -983,9 +880,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "东侧偏殿·夜间"
       },
       "layerLayout": "assets/scenes/east_shrine/layout.json"
@@ -1004,12 +899,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "02",
-          "03",
-          "12"
-        ],
+        "storyBeats": ["01", "02", "03", "12"],
         "purpose": "陆沉·白日接待"
       },
       "alphaCheck": {
@@ -1037,10 +927,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "08"
-        ],
+        "storyBeats": ["02", "08"],
         "purpose": "回廊铜铃"
       },
       "alphaCheck": {
@@ -1068,10 +955,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "08"
-        ],
+        "storyBeats": ["02", "08"],
         "purpose": "回廊花瓶·完整"
       },
       "alphaCheck": {
@@ -1099,12 +983,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "07",
-          "10"
-        ],
+        "storyBeats": ["05", "06", "07", "10"],
         "purpose": "红烛烛台·燃烧"
       },
       "alphaCheck": {
@@ -1132,10 +1011,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "10"
-        ],
+        "storyBeats": ["05", "10"],
         "purpose": "大念处经·桌面"
       },
       "alphaCheck": {
@@ -1163,9 +1039,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05"
-        ],
+        "storyBeats": ["05"],
         "purpose": "寺史册·桌面"
       },
       "alphaCheck": {
@@ -1193,9 +1067,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋堂桌前景"
       },
       "alphaCheck": {
@@ -1223,9 +1095,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "东院回廊·入夜"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
@@ -1244,12 +1114,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "08",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["07", "08", "10", "11"],
         "purpose": "东院回廊·午夜"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
@@ -1268,9 +1133,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋碗·肉粥"
       },
       "alphaCheck": {
@@ -1298,9 +1161,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "杯筊桌前景"
       },
       "alphaCheck": {
@@ -1328,13 +1189,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "07",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "07", "10", "11"],
         "purpose": "门房油灯·未燃"
       },
       "alphaCheck": {
@@ -1362,9 +1217,7 @@
       "status": "generated",
       "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "清早三位同伴从各自房间出来：林岚在近左听房门口掩嘴打哈欠，周砚在远左灯房外伸懒腰，许栀在远右纸房的门缝内整理帆布包；近右门房为主角房间。人物、半开的门、房牌、行李与晨光统一绘入完整插画，不叠加旧人物、道具、房牌文字或人物微动。"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
@@ -1383,11 +1236,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "10"
-        ],
+        "storyBeats": ["05", "06", "10"],
         "purpose": "同伴入室、危险实体与死亡分镜的第一视角分层底图；独处房间与三更醒来使用 room_seated_lit / room_seated_unlit 完整插画。"
       },
       "layerLayout": "assets/scenes/player_room/layout.json"
@@ -1406,9 +1255,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "11"
-        ],
+        "storyBeats": ["11"],
         "purpose": "门房·假报晓"
       },
       "layerLayout": "assets/scenes/player_room/layout.json"
@@ -1427,10 +1274,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "11",
-          "12"
-        ],
+        "storyBeats": ["11", "12"],
         "purpose": "门房·真实清晨"
       },
       "layerLayout": "assets/scenes/player_room/layout.json"
@@ -1449,9 +1293,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "山门·晨光；红烛寺、明照寺、香客须知和接驳站牌文字直接绘入背景，运行时不叠字。"
       },
       "layerLayout": "assets/scenes/temple_gate/layout.json"
@@ -1470,9 +1312,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01"
-        ],
+        "storyBeats": ["01"],
         "purpose": "开始后的第二镜，第一视角从车内跟随三位同伴下车，陆沉在山门内合十迎客；整图渐进淡入并缓慢横移约3秒，镜头结束进入山门外正片后，首句对白与完整字幕同步开始。主匾红烛寺、旧匾明照寺、香客须知及接驳站牌直接绘入图片，运行时不叠字。"
       }
     },
@@ -1490,10 +1330,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08",
-          "09"
-        ],
+        "storyBeats": ["08", "09"],
         "purpose": "大雄宝殿·夜间入口"
       }
     },
@@ -1511,9 +1348,7 @@
       "status": "generated",
       "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
-        "storyBeats": [
-          "01"
-        ],
+        "storyBeats": ["01"],
         "purpose": "点击或说“开始游戏”后播放约3秒：山林公路顶视远景，大巴很小，整张图由上往下缓慢平移；随后车内下车图渐进淡入并横移约4秒，两个镜头以柔和渐变衔接，镜头结束进入山门外“大巴抵达红烛寺”正片后，首句对白与完整字幕同步开始。"
       }
     },
@@ -1531,9 +1366,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07"
-        ],
+        "storyBeats": ["07"],
         "purpose": "门眼·空回廊"
       },
       "layerLayout": "assets/scenes/player_room/layout.json"
@@ -1552,9 +1385,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "回廊花瓶·碎裂"
       },
       "alphaCheck": {
@@ -1582,11 +1413,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "08",
-          "12"
-        ],
+        "storyBeats": ["02", "08", "12"],
         "purpose": "林岚相机盖"
       },
       "alphaCheck": {
@@ -1614,11 +1441,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "02",
-          "08"
-        ],
+        "storyBeats": ["01", "02", "08"],
         "purpose": "周砚折叠修缮图"
       },
       "alphaCheck": {
@@ -1646,10 +1469,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "08"
-        ],
+        "storyBeats": ["02", "08"],
         "purpose": "许栀蓝发圈夹入住须知"
       },
       "alphaCheck": {
@@ -1677,11 +1497,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "08"
-        ],
+        "storyBeats": ["05", "06", "08"],
         "purpose": "火柴"
       },
       "alphaCheck": {
@@ -1709,11 +1525,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "08"
-        ],
+        "storyBeats": ["05", "06", "08"],
         "purpose": "手电"
       },
       "alphaCheck": {
@@ -1741,9 +1553,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "慧普·帘后轮廓"
       },
       "alphaCheck": {
@@ -1771,9 +1581,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋碗·食用后"
       },
       "alphaCheck": {
@@ -1801,9 +1609,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "肉粥·勺底纤维调查"
       },
       "alphaCheck": {
@@ -1831,9 +1637,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "木勺"
       },
       "alphaCheck": {
@@ -1861,9 +1665,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "热水"
       },
       "alphaCheck": {
@@ -1891,9 +1693,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "腌笋"
       },
       "alphaCheck": {
@@ -1921,12 +1721,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "10", "11"],
         "purpose": "红烛烛台·未燃"
       },
       "alphaCheck": {
@@ -1954,12 +1749,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "10", "11"],
         "purpose": "红烛烛台·熄灭"
       },
       "alphaCheck": {
@@ -1987,12 +1777,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "10",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "10", "11"],
         "purpose": "红烛烛台·短芯燃烧"
       },
       "alphaCheck": {
@@ -2020,9 +1805,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "杯筊·封存"
       },
       "alphaCheck": {
@@ -2050,9 +1833,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "杯筊单块·平面朝上"
       },
       "alphaCheck": {
@@ -2080,9 +1861,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "偏殿鸟笼"
       },
       "alphaCheck": {
@@ -2110,9 +1889,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "偏殿猫食碟"
       },
       "alphaCheck": {
@@ -2140,10 +1917,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "09"
-        ],
+        "storyBeats": ["01", "09"],
         "purpose": "寺猫·花猫"
       },
       "alphaCheck": {
@@ -2171,9 +1945,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "杯筊单块·凸面朝上"
       },
       "alphaCheck": {
@@ -2201,11 +1973,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "09",
-          "11"
-        ],
+        "storyBeats": ["01", "09", "11"],
         "purpose": "檐鸟·麻雀"
       },
       "alphaCheck": {
@@ -2233,11 +2001,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "01",
-          "02",
-          "12"
-        ],
+        "storyBeats": ["01", "02", "12"],
         "purpose": "四人旅行行李"
       },
       "alphaCheck": {
@@ -2265,12 +2029,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "04",
-          "08",
-          "12"
-        ],
+        "storyBeats": ["02", "04", "08", "12"],
         "purpose": "林岚·相机去盖站姿"
       },
       "alphaCheck": {
@@ -2298,9 +2057,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "周砚·斋堂坐姿"
       },
       "alphaCheck": {
@@ -2328,9 +2085,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "许栀·斋堂坐姿"
       },
       "alphaCheck": {
@@ -2358,9 +2113,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "陆沉·示意噤声"
       },
       "alphaCheck": {
@@ -2388,9 +2141,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "林岚·斋堂坐姿"
       },
       "alphaCheck": {
@@ -2418,9 +2169,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公·守桌坐姿"
       },
       "alphaCheck": {
@@ -2448,9 +2197,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公·持烛引路"
       },
       "alphaCheck": {
@@ -2478,9 +2225,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公·指尖石化"
       },
       "alphaCheck": {
@@ -2508,9 +2253,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "09"
-        ],
+        "storyBeats": ["09"],
         "purpose": "神公·完全石化"
       },
       "alphaCheck": {
@@ -2538,9 +2281,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "慧普·空背剥皮"
       },
       "alphaCheck": {
@@ -2568,9 +2309,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "慧普·停手回望"
       },
       "alphaCheck": {
@@ -2598,10 +2337,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "10"
-        ],
+        "storyBeats": ["07", "10"],
         "purpose": "林岚·换皮者抓脸"
       },
       "alphaCheck": {
@@ -2629,9 +2365,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "林岚·缝线显露头像"
       },
       "alphaCheck": {
@@ -2659,9 +2393,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "林岚·晨间疲惫"
       },
       "alphaCheck": {
@@ -2689,10 +2421,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "10"
-        ],
+        "storyBeats": ["07", "10"],
         "purpose": "周砚·换皮者抓脸"
       },
       "alphaCheck": {
@@ -2720,9 +2449,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "周砚·缝线显露头像"
       },
       "alphaCheck": {
@@ -2750,9 +2477,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "周砚·晨间疲惫"
       },
       "alphaCheck": {
@@ -2780,10 +2505,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "10"
-        ],
+        "storyBeats": ["07", "10"],
         "purpose": "许栀·换皮者抓脸"
       },
       "alphaCheck": {
@@ -2811,9 +2533,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "许栀·缝线显露头像"
       },
       "alphaCheck": {
@@ -2841,9 +2561,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "许栀·晨间疲惫"
       },
       "alphaCheck": {
@@ -2871,9 +2589,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "回廊·灯房半掩"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
@@ -2892,9 +2608,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "回廊·纸房半掩"
       },
       "layerLayout": "assets/scenes/east_courtyard/layout.json"
@@ -2913,11 +2627,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "07",
-          "08",
-          "10"
-        ],
+        "storyBeats": ["07", "08", "10"],
         "purpose": "门房·开门"
       },
       "alphaCheck": {
@@ -2945,9 +2655,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "06"
-        ],
+        "storyBeats": ["06"],
         "purpose": "门房·人形鼓门"
       },
       "alphaCheck": {
@@ -2975,9 +2683,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "06"
-        ],
+        "storyBeats": ["06"],
         "purpose": "破门黑影"
       },
       "alphaCheck": {
@@ -3005,9 +2711,7 @@
       "kind": "video_keyframe",
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "usage": {
-        "storyBeats": [
-          "opening"
-        ],
+        "storyBeats": ["opening"],
         "purpose": "片头首镜；锁定真人演员、深色旅行外套、相机、门边动作与烛光，门外为完全黑夜。"
       }
     },
@@ -3025,9 +2729,7 @@
       "kind": "video_keyframe",
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "usage": {
-        "storyBeats": [
-          "opening"
-        ],
+        "storyBeats": ["opening"],
         "purpose": "同一位真人演员的双眼极近景；用于受惊偏转目光，不作静止头像。"
       }
     },
@@ -3045,9 +2747,7 @@
       "kind": "video_keyframe",
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "usage": {
-        "storyBeats": [
-          "opening"
-        ],
+        "storyBeats": ["opening"],
         "purpose": "第一人称跟随林岚逃跑；相同外套、相机和夜间寺院，庭院沉黑，仅局部廊灯照明。"
       }
     },
@@ -3065,9 +2765,7 @@
       "kind": "video_end_frame",
       "promptSet": "assets/generation/opening_keyframe_prompts.json",
       "usage": {
-        "storyBeats": [
-          "opening"
-        ],
+        "storyBeats": ["opening"],
         "purpose": "同一回廊侧倒后的贴地终幅；低机位、明显倾斜，近处石纹可读，外部庭院近黑，无人物或死亡暗示。"
       }
     },
@@ -3085,9 +2783,7 @@
       "kind": "video_title",
       "promptSet": "assets/generation/opening_title_prompt.json",
       "usage": {
-        "storyBeats": [
-          "opening"
-        ],
+        "storyBeats": ["opening"],
         "purpose": "最后纯黑片名的准确四字和粗粝毛笔造型参考；不用于真人场景风格。"
       }
     },
@@ -3106,9 +2802,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
       }
     },
@@ -3127,9 +2821,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
       }
     },
@@ -3148,9 +2840,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "安抚后的换皮同伴伏在床脚；按身体真实姿势等比放置，不旋转普通站姿。"
       }
     },
@@ -3169,9 +2859,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
       }
     },
@@ -3190,9 +2878,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
       }
     },
@@ -3211,9 +2897,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "03"
-        ],
+        "storyBeats": ["03"],
         "purpose": "斋堂长桌上的独立素食道具，与粥碗、笋干共享透视和左侧夕光。"
       }
     },
@@ -3232,9 +2916,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "02"
-        ],
+        "storyBeats": ["02"],
         "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
       }
     },
@@ -3253,10 +2935,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "07",
-          "10"
-        ],
+        "storyBeats": ["07", "10"],
         "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
       }
     },
@@ -3275,9 +2954,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "10"
-        ],
+        "storyBeats": ["10"],
         "purpose": "调查时使用专用物件近景，不再复用与观察目标无关的建筑图硬凑。"
       }
     },
@@ -3296,9 +2973,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "02"
-        ],
+        "storyBeats": ["02"],
         "purpose": "登记分镜专用俯身书写姿态，右手毛笔、左手压纸；纸本与桌面由登记处分层提供。"
       }
     },
@@ -3317,9 +2992,7 @@
       "promptSet": "assets/generation/production_manifest.json",
       "generator": "built-in image_gen",
       "usage": {
-        "storyBeats": [
-          "04"
-        ],
+        "storyBeats": ["04"],
         "purpose": "晚膳后发烛分镜，右手递出未燃红烛、左臂抱烛盒；不是提灯噤声的复用姿态。"
       }
     },
@@ -3337,10 +3010,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "02",
-          "03"
-        ],
+        "storyBeats": ["02", "03"],
         "purpose": "去斋堂途中经过大殿的完整插画：两尊巨佛占据主体，陆沉与三位同伴以小比例从底部通行；暗金佛像、冷灰窗光和香烟保留阴森感。人物与环境统一绘入，仅使用约3秒的整图横向平移，不叠加或动画化人物。"
       }
     },
@@ -3358,13 +3028,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "07",
-          "08",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "07", "08", "11"],
         "purpose": "主角赵熙独自坐在床边的完整房间插画，红烛点亮；人物、床、桌、书本、油灯、蜡烛和暖光统一绘入，窗外近黑，只有一名人物。"
       }
     },
@@ -3382,13 +3046,7 @@
       "status": "generated",
       "promptSet": "assets/generation/production_manifest.json",
       "usage": {
-        "storyBeats": [
-          "05",
-          "06",
-          "07",
-          "08",
-          "11"
-        ],
+        "storyBeats": ["05", "06", "07", "08", "11"],
         "purpose": "与点亮版同一机位、人物姿势和物件位置的完整房间插画，红烛未点亮或已熄灭；主角独坐床边，窗外近黑，室内仅有微弱冷暗环境光。"
       }
     },
@@ -3407,9 +3065,7 @@
       "promptSet": "assets/generation/scene_prompts.json",
       "layerLayout": "assets/scenes/guest_room/layout.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
       }
     },
@@ -3428,9 +3084,7 @@
       "promptSet": "assets/generation/scene_prompts.json",
       "layerLayout": "assets/scenes/guest_room/layout.json",
       "usage": {
-        "storyBeats": [
-          "08"
-        ],
+        "storyBeats": ["08"],
         "purpose": "房内无灯、近乎全黑，住持伏在床上一个人身上，身份与动作细节模糊；初窥和贴近观察共用伏身完整插画，花瓶打碎后切换同机位回头完整插画，不叠加人物、床上局部或人物微动。碎花瓶近景保留在右侧，避开床上人物。"
       }
     },
@@ -3448,9 +3102,7 @@
       "status": "generated",
       "promptSet": "assets/generation/scene_prompts.json",
       "usage": {
-        "storyBeats": [
-          "12"
-        ],
+        "storyBeats": ["12"],
         "purpose": "结尾使用远处山坡上的外部远景机位：大巴沿清晨山区弯路驶离，远处灰瓦寺庙隐在树林和薄雾间；单张完整插画，不显示车内、后视镜、乘客或旧匾文字叠层。"
       }
     }
@@ -3458,8 +3110,18 @@
   "storySource": "story/mini_script.md",
   "usageGuide": "assets/generation/asset_usage.md",
   "runtimeIntegration": {
-    "status": "integrated",
-    "currentDemoGuide": "docs/design/assets-and-slicing.md"
+    "renderer": "native_webgpu_3d",
+    "entry": "web/src/scene/world_view/index.tsx",
+    "sceneModels": "web/src/scene/world_environment",
+    "characterModels": "web/src/scene/world_character",
+    "propModels": "web/src/scene/world_prop",
+    "portraits": "对白沿用原头像；3D 使用 Rocketbox 头模与皮肤贴图",
+    "plates": "完整场景图与站姿图保留为美术依据，运行时以网格与灯光呈现场景",
+    "guide": "docs/3d_scene.md",
+    "assetLibrary": "web/public/art/world/library.json",
+    "sources": "assets/environment/README.md",
+    "statue": "MIA CC0 观音扫描，来源见 assets/environment/guanyin_source.json",
+    "articulation": "完整肢体的肘膝连续变形、髋部伏身、掌心道具绑定、步行实际位移与脚底接触阴影"
   },
   "media": [
     {

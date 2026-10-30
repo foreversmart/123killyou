@@ -69,7 +69,13 @@ async function fixture(options = {}) {
     voice,
     playbackReady,
     setConnected: (value) => (connected = value),
-    render: () => runtime.render(hook),
+    render: () => {
+      const game = runtime.render(hook);
+      if (options.sceneReady === false) return game;
+      game.setSceneReady(true);
+      if (options.journeyReady !== false) game.setJourneyReady(true);
+      return runtime.render(hook);
+    },
   };
 }
 
@@ -102,6 +108,29 @@ for (const method of ['click', 'voice']) {
     f.runtime.dispose();
   });
 }
+
+test('3D 开场画面尚未就绪时不计时或发送对白，画面就绪后才续行', async () => {
+  const f = await fixture({ journeyReady: false });
+  let game = f.render();
+  game.finishOpeningVideo();
+  game = f.render();
+  await game.begin();
+  game = f.render();
+  f.runtime.flushTimers();
+  game = f.render();
+  assert.equal(game.openingPhase, 'road');
+  assert.deepEqual(f.sent, []);
+  game.setJourneyReady(true);
+  f.render();
+  f.runtime.flushTimers();
+  game = f.render();
+  assert.equal(game.openingPhase, 'alighting');
+  assert.deepEqual(f.sent, []);
+  game.setJourneyReady(true);
+  f.render();
+  assert.deepEqual(f.sent, ['听第一话']);
+  f.runtime.dispose();
+});
 
 test('片头结束遇到连接延迟时等待就绪，再由首句创建会话且只发送一次', async () => {
   const f = await fixture({ id: '', connected: false });

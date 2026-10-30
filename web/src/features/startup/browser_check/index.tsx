@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { HtmlCanvasSupport } from '@/shared/lib/htmlCanvas';
 import { probeHtmlCanvasSupport } from '@/shared/lib/htmlCanvasProbe';
+import { probeWebGpuSupport } from '@/shared/lib/webgpuProbe';
 import { Icon } from '@/shared/ui/icon';
 import styles from './style.module.css';
 
@@ -15,8 +16,10 @@ export function BrowserCheck({ onComplete }: { onComplete: (result: HtmlCanvasSu
       const current = new AbortController();
       attempt = current;
       void probeHtmlCanvasSupport(host.current, { signal: current.signal })
-        .then((result) => {
-          if (!current.signal.aborted) onComplete(result);
+        .then(async (result) => {
+          if (current.signal.aborted) return;
+          const gpu = result.supported ? await probeWebGpuSupport(current.signal) : result;
+          if (!current.signal.aborted) onComplete(gpu);
         })
         .catch((error: unknown) => {
           if (!current.signal.aborted) {
@@ -39,7 +42,7 @@ export function BrowserCheck({ onComplete }: { onComplete: (result: HtmlCanvasSu
   return (
     <main className={styles['check-screen']} data-browser-requirements="checking" aria-busy="true">
       <Icon kind="seal" />
-      <p role="status">正在验证画面绘制……</p>
+      <p role="status">正在验证文字绘制与 3D 图形能力……</p>
       <div className={styles['probe-host']} ref={host} aria-hidden="true" />
       <small>请保持页面在前台，检测通过后进入游戏</small>
     </main>
