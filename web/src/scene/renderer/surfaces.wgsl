@@ -41,6 +41,21 @@ fn environmentLight(direction: vec3f, rough: f32) -> vec3f {
   let color = textureSampleLevel(environment, surfaceSampler, environmentUv(direction), layer, rough * 8.0).rgb;
   return color * select(0.035, 0.8, frame.eye.w > 0.5);
 }
+// World-scale triplanar rock and forest floor keep steep mountains from
+// stretching the ground texture. A second scale breaks the distant tiling.
+fn terrainSurface(p: vec3f, n: vec3f, dx: vec3f, dy: vec3f) -> vec3f {
+  let weights = pow(abs(n), vec3f(4.0));
+  let w = weights / max(dot(weights, vec3f(1.0)), 0.0001);
+  let scale = 0.22;
+  let rockX = textureSampleGrad(surfaceColor, surfaceSampler, p.zy * scale, 1, dx.zy * scale, dy.zy * scale).rgb;
+  let rockY = textureSampleGrad(surfaceColor, surfaceSampler, p.xz * scale, 1, dx.xz * scale, dy.xz * scale).rgb;
+  let rockZ = textureSampleGrad(surfaceColor, surfaceSampler, p.xy * scale, 1, dx.xy * scale, dy.xy * scale).rgb;
+  let floor = textureSampleGrad(surfaceColor, surfaceSampler, p.xz * 0.32, 3, dx.xz * 0.32, dy.xz * 0.32).rgb;
+  let broad = textureSampleGrad(surfaceColor, surfaceSampler, p.xz * 0.039 + vec2f(0.31, 0.17), 3, dx.xz * 0.039, dy.xz * 0.039).rgb;
+  let rock = rockX * w.x + rockY * w.y + rockZ * w.z;
+  let vegetation = mix(floor, broad, 0.4) * vec3f(0.7, 1.0, 0.55);
+  return mix(vegetation, rock * vec3f(0.72, 0.77, 0.72), 1.0 - smoothstep(0.48, 0.81, n.y));
+}
 @fragment fn shadowFragment(i: Surface) {
   if (i.material.z >= 16.0) {
     let alpha = textureSampleLevel(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), 0.0).a;

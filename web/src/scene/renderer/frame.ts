@@ -6,7 +6,7 @@ export function cameraMatrix(camera: CameraShot, aspect: number, offset: V3 = [0
     target = vec3.add(camera.target, offset);
   const fov = Math.min(95, (camera.fov || 48) + Math.max(0, 1.45 - aspect) * 28);
   return mat4.multiply(
-    mat4.perspective((fov * Math.PI) / 180, aspect, 0.05, 320),
+    mat4.perspective((fov * Math.PI) / 180, aspect, 0.05, 1100),
     mat4.lookAt(eye, target, [0, 1, 0]),
   );
 }

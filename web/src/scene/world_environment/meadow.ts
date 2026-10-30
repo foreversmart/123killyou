@@ -1,4 +1,5 @@
-import { terrainHeight } from '@/scene/world_environment/terrain';
+import { terrainHeight, templeClearance } from '@/scene/world_environment/terrain';
+import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
 import { node, type Geometry } from '@/scene/world/types';
 
 const cache = new Map<boolean, Geometry>();
@@ -11,16 +12,21 @@ export function meadow(road: boolean) {
       seed = (seed * 1664525 + 1013904223) >>> 0;
       return seed / 4294967296;
     };
-    for (let clump = 0; clump < 36000; clump++) {
-      const z = 14 - random() * 63,
-        side = clump % 2 ? 1 : -1;
-      const x = side * ((road ? 4.5 : 8.9) + random() * 18) + (road ? Math.sin(z * 0.035) * 4 : 0);
+    for (let clump = 0; clump < 14000; clump++) {
+      const side = clump % 2 ? 1 : -1;
+      const frame = roadSample(random() * ROAD_LENGTH);
+      const offset = side * (4.7 + random() * 13);
+      const x = road
+        ? frame.position[0] + Math.cos(frame.yaw) * offset
+        : side * (33 + random() * 18);
+      const z = road ? frame.position[2] - Math.sin(frame.yaw) * offset : 15 - random() * 90;
+      if (templeClearance(x, z) < 0.8 || (z > 11 && roadNearest(x, z).distance < 4.5)) continue;
       const y = terrainHeight(x, z, road);
       const patch = Math.sin(x * 0.7) * Math.cos(z * 0.31);
       if (patch < -0.65) continue;
       for (let blade = 0; blade < 4; blade++) {
         const angle = random() * Math.PI * 2,
-          height = 0.09 + random() * 0.29;
+          height = 0.16 + random() * 0.43;
         const width = 0.01 + random() * 0.01,
           lean = 0.08 + random() * 0.18;
         const sx = Math.cos(angle),

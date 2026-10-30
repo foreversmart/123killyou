@@ -8,7 +8,7 @@
 
 | 原素材 | 当前用途 |
 | --- | --- |
-| [tree_small_02](https://polyhaven.com/a/tree_small_02) | 近景与远景树，按独立叶片减面以保留树冠覆盖 |
+| [tree_small_02](https://polyhaven.com/a/tree_small_02) | 近景与中景树，按独立叶片减面以保留树冠覆盖；远山复用 tree_1 透明叶片贴图，以枝叶卡片和细干组成程序化合并林冠 |
 | [rock_moss_set_01](https://polyhaven.com/a/rock_moss_set_01) | 三种苔石 |
 | [fern_02](https://polyhaven.com/a/fern_02) | 三种蕨类 |
 | [grass_medium_02](https://polyhaven.com/a/grass_medium_02) | 三种草丛，配合程序化随风草叶 |
@@ -65,4 +65,4 @@ node scripts/art_assets/build.mjs /path/to/source /path/to/tidewater/public/mode
 
 `gltf.mjs` 读取网格，`pose.mjs` 烘焙姿态，`heads.mjs` 读取 FBX/TGA，`foliage.mjs` 保留树冠密度，`library.mjs` 打包纹理和二进制。Three.js 与 meshoptimizer 仅作离线工具。每次重建覆盖固定路径，不保留修订副本；改换素材后删除未被清单引用的文件。
 
-观音约 5.5 万三角形；近树约 5.6 万三角形，远树约 1.3 万；岩石每种约 4500，植被每种约 800–1800，头部约 3000–4000。渲染使用 mipmap、远树关闭阴影、共享网格、分辨率上限与隐藏页面暂停。实际性能取决于显卡；资源完整性、场景状态与浏览器绘制分别验证。
+观音约 5.5 万三角形；近树约 5.6 万三角形，远树约 1.3 万；岩石每种约 4500，植被每种约 800–1800，头部约 3000–4000。山地密林按距离使用近景扫描树、中景减面树和远景枝叶卡片林冠；远景复用既有透明贴图、带有细树干并合并成一个网格，与扫描树群交错分布；程序化地形、围墙院落与盘山公路不增加外部素材。渲染使用 mipmap、远树关闭阴影、共享网格、分辨率上限与隐藏页面暂停。实际性能取决于显卡；资源完整性、场景状态与浏览器绘制分别验证。

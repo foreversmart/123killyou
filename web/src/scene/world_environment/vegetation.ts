@@ -1,6 +1,9 @@
 import { node, type V3, type WorldNode } from '@/scene/world/types';
-import { terrainHeight } from '@/scene/world_environment/terrain';
+import { terrainHeight, templeClearance } from '@/scene/world_environment/terrain';
 import { meadow } from '@/scene/world_environment/meadow';
+import { forestCanopy } from '@/scene/world_environment/forest_canopy';
+import { noise } from '@/scene/world_environment/terrain_noise';
+import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
 
 export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0) {
   const result = node(asset);
@@ -18,67 +21,63 @@ export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0)
   return result;
 }
 
+export function vegetationClearance(x: number, z: number, radius = 8) {
+  if (templeClearance(x, z) < radius) return false;
+  return z < 11 || z > 175 || Math.abs(x) > 125 || roadNearest(x, z).distance > radius;
+}
+
 export function addVegetation(root: WorldNode, road = false) {
-  root.children.push(meadow(road));
+  root.children.push(meadow(road), forestCanopy());
   let seed = 417;
   const random = () => {
     seed = (seed * 1664525 + 1013904223) >>> 0;
     return seed / 4294967296;
   };
-  for (let i = 0; i < 72; i++) {
-    const x = (random() - 0.5) * 115,
-      z = -40 - random() * 75;
-    if (road && Math.abs(x - Math.sin(z * 0.035) * 4) < 6) continue;
-    const distant = modelAsset(
-      'tree_far',
-      [x, terrainHeight(x, z, road), z],
-      1.1 + random() * 1.1,
-      random() * 6.28,
+  // Scanned crowns cover the foreground and middle slopes, with irregular
+  // spacing, size and gaps. Their roots use the same graded terrain as the road.
+  let detailed = 0,
+    trees = 0;
+  for (let attempt = 0; attempt < 2200 && trees < 260; attempt++) {
+    const x = (random() - 0.5) * 250,
+      z = -135 + random() * 280;
+    if (!vegetationClearance(x, z, 9)) continue;
+    if (Math.hypot(x, z + 16) > 142) continue;
+    if (noise(x / 21, z / 21) < 0.18) continue;
+    const y = terrainHeight(x, z);
+    const slope = Math.hypot(terrainHeight(x + 2, z) - y, terrainHeight(x, z + 2) - y) / 2;
+    if (slope > 1.35) continue;
+    const near =
+      detailed < 28 &&
+      (Math.hypot(x, z) < 64 || (road && z > 15 && roadNearest(x, z).distance < 17));
+    const tree = modelAsset(
+      near ? 'tree' : 'tree_far',
+      [x, y - 0.12, z],
+      1.2 + random() * 1.05,
+      random() * Math.PI * 2,
     );
-    distant.shadow = false;
-    root.children.push(distant);
+    tree.shadow = near;
+    root.children.push(tree);
+    if (near) detailed++;
+    trees++;
   }
-  for (const side of [-1, 1]) {
-    for (let i = 0; i < 12; i++) {
-      const x = side * (10.5 + random() * 15),
-        z = 7 - i * 5 + random() * 2;
-      root.children.push(
-        modelAsset(
-          'tree',
-          [x, terrainHeight(x, z, road), z],
-          0.85 + random() * 0.95,
-          random() * Math.PI * 2,
-        ),
-      );
-    }
-    for (let i = 0; i < 48; i++) {
-      const x = side * ((road ? 4.5 : 8.8) + random() * 8),
-        z = 10 - random() * 40;
-      const asset = i % 5 === 0 ? 'fern' : 'grass';
-      const plant = modelAsset(
-        asset + (i % 3 || ''),
-        [x, terrainHeight(x, z, road), z],
-        0.6 + random() * 0.7,
-        random() * 6.28,
-      );
-      const phase = random() * 6.28;
-      plant.animate = (t) => {
-        plant.rotation[2] = Math.sin(t * 1.1 + phase) * 0.018;
-      };
-      root.children.push(plant);
-    }
-    for (let i = 0; i < 7; i++) {
-      const x = side * (9 + random() * 13),
-        z = 5 - i * 5;
-      root.children.push(
-        modelAsset(
-          'rock' + (i % 3 || ''),
-          [x, terrainHeight(x, z, road) - 0.08, z],
-          0.6 + random() * 1.1,
-          random() * 6.28,
-        ),
-      );
-    }
+  for (let i = 0; i < 160; i++) {
+    const frame = roadSample(random() * ROAD_LENGTH);
+    const offset = (i % 2 ? 1 : -1) * (6 + random() * 8);
+    const x = road
+      ? frame.position[0] + Math.cos(frame.yaw) * offset
+      : (i % 2 ? 1 : -1) * (34 + random() * 12);
+    const z = road ? frame.position[2] - Math.sin(frame.yaw) * offset : 9 - random() * 80;
+    if (!vegetationClearance(x, z, 4.8)) continue;
+    const y = terrainHeight(x, z);
+    const asset = i % 5 === 0 ? 'rock' : i % 3 === 0 ? 'fern' : 'grass';
+    const plant = modelAsset(
+      asset + (i % 3 || ''),
+      [x, y - 0.04, z],
+      asset === 'rock' ? 0.8 + random() * 1.25 : 0.75 + random() * 0.8,
+      random() * Math.PI * 2,
+    );
+    plant.shadow = asset === 'rock';
+    root.children.push(plant);
   }
 }
 

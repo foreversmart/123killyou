@@ -10,7 +10,7 @@ export function sceneLighting(state: GameState, place: Place, day: boolean): Lig
     ground: day ? [0.065, 0.075, 0.055] : [0.017, 0.019, 0.026],
     sun: day ? (sunset ? [3.4, 2.1, 1.05] : [3.0, 2.65, 1.95]) : [0.19, 0.29, 0.47],
     direction: [-0.65, 0.8, 0.55],
-    fog: day ? 0.0035 : 0.016,
+    fog: day ? (place === 'road' || place === 'gate' ? 0.0016 : 0.0035) : 0.016,
     exposure: day ? 1.1 : 1.45,
     lamps: [],
   };

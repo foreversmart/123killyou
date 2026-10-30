@@ -12,7 +12,12 @@ registerHooks({
     return nextResolve(specifier, context);
   },
 });
-const { journeyFrame, roadCenter } = await import('../src/scene/world_vehicle/journey.ts');
+const { journeyFrame, JOURNEY_START, JOURNEY_END } =
+  await import('../src/scene/world_vehicle/journey.ts');
+const { roadSample, roadNearest, ROAD_HALF_WIDTH, ROAD_LENGTH } =
+  await import('../src/scene/world_environment/road_path.ts');
+const { roadSurface } = await import('../src/scene/world_environment/road_surface.ts');
+const { WHEEL_RADIUS } = await import('../src/scene/world_vehicle/coach.ts');
 const { road } = await import('../src/scene/world_environment/road.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
 const { roundedBox } = await import('../src/scene/geometry/rounded_box.ts');
@@ -20,49 +25,111 @@ const { OPENING_ROAD_DURATION_MS, DEPARTURE_ROAD_DURATION_MS } =
   await import('../src/shared/lib/story_timing.ts');
 
 const distance = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
-const temple = [-8, 0, -21];
+function vehiclePoint(frame, [x, y, z]) {
+  const c = Math.cos(frame.yaw),
+    s = Math.sin(frame.yaw),
+    p = Math.cos(frame.pitch),
+    q = Math.sin(frame.pitch),
+    r = Math.cos(frame.roll || 0),
+    v = Math.sin(frame.roll || 0);
+  const rx = x * r - y * v,
+    ry = x * v + y * r,
+    py = ry * p - z * q,
+    pz = ry * q + z * p;
+  return [
+    frame.position[0] + rx * c + pz * s,
+    frame.position[1] + py,
+    frame.position[2] - rx * s + pz * c,
+  ];
+}
+
+// Intersect the actual triangulated road, independently of its spline lookup.
+const pavement = roadSurface().geometry;
+const triangles = [];
+for (let i = 0; i < pavement.indices.length; i += 3) {
+  const [a, b, c] = Array.from(pavement.indices.slice(i, i + 3), (index) =>
+    pavement.vertices.slice(index * 16, index * 16 + 3),
+  );
+  const determinant = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+  if (Math.abs(determinant) < 1e-7) continue;
+  triangles.push({
+    a,
+    b,
+    c,
+    determinant,
+    minX: Math.min(a[0], b[0], c[0]),
+    maxX: Math.max(a[0], b[0], c[0]),
+    minZ: Math.min(a[2], b[2], c[2]),
+    maxZ: Math.max(a[2], b[2], c[2]),
+  });
+}
+function roadHeight(x, z) {
+  let height = -Infinity;
+  for (const { a, b, c, determinant, minX, maxX, minZ, maxZ } of triangles) {
+    if (x < minX || x > maxX || z < minZ || z > maxZ) continue;
+    const u = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / determinant;
+    const v = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / determinant;
+    if (u >= -1e-5 && v >= -1e-5 && u + v <= 1.00001)
+      height = Math.max(height, u * a[1] + v * b[1] + (1 - u - v) * c[1]);
+  }
+  return height;
+}
 
 for (const departing of [false, true]) {
-  test(`${departing ? '离寺' : '入寺'}大巴朝实际行进方向行驶、保持车道，镜头由近及远且完整保留车身`, () => {
+  test(`${departing ? '离寺' : '入寺'}大巴沿盘山路靠右行驶、随坡俯仰，横竖屏完整保留车身`, () => {
     const duration = (departing ? DEPARTURE_ROAD_DURATION_MS : OPENING_ROAD_DURATION_MS) / 1000;
+    const direction = departing ? -1 : 1;
     assert.ok(duration >= 10);
-    let previous = journeyFrame(0, departing);
-    for (let t = 0.25; t <= duration; t += 0.25) {
-      const frame = journeyFrame(t, departing);
+    let previous = journeyFrame(0, departing),
+      travelled = 0,
+      pitched = false;
+    assert.equal(previous.along, departing ? JOURNEY_END : JOURNEY_START);
+    assert.equal(previous.distance, 0);
+    for (let step = 1; step <= 200; step++) {
+      const t = (duration * step) / 200,
+        frame = journeyFrame(t, departing),
+        middle = journeyFrame(t - duration / 400, departing);
       const movement = frame.position.map((v, i) => v - previous.position[i]);
-      const forwards = [Math.sin(frame.yaw), 0, Math.cos(frame.yaw)];
-      const dot = movement.reduce((sum, v, i) => sum + v * forwards[i], 0);
-      assert.ok(dot / Math.hypot(...movement) > 0.999, '车头沿弯道前进，不倒着开');
-      assert.ok(
-        departing
-          ? distance(frame.position, temple) > distance(previous.position, temple)
-          : distance(frame.position, temple) < distance(previous.position, temple),
-      );
-      const lane = frame.position[0] - roadCenter(frame.position[2]);
-      assert.ok(departing ? lane < -1.4 : lane > 1.4, '两次行车均靠各自行驶方向右侧');
+      const dot = movement[0] * Math.sin(middle.yaw) + movement[2] * Math.cos(middle.yaw);
+      assert.ok(dot / Math.hypot(movement[0], movement[2]) > 0.998, '车头沿实际行进方向');
+      assert.ok((frame.along - previous.along) * direction > 0, '沿路线入寺或离寺');
+      const center = roadSample(frame.along),
+        offset = frame.position.map((v, i) => v - center.position[i]);
+      const right = offset[0] * Math.cos(center.yaw) - offset[2] * Math.sin(center.yaw);
+      assert.ok(right * direction > 1.4 && right * direction < 1.9, '按行进方向靠右');
+      assert.ok(Math.abs(frame.position[1] - center.position[1]) < 0.35, '车身由轮轴下方路面支承');
+      pitched ||= Math.abs(frame.pitch) > 0.04;
+      for (const x of [-1.14, 1.14])
+        for (const z of [-2.85, 2.75]) {
+          const tyre = vehiclePoint(frame, [x, WHEEL_RADIUS + 0.02, z]);
+          assert.ok(roadNearest(tyre[0], tyre[2]).distance < ROAD_HALF_WIDTH, '轮胎保持在路面内');
+          const clearance = tyre[1] - WHEEL_RADIUS - roadHeight(tyre[0], tyre[2]);
+          assert.ok(
+            Math.abs(clearance) < 0.1,
+            `四轮贴合实际路面：t=${t}, wheel=${x},${z}, gap=${clearance}`,
+          );
+        }
+      travelled += Math.hypot(...movement);
       assert.ok(frame.distance > previous.distance);
+      assert.ok(Math.abs(frame.distance - travelled) < 0.18, '车轮按实际三维路程滚动');
       assert.ok(
         distance(frame.camera.eye, frame.position) >
           distance(previous.camera.eye, previous.position),
       );
-      assert.ok(frame.camera.eye[1] > previous.camera.eye[1]);
       for (const aspect of [16 / 9, 320 / 740]) {
         const matrix = cameraMatrix(frame.camera, aspect);
         for (const x of [-1.3, 1.3])
           for (const y of [0, 3.35])
-            for (const z of [-4.8, 4.8]) {
-              const c = Math.cos(frame.yaw),
-                s = Math.sin(frame.yaw);
-              const corner = [
-                frame.position[0] + x * c + z * s,
-                y,
-                frame.position[2] - x * s + z * c,
-              ];
-              assert.ok(project(corner, matrix), `t=${t}, aspect=${aspect}: 车身不被裁出画面`);
-            }
+            for (const z of [-4.8, 4.8])
+              assert.ok(
+                project(vehiclePoint(frame, [x, y, z]), matrix),
+                `t=${t}, aspect=${aspect}: 车身不被裁出画面`,
+              );
       }
       previous = frame;
     }
+    assert.ok(pitched, '实际经过有坡度的路段');
+    assert.equal(previous.along, departing ? JOURNEY_START : JOURNEY_END);
     assert.deepEqual(
       journeyFrame(duration, departing),
       journeyFrame(duration + 30, departing),
@@ -83,23 +150,72 @@ test('道路场景使用同一行车轨迹更新车身、车轮和摄像机，�
     const frame = journeyFrame(5, departing);
     assert.deepEqual(bus.position, frame.position);
     assert.equal(bus.rotation[1], frame.yaw);
+    assert.equal(bus.rotation[0], frame.pitch);
+    assert.equal(bus.rotation[2], frame.roll);
     assert.deepEqual(camera, frame.camera);
     for (const axle of axles) {
-      assert.ok(axle.children[0].rotation[0] > 0, '前后轮都向前滚动');
+      assert.equal(axle.children[0].rotation[0], frame.distance / WHEEL_RADIUS, '前后轮按行程滚动');
       assert.equal(axle.rotation[1], axle.name === 'front_axle' ? frame.steering : 0);
     }
+    const paused = JSON.stringify([
+      bus.position,
+      bus.rotation,
+      camera,
+      axles.map((n) => n.children[0].rotation),
+    ]);
+    bus.animate(5, 0);
+    assert.equal(
+      JSON.stringify([
+        bus.position,
+        bus.rotation,
+        camera,
+        axles.map((n) => n.children[0].rotation),
+      ]),
+      paused,
+      '暂停在同一时间不会积累轮转',
+    );
+    bus.animate(2, 0);
+    bus.animate(5, 0);
+    assert.equal(
+      JSON.stringify([
+        bus.position,
+        bus.rotation,
+        camera,
+        axles.map((n) => n.children[0].rotation),
+      ]),
+      paused,
+      '恢复或回看直接重建同一帧',
+    );
     bus.animate(10, 0);
     const stopped = JSON.stringify([
       bus.position,
+      bus.rotation,
       camera,
       axles.map((n) => n.children[0].rotation),
     ]);
     bus.animate(30, 0);
     assert.equal(
-      JSON.stringify([bus.position, camera, axles.map((n) => n.children[0].rotation)]),
+      JSON.stringify([
+        bus.position,
+        bus.rotation,
+        camera,
+        axles.map((n) => n.children[0].rotation),
+      ]),
       stopped,
     );
   }
+});
+
+test('连续盘山路面在折返弯与两侧车道都有可通行表面', () => {
+  assert.ok(pavement.vertices.every(Number.isFinite));
+  for (let d = 0.5; d < ROAD_LENGTH - 0.5; d += 4.1)
+    for (const lane of [-3.1, 0, 3.1]) {
+      const [x, y, z] = roadSample(d, lane).position;
+      assert.ok(
+        Math.abs(roadHeight(x, z) - y) < 0.04,
+        `道路不能在弯道拼接处漏面：distance=${d}, lane=${lane}`,
+      );
+    }
 });
 
 test('客车圆角表面法线有限且朝外，避免车漆黑面和阴影破面', () => {

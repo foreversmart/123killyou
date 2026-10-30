@@ -7,3 +7,4 @@ bin/
 !.env.example
 .DS_Store
 *.log
+.cindy-worktrees/

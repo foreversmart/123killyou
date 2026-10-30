@@ -20,6 +20,8 @@ const data = await readFile(new URL(manifest.binary, root));
 const binary = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
 const { characterModel } = await import('../src/scene/world_character/model.ts');
 const { terrainHeight } = await import('../src/scene/world_environment/terrain.ts');
+const { roadSample, roadNearest, ROAD_HALF_WIDTH, ROAD_LENGTH } =
+  await import('../src/scene/world_environment/road_path.ts');
 const { bodhisattva } = await import('../src/scene/world_environment/statue.ts');
 
 test('packed models contain bounded finite geometry, valid normals, local texture slots and indices', () => {
@@ -106,20 +108,50 @@ test('all character poses and the statue resolve current meshes with head and ne
   }
 });
 
-test('terrain keeps road and courtyard contacts level while hills remain continuous', () => {
-  for (let z = -120; z <= 20; z += 2) {
-    const center = Math.sin(z * 0.035) * 4;
-    for (const offset of [-3, 0, 3]) assert.equal(terrainHeight(center + offset, z, true), -0.16);
+test('半山寺院平台平整，盘山路基随高程变化且留足通车宽度', () => {
+  for (let z = -62; z <= 12; z += 2)
+    for (let x = -32; x <= 32; x += 2)
+      assert.ok(Math.abs(terrainHeight(x, z) + 0.16) < 1e-8, `寺院平台 ${x},${z}`);
+  let turns = 0,
+    previousDirection = 0;
+  for (let d = 1; d < ROAD_LENGTH - 1; d += 3) {
+    const center = roadSample(d),
+      direction = Math.sign(Math.sin(center.yaw));
+    assert.ok(center.position[1] <= 0.01, '到寺前平地时高程不因样条超调隆起');
+    if (previousDirection && direction !== previousDirection) turns++;
+    previousDirection = direction;
+    for (const offset of [-ROAD_HALF_WIDTH, 0, ROAD_HALF_WIDTH]) {
+      const [x, , z] = roadSample(d, offset).position;
+      const nearest = roadNearest(x, z);
+      assert.ok(
+        Math.abs(terrainHeight(x, z) - (nearest.height - 0.16)) < 1e-8,
+        `两侧路基紧贴对应高程：distance=${d}, offset=${offset}, x=${x}, z=${z}`,
+      );
+      assert.equal(terrainHeight(x, z), terrainHeight(x, z, true), '山门和山路共用地形');
+    }
   }
-  for (let z = -12; z < 12; z += 2)
-    for (let x = -8; x <= 8; x += 2) assert.equal(terrainHeight(x, z), -0.16);
-  let peak = 0;
-  for (let z = -120; z < 20; z += 2)
-    for (let x = -70; x < 70; x += 2) {
+  assert.ok(turns >= 3, '公路多次跨坡折返');
+  assert.ok(roadSample(ROAD_LENGTH).position[1] - roadSample(0).position[1] > 30, '公路从山谷爬升');
+});
+
+test('群山高于半山寺院，前方谷地更低且坡面连续', () => {
+  let peak = -Infinity,
+    valley = Infinity;
+  for (let z = -400; z <= 220; z += 10)
+    for (let x = -320; x <= 320; x += 10) {
       const h = terrainHeight(x, z);
       assert.ok(Number.isFinite(h));
-      assert.ok(Math.abs(terrainHeight(x + 0.001, z) - h) < 0.01);
-      peak = Math.max(peak, h);
+      assert.ok(Math.abs(terrainHeight(x + 0.001, z) - h) < 0.03, `东西坡面连续 ${x},${z}`);
+      assert.ok(Math.abs(terrainHeight(x, z + 0.001) - h) < 0.03, `南北坡面连续 ${x},${z}`);
+      if (z < -62) peak = Math.max(peak, h);
+      if (z > 70 && Math.abs(x) < 100) valley = Math.min(valley, h);
     }
-  assert.ok(peak > 15);
+  for (const z of [-62, 11, 12, 175])
+    for (let x = -40; x <= 40; x += 2)
+      assert.ok(
+        Math.abs(terrainHeight(x, z - 0.001) - terrainHeight(x, z + 0.001)) < 0.03,
+        `平台及路基边界连续 ${x},${z}`,
+      );
+  assert.ok(peak > 100, '寺后高山形成山脊');
+  assert.ok(valley < -20, '寺前谷地体现半山高度');
 });

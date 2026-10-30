@@ -138,7 +138,11 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   } else if (pat > 6.5 && pat < 16.0) {
     col *= mix(0.72, 1.08, fbm(p * 16.0));
   }
-  if (usesTexture(pat)) {
+  if (pat == 9.0) {
+    let broadTone = mix(0.65, 1.15, fbm(p * 0.046));
+    col = terrainSurface(p, n, dx, dy) * broadTone * (0.5 + col);
+    rough = 0.96;
+  } else if (usesTexture(pat)) {
     let slot = surfaceSlot(pat);
     let sample = textureSampleGrad(surfaceColor, surfaceSampler, uv, slot, ux, uy);
     if (pat >= 16.0 && sample.a < 0.42) { discard; }

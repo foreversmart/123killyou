@@ -6,28 +6,36 @@ import { lantern } from '@/scene/world_prop/ritual';
 import { landscape } from '@/scene/world_environment/terrain';
 import { addVegetation, addCourtyardGarden } from '@/scene/world_environment/vegetation';
 import { gateCarpentry } from '@/scene/world_environment/doors';
+import { templeCompound } from '@/scene/world_environment/temple_compound';
+import { compoundRoof } from '@/scene/world_environment/compound_roof';
 
-export function templeGate(): WorldNode {
+export function templeEntrance(distant = false): WorldNode {
   const b = new Builder();
-  landscape(b);
-  floor(b, 17, 14);
+  if (!distant) floor(b, 17, 14);
   for (let i = 0; i < 3; i++)
     b.box([8 - i * 0.5, 0.12, 2.2 - i * 0.45], [0, i * 0.12, -0.8 - i * 0.25], M.stone);
   for (const x of [-3.1, 3.1]) {
     b.add(cylinder(0.2, 0.24, 3.65), M.redWood, [x, 2.05, -2]);
     b.add(cylinder(0.32, 0.37, 0.35), M.stone, [x, 0.35, -2]);
     b.box([3.8, 2.8, 0.65], [x + Math.sign(x) * 2, 1.6, -2.4], M.plaster);
-    roof(b, x + Math.sign(x) * 2, -2.4, 4, 1.3, 2.95);
+    if (distant) compoundRoof(b, x + Math.sign(x) * 2, -2.4, 4, 1.3, 2.95, 0.5);
+    else roof(b, x + Math.sign(x) * 2, -2.4, 4, 1.3, 2.95);
   }
   b.box([6.6, 0.4, 0.35], [0, 3.55, -2], M.redWood);
-  roof(b, 0, -2, 7.5, 3.7, 3.8);
+  if (distant) compoundRoof(b, 0, -2, 7.5, 3.7, 3.8, 1.05);
+  else roof(b, 0, -2, 7.5, 3.7, 3.8);
   gateCarpentry(b);
   plaque(b, '红烛寺', [0, 2.9, -1.76], 2.15, 0.61);
   plaque(b, '明照寺', [-3.9, 1.2, -1.95], 0.58, 0.85, 0.1);
   plaque(b, '香客止步', [4.5, 0.65, 0.6], 0.6, 0.8, -0.25);
-  b.box([6, 3, 0.3], [0, 1.5, -11], M.plaster);
-  roof(b, 0, -11, 7.3, 4, 3.2);
+  return b.mesh('temple_entrance');
+}
+
+export function templeGate(): WorldNode {
+  const b = new Builder();
+  landscape(b);
   const root = b.mesh('temple_gate');
+  root.children.push(templeEntrance(), templeCompound());
   addVegetation(root);
   return root;
 }

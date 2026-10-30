@@ -1,57 +1,95 @@
-import { Builder } from '@/scene/geometry/builder';
-import type { Shape } from '@/scene/geometry/primitives';
+import type { Builder } from '@/scene/geometry/builder';
+import type { Geometry } from '@/scene/world/types';
+import { mountainHeight, noise, smooth } from '@/scene/world_environment/terrain_noise';
+import { roadNearest, ROAD_HALF_WIDTH } from '@/scene/world_environment/road_path';
 
-const smooth = (v: number) => {
-  const t = Math.max(0, Math.min(1, v));
-  return t * t * (3 - 2 * t);
-};
-const hash = (x: number, z: number) => {
-  const v = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;
-  return v - Math.floor(v);
-};
-function noise(x: number, z: number) {
-  const ix = Math.floor(x),
-    iz = Math.floor(z),
-    u = smooth(x - ix),
-    v = smooth(z - iz);
-  const a = hash(ix, iz) * (1 - u) + hash(ix + 1, iz) * u;
-  const b = hash(ix, iz + 1) * (1 - u) + hash(ix + 1, iz + 1) * u;
-  return a * (1 - v) + b * v;
+// The temple is cut into a broad shoulder. Its local floor is zero; the valley
+// drops below it while successive ridges continue climbing behind the enclosure.
+export function templeClearance(x: number, z: number) {
+  return Math.max(Math.abs(x) - 32, -62 - z, z - 12);
 }
 
-// The courtyard and winding approach remain level. Hills grow beyond the playable footprint.
-export function terrainHeight(x: number, z: number, road = false) {
-  const border = road
-    ? Math.abs(x - Math.sin(z * 0.035) * 4) - 4.2
-    : Math.max(Math.abs(x) - 8.8, -z - 14, z - 13);
-  const blend = smooth(border / 9);
-  const ridge =
-    noise(x * 0.033 + 17, z * 0.031 + 4) * 0.62 +
-    noise(x * 0.077, z * 0.076) * 0.25 +
-    noise(x * 0.19, z * 0.19) * 0.13;
-  const mountain = smooth((-z - 26) / 55) * (10 + ridge * 27);
-  return -0.16 + blend * (ridge * 4.4 + mountain) + blend * noise(x * 1.4, z * 1.4) * 0.1;
+export function terrainHeight(x: number, z: number, _road = false) {
+  const clearance = templeClearance(x, z);
+  if (clearance <= 0) return -0.16;
+  const shelf = smooth(clearance / 27);
+  let height = -0.16 + (mountainHeight(x, z) + 0.16) * shelf;
+  const apron = Math.max(-15 - x, x - 8, 6.5 - z, z - 17.5);
+  height += (-0.16 - height) * (1 - smooth(apron / 6));
+  if (z > 0 && z < 175 && Math.abs(x) < 125) {
+    const nearest = roadNearest(x, z);
+    const blend =
+      (1 - smooth((nearest.distance - ROAD_HALF_WIDTH - 0.8) / 7)) * smooth(clearance / 2);
+    height += (nearest.height - 0.16 - height) * blend;
+  }
+  return height;
 }
 
-export function landscape(b: Builder, road = false) {
-  const g: Shape = { positions: [], normals: [], uv: [], indices: [] };
-  const columns = 112,
-    rows = road ? 184 : 144;
-  for (let j = 0; j <= rows; j++)
-    for (let i = 0; i <= columns; i++) {
-      const x = -85 + (i / columns) * 170,
-        z = road ? 80 - (j / rows) * 230 : 30 - (j / rows) * 180;
-      const dx = terrainHeight(x - 0.15, z, road) - terrainHeight(x + 0.15, z, road);
-      const dz = terrainHeight(x, z - 0.15, road) - terrainHeight(x, z + 0.15, road);
-      const length = Math.hypot(dx, 0.3, dz);
-      g.positions.push(x, terrainHeight(x, z, road), z);
-      g.normals.push(dx / length, 0.3 / length, dz / length);
-      g.uv.push(x * 0.4, z * 0.4);
-      if (i < columns && j < rows) {
-        const a = j * (columns + 1) + i,
-          c = a + columns + 1;
-        g.indices.push(a, a + 1, c, a + 1, c + 1, c);
+function axis(start: number, end: number, fineStart: number, fineEnd: number) {
+  const values = [start];
+  while (values[values.length - 1] < end) {
+    const value = values[values.length - 1];
+    const step = value >= fineStart && value < fineEnd ? 1.7 : 6;
+    values.push(Math.min(end, value + step));
+  }
+  return values;
+}
+
+let cached: Geometry | undefined;
+export function landscape(b: Builder, _road = false) {
+  if (!cached) {
+    const xs = axis(-350, 350, -115, 115),
+      zs = axis(-420, 250, -85, 170);
+    const width = xs.length,
+      depth = zs.length;
+    const heights = new Float32Array(width * depth);
+    for (let j = 0; j < depth; j++)
+      for (let i = 0; i < width; i++) heights[j * width + i] = terrainHeight(xs[i], zs[j]);
+    const vertices: number[] = [],
+      indices: number[] = [];
+    for (let j = 0; j < depth; j++) {
+      for (let i = 0; i < width; i++) {
+        const x = xs[i],
+          z = zs[j],
+          y = heights[j * width + i];
+        const left = Math.max(0, i - 1),
+          right = Math.min(width - 1, i + 1);
+        const back = Math.max(0, j - 1),
+          front = Math.min(depth - 1, j + 1);
+        const dx =
+          (heights[j * width + left] - heights[j * width + right]) / (xs[right] - xs[left]);
+        const dz =
+          (heights[back * width + i] - heights[front * width + i]) / (zs[front] - zs[back]);
+        const length = Math.hypot(dx, 1, dz),
+          ny = 1 / length;
+        const rocky = smooth((0.78 - ny) / 0.38);
+        const tone = 0.82 + noise(x / 28 + 9, z / 28) * 0.28;
+        vertices.push(
+          x,
+          y,
+          z,
+          dx / length,
+          ny,
+          dz / length,
+          (0.28 + rocky * 0.13) * tone,
+          (0.36 + rocky * 0.04) * tone,
+          (0.19 + rocky * 0.17) * tone,
+          1,
+          0,
+          9,
+          0,
+          x * 0.4,
+          z * 0.4,
+          -1,
+        );
+        if (i < width - 1 && j < depth - 1) {
+          const a = j * width + i,
+            c = a + width;
+          indices.push(a, c, a + 1, a + 1, c, c + 1);
+        }
       }
     }
-  b.add(g, { color: 0xc5c9b5, rough: 1, pattern: 9 });
+    cached = { vertices: new Float32Array(vertices), indices: new Uint32Array(indices) };
+  }
+  b.merge(cached, [0, 0, 0]);
 }
