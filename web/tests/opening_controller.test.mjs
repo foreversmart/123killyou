@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
+import * as timing from '../src/shared/lib/story_timing.ts';
 
 async function fixture(options = {}) {
   const runtime = hookRuntime();
@@ -8,6 +9,7 @@ async function fixture(options = {}) {
     '../../src/app/game/useOpeningFlow.ts',
     'useOpeningFlow',
     runtime,
+    timing,
   );
   const sent = [],
     entries = [],
