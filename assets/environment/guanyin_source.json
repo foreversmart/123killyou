@@ -1,0 +1,13 @@
+{
+  "asset": "guanyin",
+  "title": "Seated bodhisattva Guanyin, 12th C. CE",
+  "publisher": "Minneapolis Institute of Art",
+  "publisherProfile": "https://sketchfab.com/artsmia",
+  "source": "https://sketchfab.com/3d-models/2c865894453743a49f8e82d57e4f0a8d",
+  "sourceMetadata": "https://api.sketchfab.com/v3/models/2c865894453743a49f8e82d57e4f0a8d",
+  "license": "CC0-1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "download": "https://images.artheonmuseum.org/ugc/sketchfab/2c865894453743a49f8e82d57e4f0a8d.glb",
+  "localMesh": "web/public/art/world/library.json#meshes.guanyin",
+  "processing": "Centered, 2.55 m tall, simplified to approximately 55,000 triangles; original painted sculpture surface retained."
+}

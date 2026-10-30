@@ -51,7 +51,9 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           state={state}
           phase={roomPhase}
           onAction={voice.submit}
-          interactive={connected && !openingFlow}
+          interactive={connected && !openingFlow && game.sceneReady}
+          onAvailability={game.setSceneReady}
+          onTravelActive={game.setTravelActive}
         >
           <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
@@ -77,7 +79,11 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           />
         )}
         {(openingPhase === 'road' || openingPhase === 'alighting') && (
-          <OpeningJourney phase={openingPhase} />
+          <OpeningJourney
+            phase={openingPhase}
+            state={state}
+            onAvailability={game.setJourneyReady}
+          />
         )}
       </section>
       <div className={styles['outside-caption']}>

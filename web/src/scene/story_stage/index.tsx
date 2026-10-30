@@ -1,17 +1,11 @@
 import type { GameState } from '@/shared/types/game';
-import { ScenePerson } from '@/scene/scene_person';
-import { canShowScenePerson } from '@/scene/scene_person/visibility';
-import { SceneProp } from '@/scene/scene_prop';
 import { StoryReading } from '@/scene/story_reading';
-import { StoryObservation } from '@/scene/story_observation';
+import { WorldEvidence } from '@/scene/world_evidence';
 import { SceneHeading } from '@/scene/scene_heading';
-import { storyAssets } from '@/shared/lib/story_assets';
 import { sceneLayout, shotTitles } from './layouts';
-import { authoredScene } from '@/scene/authored_scene/scenes';
 import { sceneChoices } from './choices';
 import { DeathFeedback } from '@/scene/death_feedback';
 import styles from './style.module.css';
-import registrationStyles from './registration.module.css';
 
 export function StoryStage({
   state,
@@ -24,16 +18,9 @@ export function StoryStage({
 }) {
   const layout = sceneLayout(state);
   const mealEating = state.sceneKey === 'mini_refectory' && state.shotKey === 'refectory_eating';
-  const authored = Boolean(authoredScene(state));
   const enabled =
     interactive && !state.paused && (!state.caught || Boolean(state.flags.story_dead));
   const speaker = state.dialogue.speaker;
-  const actors = (state.actors || []).filter(
-    (actor) =>
-      state.sceneKey !== 'mini_death' &&
-      canShowScenePerson(actor) &&
-      !(actor.id === 'victim' && state.flags.skin_seen),
-  );
   const unseenSpeaker = state.actors?.find(
     (actor) =>
       !actor.visible &&
@@ -51,109 +38,6 @@ export function StoryStage({
         title={shotTitles[state.shotKey || ''] || layout.title}
         description={layout.atmosphere}
       />
-      <div className={styles.staging} aria-label="人物位置与现场道具">
-        {!authored &&
-          actors.map((actor, index) => (
-            <ScenePerson
-              key={actor.id}
-              actor={actor}
-              placement={layout.actors[actor.id] || { x: 35 + index * 13, y: 74, height: 32 }}
-              speaking={speaker.startsWith(actor.name) && !speaker.includes('心声')}
-              pose={state.shotKey}
-              sceneKey={state.sceneKey}
-              flags={state.flags}
-            />
-          ))}
-        {!authored && state.sceneKey === 'mini_register' && (
-          <>
-            <img
-              className={styles.registrationForeground}
-              src={storyAssets.scenes.registrationDesk}
-              alt=""
-              aria-hidden="true"
-            />
-            <div
-              className={`${styles.registrationItem} ${registrationStyles.registrationLedger} ${
-                state.shotKey === 'register_rooms'
-                  ? registrationStyles.registrationLedgerClosed
-                  : ''
-              }`}
-              aria-hidden="true"
-            >
-              <img
-                src={
-                  state.shotKey === 'register_rooms'
-                    ? storyAssets.scenes.registrationLedgerClosed
-                    : storyAssets.scenes.registrationLedgerOpen
-                }
-                alt=""
-              />
-            </div>
-            {state.shotKey === 'register_desk' && (
-              <div
-                className={registrationStyles.registrationWriting}
-                aria-label="陆沉正在用毛笔登记姓名"
-              >
-                <span className={registrationStyles.brush} />
-                <span className={registrationStyles.inkStroke} />
-                <span className={registrationStyles.inkStroke} />
-                <span className={registrationStyles.inkStroke} />
-              </div>
-            )}
-            {state.shotKey !== 'register_desk' &&
-              ['register_key_tags', 'register_rooms', 'register_luggage'].includes(
-                state.shotKey || '',
-              ) && (
-                <img
-                  className={`${styles.registrationItem} ${registrationStyles.registrationKey}`}
-                  src={storyAssets.scenes.registrationCopperKey}
-                  alt=""
-                  aria-hidden="true"
-                />
-              )}
-            {['register_key_tags', 'register_rooms', 'register_luggage'].includes(
-              state.shotKey || '',
-            ) ? (
-              <div className={registrationStyles.registrationTags} aria-hidden="true">
-                <span>听</span>
-                <span>灯</span>
-                <span>纸</span>
-                <span>门</span>
-              </div>
-            ) : null}
-          </>
-        )}
-        {!authored && state.sceneKey === 'mini_refectory' && (
-          <img
-            className={styles.diningForeground}
-            src={storyAssets.scenes.diningTable}
-            alt=""
-            aria-hidden="true"
-          />
-        )}
-        {!authored && state.sceneKey === 'mini_oracle' && (
-          <img
-            className={styles.shrineForeground}
-            src={storyAssets.scenes.shrineTable}
-            alt=""
-            aria-hidden="true"
-          />
-        )}
-        {!authored &&
-          layout.props.map((prop) => (
-            <SceneProp
-              key={prop.id}
-              prop={prop}
-              enabled={enabled}
-              lit={Boolean(
-                state.flags.red_candle_lit ||
-                (prop.id === 'candle' && state.sceneKey === 'mini_oracle'),
-              )}
-              onAction={onAction}
-              state={state}
-            />
-          ))}
-      </div>
       {unseenSpeaker && (
         <div className={styles.source} role="status">
           <i />
@@ -161,7 +45,7 @@ export function StoryStage({
         </div>
       )}
       <StoryReading shot={state.shotKey || ''} />
-      <StoryObservation state={state} />
+      <WorldEvidence state={state} />
       {state.shotKey?.startsWith('double_scripture_') && (
         <div className={styles.scripture} aria-label="念诵进度">
           {['观身如身', '观受如受', '观心如心', '观法如法'].map((line, index) => (

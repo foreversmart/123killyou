@@ -16,7 +16,7 @@
 
 建议体验顺序：
 
-1. 通过浏览器绘制自检，允许麦克风并进入，观看片头，在结尾片名下点击“开始游戏”或按住空格说“开始游戏”；山路远景约3秒、下车停门镜头约4秒（两张画面柔和渐变，门口镜头缓慢横移）后进入正片，首句对白与完整字幕同步开始。
+1. 通过浏览器绘制自检，允许麦克风并进入，观看片头，在结尾片名下点击“开始游戏”或按住空格说“开始游戏”；山路远景约3秒、下车停门镜头约4秒（3D 山路远景与停门机位衔接）后进入正片，首句对白与完整字幕同步开始。
 2. 在山门观察周围、向同行者提问，再办理入住，感受调查与角色对话的衔接。
 3. 到斋堂后表达自己的用餐选择，或尝试劝说同伴，观察人物回应与状态变化。
 4. 夜间根据所见、所闻作出选择，体验语音调查、道具操作与生存分支。
@@ -77,7 +77,7 @@ JEV 在指定剧情节点承担决策判定：读取玩家原话、场景状态�
 | --------- | ----------------------------------------------- | -------------------------------------------- |
 | 界面      | React 19、TypeScript、Vite 8                    | 状态栏、道具栏、字幕、信息面板与应用编排     |
 | 样式      | CSS Modules                                     | 每个组件独立维护样式，隔离类名               |
-| 场景      | PixiJS 8、WebGL、GLSL                           | 固定视角场景、纹理、氛围滤镜                 |
+| 场景      | 原生 WebGPU、WGSL、wgpu-matrix                           | 3D 人物、场景、道具、PBR 与实时阴影                 |
 | HTML 纹理 | HTML-in-Canvas 实验 API                         | 将 HTML/CSS 内容绘制到 Canvas，再接入 PixiJS |
 | 当前语音  | AudioWorklet、Web Audio API、七牛灵矽 WebSocket | 按住说话、云端 NPC 音频、系统读白与波形      |
 | 后端      | Go 1.26、Gin、HTTP / WebSocket                  | 会话、规则结算、状态同步与请求去重           |
@@ -95,7 +95,7 @@ flowchart LR
     Session -. PCM 识别 / NPC 台词 / TTS .-> Linx[七牛灵矽适配器]
     Linx -. STT 文字 .-> Session
     Linx -. WebSocket 字幕 / PCM .-> Session
-    App --> View[DOM 界面与 PixiJS 场景]
+    App --> View[DOM 界面与 WebGPU 3D 场景]
     Session -->|NDJSON 字幕 / PCM 流| App
     App --> Voice[Web Audio 流式播放]
     Session --> Audio[短期音频缓存 / 去重重放]
@@ -109,7 +109,7 @@ flowchart LR
 | ------------------- | ---------------------------------------------------- |
 | `web/src/app/`      | 启动检查、页面组装、语音与会话等跨功能编排           |
 | `web/src/features/` | 语音、会话、状态栏、道具栏、字幕、信息面板和调试入口 |
-| `web/src/scene/`    | 场景布局、黑屏转场、PixiJS、HTML 纹理与 GLSL         |
+| `web/src/scene/`    | 3D 场景、人物与道具、WebGPU 阴影、HTML 文字纹理         |
 | `web/src/shared/`   | 通用 UI、类型、工具与基础样式                        |
 
 `shared` 不依赖上层，`scene` 不导入 `features/app`，`features` 不导入 `app`；跨功能协调放在 `app`。
@@ -156,7 +156,7 @@ PixiJS Sprite
 
 对应实现位于 `web/src/scene/html_clue/`；状态栏、道具栏和字幕使用 React DOM。房间画面与氛围滤镜分别位于 `scene/background/`、`scene/effects/`，通过独立的 GLSL 文件维护变暗、故障和晕眩等效果。
 
-启动探针位于 `web/src/shared/lib/htmlCanvasProbe.ts`，与线索面板共用 `configureHtmlCanvas()` 配置。探针验证 HTML 到 2D Canvas 的实际绘制；纹理上传、shader 和复杂 HTML 内容仍需在目标浏览器中单独验证。线索面板具有加载、就绪和失败反馈。
+启动探针位于 `web/src/shared/lib/htmlCanvasProbe.ts`，与线索面板共用 `configureHtmlCanvas()` 配置。探针验证 HTML 到 2D Canvas 的实际绘制，随后 webgpuProbe.ts 实际绘制三角形并回读像素验证 WebGPU；纹理上传、shader 和复杂 HTML 内容仍需在目标浏览器中单独验证。线索面板具有加载、就绪和失败反馈。
 
 本机演示将此实验能力作为必要条件，检测失败时显示启用说明，不提供普通 HTML 的游戏内降级体验。
 
@@ -253,7 +253,7 @@ web/src/features/example_panel/
 
 新增信息面板放在 `features/overlays/`，场景与滤镜放在 `scene/`，跨功能控制放在 `app/`。使用 `@/` 导入源码，每个组件维护自己的 CSS Module；共享基础样式位于 `shared/styles/`。单个源码或组件样式文件保持在 300 行以内。
 
-运行素材存放在 `web/public/art/`，原始素材位于 `assets/`。正式场景由 `assets/scenes/*/layout.json` 定义人物、道具与前景的坐标、状态和遮挡，再由 `scene/authored_scene/` 组合呈现；未使用该组合的场景由 `story_art/` 提供画面。`npm run assets:slice` 用于早期界面概念图的切片，不负责生成正式剧情的全部素材。新增场景需要同步布局、交互热点与后端规则。
+运行素材存放在 `web/public/art/`，原始素材位于 `assets/`。正式场景由 scene/world/ 映射原剧情状态，以 world_environment、world_character 和 world_prop 构建米制 3D 网格，由 scene/renderer 使用原生 WebGPU 渲染。实现参考同级 Tidewater 的 Engine/GPU、GeoKit、Vendor 和 GameMaterials，详见 [3D 场景实现](docs/3d_scene.md)。现有场景插画作为造型和美术参考保留，头像、物品图标、书页和开场片头继续使用原资源。`npm run assets:slice` 用于早期界面概念图的切片，不负责生成正式剧情的全部素材。新增场景需要同步布局、交互热点与后端规则。
 
 ### 管理 NPC 与物品
 

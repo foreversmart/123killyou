@@ -174,9 +174,11 @@ test('死亡只叠加一个现有鬼影和血泊，保留重试及重新开始�
     retryScene: 'mini_four_knocks',
   };
   const markup = renderToStaticMarkup(createElement(DeathFeedback, { state: death }));
-  assert.equal((markup.match(/data-death-ghost=/g) || []).length, 1);
-  assert.equal((markup.match(/data-death-blood=/g) || []).length, 1);
-  assert.ok(markup.includes('/props/intrusion_shadow.webp'));
+  const { createWorld } = await server.ssrLoadModule('/src/scene/world/create_world.ts');
+  const world = createWorld({ state: death });
+  assert.equal(world.root.children.filter((node) => node.name === 'intrusion_shadow').length, 1);
+  assert.equal(world.root.children.filter((node) => node.name === 'blood_pool').length, 1);
+  assert.ok(!markup.includes('/props/intrusion_shadow.webp'));
   assert.ok(!markup.includes('data-death-figure'));
   assert.equal(sceneChoices(death).length, 2);
   assert.ok(sceneChoices(death).some((choice) => /重试/.test(choice.command)));

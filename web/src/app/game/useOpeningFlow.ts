@@ -10,8 +10,10 @@ export const OPENING_ALIGHTING_DURATION_MS = 4000;
 
 export function useOpeningFlow() {
   const [openingPhase, setOpeningPhase] = useState<OpeningPhase>('reel');
+  const [journeyReady, setJourneyReady] = useState(false);
   const openingGate = useRef<OpeningPhase>('reel');
   const changePhase = useCallback((phase: OpeningPhase) => {
+    setJourneyReady(false);
     openingGate.current = phase;
     setOpeningPhase(phase);
   }, []);
@@ -25,14 +27,22 @@ export function useOpeningFlow() {
   const finishOpening = useCallback(() => changePhase('done'), [changePhase]);
 
   useEffect(() => {
-    if (openingPhase !== 'road' && openingPhase !== 'alighting') return;
+    if (!journeyReady || (openingPhase !== 'road' && openingPhase !== 'alighting')) return;
     const timer = setTimeout(
       () => changePhase(openingPhase === 'road' ? 'alighting' : 'done'),
       // Let the bus settle before the outside scene and its dialogue begin.
       openingPhase === 'road' ? OPENING_ROAD_DURATION_MS : OPENING_ALIGHTING_DURATION_MS,
     );
     return () => clearTimeout(timer);
-  }, [changePhase, openingPhase]);
+  }, [changePhase, openingPhase, journeyReady]);
 
-  return { openingPhase, openingGate, finishOpeningVideo, startOpening, finishOpening };
+  return {
+    openingPhase,
+    openingGate,
+    finishOpeningVideo,
+    startOpening,
+    finishOpening,
+    journeyReady,
+    setJourneyReady,
+  };
 }

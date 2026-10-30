@@ -65,3 +65,22 @@
     gap: 12px;
   }
 }
+
+@media (max-width: 600px) {
+  .app-frame {
+    justify-content: flex-start;
+    padding: 8px;
+  }
+  .game-shell {
+    aspect-ratio: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 52px minmax(410px, 55svh) auto auto;
+  }
+  .outside-caption {
+    flex-wrap: wrap;
+    font-size: 9px;
+  }
+  .app-frame--debug {
+    padding-bottom: 88px;
+  }
+}

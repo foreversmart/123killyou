@@ -1,14 +1,28 @@
 .reel {
   position: absolute;
-  z-index: 2;
+  z-index: 8;
   right: 3%;
-  bottom: 4%;
+  top: 4%;
   width: min(24cqw, 280px);
   color: #f6e5bd;
   background: #16221dd9;
   border: 1px solid #c7a65b88;
   box-shadow: 0 0.8cqw 1.7cqw #0005;
   pointer-events: auto;
+}
+@media (max-width: 600px) {
+  .reel {
+    top: auto;
+    bottom: 100px;
+    width: 150px;
+  }
+  .video {
+    max-height: 100px;
+  }
+  .reel summary {
+    padding: 8px;
+    font-size: 11px;
+  }
 }
 .reel summary {
   padding: 0.45cqw 0.7cqw;

@@ -116,3 +116,43 @@
     display: none;
   }
 }
+
+@media (max-width: 600px) {
+  .topbar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .topbar h1 {
+    left: 23%;
+    width: 52%;
+    font-size: 11px;
+    white-space: normal;
+    text-align: center;
+    padding: 4px;
+  }
+  .devotion {
+    left: 8px;
+    width: 18%;
+    gap: 5px;
+  }
+  .devotion-heading,
+  .devotion-heading strong {
+    font-size: 10px;
+  }
+  .devotion-track {
+    height: 4px;
+  }
+  .connection-status {
+    margin-right: 8px;
+    gap: 5px;
+  }
+  .connection-status > span {
+    font-size: 10px;
+  }
+  .connection-status small {
+    font-size: 8px;
+  }
+  .connection-status i {
+    width: 5px;
+  }
+}

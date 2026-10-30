@@ -13,12 +13,16 @@ export function Room({
   children,
   onAction,
   interactive,
+  onAvailability,
+  onTravelActive,
 }: {
   state: GameState;
   phase: RoomPhase;
   children: ReactNode;
   onAction: (command: string) => Promise<void>;
   interactive?: boolean;
+  onAvailability?: (available: boolean) => void;
+  onTravelActive?: (active: boolean) => void;
 }) {
   return (
     <section
@@ -26,7 +30,12 @@ export function Room({
       aria-label={state.sceneName || state.roomName}
       aria-busy={phase !== 'idle'}
     >
-      <Scene state={state} />
+      <Scene
+        state={state}
+        onAction={onAction}
+        interactive={interactive}
+        onAvailability={onAvailability}
+      />
       <div
         className={cx(
           styles['scene-shading'],
@@ -34,7 +43,7 @@ export function Room({
         )}
       />
       <StoryScene state={state} onAction={onAction} interactive={interactive} />
-      <StoryTransition state={state} phase={phase} />
+      <StoryTransition state={state} phase={phase} onActive={onTravelActive} />
       {children}
       <div
         className={cx(

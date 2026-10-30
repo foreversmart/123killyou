@@ -21,11 +21,6 @@ export function StartChoices({
   const [titleFallback, setTitleFallback] = useState(false);
 
   useEffect(() => {
-    for (const src of [storyAssets.scenes.busJourney, storyAssets.scenes.busArrival]) {
-      const image = new Image();
-      image.src = src;
-      void image.decode().catch(() => {});
-    }
     void reel.current?.play().catch(() => setPlayBlocked(true));
   }, []);
 

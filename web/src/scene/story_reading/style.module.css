@@ -52,3 +52,30 @@
   transform: rotate(-9deg);
   font-family: serif;
 }
+
+@media (max-width: 600px) {
+  .page {
+    top: 30%;
+    left: 6%;
+    width: 76%;
+    padding: 12px 16px 12px 24px;
+  }
+  .page h3 {
+    font-size: 17px;
+    margin: 8px 0;
+  }
+  .page p,
+  .torn {
+    font-size: 13px;
+  }
+  .page small {
+    font-size: 10px;
+  }
+  .torn {
+    margin: 8px 0;
+    padding: 6px;
+  }
+  .seal {
+    font-size: 14px;
+  }
+}

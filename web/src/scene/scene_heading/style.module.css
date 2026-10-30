@@ -39,3 +39,22 @@
   letter-spacing: 0.025em;
   line-height: 1.7;
 }
+
+@media (max-width: 600px) {
+  .heading {
+    top: 12px;
+    left: 12px;
+    max-width: 82%;
+    padding: 8px 10px;
+  }
+  .heading h2 {
+    font-size: 16px;
+    margin: 3px 0;
+  }
+  .chapter {
+    font-size: 10px;
+  }
+  .heading p {
+    font-size: 11px;
+  }
+}

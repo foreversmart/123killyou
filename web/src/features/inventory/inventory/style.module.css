@@ -139,3 +139,56 @@
   height: 1px;
   background: #8d7444;
 }
+
+@media (max-width: 600px) {
+  .inventory {
+    grid-column: 1;
+    grid-row: 4;
+    border-left: 0;
+    border-top: 1px solid #5b482e;
+    padding: 10px;
+    gap: 8px;
+  }
+  .inventory-title,
+  .inventory-bottom-mark {
+    display: none;
+  }
+  .inventory-grid {
+    height: 70px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    gap: 5px;
+  }
+  .item-card {
+    padding: 3px;
+  }
+  .item-card > span {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .voice-library {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 6px 10px;
+  }
+  .voice-library-title {
+    font-size: 11px;
+  }
+  .voice-library > div {
+    margin: 0;
+    gap: 14px;
+  }
+  .voice-library figure {
+    flex-direction: row;
+    gap: 4px;
+  }
+  .voice-library svg {
+    width: 16px;
+    height: 16px;
+  }
+  .voice-library figcaption {
+    font-size: 10px;
+  }
+}

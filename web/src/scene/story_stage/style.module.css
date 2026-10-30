@@ -4,50 +4,6 @@
   color: #e6d3a6;
   pointer-events: none;
 }
-.staging {
-  position: absolute;
-  inset: 0;
-}
-.registrationForeground {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  object-fit: fill;
-}
-.registrationLayer {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  object-fit: fill;
-}
-.registrationItem {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  object-fit: fill;
-  filter: drop-shadow(0 0.25cqw 0.2cqw #17251c55);
-}
-.diningForeground,
-.shrineForeground {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  pointer-events: none;
-}
-
 .choices {
   position: absolute;
   z-index: 7;
@@ -150,5 +106,40 @@
   }
   .scripture span {
     transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .choices {
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    padding: 8px;
+  }
+  .choices > div {
+    gap: 5px;
+  }
+  .choices button {
+    min-height: 36px;
+    flex: 1 1 40%;
+    padding: 6px;
+    font-size: 12px;
+  }
+  .thought {
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  .source {
+    left: auto;
+    right: 12px;
+    font-size: 11px;
+    padding: 8px;
+  }
+  .scripture {
+    padding: 12px;
+    gap: 8px;
+  }
+  .scripture span {
+    font-size: 13px;
   }
 }

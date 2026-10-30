@@ -1,0 +1,122 @@
+import type { V3, CameraShot } from '@/scene/world/types';
+import type { Place } from '@/scene/world/scene_state';
+
+export const cameras: Record<Place, CameraShot> = {
+  gate: { eye: [0.3, 1.75, 8.4], target: [0, 1.85, -1], fov: 49 },
+  corridor: { eye: [0, 1.68, 5.7], target: [0, 1.3, -3.2], fov: 54 },
+  register: { eye: [0.3, 1.65, 4.8], target: [0, 1.15, -0.9], fov: 51 },
+  refectory: { eye: [0.15, 1.62, 4.1], target: [0, 1.05, -0.45], fov: 57 },
+  bedroom: { eye: [0.3, 1.62, 4.2], target: [-0.35, 1.1, -1.25], fov: 57 },
+  listen: { eye: [2.8, 1.62, 4.1], target: [-1.2, 1.1, -1.4], fov: 54 },
+  oracle: { eye: [0.3, 1.62, 4.7], target: [0.2, 1.35, -0.7], fov: 54 },
+  hall: { eye: [-1.5, 1.68, 6.5], target: [0, 1.7, -2.4], fov: 58 },
+  road: { eye: [10, 6.8, 12], target: [0, 1.0, -2], fov: 51 },
+};
+
+export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
+  gate: {
+    linlan: [-2.1, 0, 2.2],
+    zhouyan: [2.25, 0, 1.2],
+    xuzhi: [1.05, 0, 3.0],
+    luchen: [-0.2, 0.24, -0.6],
+  },
+  register: {
+    luchen: [0, 0, -0.85],
+    linlan: [-2.1, 0, -0.1],
+    zhouyan: [2.3, 0, -1.7],
+    xuzhi: [2.0, 0, 0.7],
+  },
+  refectory: {
+    linlan: [-2.35, 0, -0.2],
+    zhouyan: [0, 0, -1.35],
+    xuzhi: [2.35, 0, -0.15],
+    luchen: [3, 0, -1.65],
+    huipu: [3.32, 0, -3.2],
+  },
+  corridor: {
+    luchen: [-0.1, 0, -0.7],
+    linlan: [-2.1, 0, 0.5],
+    zhouyan: [-1.9, 0, -3.6],
+    xuzhi: [2.1, 0, 0.9],
+  },
+  listen: {
+    huipu: [-2.35, 0, -1.6],
+    victim: [-3, 0.57, -1.6],
+    linlan: [1.7, 0, 2.7],
+    zhouyan: [1.7, 0, 2.7],
+    xuzhi: [1.7, 0, 2.7],
+  },
+  oracle: { shangong: [0.65, 0, -0.7] },
+  bedroom: { skin_double: [1.3, 0, -0.5] },
+};
+
+export const propPositions: Partial<Record<Place, Record<string, V3>>> = {
+  gate: {
+    bell: [-2.7, 2.7, -0.8],
+    plaque: [-3.9, 1.6, -1.9],
+    cat: [-3, 0.18, 0.5],
+    bags: [3.9, 0, -0.8],
+    camera: [-2.1, 1.1, 2.3],
+    map: [2.3, 1, 1.3],
+    ribbon: [1.1, 1.5, 3],
+  },
+  register: {
+    register: [-0.25, 0.88, -0.3],
+    keys: [0.43, 0.88, 0.05],
+    permit: [0.85, 0.88, -0.15],
+    beads: [-0.8, 0.88, 0],
+    bags: [-3.2, 0, 1.2],
+    camera: [-2.1, 1, 0],
+    map: [2.4, 1, -1.5],
+    ribbon: [2, 1.5, 0.8],
+  },
+  refectory: {
+    player_bowl: [0, 0.88, 0.76],
+    linlan_bowl: [-1.3, 0.88, -0.12],
+    zhouyan_bowl: [0, 0.88, -0.7],
+    xuzhi_bowl: [1.3, 0.88, -0.1],
+    bread: [-0.68, 0.88, 0.35],
+    pickles: [-0.88, 0.88, -0.5],
+    bamboo: [0.52, 0.88, -0.35],
+    local_vegetables: [0.65, 0.88, 0.3],
+    spoon: [0.32, 0.88, 0.68],
+    water: [1.45, 0.88, 0.66],
+    curtain_lamp: [3.1, 1.8, -2.9],
+  },
+  corridor: {
+    candle: [-0.42, 0.85, -0.1],
+    keeper_lamp: [0, 2.7, -4],
+    bell: [-3.9, 2.7, 0],
+    notice: [3.2, 1.25, -1.8],
+    tower: [0, 2.4, -7.4],
+    bags: [-3.3, 0, -1.6],
+    camera: [-2.1, 1, 0.6],
+    map: [-1.9, 1, -3.5],
+    ribbon: [2.1, 1.5, 1],
+    permit: [0.8, 1, -0.1],
+  },
+  bedroom: {
+    candle: [-1.35, 0.69, 0.25],
+    history: [-1.8, 0.69, 0.5],
+    scripture: [-0.63, 0.69, 0.5],
+    matches: [-1, 0.69, 0.65],
+    beads: [-1.7, 0.69, 0],
+    latch: [2.4, 1.13, -3.49],
+    lamp: [-0.5, 0.69, -0.1],
+  },
+  listen: {
+    vase: [1.3, 0.02, 2.1],
+    cat: [1, 0.02, 0.8],
+    bird: [0.3, 2.05, -2.2],
+    torch: [2, 0.7, 2.6],
+    plaque: [2.4, 2.7, -3.6],
+  },
+  oracle: {
+    cups: [0.65, 0.73, 0.3],
+    seal: [0.27, 0.73, 0.15],
+    candle: [1.2, 0.73, -0.1],
+    cat: [-1.9, 0.02, 0.1],
+    bird: [3, 2.1, -1.5],
+    lamp: [-2.5, 1.5, -1.8],
+  },
+};
