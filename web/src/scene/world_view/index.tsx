@@ -7,6 +7,12 @@ import type { WorldMode, V3 } from '@/scene/world/types';
 import { TempleRenderer } from '@/scene/renderer/engine';
 import { project } from '@/scene/renderer/frame';
 import styles from '@/scene/world_view/style.module.css';
+import {
+  createPlayerControls,
+  updateMouseLook,
+  updatePlayerView,
+  type PlayerControls,
+} from '@/scene/world_view/player_controls';
 
 type Props = {
   state: GameState;
@@ -28,15 +34,64 @@ export function WorldView({
   const canvas = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
   const engine = useRef<TempleRenderer | null>(null);
+  const controls = useRef<PlayerControls>(createPlayerControls());
   const sceneKey = visualKey(state, mode);
   const world = useMemo(() => createWorld({ state, mode }), [sceneKey]);
+  const previousSceneKey = useRef(sceneKey);
+  const [settling, setSettling] = useState(false);
   const actionKey = performanceKey(state, mode);
-  const latest = useRef({ world, actionKey, speaker, paused: state.paused, onAvailability });
-  latest.current = { world, actionKey, speaker, paused: state.paused, onAvailability };
+  const latest = useRef({ world, actionKey, speaker, state, paused: state.paused, onAvailability });
+  latest.current = { world, actionKey, speaker, state, paused: state.paused, onAvailability };
   const aim = useRef<V3>([0, 0, 0]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState('');
-  const enabled = interactive && status === 'ready' && !state.paused && !state.caught;
+  const enabled =
+    interactive && status === 'ready' && !state.paused && !state.caught && !state.overlay;
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+
+  useEffect(() => {
+    const isEditable = (target: EventTarget | null) => {
+      const element = target as HTMLElement | null;
+      return Boolean(element?.closest('input, textarea, select, button, [contenteditable="true"]'));
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!enabledRef.current || modeRef.current !== 'story' || isEditable(event.target)) return;
+      const key = event.key.toLowerCase();
+      if (!['w', 'a', 's', 'd'].includes(key)) return;
+      controls.current.keys.add(key);
+      event.preventDefault();
+    };
+    const onKeyUp = (event: KeyboardEvent) => {
+      controls.current.keys.delete(event.key.toLowerCase());
+    };
+    const clear = () => controls.current.keys.clear();
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', clear);
+    document.addEventListener('visibilitychange', clear);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+      window.removeEventListener('blur', clear);
+      document.removeEventListener('visibilitychange', clear);
+    };
+  }, []);
+
+  // A shot change rebuilds the world graph in one frame. Give the eye a short
+  // focus settle so the new composition reads as a camera move instead of a
+  // hard cut. Travel and hall interludes already have their own movement and
+  // fade, so this is intentionally limited to story frames.
+  useEffect(() => {
+    if (previousSceneKey.current === sceneKey) return;
+    previousSceneKey.current = sceneKey;
+    if (mode !== 'story' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    setSettling(true);
+    const timer = window.setTimeout(() => setSettling(false), 280);
+    return () => window.clearTimeout(timer);
+  }, [mode, sceneKey]);
 
   useEffect(() => {
     let disposed = false,
@@ -80,6 +135,13 @@ export function WorldView({
           }
           if (!latest.current.paused) clock += delta;
           activeWorld.speaker = latest.current.speaker;
+          updatePlayerView(
+            controls.current,
+            activeWorld,
+            latest.current.state,
+            latest.current.paused ? 0 : delta,
+            enabledRef.current && modeRef.current === 'story',
+          );
           try {
             const matrix = renderer.render(
               activeWorld,
@@ -122,12 +184,19 @@ export function WorldView({
 
   return (
     <div
-      className={styles.world}
+      className={settling ? `${styles.world} ${styles['world--settling']}` : styles.world}
       data-world-status={status}
       data-world-scene={state.sceneKey}
       data-world-mode={mode}
       onPointerMove={(event) => {
         if (event.pointerType !== 'mouse') return;
+        if (controls.current.dragging && controls.current.pointerId === event.pointerId) {
+          const dx = event.clientX - controls.current.lastPointer[0];
+          const dy = event.clientY - controls.current.lastPointer[1];
+          controls.current.lastPointer = [event.clientX, event.clientY];
+          updateMouseLook(controls.current, dx, dy);
+          return;
+        }
         const rect = event.currentTarget.getBoundingClientRect();
         aim.current = [
           ((event.clientX - rect.left) / rect.width - 0.5) * 0.16,
@@ -137,6 +206,34 @@ export function WorldView({
       }}
       onPointerLeave={() => {
         aim.current = [0, 0, 0];
+      }}
+      onPointerDown={(event) => {
+        if (
+          event.pointerType !== 'mouse' ||
+          !enabledRef.current ||
+          mode !== 'story' ||
+          (event.target as HTMLElement).closest('button')
+        )
+          return;
+        controls.current.dragging = true;
+        controls.current.pointerId = event.pointerId;
+        controls.current.lastPointer = [event.clientX, event.clientY];
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }}
+      onPointerUp={(event) => {
+        if (!controls.current.dragging || controls.current.pointerId !== event.pointerId) return;
+        controls.current.dragging = false;
+        controls.current.pointerId = undefined;
+        if (event.currentTarget.hasPointerCapture(event.pointerId))
+          event.currentTarget.releasePointerCapture(event.pointerId);
+      }}
+      onLostPointerCapture={() => {
+        controls.current.dragging = false;
+        controls.current.pointerId = undefined;
+      }}
+      onPointerCancel={() => {
+        controls.current.dragging = false;
+        controls.current.pointerId = undefined;
       }}
     >
       <canvas
@@ -174,6 +271,11 @@ export function WorldView({
               重新检测并载入
             </button>
           )}
+        </div>
+      )}
+      {mode === 'story' && interactive && status === 'ready' && (
+        <div className={styles.controlsHint} aria-hidden="true">
+          <span>WASD</span> 移动 · 按住鼠标拖动视角
         </div>
       )}
     </div>

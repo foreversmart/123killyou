@@ -11,9 +11,11 @@
 | 登记室 | 3D 登记桌、可开合外观的簿册、铜钥匙和四块房牌；陆沉坐在桌后，仅执笔手随书写动作移动，笔尖与簿册对齐 |
 | 东院回廊 | 同一套 3D 门框、房牌、窗格、廊柱和檐灯；日光、夜色、晨光读取剧情状态 |
 | 斋堂 | 3D 桌椅、四碗粥、木勺、馒头与三碟素菜；各人空满碗使用 meal_*_ate 状态，喝粥时唯一的碗转到手中、素食使用筷子；慧普仅在指定帘后镜头可见 |
+| 斋堂餐具动作 | 吃粥者的勺子以手部局部坐标绑定，低位锚到手中碗沿，抬起时平滑送到下唇，再沿同一路径回碗；俯仰、侧滚和轻微腕摆由 `mealUtensilRotation` 驱动，避免漂浮或穿过嘴部 |
 | 门房 | 床、矮桌、书册、烛台、门闩与未点油灯；red_candle_lit 同时控制火焰和局部暖光 |
 | 偷听 | 同一间暗室的半掩门、花瓶、鸟笼、猫食碟；只显示后端允许看见的人物，碎瓷读取 vase_broken |
 | 偏殿 | 博物馆 CC0 观音扫描及木石供座、神公、杯筊桌与引路烛；杯面采用后端投掷结果，失败石化、成功引路仍依原分支 |
+| 大殿四天王 | `assets/environment/guardian_monk_sources.json` 中的 CC0 Dvarapala / Nio Temple Guardian 作为真实造像候选与法器参考；未完成离线 GLB 清理前，运行时使用 `world_environment/statue.ts` 的分层本地造像，不从网站请求模型 |
 | 换皮与死亡 | 沿用真实同行者的服装与头部纹理；抓挠、伏身和死亡扑近使用网格动画，重试与重新开始入口保留 |
 | 阅读证据 | 原经文、寺史内容、通行凭、拖痕发现气泡和碗签仍可读；一般实体调查改用 3D 摄像机近看 |
 
@@ -35,6 +37,7 @@
 - 造型参照：assets/scenes、assets/characters、assets/props 下的现有原图。
 - 方法参照：同级 Tidewater 的原生 WebGPU、GeoKit、GameMaterials 和 Vendor；授权见 docs/tidewater_license.txt。
 - Poly Haven 提供 CC0 植被、岩石、PBR 表面与昼夜天空；Microsoft Rocketbox 提供 MIT 人物，Minneapolis Institute of Art 提供 CC0 观音扫描。完整映射与授权见 [环境素材](../environment/README.md)。
+- Poly Haven 检索没有符合剧情的中国僧人或四大天王人物模型，因此只承担环境材质来源；僧人和天王的可追溯候选、API 许可证快照与离线导入要求见 [guardian_monk_sources.json](../environment/guardian_monk_sources.json) 和 [寺院模型来源](../environment/temple_model_sources.md)。
 - 天空随摄像机方向取样，假报晓保持夜景；叶片透明轮廓同时用于画面与阴影。
 
 仅在启动能力检查通过后加载游戏。GPU 不可用或中途丢失时显示说明并阻止继续剧情，不提供静态图片或普通 HTML 场景降级。

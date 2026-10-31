@@ -22,9 +22,12 @@ export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
   },
   register: {
     luchen: [0, 0, -0.85],
-    linlan: [-2.1, 0, -0.1],
-    zhouyan: [2.3, 0, -1.7],
-    xuzhi: [2.0, 0, 0.7],
+    // Keep the guests within a conversational circle around the ledger. The
+    // side offsets leave a clear line of sight to Lu Chen while allowing one
+    // person to glance toward the courtyard between lines.
+    linlan: [-1.15, 0, 0.28],
+    zhouyan: [1.05, 0, 0.18],
+    xuzhi: [1.55, 0, 1.05],
   },
   refectory: {
     linlan: [-2.35, 0, -0.2],
@@ -72,14 +75,16 @@ export const propPositions: Partial<Record<Place, Record<string, V3>>> = {
   },
   refectory: {
     player_bowl: [0, 0.88, 0.76],
-    linlan_bowl: [-1.3, 0.88, -0.12],
-    zhouyan_bowl: [0, 0.88, -0.7],
-    xuzhi_bowl: [1.3, 0.88, -0.1],
+    // Keep each bowl inside a natural reach from its place at the table.
+    // The previous wide spread made the guests lean across one another.
+    linlan_bowl: [-1.95, 0.88, -0.18],
+    zhouyan_bowl: [0, 0.88, -1.05],
+    xuzhi_bowl: [1.95, 0.88, -0.18],
     bread: [-0.68, 0.88, 0.35],
     pickles: [-0.88, 0.88, -0.5],
     bamboo: [0.52, 0.88, -0.35],
     local_vegetables: [0.65, 0.88, 0.3],
-    spoon: [0.32, 0.88, 0.68],
+    spoon: [0.22, 0.88, 0.58],
     water: [1.45, 0.88, 0.66],
     curtain_lamp: [3.1, 1.8, -2.9],
   },

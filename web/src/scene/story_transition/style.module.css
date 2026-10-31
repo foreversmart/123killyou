@@ -39,6 +39,10 @@
   text-shadow: 0 1px 3px #000;
 }
 
+.transition[data-ready='true'] .copy {
+  animation: travel_copy var(--travel-duration, 2200ms) ease-out both;
+}
+
 .copy strong {
   color: #f3ddb0;
   font-family: 'Songti SC', 'STSong', serif;
@@ -66,9 +70,27 @@
     opacity: 1;
   }
 }
+
+@keyframes travel_copy {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translateY(0.35cqw);
+  }
+  24%,
+  82% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.2cqw);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .transition[data-ready='true'],
-  .transition[data-kind='sleep'][data-ready='true'] .shade {
+  .transition[data-kind='sleep'][data-ready='true'] .shade,
+  .transition[data-ready='true'] .copy {
     animation: none;
   }
 }

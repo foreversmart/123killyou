@@ -2,6 +2,8 @@
 
 运行文件固定放在 `web/public/art/world/`，包括 `library.json`、`library.bin`、PBR WebP 和昼夜天空。运行时只读取本地资源，无素材网站请求。当前约 20.0 MiB，73 个文件；人物和植物实例共享网格缓冲。
 
+可供后续离线制作评估的寺院模型与许可证核验结果见[可选寺院模型来源](temple_model_sources.md)。候选模型不会在运行时联网加载。
+
 ## Poly Haven · CC0
 
 以下素材按 [Poly Haven CC0 许可](https://polyhaven.com/license) 使用，经过减面、尺寸统一、纹理缩放及格式转换。
@@ -45,6 +47,8 @@
 大殿与偏殿使用博物馆 artsmia 发布的 [Seated bodhisattva Guanyin, 12th C. CE](https://sketchfab.com/3d-models/2c865894453743a49f8e82d57e4f0a8d) 扫描。原发布方[模型元数据](https://api.sketchfab.com/v3/models/2c865894453743a49f8e82d57e4f0a8d)标注 CC0 Public Domain，允许商业使用。下载镜像：[Artheon Museum](https://www.artheonmuseum.org/artwork/seated-bodhisattva-guanyin-12th-c-ce-2c8658)。当前来源记录见 [guanyin_source.json](guanyin_source.json)。
 
 保留雕塑原有脸部、冠饰、盘坐、手势、衣褶和旧彩绘材质，统一高 2.55 米，减至约 5.5 万三角形；本作另制作木石供座，不再拼接人物头模或覆盖为统一铜色。GLB 转换后打包进同一素材库，运行时无外部下载。
+
+大殿四大天王与真实和尚模型的候选来源、许可证复核和离线导入要求见 [`temple_model_sources.md`](temple_model_sources.md)，本次 API 核验快照保存在 [`guardian_monk_sources.json`](guardian_monk_sources.json)。当前运行版保留 `statue.ts` 的本地分层造像，并补足衣褶、盔甲、面部和法器细节；完成候选 GLB 的重新核验与清理后，直接覆盖固定资源路径，不保留并行版本。
 
 ## 离线重建
 

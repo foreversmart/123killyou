@@ -1,6 +1,11 @@
 import type { V3 } from '@/scene/world/types';
 
-export const ROAD_HALF_WIDTH = 3.6;
+// Leave a broad shoulder at both sides of the coach lane.  The previous
+// 3.6 m carriageway left only a few decimetres beyond the bus body on the
+// outside of a bend, which made the arrival and departure shots feel as if
+// the coach was skimming the verge.  The wider carriageway also gives the
+// forecourt a believable transition into the mountain road.
+export const ROAD_HALF_WIDTH = 4.3;
 // Surveyed contour bends: the road gains height across the hillside, with
 // generous turning radii for the 9.6 m coach and a level arrival apron.
 const controls: V3[] = [

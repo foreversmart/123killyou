@@ -11,14 +11,19 @@ export function characterHead(id: Identity, stone = false) {
   face.bend = { pivot: [0, -0.045, 0.035], angle: 0 };
   if (stone) face.surface = 'stone';
   // Distinct cranial and jaw proportions keep the cast readable in profile.
+  // The Rocketbox source for the night keeper is a little tall and narrow;
+  // widening the temples while shortening the crown gives Lu Chen a calm,
+  // believable shaved-monk silhouette and leaves the neck seated naturally.
   face.scale =
-    id === 'xuzhi'
-      ? [0.94, 0.97, 0.95]
-      : id === 'huipu'
-        ? [1.12, 1.04, 1.03]
-        : id === 'shangong'
-          ? [0.95, 1.08, 0.95]
-          : [1, 1, 1];
+    id === 'luchen'
+      ? [1.08, 0.95, 1.02]
+      : id === 'xuzhi'
+        ? [0.94, 0.97, 0.95]
+        : id === 'huipu'
+          ? [1.12, 1.04, 1.03]
+          : id === 'shangong'
+            ? [0.95, 1.08, 0.95]
+            : [1, 1, 1];
   head.children.push(face);
   if (id === 'xuzhi') {
     const b = new Builder();

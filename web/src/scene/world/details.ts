@@ -39,3 +39,36 @@ export function applyDetailCamera(world: World, state: GameState) {
     fov: 46,
   };
 }
+
+/**
+ * When the player lies down, the eye drops onto the mattress and the view
+ * opens toward the ceiling beams. Keeping this as a camera shot (rather than
+ * changing the room geometry) makes the same room readable during the brief
+ * sleep interlude and when the next danger scene is reached.
+ */
+export function applySleepCamera(world: World, state: GameState) {
+  const sleepShot = state.shotKey === 'room_sleep_wait' || state.shotKey === 'escape_sleep_wait';
+  if (!sleepShot || !['mini_wake_three_gongs', 'mini_dawn_trap'].includes(state.sceneKey || ''))
+    return;
+
+  const standing = { ...world.camera };
+  const resting = {
+    eye: [-2.92, 0.72, -1.76] as [number, number, number],
+    target: [-1.68, 3.23, -1.18] as [number, number, number],
+    fov: 58,
+  };
+  world.camera = { ...resting };
+  world.root.animate = (time) => {
+    const t = Math.min(1, Math.max(0, time / 1.8));
+    const eased = t * t * (3 - 2 * t);
+    world.camera.eye = standing.eye.map((value, i) => value + (resting.eye[i] - value) * eased) as [
+      number,
+      number,
+      number,
+    ];
+    world.camera.target = standing.target.map(
+      (value, i) => value + (resting.target[i] - value) * eased,
+    ) as [number, number, number];
+    world.camera.fov = (standing.fov || 48) + ((resting.fov || 48) - (standing.fov || 48)) * eased;
+  };
+}

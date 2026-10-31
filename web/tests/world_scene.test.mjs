@@ -16,6 +16,7 @@ registerHooks({
 });
 const { createWorld } = await import('../src/scene/world/create_world.ts');
 const { scenePlace, visibleActors, isDaylight } = await import('../src/scene/world/scene_state.ts');
+const { actorMovement, CORRIDOR_TRAVEL_END_Z } = await import('../src/scene/world/movement.ts');
 const { box, sphere, cylinder, torus } = await import('../src/scene/geometry/primitives.ts');
 const { roofTile } = await import('../src/scene/geometry/roof_tile.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
@@ -88,6 +89,73 @@ test('peephole, false dawn, the gate and the departure shot follow existing stor
   const ending = state('mini_ending', { actors: [actor('linlan')] });
   assert.equal(visibleActors(ending).length, 0);
   assert.equal(visibleActors(ending, 'travel').length, 1);
+});
+
+test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行走', () => {
+  const guest = actor('linlan');
+  const corridor = actorMovement(guest, state('mini_refectory'), 'travel', [0.8, 0, -1]);
+  const hall = actorMovement(guest, state('mini_refectory'), 'hall', [2, 0, 1.5]);
+  assert.equal(corridor?.duration, 5.6);
+  assert.ok((corridor?.to[2] ?? 0) < (corridor?.from[2] ?? 0));
+  assert.equal(hall?.duration, 7);
+  assert.ok((hall?.to[0] ?? 0) < (hall?.from[0] ?? 0));
+  assert.equal(hall?.to[2], hall?.from[2]);
+});
+
+test('回廊队伍在侧门前停步并转向，镜头目标留在尽头墙前', () => {
+  const world = createWorld({
+    state: state('mini_register', { actors: [actor('linlan'), actor('zhouyan')] }),
+    mode: 'travel',
+  });
+  const linlan = world.root.children.find((node) => node.name === 'linlan');
+  assert.ok(linlan?.animate);
+  linlan.animate(7, 0);
+  assert.ok(linlan.position[2] > -7.8, '角色停在尽头墙前');
+  assert.ok(Math.abs(linlan.rotation[1] + Math.PI / 2) < 0.08, '角色转向侧门');
+  world.root.animate?.(7, 0);
+  assert.ok(world.camera.target[2] > -7.8, '镜头目标没有穿过尽头墙');
+  assert.ok(world.camera.target[0] > 1, '镜头在收尾时转向侧门');
+  assert.ok(CORRIDOR_TRAVEL_END_Z > -7.8);
+});
+
+test('东院回廊门间墙面挂有六块矿物颜料佛教壁画', () => {
+  const world = createWorld({ state: state('mini_register', { shotKey: 'register_rooms' }) });
+  const names = [];
+  const visit = (node) => {
+    names.push(node.name);
+    node.children.forEach(visit);
+  };
+  visit(world.root);
+  assert.equal(names.filter((name) => name === 'hall_buddhist_mural').length, 6);
+});
+
+test('大殿保留两尊主像并新增四大天王与四幅壁画', () => {
+  const world = createWorld({ state: state('mini_refectory'), mode: 'hall' });
+  const names = [];
+  const visit = (node) => {
+    names.push(node.name);
+    node.children.forEach(visit);
+  };
+  visit(world.root);
+  assert.equal(names.filter((name) => name === 'bodhisattva').length, 2);
+  assert.equal(names.filter((name) => name.startsWith('heavenly_king_')).length, 4);
+  assert.equal(names.filter((name) => name === 'hall_buddhist_mural').length, 4);
+});
+
+test('不同寺院房间使用符合用途的佛教器物，而不是统一堆放佛像', () => {
+  const namesFor = (sceneKey) => {
+    const names = [];
+    const visit = (node) => {
+      names.push(node.name);
+      node.children.forEach(visit);
+    };
+    visit(createWorld({ state: state(sceneKey) }).root);
+    return names;
+  };
+  assert.ok(namesFor('mini_register').includes('incense_burner'));
+  assert.ok(namesFor('mini_refectory').includes('wood_fish'));
+  assert.ok(namesFor('mini_oracle').includes('incense_burner'));
+  assert.ok(namesFor('mini_room').every((name) => name !== 'wood_fish'));
 });
 
 test('oracle results keep cups on the floor and a single candle attached to the guide', () => {
@@ -223,4 +291,19 @@ test('3D hotspots project to the visible object and hide behind the camera', () 
   const screen = project([0, 1, 0], vp);
   assert.ok(Math.abs(screen.x - 50) < 0.001 && Math.abs(screen.y - 50) < 0.001);
   assert.equal(project([0, 1, 6], vp), null);
+});
+
+test('sleep shots lower the eye onto the bed and settle on the ceiling beams', () => {
+  const world = createWorld({
+    state: state('mini_wake_three_gongs', { shotKey: 'room_sleep_wait' }),
+  });
+  world.root.animate?.(0, 0);
+  const standingHeight = world.camera.eye[1];
+  world.root.animate?.(0.8, 0);
+  const transitionHeight = world.camera.eye[1];
+  world.root.animate?.(1.8, 0);
+  assert.ok(transitionHeight > world.camera.eye[1]);
+  assert.ok(world.camera.eye[1] < standingHeight);
+  assert.ok(world.camera.target[1] > 3);
+  assert.ok([...world.camera.eye, ...world.camera.target].every(Number.isFinite));
 });

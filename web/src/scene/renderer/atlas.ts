@@ -30,12 +30,15 @@ export async function createAtlas(device: GPUDevice) {
   for (const [i, label] of labels.entries()) {
     const x = (i % 8) * 256,
       y = Math.floor(i / 8) * 256;
-    ctx.fillStyle = i < 2 ? '#33332b' : '#d2bb8b';
+    // The four guest-room plaques are old timber tags. Keep their glyphs
+    // readable at close range without the fresh paper-sign contrast.
+    const roomPlaque = i >= 2 && i <= 5;
+    ctx.fillStyle = i < 2 ? '#33332b' : roomPlaque ? '#5c5545' : '#d2bb8b';
     ctx.fillRect(x, y, 256, 256);
-    ctx.strokeStyle = i < 2 ? '#b19b65' : '#7e6541';
+    ctx.strokeStyle = i < 2 ? '#b19b65' : roomPlaque ? '#827255' : '#7e6541';
     ctx.lineWidth = 5;
     ctx.strokeRect(x + 10, y + 10, 236, 236);
-    ctx.fillStyle = i < 2 ? '#e1c995' : '#322f28';
+    ctx.fillStyle = i < 2 ? '#e1c995' : roomPlaque ? '#c1ae7d' : '#322f28';
     ctx.font =
       '600 ' +
       (label.length < 2 ? 144 : i < 2 ? 172 : label.length <= 4 ? 88 : 64) +

@@ -15,7 +15,7 @@ import { authoredScene } from '@/scene/authored_scene/scenes';
 
 const descriptions: Record<string, string> = {
   mini_register:
-    '东院登记桌前，四间偏房沿回廊排开。听、灯、纸、门的铜牌挂在门上，地砖旧拖痕延伸到偏殿。',
+    '东院登记桌前，四间偏房沿回廊排开。登记室只放着簿册、钥匙和行李，旧拖痕延伸到偏殿。',
   mini_refectory:
     '落日穿过斋堂格窗，三位同伴自然围坐用餐，粥碗、馒头、笋干和香菇青菜放在长桌上。陆沉站在右后方帘边。',
   mini_corridor_candle: '靛蓝夜色中的东院回廊。四扇偏房门被檐灯照亮，远处钟楼门已经封闭。',

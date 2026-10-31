@@ -12,7 +12,7 @@ registerHooks({
     return nextResolve(specifier, context);
   },
 });
-const { journeyFrame, JOURNEY_START, JOURNEY_END } =
+const { journeyFrame, ARRIVAL_START, JOURNEY_START, JOURNEY_END } =
   await import('../src/scene/world_vehicle/journey.ts');
 const { roadSample, roadNearest, ROAD_HALF_WIDTH, ROAD_LENGTH } =
   await import('../src/scene/world_environment/road_path.ts');
@@ -76,14 +76,14 @@ function roadHeight(x, z) {
 }
 
 for (const departing of [false, true]) {
-  test(`${departing ? '离寺' : '入寺'}大巴沿盘山路靠右行驶、随坡俯仰，横竖屏完整保留车身`, () => {
+  test(`${departing ? '离寺' : '入寺'}大巴沿盘山路靠右行驶、随坡俯仰，中段横竖屏完整保留车身`, () => {
     const duration = (departing ? DEPARTURE_ROAD_DURATION_MS : OPENING_ROAD_DURATION_MS) / 1000;
     const direction = departing ? -1 : 1;
     assert.ok(duration >= 10);
     let previous = journeyFrame(0, departing),
       travelled = 0,
       pitched = false;
-    assert.equal(previous.along, departing ? JOURNEY_END : JOURNEY_START);
+    assert.equal(previous.along, departing ? JOURNEY_END : ARRIVAL_START);
     assert.equal(previous.distance, 0);
     for (let step = 1; step <= 200; step++) {
       const t = (duration * step) / 200,
@@ -112,23 +112,50 @@ for (const departing of [false, true]) {
       travelled += Math.hypot(...movement);
       assert.ok(frame.distance > previous.distance);
       assert.ok(Math.abs(frame.distance - travelled) < 0.18, '车轮按实际三维路程滚动');
-      assert.ok(
-        distance(frame.camera.eye, frame.position) >
-          distance(previous.camera.eye, previous.position),
-      );
+      assert.ok(frame.camera.eye.every(Number.isFinite));
+      assert.ok(frame.camera.target.every(Number.isFinite));
+      // The coach is deliberately staged outside the opening and closing
+      // frames. During the middle of the road shot the entire body must still
+      // remain readable in both wide and portrait compositions.
       for (const aspect of [16 / 9, 320 / 740]) {
         const matrix = cameraMatrix(frame.camera, aspect);
-        for (const x of [-1.3, 1.3])
-          for (const y of [0, 3.35])
-            for (const z of [-4.8, 4.8])
-              assert.ok(
-                project(vehiclePoint(frame, [x, y, z]), matrix),
-                `t=${t}, aspect=${aspect}: 车身不被裁出画面`,
-              );
+        if (step >= 40 && step <= 160)
+          for (const x of [-1.3, 1.3])
+            for (const y of [0, 3.35])
+              for (const z of [-4.8, 4.8])
+                assert.ok(
+                  project(vehiclePoint(frame, [x, y, z]), matrix),
+                  `t=${t}, aspect=${aspect}: 中段车身不应被裁出画面`,
+                );
       }
       previous = frame;
     }
     assert.ok(pitched, '实际经过有坡度的路段');
+    const startFrame = journeyFrame(0, departing);
+    const endFrame = journeyFrame(duration, departing);
+    for (const aspect of [16 / 9, 320 / 740]) {
+      for (const [frame, matrix] of [
+        [startFrame, cameraMatrix(startFrame.camera, aspect)],
+        [endFrame, cameraMatrix(endFrame.camera, aspect)],
+      ])
+        assert.equal(
+          [-1.3, 1.3].some((x) =>
+            [0, 3.35].some((y) =>
+              [-4.8, 4.8].some((z) => project(vehiclePoint(frame, [x, y, z]), matrix)),
+            ),
+          ),
+          false,
+          '大巴首尾应从画外进入或驶出',
+        );
+    }
+    for (const aspect of [16 / 9, 320 / 740]) {
+      const middle = journeyFrame(duration * 0.5, departing);
+      const matrix = cameraMatrix(middle.camera, aspect);
+      for (const x of [-1.3, 1.3])
+        for (const y of [0, 3.35])
+          for (const z of [-4.8, 4.8])
+            assert.ok(project(vehiclePoint(middle, [x, y, z]), matrix), '中段大巴完整入画');
+    }
     assert.equal(previous.along, departing ? JOURNEY_START : JOURNEY_END);
     assert.deepEqual(
       journeyFrame(duration, departing),
@@ -186,14 +213,15 @@ test('道路场景使用同一行车轨迹更新车身、车轮和摄像机，�
       paused,
       '恢复或回看直接重建同一帧',
     );
-    bus.animate(10, 0);
+    const duration = (departing ? DEPARTURE_ROAD_DURATION_MS : OPENING_ROAD_DURATION_MS) / 1000;
+    bus.animate(duration, 0);
     const stopped = JSON.stringify([
       bus.position,
       bus.rotation,
       camera,
       axles.map((n) => n.children[0].rotation),
     ]);
-    bus.animate(30, 0);
+    bus.animate(duration + 30, 0);
     assert.equal(
       JSON.stringify([
         bus.position,
@@ -204,6 +232,25 @@ test('道路场景使用同一行车轨迹更新车身、车轮和摄像机，�
       stopped,
     );
   }
+});
+
+test('入寺镜头收尾保持车辆相对机位，避免最后一拍向右急拉', () => {
+  const duration = OPENING_ROAD_DURATION_MS / 1000;
+  // `progress` is eased, so the final camera handoff is effectively complete
+  // by 98% of wall-clock time. Compare inside that settled window so the
+  // assertion measures a sudden lateral pull rather than the deliberate
+  // establishing-shot move leading into the handoff.
+  const previous = journeyFrame(duration * 0.98, false);
+  const ending = journeyFrame(duration, false);
+  assert.ok(Math.abs(ending.camera.eye[0] - ending.position[0] - 17) < 1e-6);
+  assert.ok(Math.abs(ending.camera.eye[2] - ending.position[2] - 23) < 1e-6);
+  const previousOffset = previous.camera.eye.map((v, i) => v - previous.position[i]);
+  const endingOffset = ending.camera.eye.map((v, i) => v - ending.position[i]);
+  assert.ok(
+    distance(previousOffset, endingOffset) < 0.05,
+    '收尾应保持车辆相对机位，不应额外把镜头拉向右侧',
+  );
+  assert.deepEqual(ending.camera.target, [0, 45, -55]);
 });
 
 test('连续盘山路面在折返弯与两侧车道都有可通行表面', () => {

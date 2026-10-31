@@ -3,7 +3,8 @@ import { cylinder } from '@/scene/geometry/primitives';
 import { roomShell, table, plaque } from '@/scene/world_environment/architecture';
 import { doorFrame, movingDoor, type DoorState } from '@/scene/world_environment/doors';
 import type { WorldNode } from '@/scene/world/types';
-import { bodhisattva } from '@/scene/world_environment/statue';
+import { buddhistMural, bodhisattva, heavenlyKing } from '@/scene/world_environment/statue';
+import { incenseBurner, woodFish } from '@/scene/world_prop/ritual';
 
 export function interior(
   kind: 'register' | 'refectory' | 'bedroom' | 'listen' | 'oracle' | 'hall',
@@ -11,15 +12,21 @@ export function interior(
   daylight = false,
 ): WorldNode {
   const b = new Builder();
+  const ritualProps: WorldNode[] = [];
   roomShell(b, daylight);
   doorFrame(b, [2.4, 0, -3.75]);
-  plaque(b, kind === 'listen' ? '灯' : '门', [2.4, 2.61, -3.65]);
+  // The registration room is a work space, not the guest-room corridor.
+  if (kind !== 'register')
+    plaque(b, kind === 'listen' ? '灯' : '门', [2.4, 2.61, -3.65], 0.24, 0.35, 0, true);
   if (kind === 'register') {
     table(b, [0, 0, -0.2], 2.5, 1.05);
     table(b, [0, 0, -0.95], 0.65, 0.42, 0.4);
     table(b, [-3.8, 0, -2.5], 1.4, 0.6, 0.9);
-    for (let i = 0; i < 4; i++)
-      plaque(b, ['听', '灯', '纸', '门'][i], [-0.75 + i * 0.48, 0.9, 0.12], 0.16, 0.22);
+    // A small side altar keeps the registration room recognisably monastic
+    // without turning a practical workroom into a shrine.
+    b.box([0.9, 0.06, 0.34], [-3.8, 0.94, -2.5], M.darkWood);
+    b.box([0.74, 0.04, 0.22], [-3.8, 0.99, -2.5], M.wood);
+    ritualProps.push(incenseBurner([-3.8, 1.03, -2.5], false));
   }
   if (kind === 'refectory') {
     table(b, [0, 0, 0], 3.6, 2.05);
@@ -32,6 +39,7 @@ export function interior(
         1.9,
         -2.95,
       ]);
+    ritualProps.push(woodFish([2.8, 0.55, -2.6]));
   }
   if (kind === 'bedroom' || kind === 'listen') {
     table(b, [-1.15, 0, 0.3], 2, 1, 0.62);
@@ -51,5 +59,23 @@ export function interior(
   if (kind === 'oracle' || kind === 'hall')
     for (const x of kind === 'hall' ? [-2.3, 2.3] : [-1.2])
       root.children.push(bodhisattva([x, 0, -2.5]));
+  if (kind === 'hall') {
+    // The four guardians flank the Guanyin altar, each with its own emblem:
+    // pipa, sword, dragon and umbrella. They sit against the side bays so the
+    // slow right-to-left passage keeps the full tableau in view.
+    root.children.push(
+      heavenlyKing([-3.86, 0, -2.9], 'pipa', 0.18),
+      heavenlyKing([3.86, 0, -2.9], 'sword', -0.18),
+      heavenlyKing([-3.86, 0, -1.0], 'dragon', 0.2),
+      heavenlyKing([3.86, 0, -1.0], 'umbrella', -0.2),
+      buddhistMural([-4.82, 1.38, -2.95], Math.PI / 2, 0xb36d4e),
+      buddhistMural([4.82, 1.38, -2.95], -Math.PI / 2, 0x8d6b45),
+      buddhistMural([-4.82, 1.38, -1.12], Math.PI / 2, 0x4f7569),
+      buddhistMural([4.82, 1.38, -1.12], -Math.PI / 2, 0x9a5847),
+    );
+    ritualProps.push(incenseBurner([0, 0.58, -2.1], true));
+  }
+  if (kind === 'oracle') ritualProps.push(incenseBurner([1.12, 0.73, -0.5], true));
+  root.children.push(...ritualProps);
   return root;
 }

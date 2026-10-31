@@ -140,24 +140,26 @@ export function PerspectiveFloor({
 }) {
   return (
     <g>
-      <path d={`M0 ${horizon}H1000V600H0Z`} fill={night ? '#314346' : '#b8ad8c'} />
+      <path d={`M0 ${horizon}H1000V600H0Z`} fill={night ? '#2c2928' : '#806246'} />
       {[0, 120, 260, 420, 580, 740, 880, 1000].map((x) => (
         <path
           key={x}
           d={`M500 ${horizon - 90}L${x} 600`}
-          stroke={night ? '#78928a' : '#5f705a'}
-          strokeOpacity=".25"
+          stroke={night ? '#9b8970' : '#d0a477'}
+          strokeOpacity=".24"
+          strokeWidth="2"
         />
       ))}
-      {[horizon + 22, horizon + 58, horizon + 110, horizon + 183].map((y) => (
+      {[horizon + 18, horizon + 45, horizon + 82, horizon + 132, horizon + 198].map((y) => (
         <path
           key={y}
           d={`M0 ${y}H1000`}
-          stroke={night ? '#90a095' : '#5a6653'}
-          strokeOpacity=".27"
+          stroke={night ? '#9b8970' : '#3f3028'}
+          strokeOpacity=".3"
+          strokeWidth="2"
         />
       ))}
-      <path d={`M0 ${horizon + 3}H1000`} stroke="#1b302c" strokeOpacity=".35" strokeWidth="5" />
+      <path d={`M0 ${horizon + 3}H1000`} stroke="#241d1b" strokeOpacity=".48" strokeWidth="5" />
       <path
         d="M765 600L630 458 586 426 557 394"
         stroke={night ? '#101b21' : '#5d5c4a'}

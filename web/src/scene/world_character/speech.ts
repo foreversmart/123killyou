@@ -29,7 +29,10 @@ export function speechMotion(rig: CharacterRig, actor: SceneActor, speaker: () =
     if (!weight || !['idle', 'admire', 'look_up', 'welcome'].includes(action)) return;
     rig.head.rotation[0] += Math.sin(time * 3.4) * 0.045 * weight;
     rig.head.rotation[1] += Math.sin(time * 1.6) * 0.07 * weight;
-    if (action !== 'idle') return;
+    // A welcome is an active hand gesture as well as a head turn; let the
+    // audible line carry a small forearm beat without overriding the monk's
+    // broader invitation pose from dayAction.
+    if (!['idle', 'welcome'].includes(action)) return;
     const gesture = (0.5 + Math.sin(time * 2.1) * 0.5) * weight;
     armPose(rig, 0, -0.06 - 0.18 * weight, -0.09 - 0.55 * weight - 0.3 * gesture, 0.12 * weight);
     rig.hands[0].rotation[2] = -0.18 * gesture;

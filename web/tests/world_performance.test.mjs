@@ -93,6 +93,13 @@ test('meal choices retain one bowl, with hands lifting and lowering without anim
   assert.ok(high.get(rig.hands[0])[13] > low.get(rig.hands[0])[13] + 0.1);
   assert.ok(settled.get(rig.hands[0])[13] < high.get(rig.hands[0])[13] - 0.1);
   assert.ok(nextBite.get(rig.hands[0])[13] > settled.get(rig.hands[0])[13] + 0.1);
+  const spoon = (snapshot) =>
+    vec3.transformMat4([0, 0.11, 0.13], snapshot.get(find(snapshot, 'meal_utensils')));
+  const bowl = (snapshot) =>
+    vec3.transformMat4([0, 0.125, 0], snapshot.get(find(snapshot, 'zhouyan_held_bowl')));
+  const mouth = (snapshot) => vec3.transformMat4([0, -0.04, 0.16], snapshot.get(rig.head));
+  assert.ok(vec3.distance(spoon(low), bowl(low)) < 0.04, 'spoon rests on the bowl rim');
+  assert.ok(vec3.distance(spoon(high), mouth(high)) < 0.04, 'spoon reaches the mouth');
   game.flags.refectory_meal_finished = true;
   assert.notEqual(performanceFor(actor('zhouyan'), game), 'eat');
 });

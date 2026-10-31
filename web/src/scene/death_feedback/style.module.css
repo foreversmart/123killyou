@@ -25,6 +25,47 @@
   pointer-events: none;
 }
 
+.ghost-approach {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ghost-figure {
+  position: absolute;
+  left: 5%;
+  bottom: 4%;
+  width: min(39cqw, 530px);
+  height: 88%;
+  transform-origin: 70% 100%;
+  filter: saturate(0.62) contrast(1.18) brightness(0.58) drop-shadow(0 1.8cqw 1.8cqw #030207bf);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+  animation: ghost-advance 3.2s cubic-bezier(0.16, 0.72, 0.24, 1) both;
+}
+
+.ghost-figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+}
+
+.ghost-rear {
+  opacity: 0.92;
+  animation: ghost-rear-fade 3.2s ease-out both;
+}
+
+.ghost-turn {
+  opacity: 0;
+  transform: translateX(-1.8%);
+  animation: ghost-turn 3.2s ease-out both;
+}
+
 .impact-flash {
   position: absolute;
   inset: 0;
@@ -49,7 +90,7 @@
     inset 0 0 1.6cqw #9b203322;
   text-align: center;
   transform: translateX(-50%);
-  animation: card-arrive 0.8s 1.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: card-arrive 0.8s 2.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .kicker {
@@ -128,6 +169,61 @@
   }
 }
 
+@keyframes ghost-advance {
+  0% {
+    opacity: 0;
+    transform: translate3d(-36%, 9%, 0) scale(0.64) rotate(-4deg);
+    filter: saturate(0.45) contrast(1.08) brightness(0.4) blur(0.38cqw)
+      drop-shadow(0 1.8cqw 1.8cqw #03020780);
+  }
+  22% {
+    opacity: 0.46;
+    transform: translate3d(-28%, 7%, 0) scale(0.7) rotate(-3deg);
+  }
+  53% {
+    opacity: 0.74;
+    transform: translate3d(-13%, 3%, 0) scale(0.88) rotate(-1deg);
+  }
+  78% {
+    opacity: 0.9;
+    transform: translate3d(1%, 0, 0) scale(1.03) rotate(0.5deg);
+  }
+  100% {
+    opacity: 0.94;
+    transform: translate3d(6%, 0, 0) scale(1.1) rotate(0);
+    filter: saturate(0.62) contrast(1.18) brightness(0.58) drop-shadow(0 1.8cqw 1.8cqw #030207bf);
+  }
+}
+
+@keyframes ghost-rear-fade {
+  0%,
+  52% {
+    opacity: 0.92;
+  }
+  76% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0.08;
+  }
+}
+
+@keyframes ghost-turn {
+  0%,
+  34% {
+    opacity: 0;
+  }
+  56% {
+    opacity: 0.1;
+  }
+  76% {
+    opacity: 0.62;
+  }
+  100% {
+    opacity: 0.96;
+  }
+}
+
 @keyframes card-arrive {
   from {
     opacity: 0;
@@ -155,9 +251,25 @@
 @media (prefers-reduced-motion: reduce) {
   .feedback,
   .blood-vignette,
+  .ghost-figure,
+  .ghost-rear,
+  .ghost-turn,
   .impact-flash,
   .card {
     animation: none;
+  }
+
+  .ghost-figure {
+    opacity: 0.88;
+    transform: translate3d(6%, 0, 0) scale(1.06);
+  }
+
+  .ghost-rear {
+    opacity: 0.1;
+  }
+
+  .ghost-turn {
+    opacity: 0.92;
   }
 
   .impact-flash {

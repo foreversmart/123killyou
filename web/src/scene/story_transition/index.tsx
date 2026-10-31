@@ -4,6 +4,12 @@ import type { RoomPhase } from '@/scene/room/useRoomTransition';
 import { WorldView } from '@/scene/world_view';
 import styles from './style.module.css';
 
+type TravelPhase = {
+  mode: 'travel' | 'hall';
+  title: string;
+  durationMs: number;
+};
+
 type TravelBeat = {
   id: string;
   title: string;
@@ -11,6 +17,7 @@ type TravelBeat = {
   interlude?: string;
   durationMs?: number;
   interludeDurationMs?: number;
+  phases?: TravelPhase[];
 };
 
 const travelBeats: Record<string, TravelBeat> = {
@@ -18,21 +25,29 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'arrival_walk_register',
     title: '跟随陆沉进入东院',
     kind: 'walk',
-    durationMs: 3000,
+    durationMs: 5600,
   },
   mini_refectory: {
     id: 'register_walk_refectory',
-    title: '经过红竹寺大殿，走向斋堂',
+    title: '穿过东院回廊，经过大殿，走向斋堂',
     kind: 'walk',
     interlude: 'hall',
-    durationMs: 7000,
+    // The route is deliberately staged: guests leave their rooms through
+    // the covered corridor, cross the main hall, then arrive at the dining
+    // hall. Keeping the hall as its own phase gives the lateral tableau room
+    // to read before the refectory scene appears.
+    phases: [
+      { mode: 'travel', title: '先穿过东院回廊', durationMs: 5600 },
+      { mode: 'hall', title: '经过大殿（从右向左通行）', durationMs: 7000 },
+    ],
+    durationMs: 12600,
     interludeDurationMs: 7000,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
     title: '晚膳后沿回廊返回',
     kind: 'walk',
-    durationMs: 4000,
+    durationMs: 5200,
   },
   mini_room: {
     id: 'corridor_return_room',
@@ -43,7 +58,7 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'companion_walk_listen',
     title: '沿回廊走向半掩的偏房',
     kind: 'walk',
-    durationMs: 3000,
+    durationMs: 5200,
   },
   mini_wake_three_gongs: {
     id: 'room_sleep_blackout',
@@ -69,6 +84,7 @@ export function StoryTransition({
   const sceneKey = state.sceneKey || '';
   const previousScene = useRef<string | null>(null);
   const [active, setActive] = useState<TravelBeat | null>(null);
+  const [phaseIndex, setPhaseIndex] = useState(0);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     onActive?.(Boolean(active));
@@ -87,14 +103,24 @@ export function StoryTransition({
       setActive(null);
       return;
     }
+    setPhaseIndex(0);
     setReady(false);
     setActive(next);
   }, [sceneKey, state.flags.companion_present, state.flags.debug_scene_skipped]);
   useEffect(() => {
     if (!active || !ready || state.paused) return;
-    const timer = window.setTimeout(() => setActive(null), active.durationMs ?? 2200);
+    const phases = active.phases;
+    const duration = phases?.[phaseIndex]?.durationMs ?? active.durationMs ?? 2200;
+    const timer = window.setTimeout(() => {
+      if (phases && phaseIndex < phases.length - 1) {
+        setReady(false);
+        setPhaseIndex((index) => index + 1);
+      } else {
+        setActive(null);
+      }
+    }, duration);
     return () => window.clearTimeout(timer);
-  }, [active, ready, state.paused]);
+  }, [active, phaseIndex, ready, state.paused]);
 
   const beat = active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
   if (
@@ -103,6 +129,10 @@ export function StoryTransition({
     (beat.id === 'companion_walk_listen' && !state.flags.companion_present)
   )
     return null;
+  const currentPhase = beat.phases?.[phaseIndex];
+  const mode =
+    currentPhase?.mode ?? (beat.kind === 'sleep' ? 'story' : beat.interlude ? 'hall' : 'travel');
+  const title = currentPhase?.title ?? beat.title;
   return (
     <div
       key={beat.id}
@@ -114,22 +144,22 @@ export function StoryTransition({
       data-interlude-pan={beat.interlude ? 'horizontal' : undefined}
       style={
         {
-          '--travel-duration': `${beat.durationMs ?? 2200}ms`,
-          '--interlude-duration': `${beat.interludeDurationMs ?? beat.durationMs ?? 2200}ms`,
+          '--travel-duration': `${currentPhase?.durationMs ?? beat.durationMs ?? 2200}ms`,
+          '--interlude-duration': `${currentPhase?.durationMs ?? beat.interludeDurationMs ?? beat.durationMs ?? 2200}ms`,
         } as CSSProperties
       }
       role="status"
       aria-live="polite"
     >
       <WorldView
-        key={beat.id}
+        key={`${beat.id}-${phaseIndex}`}
         state={state}
-        mode={beat.kind === 'sleep' ? 'story' : beat.interlude ? 'hall' : 'travel'}
+        mode={mode}
         onAvailability={setReady}
       />
       <div className={styles.shade} aria-hidden="true" />
       <div className={styles.copy}>
-        <strong>{beat.title}</strong>
+        <strong>{title}</strong>
       </div>
     </div>
   );

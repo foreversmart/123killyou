@@ -5,15 +5,24 @@ import { doorway } from '@/scene/world_environment/doors';
 import type { V3 } from '@/scene/world/types';
 import { roofTile } from '@/scene/geometry/roof_tile';
 
-export function plaque(b: Builder, text: string, p: V3, width = 0.24, height = 0.35, yaw = 0) {
-  b.box([width + 0.04, height + 0.04, 0.055], [p[0], p[1] + height / 2, p[2] - 0.03], M.darkWood, [
+export function plaque(
+  b: Builder,
+  text: string,
+  p: V3,
+  width = 0.24,
+  height = 0.35,
+  yaw = 0,
+  weathered = false,
+) {
+  const frame = weathered ? { ...M.darkWood, color: 0x403a30, rough: 0.98 } : M.darkWood;
+  b.box([width + 0.04, height + 0.04, 0.055], [p[0], p[1] + height / 2, p[2] - 0.03], frame, [
     0,
     yaw,
     0,
   ]);
   b.add(
     plane(width, height),
-    { color: 0xffffff, rough: 0.85 },
+    { color: weathered ? 0xa08d68 : 0xffffff, rough: 0.9 },
     p,
     [1, 1, 1],
     [0, yaw, 0],
@@ -21,14 +30,29 @@ export function plaque(b: Builder, text: string, p: V3, width = 0.24, height = 0
   );
 }
 
-export function floor(b: Builder, width = 12, depth = 12) {
-  b.box([width, 0.15, depth], [0, -0.16, -1], M.darkWood);
-  for (let x = -width / 2; x < width / 2; x += 0.85)
-    for (let z = -depth / 2; z < depth / 2; z += 0.85) {
-      const tint = Math.floor(112 + (Math.sin(x * 34 + z * 18) + 1) * 9);
-      b.box([0.83, 0.09, 0.83], [x + 0.425, -0.05, z - 1], {
-        ...M.stone,
-        color: tint * 0x010101 + 0x040400,
+export function floor(b: Builder, width = 12, depth = 12, surface: 'wood' | 'stone' = 'wood') {
+  const base = surface === 'wood' ? M.darkWood : M.stone;
+  b.box([width, 0.15, depth], [0, -0.16, -1], base);
+  if (surface === 'stone') {
+    for (let x = -width / 2; x < width / 2; x += 0.85)
+      for (let z = -depth / 2; z < depth / 2; z += 0.85) {
+        const tint = Math.floor(112 + (Math.sin(x * 34 + z * 18) + 1) * 9);
+        b.box([0.83, 0.09, 0.83], [x + 0.425, -0.05, z - 1], {
+          ...M.stone,
+          color: tint * 0x010101 + 0x040400,
+        });
+      }
+    return;
+  }
+  // Interior floors use long, slightly varied timber boards. The narrow gaps
+  // expose the dark subfloor and keep the material reading as aged planks
+  // instead of a tiled checkerboard.
+  for (let x = -width / 2; x < width / 2; x += 0.86)
+    for (let z = -depth / 2; z < depth / 2; z += 2.7) {
+      const tone = Math.sin(x * 17 + z * 5) > 0 ? 0x66513d : 0x574534;
+      b.box([0.83, 0.09, 2.64], [x + 0.43, -0.05, z + 1.32 - 1], {
+        ...M.wood,
+        color: tone,
       });
     }
 }
@@ -75,9 +99,9 @@ export function windowLattice(
     b.box([width, 0.045, 0.06], [x, y - height / 2 + (height * i) / 5, z + 0.05], M.darkWood);
 }
 
-export function door(b: Builder, p: V3, label = '门', open = false) {
+export function door(b: Builder, p: V3, label = '门', open = false, weatheredPlaque = false) {
   doorway(b, p, open);
-  plaque(b, label, [p[0], p[1] + 2.61, p[2] + 0.1]);
+  plaque(b, label, [p[0], p[1] + 2.61, p[2] + 0.1], 0.24, 0.35, 0, weatheredPlaque);
 }
 
 export function roof(b: Builder, x: number, z: number, width: number, depth: number, y: number) {
@@ -135,8 +159,17 @@ export function roomShell(b: Builder, daylight: boolean) {
     for (const z of [-4, -1, 2]) b.add(cylinder(0.11, 0.14, 3.7), M.darkWood, [x * 0.98, 1.85, z]);
   }
   for (const z of [-3.7, -0.5, 2.5]) b.box([10, 0.24, 0.22], [0, 3.5, z], M.darkWood);
+  // A real ceiling closes the room above the rafters. From the mattress the
+  // player now sees dark, irregular timber boards instead of an open skybox.
+  b.box([9.72, 0.14, 9.62], [0, 3.84, 0.55], {
+    ...M.wood,
+    color: 0x453b31,
+    rough: 0.96,
+  });
   for (let x = -4.75; x < 5; x += 0.5)
     b.box([0.495, 0.13, 10], [x, 3.73, 0.6], { ...M.wood, color: 0x554c3d });
+  for (const x of [-4.4, -2.2, 0, 2.2, 4.4])
+    b.box([0.16, 0.2, 9.7], [x, 3.78, 0.55], { ...M.darkWood, color: 0x302a24 });
   windowLattice(b, -2.4, 1.9, -3.83, 2.1, 1.7, daylight);
   b.box([10, 0.22, 0.3], [0, 0.12, -3.8], M.darkWood);
 }

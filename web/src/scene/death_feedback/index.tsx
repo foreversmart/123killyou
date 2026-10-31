@@ -40,6 +40,20 @@ export function DeathFeedback({ state }: { state: GameState }) {
     >
       <div className={styles['blood-vignette']} aria-hidden="true" />
       <div className={styles['kill-sequence']} aria-hidden="true">
+        <div className={styles['ghost-approach']}>
+          <div className={styles['ghost-figure']}>
+            <img
+              className={styles['ghost-rear']}
+              src="/art/story/characters/hui_pu/rear_hollow.webp"
+              alt=""
+            />
+            <img
+              className={styles['ghost-turn']}
+              src="/art/story/characters/hui_pu/turning_hollow.webp"
+              alt=""
+            />
+          </div>
+        </div>
         <div className={styles['impact-flash']} />
       </div>
       <div className={styles.card}>

@@ -33,14 +33,10 @@ function registrationScene(state: GameState): SceneComposition {
     ledger: state.shotKey === 'register_rooms' ? 'closed' : 'open',
     keyVisible: !hasItem(state, 'key'),
     permit: state.shotKey === 'register_luggage' ? 'single' : 'stack',
-    roomTagsVisible: [
-      'register_key_tags',
-      'register_rooms',
-      'register_drag_mark',
-      'register_camera_bell',
-      'register_ribbon',
-      'register_luggage',
-    ].includes(state.shotKey || ''),
+    // Room identities belong to the east courtyard. The registration desk
+    // only handles the ledger, keys and permit, so never layer the four
+    // guest-room tags into this room.
+    roomTagsVisible: false,
   };
   const composition = composeLayout(registrationLayout as never, 'registration', selection);
   const writing = state.shotKey === 'register_desk';

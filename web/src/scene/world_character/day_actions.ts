@@ -35,8 +35,55 @@ export function reachHand(rig: CharacterRig, side: number, y: number, z: number)
 }
 
 export function mealLift(t: number, seed: number) {
+  // Each bite has a short settle at the bowl, a deliberate lift to the mouth,
+  // and a slower return. Keeping the three phases explicit prevents the spoon
+  // from hovering between the two anchors when the frame rate changes.
   const time = Math.max(0, t - (seed % 0.6)) % 4.8;
-  return ease(time - 0.6, 0.9) * (1 - ease(time - 2.7, 1.1));
+  const raise = ease(time - 0.55, 0.72);
+  const lower = ease(time - 2.35, 1.05);
+  return Math.max(0, Math.min(1, raise * (1 - lower)));
+}
+
+/**
+ * The hand targets are in the arm's local sagittal plane. These values are
+ * tied to the anatomical head and table height in characterModel, so the
+ * spoon tip meets the lower lip at the top of a bite and returns to the bowl
+ * rim at the bottom. The small lateral drift reads as a relaxed wrist rather
+ * than a robotic hinge.
+ */
+export function mealHandTarget(lift: number, t: number): [number, number] {
+  const sway = Math.sin(t * 2.1) * 0.008 * (1 - lift);
+  return [0.045 + lift * 0.14 + sway, 0.43 - lift * 0.16];
+}
+
+export function mealUtensilRotation(lift: number, t: number): [number, number, number] {
+  // The spoon starts with its bowl tipped toward the held bowl. As the hand
+  // reaches the lower lip it flattens, then adds a small inward roll. Keeping
+  // the three axes explicit avoids the old wrist spin which made the spoon
+  // miss both anchors even when the hand itself was correctly solved.
+  const settle = Math.max(0, Math.min(1, lift));
+  const wristSway = Math.sin(t * 2.1) * 0.045 * settle;
+  return [0.31 - settle * 0.23, wristSway, -0.035 - settle * 0.095];
+}
+
+/**
+ * Offset the spoon from the eating hand so its bowl has two real anchors:
+ * over the held bowl at rest and just below the mouth at the top of a bite.
+ * This is expressed in the hand's local frame because the forearm rotates as
+ * it reaches; leaving the offset at the wrist made the spoon float beside the
+ * bowl whenever the character turned their elbow.
+ */
+export function mealUtensilOffset(lift: number, t: number): [number, number, number] {
+  const sway = Math.sin(t * 2.1) * 0.008 * (1 - lift);
+  // These values account for the spoon's bowl being slightly ahead of the
+  // grip. At lift=0 it settles over the ceramic rim; at lift=1 it reaches the
+  // lower lip, while the hand and elbow continue to carry the motion.
+  const settle = Math.max(0, Math.min(1, lift));
+  return [
+    0.202 + 0.124 * (1 - settle) + sway,
+    0.146 + 0.001 * (1 - settle),
+    0.177 - 0.198 * (1 - settle),
+  ];
 }
 
 function reachAcross(rig: CharacterRig, side: number, x: number, y: number, z: number) {
@@ -48,6 +95,17 @@ function reachAcross(rig: CharacterRig, side: number, x: number, y: number, z: n
 export function dayAction(rig: CharacterRig, action: Performance, t: number, seed: number) {
   const { head, body } = rig;
   const arrive = ease(t, 0.8);
+  if (action === 'walk') {
+    // Walking is shared by the transition shots, but each person should still
+    // feel occupied: a brief look toward a companion and a loose arm swing
+    // keep the procession from reading as a rigid marching line.
+    const look = Math.sin(t * 0.82 + seed) * 0.16;
+    head.rotation[1] = look;
+    head.rotation[0] = Math.sin(t * 0.54 + seed * 0.7) * 0.025;
+    body.rotation[0] = Math.sin(t * 0.9 + seed) * 0.018;
+    armPose(rig, 0, -0.08, -0.12, 0.035 + Math.sin(t * 1.8 + seed) * 0.02);
+    armPose(rig, 1, -0.08, -0.12, -0.035 - Math.sin(t * 1.8 + seed) * 0.02);
+  }
   if (action === 'write') {
     // The supporting hand stays fixed; the brush hand makes short strokes.
     const seat = body.position[1] - 0.46;
@@ -61,7 +119,8 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     // Repeat until the backend ends the meal, with staggered bites.
     const time = Math.max(0, t - (seed % 0.6));
     const lift = mealLift(t, seed);
-    reachHand(rig, 0, 0.02 + lift * 0.14, 0.43 - lift * 0.16);
+    const [handY, handZ] = mealHandTarget(lift, time);
+    reachHand(rig, 0, handY, handZ);
     reachHand(rig, 1, -0.04, 0.43);
     rig.arms[0].rotation[2] = 0.3;
     rig.arms[1].rotation[2] = -0.24;
@@ -80,8 +139,17 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     head.rotation[0] = 0.045;
   }
   if (action === 'glance') {
-    head.rotation[1] = -0.75 * Math.sin(ease(t, 3.2) * Math.PI);
-    head.rotation[0] = 0.035;
+    // A glance is a continuing observation, not a single loop that snaps
+    // back to the camera after one beat. The slow sweep pauses at either side
+    // while a smaller nod and shoulder shift keep the body occupied between
+    // lines of dialogue (useful around the registration desk and windows).
+    const sweep = Math.sin(t * 0.7 + seed * 0.11);
+    const pause = 0.72 + 0.28 * Math.cos(t * 0.35 + seed * 0.07);
+    head.rotation[1] = -0.62 * sweep * pause;
+    head.rotation[0] = 0.035 + Math.sin(t * 0.92 + seed) * 0.018;
+    body.rotation[1] = Math.sin(t * 0.34 + seed * 0.17) * 0.045;
+    armPose(rig, 0, -0.055, -0.1, 0.045 + Math.sin(t * 0.63 + seed) * 0.018);
+    armPose(rig, 1, -0.06, -0.1, -0.045 - Math.sin(t * 0.63 + seed) * 0.018);
   }
   if (action === 'inspect') {
     body.rotation[0] = 0.3 * arrive;
@@ -89,10 +157,20 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     armPose(rig, 0, -0.3, -0.7, 0.08);
   }
   if (action === 'admire' || action === 'look_up') {
+    // Finish one deliberate scan, then settle on the eave with only a small
+    // breathing shift. A perpetual full-range sine made the same look repeat
+    // even after the line had moved on to the next beat.
+    const scan = ease(t, 4.2);
+    const settle = ease(t - 4.2, 1.2);
+    const scanned = 0.28 + Math.sin(scan * Math.PI * 2) * 0.24;
+    const settled = 0.34 + Math.sin(Math.max(0, t - 4.2) * 0.62) * 0.035;
     head.rotation[0] = -0.3 * arrive;
-    head.rotation[1] = (0.28 + Math.sin(t * 0.65) * 0.24) * arrive;
-    body.rotation[1] = 0.12 * arrive;
-    if (action === 'look_up') armPose(rig, 0, -0.4 * arrive, -0.9 * arrive, 0.14 * arrive);
+    head.rotation[1] = (scanned * (1 - settle) + settled * settle) * arrive;
+    body.rotation[1] = 0.12 * arrive * (1 - 0.18 * settle);
+    if (action === 'look_up') {
+      const arm = arrive * (1 - 0.18 * settle);
+      armPose(rig, 0, -0.4 * arm, -0.9 * arm, 0.14 * arm);
+    }
   }
   if (action === 'stretch') {
     const lean = Math.sin(ease(t, 2.6) * Math.PI);
@@ -100,13 +178,26 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     head.rotation[0] = 0.25 * lean;
     armPose(rig, 0, 0.1 * lean, -0.1, 0.08);
   }
+  if (action === 'luggage') {
+    // A low, relaxed two-hand hold gives the luggage handler a purposeful
+    // idle pose while the other guests finish stepping off the coach.
+    const shift = Math.sin(ease(t, 1.8) * Math.PI);
+    armPose(rig, 0, -0.18 - shift * 0.08, -0.95, 0.25);
+    armPose(rig, 1, -0.16 - shift * 0.08, -0.9, -0.25);
+    body.rotation[0] = 0.08 * shift;
+    head.rotation[0] = 0.1 * shift;
+    head.rotation[1] = -0.1 * shift;
+  }
   if (action === 'welcome') {
     const invite = Math.sin(ease(t, 3.4) * Math.PI);
     armPose(rig, 0, -0.4 * invite, -0.65 * invite, 0.3 * invite);
     head.rotation[0] = 0.1 * invite;
   }
   if (action === 'camera' || action === 'review_camera') {
-    const lift = ease(t, 1.2);
+    // Raise the camera once, check the frame, then lower it a little while
+    // keeping the strap and elbows engaged. The small second phase prevents a
+    // character from holding the exact same pose for the whole dialogue.
+    const lift = ease(t, 1.2) * (1 - 0.12 * ease(t - 3.8, 1.6));
     const height = action === 'camera' ? 0.18 : -0.12;
     for (const side of [0, 1]) {
       reachAcross(
@@ -119,9 +210,13 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     }
     if (rig.camera) {
       rig.camera.position = [0, 0.21 + (height + 0.27) * lift, 0.23];
-      rig.camera.rotation[0] = action === 'camera' ? -0.1 * lift : 0.35 * lift;
+      const check = ease(t - 1.6, 1.4);
+      rig.camera.rotation[0] =
+        (action === 'camera' ? -0.1 : 0.35) * lift +
+        Math.sin(Math.max(0, t - 1.6) * 0.7) * 0.025 * check;
     }
     head.rotation[0] = (action === 'camera' ? -0.08 : 0.26) * lift;
+    head.rotation[1] = Math.sin(Math.max(0, t - 2.8) * 0.7) * 0.04 * ease(t - 2.8, 1.2);
   }
   if (action === 'ribbon') {
     armPose(rig, 1, -0.3, -2.1 * arrive, -0.32);

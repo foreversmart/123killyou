@@ -5,7 +5,13 @@ import { candle } from '@/scene/world_prop/ritual';
 import { bowl } from '@/scene/world_prop/household';
 import { node, type WorldNode } from '@/scene/world/types';
 import { performanceFor } from '@/scene/world_character/performance';
-import { dayAction, armPose, mealLift } from '@/scene/world_character/day_actions';
+import {
+  dayAction,
+  armPose,
+  mealLift,
+  mealUtensilOffset,
+  mealUtensilRotation,
+} from '@/scene/world_character/day_actions';
 import { nightAction } from '@/scene/world_character/night_actions';
 import { bend, ease } from '@/scene/world_character/joints';
 import { speechMotion } from '@/scene/world_character/speech';
@@ -14,10 +20,15 @@ export function animateCharacter(
   rig: CharacterRig,
   actor: SceneActor,
   state: GameState,
-  options: { walkDuration?: number; traveling?: boolean; speaker?: () => string } = {},
+  options: {
+    walkDuration?: number;
+    traveling?: boolean;
+    alighting?: boolean;
+    speaker?: () => string;
+  } = {},
 ) {
   const { root, body, head, arms, legs, elbows, hands, knees } = rig;
-  const action = performanceFor(actor, state, options.traveling);
+  const action = performanceFor(actor, state, options.traveling, options.alighting);
   const duration = options.walkDuration || 0;
   const speak = speechMotion(rig, actor, options.speaker || (() => ''));
   const seed = [...actor.id].reduce((n, letter) => n + letter.charCodeAt(0), 0) * 0.13;
@@ -46,19 +57,18 @@ export function animateCharacter(
   }
   if (action === 'eat') {
     const utensils = new Builder();
+    // Hold one small wooden spoon with a relaxed pinch. The old two-rod
+    // placeholder read as rigid chopsticks and made the hand twist unnaturally.
+    utensils.rod([0, -0.09, -0.05], [0, 0.11, 0.13], 0.008, M.wood, 0.006);
+    utensils.ball([0.028, 0.014, 0.042], [0, 0.13, 0.16], M.wood);
     if (state.flags['meal_' + actor.id + '_ate']) {
-      utensils.rod([0, -0.02, 0], [0, 0.04, 0.16], 0.006, M.wood);
-      utensils.ball([0.024, 0.009, 0.038], [0, 0.04, 0.18], M.wood);
       const b = new Builder();
       bowl(b);
       heldBowl = b.mesh(actor.id + '_held_bowl');
-      heldBowl.scale = [0.8, 0.8, 0.8];
-      heldBowl.position = [0, 0.015, 0.045];
+      heldBowl.scale = [0.72, 0.72, 0.72];
+      heldBowl.position = [0, 0.008, 0.04];
       hands[1].children.push(heldBowl);
     } else {
-      for (const x of [-0.008, 0.008])
-        utensils.rod([x, -0.04, -0.03], [x, 0.03, 0.2], 0.003, M.wood, 0.002);
-      utensils.ball([0.012, 0.008, 0.025], [0, 0.03, 0.19], { color: 0x45633a, rough: 0.8 });
       heldBread = new Builder()
         .ball([0.055, 0.04, 0.05], [0, 0.045, 0.03], { color: 0xeadcbc, rough: 0.95 })
         .mesh('held_bread');
@@ -113,13 +123,16 @@ export function animateCharacter(
     if (heldBowl) heldBowl.rotation = [upright, 0, -arms[1].rotation[2]];
     if (heldBread) heldBread.rotation = [upright, 0, -arms[1].rotation[2]];
     if (utensilsGrip) {
+      const lift = mealLift(actionTime, seed);
+      utensilsGrip.position = mealUtensilOffset(lift, actionTime);
       utensilsGrip.rotation = [
         -(body.rotation[0] + arms[0].rotation[0] + elbows[0].rotation[0]),
         0,
         -arms[0].rotation[2],
       ];
-      const lift = mealLift(actionTime, seed);
-      utensilsGrip.children[0].rotation = [0.6 * (1 - lift), 2.5 * lift, 0];
+      // Keep the spoon angled toward the bowl and lift it only through the
+      // forearm, instead of spinning it around the wrist.
+      utensilsGrip.children[0].rotation = mealUtensilRotation(lift, actionTime);
     }
   };
   return { held, heldBowl, action };

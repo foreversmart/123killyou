@@ -108,3 +108,28 @@ export function mountainHeight(x: number, z: number) {
     (1 - smooth((Math.abs(x) - 90) / 95));
   return -48 + smooth(-z / 320) * 30 + shoulder + crest + erosion * smooth(slope / 0.7) + detail;
 }
+
+/**
+ * Returns the local grade in metres per metre.  Keeping this query alongside
+ * the height function means cliffs, rocks and vegetation all read the same
+ * warped ridge field instead of each inventing its own slope approximation.
+ */
+export function terrainSlope(x: number, z: number, step = 2.5) {
+  const dx = (mountainHeight(x + step, z) - mountainHeight(x - step, z)) / (2 * step);
+  const dz = (mountainHeight(x, z + step) - mountainHeight(x, z - step)) / (2 * step);
+  return Math.hypot(dx, dz);
+}
+
+/**
+ * A stable mask for exposed rock.  Steep faces and the dry upper side of a
+ * ridge expose more bedrock; low shoulders remain forest floor and meadow.
+ */
+export function rockExposure(x: number, z: number) {
+  const slope = terrainSlope(x, z, 3);
+  const ridge = smooth((mountainHeight(x, z) + 5) / 95);
+  const broken = noise(x / 13.5 + 5, z / 15.5 - 7);
+  return Math.max(
+    0,
+    Math.min(1, smooth((slope - 0.58) / 0.72) * (0.4 + ridge * 0.45 + broken * 0.35)),
+  );
+}

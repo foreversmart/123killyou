@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-10-31",
+  "provider": "Sketchfab v3 API",
+  "runtime_policy": "offline_only",
+  "models": [
+    {
+      "id": "c6efb650b99c45928b3f0c9b89006a60",
+      "name": "10th C BCE Chinese monk",
+      "author": "Minneapolis Institute of Art",
+      "url": "https://sketchfab.com/3d-models/10th-c-bce-chinese-monk-c6efb650b99c45928b3f0c9b89006a60",
+      "api": "https://api.sketchfab.com/v3/models/c6efb650b99c45928b3f0c9b89006a60",
+      "license": "CC0 Public Domain",
+      "downloadable": true,
+      "verified_api": {
+        "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "faces": 50000,
+        "vertices": 25002,
+        "updated_at": "2022-07-20T10:52:15.938159Z",
+        "license_label": "CC0 Public Domain",
+        "license_api_url": "https://api.sketchfab.com/v3/licenses/7c23a1ba438d4306920229c12afcb5f9",
+        "api_checked_at": "2026-10-31"
+      },
+      "use": "monk robe, shaved head and seated proportion reference",
+      "runtime_asset": null,
+      "download_note": "仅离线制作候选；下载前重新核对 API 许可证与署名要求"
+    },
+    {
+      "id": "9b2c5e718b714964afb8482cc702d386",
+      "name": "Dvarapala (Guardian Figure), 8th century CE",
+      "author": "Minneapolis Institute of Art",
+      "url": "https://sketchfab.com/3d-models/dvarapala-guardian-figure-8th-century-ce-9b2c5e718b714964afb8482cc702d386",
+      "api": "https://api.sketchfab.com/v3/models/9b2c5e718b714964afb8482cc702d386",
+      "license": "CC0 Public Domain",
+      "downloadable": true,
+      "verified_api": {
+        "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "faces": 100700,
+        "vertices": 50350,
+        "updated_at": "2022-07-20T01:22:34.792742Z",
+        "license_label": "CC0 Public Domain",
+        "license_api_url": "https://api.sketchfab.com/v3/licenses/7c23a1ba438d4306920229c12afcb5f9",
+        "api_checked_at": "2026-10-31"
+      },
+      "use": "guardian armor, facial carving and hand-held attribute reference",
+      "runtime_asset": null,
+      "download_note": "仅离线制作候选；下载前重新核对 API 许可证与署名要求"
+    },
+    {
+      "id": "bba1547659574d4fad26da6e6d00f77f",
+      "name": "Nio Temple Guardian",
+      "author": "Minneapolis Institute of Art",
+      "url": "https://sketchfab.com/3d-models/nio-temple-guardian-bba1547659574d4fad26da6e6d00f77f",
+      "api": "https://api.sketchfab.com/v3/models/bba1547659574d4fad26da6e6d00f77f",
+      "license": "CC0 Public Domain",
+      "downloadable": true,
+      "verified_api": {
+        "license_url": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "faces": 499999,
+        "vertices": 251057,
+        "updated_at": "2022-08-11T09:44:56.690984Z",
+        "license_label": "CC0 Public Domain",
+        "license_api_url": "https://api.sketchfab.com/v3/licenses/7c23a1ba438d4306920229c12afcb5f9",
+        "api_checked_at": "2026-10-31"
+      },
+      "use": "side-bay guardian silhouette and robe folds reference",
+      "runtime_asset": null,
+      "download_note": "仅离线制作候选；下载前重新核对 API 许可证与署名要求"
+    },
+    {
+      "id": "a2d011713d2b4dbdbdcabd108ea9cea1",
+      "name": "Chinese warrior monk",
+      "author": "fayjayfay",
+      "url": "https://sketchfab.com/3d-models/chinese-warrior-monk-a2d011713d2b4dbdbdcabd108ea9cea1",
+      "api": "https://api.sketchfab.com/v3/models/a2d011713d2b4dbdbdcabd108ea9cea1",
+      "license": "CC Attribution 4.0",
+      "downloadable": true,
+      "verified_api": {
+        "license_url": "http://creativecommons.org/licenses/by/4.0/",
+        "faces": 1552,
+        "vertices": 868,
+        "updated_at": "2024-01-17T08:34:49.486103Z",
+        "license_label": "CC Attribution",
+        "license_api_url": "https://api.sketchfab.com/v3/licenses/322a749bcfa841b29dff1e8a1bb74b0b",
+        "api_checked_at": "2026-10-31"
+      },
+      "use": "human shoulder, hip and walking proportion reference; requires attribution if shipped",
+      "runtime_asset": null,
+      "download_note": "仅离线制作候选；下载前重新核对 API 许可证与署名要求"
+    }
+  ],
+  "selection_policy": {
+    "human_monk": "优先使用 CC0 的 Minneapolis Institute of Art Chinese monk 作为僧袍、剃发和坐姿比例参考；运行时角色仍由本作角色骨骼驱动。",
+    "guardian_kings": "优先使用 CC0 Dvarapala/Nio 作为四天王近景雕刻参考；法器按东持琵琶、南持宝剑、西持龙蛇与宝珠、北持宝伞落位。",
+    "polyhaven": "Poly Haven 检索到的是 CC0 材质、天空和植物资源，没有满足本作剧情的中国和尚或四天王人物模型；不把不相关模型冒充人物来源。"
+  }
+}

@@ -2,8 +2,9 @@ import { node, type V3, type WorldNode } from '@/scene/world/types';
 import { terrainHeight, templeClearance } from '@/scene/world_environment/terrain';
 import { meadow } from '@/scene/world_environment/meadow';
 import { forestCanopy } from '@/scene/world_environment/forest_canopy';
-import { noise } from '@/scene/world_environment/terrain_noise';
+import { noise, rockExposure } from '@/scene/world_environment/terrain_noise';
 import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
+import { wildflowers } from '@/scene/world_environment/wildflowers';
 
 export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0) {
   const result = node(asset);
@@ -27,7 +28,7 @@ export function vegetationClearance(x: number, z: number, radius = 8) {
 }
 
 export function addVegetation(root: WorldNode, road = false) {
-  root.children.push(meadow(road), forestCanopy());
+  root.children.push(meadow(road), wildflowers(road), forestCanopy());
   let seed = 417;
   const random = () => {
     seed = (seed * 1664525 + 1013904223) >>> 0;
@@ -43,7 +44,7 @@ export function addVegetation(root: WorldNode, road = false) {
     if (!vegetationClearance(x, z, 9)) continue;
     if (Math.hypot(x, z + 16) > 142) continue;
     if (noise(x / 21, z / 21) < 0.18) continue;
-    const y = terrainHeight(x, z);
+    const y = terrainHeight(x, z, road);
     const slope = Math.hypot(terrainHeight(x + 2, z) - y, terrainHeight(x, z + 2) - y) / 2;
     if (slope > 1.35) continue;
     const near =
@@ -70,6 +71,7 @@ export function addVegetation(root: WorldNode, road = false) {
     if (!vegetationClearance(x, z, 4.8)) continue;
     const y = terrainHeight(x, z);
     const asset = i % 5 === 0 ? 'rock' : i % 3 === 0 ? 'fern' : 'grass';
+    if (asset === 'rock' && rockExposure(x, z) < 0.3) continue;
     const plant = modelAsset(
       asset + (i % 3 || ''),
       [x, y - 0.04, z],

@@ -48,9 +48,17 @@ fn surface(v: Vertex) -> Surface {
   let normal = mix(v.normal, rotateJoint(v.normal, object.joint.w), weight);
   var p = object.model * vec4f(local, 1.0);
   if (object.effects.x > 0.0) {
+    // Tidewater-style layered gusts: roots stay planted while two slow waves
+    // bend the canopy and a shorter ripple keeps grass from moving in lockstep.
     let heightMask = select(smoothstep(0.0, 2.8, v.position.y), v.uv.y, v.material.z == 11.0);
-    let sway = sin(frame.sun.w * 1.3 + p.x * 0.7 + p.z * 0.3) * 0.035 * heightMask * heightMask * object.effects.x;
-    p.x += sway; p.z += sway * 0.4;
+    let rooted = heightMask * heightMask;
+    let phase = frame.sun.w * (0.8 + object.effects.x * 0.12) + p.x * 0.33 + p.z * 0.21;
+    let gust = 0.68 + 0.32 * sin(frame.sun.w * 0.31 + p.x * 0.08 - p.z * 0.06);
+    let sway = sin(phase) * 0.022 + sin(phase * 1.73 + 1.9) * 0.012;
+    let amount = sway * gust * rooted * object.effects.x;
+    p.x += amount;
+    p.z += amount * (0.34 + 0.16 * sin(phase * 0.7));
+    p.y += sin(phase * 0.82 + p.x * 0.11) * 0.004 * rooted * object.effects.x;
   }
   o.clip = frame.view * p; o.position = p.xyz;
   o.normal = normalize((object.normal * vec4f(normal, 0.0)).xyz);

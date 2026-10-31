@@ -1,4 +1,5 @@
 import { terrainHeight, templeClearance } from '@/scene/world_environment/terrain';
+import { terrainSlope } from '@/scene/world_environment/terrain_noise';
 import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
 import { node, type Geometry } from '@/scene/world/types';
 
@@ -22,6 +23,7 @@ export function meadow(road: boolean) {
       const z = road ? frame.position[2] - Math.sin(frame.yaw) * offset : 15 - random() * 90;
       if (templeClearance(x, z) < 0.8 || (z > 11 && roadNearest(x, z).distance < 4.5)) continue;
       const y = terrainHeight(x, z, road);
+      if (terrainSlope(x, z, 2) > 1.25) continue;
       const patch = Math.sin(x * 0.7) * Math.cos(z * 0.31);
       if (patch < -0.65) continue;
       for (let blade = 0; blade < 4; blade++) {

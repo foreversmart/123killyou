@@ -19,6 +19,9 @@ const { animateCharacter } = await import('../src/scene/world_character/animatio
 const { createWorld } = await import('../src/scene/world/create_world.ts');
 const { isActorSpeaking } = await import('../src/scene/world_character/speech.ts');
 const { visualKey } = await import('../src/scene/world/visual_key.ts');
+const { performanceFor } = await import('../src/scene/world_character/performance.ts');
+const { mealLift, mealHandTarget, mealUtensilRotation } =
+  await import('../src/scene/world_character/day_actions.ts');
 const actor = (id, name = id) => ({ id, name, portrait: id, visible: true });
 const state = (shotKey, actors = []) => ({
   sceneKey: 'mini_arrival',
@@ -79,6 +82,24 @@ test('admiring the gate tilts and scans the head; the camera rises with both arm
   }
 });
 
+test('arrival gestures settle into a follow-up observation instead of looping the same pose', () => {
+  const admirer = characterModel('xuzhi');
+  animateCharacter(admirer, actor('xuzhi'), state('arrival_gate_beauty'));
+  admirer.root.animate(1.5, 0);
+  const scan = admirer.head.rotation[1];
+  admirer.root.animate(6.5, 0);
+  const settled = admirer.head.rotation[1];
+  assert.ok(Math.abs(settled) < Math.abs(scan), 'the full scan settles on the eave');
+
+  const photographer = characterModel('linlan');
+  animateCharacter(photographer, actor('linlan'), state('arrival_weather'));
+  photographer.root.animate(2, 0);
+  const raised = photographer.camera.position[1];
+  photographer.root.animate(7, 0);
+  assert.ok(photographer.camera.position[1] < raised, 'the camera lowers after checking the frame');
+  assert.ok(photographer.camera.position[1] > 0.2, 'the camera remains in the hands');
+});
+
 test('arrival actors walk before their scripted gestures and stop at the authored position', () => {
   for (const [id, shot] of [
     ['linlan', 'arrival_unload'],
@@ -105,6 +126,24 @@ test('arrival actors walk before their scripted gestures and stop at the authore
       assert.ok(head.rotation[0] < -0.2, 'looks up only after reaching the plaque');
     }
   }
+});
+
+test('opening alighting moves the whole group while each guest keeps a distinct arrival task', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const opening = state('arrival_gate', actors);
+  const world = createWorld({ state: opening, mode: 'alighting' });
+  for (const id of ['linlan', 'zhouyan', 'xuzhi', 'luchen']) {
+    const root = world.root.children.find((node) => node.name === id);
+    assert.ok(root, `${id} is visible during the opening alighting beat`);
+    root.animate(0, 0);
+    const start = [...root.position];
+    root.animate(1, 0);
+    assert.ok(Math.hypot(...root.position.map((p, i) => p - start[i])) > 0.1, `${id} moves`);
+  }
+  assert.equal(performanceFor(actor('linlan'), opening, false, true), 'camera');
+  assert.equal(performanceFor(actor('zhouyan'), opening, false, true), 'admire');
+  assert.equal(performanceFor(actor('xuzhi'), opening, false, true), 'luggage');
+  assert.equal(performanceFor(actor('luchen'), opening, false, true), 'welcome');
 });
 
 test('actual speech starts even late in a shot, stays animated, releases, and freezes on pause', () => {
@@ -152,4 +191,37 @@ test('speech leaves writing, eating and hidden voices under story control', () =
     for (let i = 0; i < 2; i++)
       assert.deepEqual(rigs[0].arms[i].rotation, rigs[1].arms[i].rotation);
   }
+});
+
+test("arrival and registration beats carry each companion's established activity across lines", () => {
+  const expected = [
+    ['arrival_gate_beauty', 'linlan', 'camera'],
+    ['arrival_gate_beauty', 'zhouyan', 'admire'],
+    ['arrival_gate_beauty', 'xuzhi', 'admire'],
+    ['arrival_weather', 'xuzhi', 'admire'],
+    ['arrival_zhouyan', 'zhouyan', 'look_up'],
+    ['register_camera_bell', 'linlan', 'camera'],
+    ['register_ribbon', 'xuzhi', 'ribbon'],
+    ['register_luggage', 'zhouyan', 'inspect'],
+  ];
+  for (const [shot, id, action] of expected)
+    assert.equal(
+      performanceFor(actor(id), state(shot)),
+      action,
+      `${id} keeps ${action} in ${shot}`,
+    );
+});
+
+test('meal utensil follows the bowl and mouth anchors with a natural wrist roll', () => {
+  const low = mealLift(0.1, 0);
+  const high = mealLift(1.7, 0);
+  const lowTarget = mealHandTarget(low, 0.1);
+  const highTarget = mealHandTarget(high, 1.7);
+  assert.ok(high > low, 'the spoon rises during the bite');
+  assert.ok(highTarget[0] > lowTarget[0]);
+  assert.ok(highTarget[1] < lowTarget[1]);
+  const lowRotation = mealUtensilRotation(low, 0.1);
+  const highRotation = mealUtensilRotation(high, 1.7);
+  assert.ok(highRotation[0] < lowRotation[0], 'the spoon rotates toward the mouth');
+  assert.notEqual(highRotation[2], lowRotation[2], 'the wrist changes angle while lifting');
 });

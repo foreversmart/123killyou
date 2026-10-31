@@ -66,6 +66,70 @@ export function lantern(b: Builder, lit = true) {
   b.add(torus(0.065, 0.008), M.brass, [0, 0.58, 0], [1, 1, 1], [Math.PI / 2, 0, 0]);
 }
 
+/** A small cast-bronze censer used on side altars and the oracle table. */
+export function incenseBurner(position: V3, lit = true) {
+  const root = node('incense_burner');
+  root.position = position;
+  const b = new Builder();
+  const bronze = { ...M.brass, color: 0x786246, rough: 0.64, metal: 0.54 };
+  b.add(
+    lathe(
+      [
+        [0, 0],
+        [0.19, 0],
+        [0.24, 0.06],
+        [0.22, 0.18],
+        [0.17, 0.27],
+        [0.16, 0.33],
+        [0, 0.35],
+      ],
+      20,
+    ),
+    bronze,
+  );
+  b.add(torus(0.2, 0.025, 20), bronze, [0, 0.29, 0]);
+  b.add(torus(0.16, 0.018, 20), bronze, [0, 0.38, 0]);
+  for (const side of [-1, 1]) {
+    b.rod([side * 0.2, 0.2, 0], [side * 0.31, 0.3, 0], 0.018, bronze);
+    b.rod([0, 0.2, side * 0.2], [0, 0.3, side * 0.31], 0.018, bronze);
+  }
+  for (const [x, z] of [
+    [0.13, 0.11],
+    [-0.13, 0.11],
+    [0, -0.16],
+  ] as const)
+    b.add(cylinder(0.035, 0.05, 0.08, 12), bronze, [x, -0.04, z]);
+  const body = b.mesh('incense_burner_body');
+  root.children.push(body);
+  if (lit) {
+    const smoke = new Builder()
+      .ball([0.025, 0.11, 0.025], [0.03, 0.47, 0], { color: 0xa7a28e, rough: 1, glow: 0.2 })
+      .mesh('incense_smoke');
+    smoke.shadow = false;
+    smoke.animate = (time) => {
+      smoke.position[0] = Math.sin(time * 0.55) * 0.035;
+      smoke.position[2] = Math.cos(time * 0.7) * 0.018;
+      smoke.scale[1] = 0.84 + Math.sin(time * 1.3) * 0.12;
+    };
+    root.children.push(smoke);
+  }
+  return root;
+}
+
+/** A compact wooden fish drum, common beside a monastic dining hall. */
+export function woodFish(position: V3) {
+  const root = node('wood_fish');
+  root.position = position;
+  const b = new Builder();
+  const lacquer = { color: 0x6c3e2e, rough: 0.82, pattern: 2 };
+  b.ball([0.28, 0.2, 0.2], [0, 0.26, 0], lacquer);
+  b.box([0.22, 0.08, 0.16], [0, 0.17, 0], M.darkWood);
+  b.rod([-0.31, 0.33, 0], [-0.43, 0.62, 0], 0.025, M.darkWood);
+  b.ball([0.06, 0.06, 0.06], [-0.44, 0.64, 0], M.brass);
+  root.children.push(b.mesh('wood_fish_body'));
+  return root;
+}
+
 export function beads(b: Builder, p: V3 = [0, 0, 0], radius = 0.085) {
   for (let i = 0; i < 16; i++) {
     const a = (i / 16) * Math.PI * 2;

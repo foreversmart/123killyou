@@ -63,9 +63,9 @@ const points: Record<string, Record<string, ArtPoint>> = {
 const cast: Record<string, Record<string, ActorPlacement>> = {
   mini_register: {
     luchen: { x: 47, y: 67.5, height: 32 },
-    linlan: { x: 23, y: 74, height: 34 },
-    zhouyan: { x: 34.5, y: 69, height: 30 },
-    xuzhi: { x: 65, y: 77, height: 35, facing: 'left' },
+    linlan: { x: 31, y: 73, height: 34 },
+    zhouyan: { x: 61, y: 70, height: 30, facing: 'left' },
+    xuzhi: { x: 70, y: 76, height: 35, facing: 'left' },
   },
   mini_refectory: {
     luchen: { x: 85, y: 78, height: 40, facing: 'left' },

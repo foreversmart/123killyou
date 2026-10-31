@@ -9,18 +9,18 @@ const protagonistName = "赵熙"
 func miniSceneActors(key string) []SceneActor {
 	actors := map[string][]SceneActor{
 		"mini_arrival": {
-			actor("player", protagonistName, "游客·主角", "山门外石阶 / 第一视角", "player", "观察中"),
-			actor("linlan", "林岚", "摄影爱好者", "山门左侧台阶", "", "举着相机"),
-			actor("zhouyan", "周砚", "古建筑爱好者", "山门右侧台阶", "", "查看梁架"),
-			actor("xuzhi", "许栀", "同行游客", "山门檐下 / 旅行包旁", "", "整理发圈"),
-			actor("luchen", "陆沉", "守夜人和尚", "山门内侧", "keeper", "迎接来客"),
+			actor("player", protagonistName, "游客·主角", "山门外石阶 / 第一视角", "player", "随意环顾，听见车门和脚步"),
+			actor("linlan", "林岚", "摄影爱好者", "山门左侧台阶 / 边走边取相机", "", "沿台阶缓步取景，偶尔按下快门"),
+			actor("zhouyan", "周砚", "古建筑爱好者", "新匾侧前方 / 绕行观察", "", "绕到匾侧看旧字和梁架，不停在原地"),
+			actor("xuzhi", "许栀", "同行游客", "檐下与行李之间 / 往返取包", "", "把小包往墙边挪，回头招呼同伴"),
+			actor("luchen", "陆沉", "守夜人和尚", "山门内侧向台阶走来", "keeper", "车门声停后走出迎接，抬手示意登记方向"),
 		},
 		"mini_register": {
-			actor("player", protagonistName, "游客·主角", "登记簿前", "player", "写名字"),
-			actor("luchen", "陆沉", "守夜人和尚", "登记桌后 / 研墨", "keeper", "用毛笔登记"),
-			actor("linlan", "林岚", "摄影爱好者", "听房门边", "", "挂相机盖"),
-			actor("zhouyan", "周砚", "古建筑爱好者", "灯房门边", "", "看拖痕"),
-			actor("xuzhi", "许栀", "同行游客", "纸房门边", "", "夹入住须知"),
+			actor("player", protagonistName, "游客·主角", "登记桌前沿 / 与大家围桌", "player", "俯身看登记簿，等陆沉写名"),
+			actor("luchen", "陆沉", "守夜人和尚", "登记桌内侧 / 执笔登记", "keeper", "低头写名，抬眼确认来客"),
+			actor("linlan", "林岚", "摄影爱好者", "登记桌左侧 / 靠窗一角", "", "扶着相机观察院景，偶尔回身看行李"),
+			actor("zhouyan", "周砚", "古建筑爱好者", "登记桌右前角 / 门槛附近", "", "探身看笔尖和桌边拖痕，向偏殿方向张望"),
+			actor("xuzhi", "许栀", "同行游客", "登记桌外侧 / 手按入住须知", "", "靠近桌边看陆沉登记，整理发圈和纸页"),
 		},
 		"mini_refectory": {
 			actor("player", protagonistName, "游客·主角", "斋堂东侧饭桌", "player", "端着粥碗"),

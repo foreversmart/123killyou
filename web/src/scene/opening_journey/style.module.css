@@ -1,24 +1,12 @@
 .journey {
   position: absolute;
   z-index: 20;
-  inset: 4px;
+  /* The opening owns the full stage. Leaving a four-pixel window exposed the
+     underlying story canvas during phase changes, which looked like objects
+     blinking at the edge of the shot. */
+  inset: 0;
   overflow: hidden;
   background: #18231e;
-}
-
-.journey {
-  animation: arrive 0.7s ease-out both;
-}
-@keyframes arrive {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .journey {
-    animation: none;
-  }
+  isolation: isolate;
+  contain: paint;
 }

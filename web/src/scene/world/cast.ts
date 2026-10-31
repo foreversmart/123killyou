@@ -31,15 +31,34 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       actor.id === 'shangong' && Boolean(state.flags.cup_failed),
     );
     let position: V3 = actorPositions[place]?.[actor.id] || [index - 1.5, 0, -1 - index * 0.5];
-    if (walking)
-      position =
-        mode === 'hall'
-          ? [-2 + index * 0.65, 0, 1.5 - index * 0.7]
-          : [index % 2 ? 0.8 : -0.8, 0, -1 - index * 1.1];
+    if (walking) {
+      if (mode === 'hall') {
+        const hallLine: Record<string, V3> = {
+          luchen: [2.2, 0, 1.2],
+          linlan: [1.55, 0, 0.75],
+          zhouyan: [0.85, 0, 0.3],
+          xuzhi: [0.15, 0, -0.15],
+        };
+        position = hallLine[actor.id] || [2 - index * 0.65, 0, 1.5 - index * 0.7];
+      } else if (state.sceneKey !== 'mini_ending') {
+        // Start at the near end of the covered passage. The offsets keep the
+        // group in a loose conversational stagger while the movement system
+        // carries them all the way to the far end.
+        const corridorLine: Record<string, V3> = {
+          luchen: [0, 0, 6.2],
+          linlan: [-0.38, 0, 5.75],
+          zhouyan: [0.08, 0, 5.3],
+          xuzhi: [0.45, 0, 4.85],
+        };
+        position = corridorLine[actor.id] || [index * 0.18 - 0.3, 0, 5.8 - index * 0.45];
+      } else {
+        position = [index % 2 ? 0.8 : -0.8, 0, -1 - index * 1.1];
+      }
+    }
     rig.root.position = [...position];
     rig.root.rotation[1] = walking
       ? mode === 'hall'
-        ? Math.PI / 2
+        ? -Math.PI / 2
         : Math.PI
       : Math.atan2(world.camera.eye[0] - position[0], world.camera.eye[2] - position[2]) * 0.5;
     if (place === 'refectory' && !walking) {
@@ -63,6 +82,7 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     const { held, heldBowl } = animateCharacter(rig, actor, state, {
       walkDuration: movement?.duration,
       traveling: walking,
+      alighting: mode === 'alighting',
       speaker: () => world.speaker || '',
     });
     if (actor.id !== 'victim') {
@@ -77,7 +97,7 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
               : { node: knee.children[0], offset: [0, -0.045, 0.015] },
         });
     }
-    const facing = actorFacing(
+    const authoredFacing = actorFacing(
       actor,
       state,
       rig.root.position,
@@ -89,17 +109,22 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
         movement.to[0] - movement.from[0],
         movement.to[2] - movement.from[2],
       );
-      const turn = Math.atan2(Math.sin(facing - heading), Math.cos(facing - heading));
+      // A corridor travel ends at a side doorway. Keep the walking heading
+      // while moving, then turn toward that doorway during the short settle
+      // window. This makes the stop readable and keeps the rig from facing
+      // through the corridor's end wall.
+      const endFacing = movement.endFacing ?? authoredFacing;
+      const turn = Math.atan2(Math.sin(endFacing - heading), Math.cos(endFacing - heading));
       rig.root.position = [...movement.from];
       rig.root.animate = (t, dt) => {
         perform(t, dt);
         rig.root.position = movementPosition(movement, t);
         rig.root.rotation[1] = heading + turn * ease(t - movement.duration + 0.45, 0.45);
       };
-    } else if (facing !== rig.root.rotation[1]) {
+    } else if (authoredFacing !== rig.root.rotation[1]) {
       const perform = rig.root.animate!;
       const origin = rig.root.rotation[1];
-      const turn = Math.atan2(Math.sin(facing - origin), Math.cos(facing - origin));
+      const turn = Math.atan2(Math.sin(authoredFacing - origin), Math.cos(authoredFacing - origin));
       rig.root.animate = (t, dt) => {
         perform(t, dt);
         rig.root.rotation[1] = origin + turn * ease(t, 1.1);

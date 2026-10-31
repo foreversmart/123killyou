@@ -1,7 +1,14 @@
 {
-  "date": "2026-10-26",
+  "date": "2026-10-31",
   "status": "current",
   "generator": "built-in image_gen",
+  "externalModelReferences": {
+    "manifest": "assets/environment/guardian_monk_sources.json",
+    "policy": "offline_only",
+    "monk": "CC0 Minneapolis Institute of Art 10th C BCE Chinese monk; offline proportion and robe reference only",
+    "guardians": "CC0 Minneapolis Institute of Art Dvarapala and Nio Temple Guardian; offline carving and attribute references only",
+    "runtime": "No remote model request. Current runtime uses local WebGPU meshes and the local CC0 Guanyin asset."
+  },
   "styleReferences": [
     "assets/references/style_reference/ref_01_character_closeup.png",
     "assets/references/style_reference/ref_02_character_counter.png",
