@@ -3,6 +3,13 @@ import type { V3, WorldMode } from '@/scene/world/types';
 import type { Performance } from '@/scene/world_character/performance';
 import { ease } from '@/scene/world_character/joints';
 import {
+  createRegisterFlockMotion,
+  flockMemberPosition,
+  registerFlockStartPosition,
+  registerFlockTargetPosition,
+  type FlockMotion,
+} from '@/scene/world/register_flock';
+import {
   CORRIDOR_TRAVEL_LISTEN_SECONDS,
   CORRIDOR_TRAVEL_REFECTORY_SECONDS,
   CORRIDOR_TRAVEL_REGISTER_SECONDS,
@@ -14,6 +21,9 @@ export type Movement = {
   from: V3;
   to: V3;
   duration: number;
+  actorId?: string;
+  /** A shared, deterministic flock used by the gate-to-registration walk. */
+  flock?: FlockMotion;
   /** Facing to settle on once the group reaches a side doorway. */
   endFacing?: number;
 };
@@ -175,6 +185,21 @@ export function actorMovement(
     state.sceneKey !== 'mini_ending' &&
     !(state.sceneKey === 'mini_ending' && actor.id === 'luchen')
   ) {
+    if (state.sceneKey === 'mini_register') {
+      const flock = createRegisterFlockMotion(CORRIDOR_TRAVEL_END_Z);
+      const from = registerFlockStartPosition(flock, actor.id);
+      const to = registerFlockTargetPosition(flock, actor.id);
+      if (from && to) {
+        return {
+          from,
+          to,
+          duration: CORRIDOR_TRAVEL_REGISTER_SECONDS,
+          actorId: actor.id,
+          flock,
+          endFacing: corridorEndFacing[actor.id],
+        };
+      }
+    }
     const laneOffsets: Record<string, number> = {
       linlan: -0.38,
       zhouyan: 0.08,
@@ -236,6 +261,8 @@ export function actorMovement(
 }
 
 export function movementPosition(movement: Movement, time: number): V3 {
+  if (movement.flock && movement.actorId)
+    return flockMemberPosition(movement.flock, movement.actorId, time, movement.duration);
   const progress = ease(time, movement.duration);
   return movement.from.map((value, i) => value + (movement.to[i] - value) * progress) as V3;
 }

@@ -9,10 +9,10 @@ import {
 
 const gilding = { ...M.brass, color: 0xbd914f, rough: 0.57, metal: 0.6 };
 export const guardianLampPositions: V3[] = [
-  [-4.5, 1.12, -0.85],
-  [-2.25, 1.12, -0.85],
-  [-0.05, 1.12, -0.85],
-  [4.5, 1.12, -0.85],
+  [-4.35, 1.12, -1.45],
+  [-4.35, 1.12, 0.8],
+  [4.35, 1.12, -1.45],
+  [4.35, 1.12, 0.8],
 ];
 
 /** Shallow carved relief stays attached to the beam, with no billboard decoration. */

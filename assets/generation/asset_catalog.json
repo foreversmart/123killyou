@@ -25,30 +25,30 @@
       "height": 1536,
       "format": "png",
       "hasAlpha": true,
-      "bytes": 784860,
-      "sha256": "79673266436e2bc9ffc81650444d284f6262a64814e5b98c149ecfa7f2748888",
+      "bytes": 724323,
+      "sha256": "9e39f795dfdb80b8027f27a6656764f9f38aea30312acfb74ed2c800031373b9",
       "status": "generated",
       "generator": "imagecreate",
       "provider": "custom",
       "model": "gpt-image-2",
       "operation": "generate",
       "inputImages": [],
-      "referenceUse": "现有主角与同伴图像仅经查看后转写为文字造型与画风约束，未作为图像输入发送到 API。",
-      "postprocess": "以纯品红 #ff00ff 背景生成，再使用 imagecreate remove_chroma_key.py 本地提取透明通道。",
+      "referenceUse": "现有主角与同伴图像经查看后用于文字造型与画风约束；最终调用 generate，inputImages 为空，未将参考图发送到最终生成请求。",
+      "postprocess": "保留服务返回 PNG 的人物透明通道；使用 Pillow 清除 alpha≤3 的微弱背景残留，将 alpha 4—252 线性映射到 1—255，并将完全透明像素的 RGB 清零。已在浅色与深色背景检查头发、衣物和鞋边，无重新按黑色抠图。",
       "promptSet": "assets/generation/character_prompts.json",
       "alphaCheck": {
-        "transparentPixels": 1190440,
-        "nearOpaquePixels": 374814,
+        "transparentPixels": 1185201,
+        "nearOpaquePixels": 371676,
         "silhouetteBounds": {
-          "minX": 299,
-          "minY": 24,
-          "maxX": 701,
-          "maxY": 1502
+          "minX": 315,
+          "minY": 16,
+          "maxX": 737,
+          "maxY": 1518
         }
       },
       "usage": {
         "storyBeats": [],
-        "purpose": "主角赵熙的全身人物定型参考：警觉克制、自然短黑发、深炭蓝夹克、浅灰米色衬衣和深灰裤，无挎包与手持物；供后续美术使用，当前不新增运行时角色或头像接入。"
+        "purpose": "主角赵熙的全身人物定型参考：警觉克制、短碎黑发、橄榄灰立领拉链夹克、暖米色圆领针织、炭灰直筒裤与深色步行鞋，无挎包与手持物；以发型、领型、服装主色和配件区别于周砚，供后续美术使用。"
       }
     },
     {

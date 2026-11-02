@@ -99,7 +99,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
-				return "story", e.startMealEating(state, "许栀", "还没想好就先不喝肉粥，吃些馒头和素菜吧。"), true
+				return "story", e.startMealEating(state, "许栀", "那就都不喝肉粥了，吃些馒头和素菜吧。"), true
 			}
 			if anyAte {
 				state.Flags["meal_all_ate"] = state.Flags["meal_player_ate"] && allCompanionsAte(state)
@@ -107,7 +107,7 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 				miniShot(state, "refectory_eating")
 				miniSetFlag(state, "refectory_eating_shown")
 				state.DialogueNext = "自动离开斋堂"
-				return "story", e.startMealEating(state, "许栀", "有人想吃就慢慢吃，不吃肉粥的就夹些馒头和素菜。大家都照自己的选择来。"), true
+				return "story", e.startMealEating(state, "许栀", "有人想吃肉粥就吃肉粥呗，不吃肉粥的就夹些馒头和素菜。大家都照自己的想法来吧。"), true
 			}
 			state.Flags["meal_all_ate"] = false
 			state.Flags["skin_double_present"] = false

@@ -121,6 +121,22 @@ test('四大天王拥有独立法器实体，网格有限且索引有效', () =>
   assert.ok(parasol.max[1] > 3.6, '宝伞伸过冠顶，保持完整伞盖');
 });
 
+test('四大天王分成左右两列，每列前后各一尊并保留中央通道', () => {
+  const positions = Object.fromEntries(kings.map((king) => [king.name, king.position]));
+  assert.deepEqual(positions.heavenly_king_pipa, [-3.6, 0, -1.45]);
+  assert.deepEqual(positions.heavenly_king_sword, [-3.6, 0, 0.8]);
+  assert.deepEqual(positions.heavenly_king_dragon, [3.6, 0, -1.45]);
+  assert.deepEqual(positions.heavenly_king_umbrella, [3.6, 0, 0.8]);
+  assert.ok(Math.abs(positions.heavenly_king_pipa[0]) > 2.1);
+  assert.ok(Math.abs(positions.heavenly_king_umbrella[0]) > 2.1);
+  assert.ok(positions.heavenly_king_pipa[0] === positions.heavenly_king_sword[0]);
+  assert.ok(positions.heavenly_king_dragon[0] === positions.heavenly_king_umbrella[0]);
+  assert.equal(kings.find((king) => king.name.endsWith('_pipa')).rotation[1], Math.PI / 2);
+  assert.equal(kings.find((king) => king.name.endsWith('_sword')).rotation[1], Math.PI / 2);
+  assert.equal(kings.find((king) => king.name.endsWith('_dragon')).rotation[1], -Math.PI / 2);
+  assert.equal(kings.find((king) => king.name.endsWith('_umbrella')).rotation[1], -Math.PI / 2);
+});
+
 test('天王和观音供台分开，伞盖与飘带不侵入两侧殿柱', () => {
   const altars = hall.children
     .filter((child) => child.name === 'bodhisattva')
@@ -148,19 +164,24 @@ test('固定大殿镜头能容纳四尊完整轮廓，横屏和竖屏均保留�
       assert.ok(box.min[1] > -0.85 && box.max[1] < 0.85, `${kings[i].name} at ${aspect}`);
       assert.ok(box.min[2] > 0 && box.max[2] < 1, 'statues are in front of the camera');
     }
-    for (let i = 0; i < projected.length - 1; i++) {
-      const a = projected[i],
-        b = projected[i + 1];
-      const overlap = Math.max(0, a.max[0] - b.min[0]);
-      assert.ok(overlap < (b.max[0] - b.min[0]) * 0.15, '相邻天王不能遮住另一尊的主体');
-    }
+    for (let i = 0; i < projected.length; i++)
+      for (let j = i + 1; j < projected.length; j++) {
+        const a = projected[i],
+          b = projected[j];
+        const overlap = Math.max(0, Math.min(a.max[0], b.max[0]) - Math.max(a.min[0], b.min[0]));
+        if (overlap > 0 && Math.abs(i - j) === 2)
+          assert.ok(
+            overlap < Math.min(a.max[0] - a.min[0], b.max[0] - b.min[0]) * 0.15,
+            '天王主体不能互相遮挡',
+          );
+      }
   }
 });
 
 test('低位铜灯避开天王裙甲，并为最靠后的过殿行走线留出身体宽度', () => {
   const lowBounds = kingPoints.map((vertices) => bounds(vertices.filter((p) => p[1] < 1.25)));
   for (const [x, , z] of guardianLampPositions) {
-    assert.ok(-0.15 - z > 0.23 + 0.28, '油灯与许栀最靠后的行走线保持间隔');
+    assert.ok(Math.abs(x) > 4.1, '油灯贴近两侧墙面');
     for (const box of lowBounds) {
       const dx = Math.max(box.min[0] - x, 0, x - box.max[0]);
       const dz = Math.max(box.min[2] - z, 0, z - box.max[2]);

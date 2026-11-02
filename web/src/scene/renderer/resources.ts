@@ -11,6 +11,10 @@ type MeshRange = {
 type Manifest = {
   surfaces: Surface[];
   meshes: Record<string, MeshRange>;
+  characterModels?: Record<
+    string,
+    { name: string; surface: number; scale: number; source: string; static: boolean; parts: string[] }
+  >;
   binary: string;
   skies: string[];
 };

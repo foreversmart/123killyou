@@ -1,11 +1,6 @@
 import type { Builder } from '@/scene/geometry/builder';
 import type { Geometry } from '@/scene/world/types';
-import {
-  mountainHeight,
-  noise,
-  rockExposure,
-  smooth,
-} from '@/scene/world_environment/terrain_noise';
+import { mountainHeight, noise, smooth } from '@/scene/world_environment/terrain_noise';
 import { roadNearest, ROAD_HALF_WIDTH } from '@/scene/world_environment/road_path';
 
 // The temple is cut into a broad shoulder. Its local floor is zero; the valley
@@ -41,110 +36,6 @@ function axis(start: number, end: number, fineStart: number, fineEnd: number) {
 }
 
 let cached: Geometry | undefined;
-let cachedCliffs: Geometry | undefined;
-
-function cliffBands(): Geometry {
-  if (cachedCliffs) return cachedCliffs;
-  const vertices: number[] = [],
-    indices: number[] = [];
-  let seed = 1097;
-  const random = () => {
-    seed = (seed * 1664525 + 1013904223) >>> 0;
-    return seed / 4294967296;
-  };
-  const addVertex = (
-    p: [number, number, number],
-    n: [number, number, number],
-    uv: [number, number],
-  ) => {
-    vertices.push(
-      ...p,
-      ...n,
-      0.25 + n[1] * 0.08,
-      0.28 + n[1] * 0.06,
-      0.25 + n[1] * 0.04,
-      0.96,
-      0,
-      4,
-      0,
-      ...uv,
-      -1,
-    );
-    return vertices.length / 16 - 1;
-  };
-  const addFace = (
-    corners: [
-      [number, number, number],
-      [number, number, number],
-      [number, number, number],
-      [number, number, number],
-    ],
-    normal: [number, number, number],
-  ) => {
-    const base = corners.map((corner, i) =>
-      addVertex(corner, normal, [i === 1 || i === 2 ? 1 : 0, i > 1 ? 0 : 1]),
-    );
-    indices.push(base[0], base[1], base[2], base[0], base[2], base[3]);
-  };
-  // Small strata are scattered only where the height field forms a genuinely
-  // steep face. Each ledge has a distinct lip and broken runout, avoiding the
-  // repeated low-poly boulders that used to read as a regular garden bed.
-  for (let z = -350; z < 190; z += 9) {
-    for (let x = -310; x < 315; x += 10) {
-      if (templeClearance(x, z) < 7) continue;
-      if (z > 0 && z < 175 && Math.abs(x) < 150 && roadNearest(x, z).distance < 10) continue;
-      const exposure = rockExposure(x, z);
-      if (exposure < 0.48 || random() > 0.22 + exposure * 0.5) continue;
-      const step = 2.5,
-        dx = (mountainHeight(x + step, z) - mountainHeight(x - step, z)) / (2 * step),
-        dz = (mountainHeight(x, z + step) - mountainHeight(x, z - step)) / (2 * step),
-        grade = Math.max(0.4, Math.hypot(dx, dz)),
-        downhill: [number, number] = [-dx / grade, -dz / grade],
-        tangent: [number, number] = [-downhill[1], downhill[0]],
-        width = 2.1 + random() * 4.2,
-        depth = 0.9 + exposure * (1.5 + random() * 2.2),
-        drop = 0.75 + exposure * (0.9 + random() * 1.7),
-        y = terrainHeight(x, z) + 0.07;
-      const jitter = (random() - 0.5) * 0.8;
-      const tx = tangent[0] * (width * 0.5),
-        tz = tangent[1] * (width * 0.5),
-        fx = downhill[0] * depth,
-        fz = downhill[1] * depth;
-      const topLeft: [number, number, number] = [x - tx, y, z - tz],
-        topRight: [number, number, number] = [x + tx, y + jitter * 0.1, z + tz],
-        bottomLeft: [number, number, number] = [x - tx + fx, y - drop, z - tz + fz],
-        bottomRight: [number, number, number] = [
-          x + tx + fx,
-          y - drop + jitter * 0.08,
-          z + tz + fz,
-        ];
-      const normal: [number, number, number] = [downhill[0] * 0.84, 0.5, downhill[1] * 0.84];
-      addFace([topLeft, topRight, bottomRight, bottomLeft], normal);
-      // A narrow, uneven cap catches the light and gives each face a readable
-      // fractured edge instead of a clean vertical cut.
-      const capDepth = 0.28 + random() * 0.36;
-      addFace(
-        [
-          topLeft,
-          topRight,
-          [
-            topRight[0] + downhill[0] * capDepth,
-            topRight[1] - 0.06,
-            topRight[2] + downhill[1] * capDepth,
-          ],
-          [
-            topLeft[0] + downhill[0] * capDepth,
-            topLeft[1] - 0.06,
-            topLeft[2] + downhill[1] * capDepth,
-          ],
-        ],
-        [0, 0.96, 0],
-      );
-    }
-  }
-  cachedCliffs = { vertices: new Float32Array(vertices), indices: new Uint32Array(indices) };
-  return cachedCliffs;
-}
 
 export function landscape(b: Builder, _road = false) {
   if (!cached) {
@@ -202,5 +93,4 @@ export function landscape(b: Builder, _road = false) {
     cached = { vertices: new Float32Array(vertices), indices: new Uint32Array(indices) };
   }
   b.merge(cached, [0, 0, 0]);
-  b.merge(cliffBands(), [0, 0, 0]);
 }

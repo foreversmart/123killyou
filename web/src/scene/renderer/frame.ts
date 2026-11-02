@@ -1,21 +1,41 @@
 import { mat4, vec3 } from 'wgpu-matrix';
 import type { CameraShot, Lighting, V3 } from '@/scene/world/types';
 
+export const SHADOW_MAP_SIZE = 2048;
+
 export function cameraMatrix(camera: CameraShot, aspect: number, offset: V3 = [0, 0, 0]) {
   const eye = vec3.add(camera.eye, offset),
     target = vec3.add(camera.target, offset);
   const fov = Math.min(95, (camera.fov || 48) + Math.max(0, 1.45 - aspect) * 28);
+  // A 5 cm near plane spends nearly all depth precision beside a distant
+  // aerial camera. Pull it out only for long shots; close props keep 5 cm.
+  const near = Math.min(1, Math.max(0.05, (vec3.distance(eye, target) - 12) * 0.025));
   return mat4.multiply(
-    mat4.perspective((fov * Math.PI) / 180, aspect, 0.05, 1100),
+    mat4.perspective((fov * Math.PI) / 180, aspect, near, 1100),
     mat4.lookAt(eye, target, [0, 1, 0]),
   );
 }
 
 export function shadowMatrix(lighting: Lighting, target: V3) {
-  const light = vec3.add(target, vec3.mulScalar(vec3.normalize(lighting.direction), 25));
+  const radius = lighting.shadowRadius ?? 16;
+  const direction = vec3.normalize(lighting.direction);
+  const right = vec3.normalize(vec3.cross([0, 1, 0], direction));
+  const up = vec3.cross(direction, right);
+  const texel = (radius * 2) / SHADOW_MAP_SIZE;
+  // Snap in the light's fixed XY basis, not the moving camera's basis. A pan
+  // can then move the shadow map only in whole texels instead of recutting
+  // every leaf and vehicle edge at a different subpixel phase each frame.
+  let center = vec3.copy(target);
+  for (const axis of [right, up]) {
+    const along = vec3.dot(target, axis);
+    center = vec3.add(center, vec3.mulScalar(axis, Math.round(along / texel) * texel - along));
+  }
+  // Keep elevated slopes and tree crowns in front of the shadow camera.
+  const depth = Math.max(80, radius * 4);
+  const light = vec3.add(center, vec3.mulScalar(direction, depth / 2));
   return mat4.multiply(
-    mat4.ortho(-16, 16, -16, 16, 0.1, 65),
-    mat4.lookAt(light, target, [0, 1, 0]),
+    mat4.ortho(-radius, radius, -radius, radius, 0.1, depth),
+    mat4.lookAt(light, center, [0, 1, 0]),
   );
 }
 

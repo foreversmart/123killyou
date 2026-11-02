@@ -47,6 +47,15 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
           xuzhi: [0.15, 0, -0.15],
         };
         position = hallLine[actor.id] || [2 - index * 0.65, 0, 1.5 - index * 0.7];
+      } else if (state.sceneKey === 'mini_register') {
+        // The registration walk starts as a loose, staggered flock instead
+        // of rebuilding the corridor's parallel lanes. actorMovement owns the
+        // deterministic separation and follow offsets for this route.
+        position = actorMovement(actor, state, mode, [0, 0, 0])?.from || [
+          index * 0.18 - 0.3,
+          0,
+          5.8 - index * 0.45,
+        ];
       } else if (state.sceneKey !== 'mini_ending') {
         // Start at the route's actual end. The refectory route begins by the
         // side rooms and walks outward; return routes begin at the open end
@@ -141,7 +150,9 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.animate = (t, dt) => {
         perform(t, dt);
         rig.root.position = movementPosition(movement, t);
-        rig.root.rotation[1] = heading + turn * ease(t - movement.duration + 0.45, 0.45);
+        const settle = ease(t - movement.duration + 0.45, 0.45);
+        const facing = heading + turn * settle;
+        rig.root.rotation[1] = Math.atan2(Math.sin(facing), Math.cos(facing));
       };
     } else if (authoredFacing !== rig.root.rotation[1]) {
       const perform = rig.root.animate!;

@@ -8,6 +8,7 @@ import { characterDetails } from '@/scene/world_character/details';
 import { bendingJoint, bend } from '@/scene/world_character/joints';
 import { camera as cameraModel } from '@/scene/world_prop/household';
 import { node, type Material, type WorldNode } from '@/scene/world/types';
+import { characterModelAssets } from '@/scene/world_character/model_assets';
 
 export type CharacterRig = {
   root: WorldNode;
@@ -29,6 +30,7 @@ export function characterModel(
 ): CharacterRig {
   const look = identities[id],
     monk = ['luchen', 'huipu', 'shangong'].includes(id);
+  const suppliedModel = characterModelAssets(id);
   const cloth: Material = {
     color: stone ? 0x787b70 : look.coat,
     rough: 0.92,
@@ -78,7 +80,11 @@ export function characterModel(
     if (id === 'huipu')
       b.box([0.17, 0.92, 0.04], [0.14, 0.93, 0.145], { ...cloth, color: 0x574638 }, [0, 0, 0.08]);
   }
-  if (monk) body.children.push(b.mesh('torso'));
+  if (suppliedModel) {
+    const torso = node('torso');
+    torso.asset = suppliedModel.torso;
+    body.children.push(torso, accessories(id));
+  } else if (monk) body.children.push(b.mesh('torso'));
   else {
     const torso = node('torso');
     torso.asset = id + '_torso';
@@ -117,7 +123,10 @@ export function characterModel(
       cloth,
     );
     const a = arm.mesh('arm');
-    if (!monk) {
+    if (suppliedModel) {
+      a.geometry = undefined;
+      a.asset = suppliedModel.arms[side < 0 ? 0 : 1];
+    } else if (!monk) {
       a.geometry = undefined;
       a.asset = id + (side < 0 ? '_right_arm' : '_left_arm');
     }
@@ -133,7 +142,7 @@ export function characterModel(
     );
     elbows.push(elbow.joint);
     hands.push(elbow.socket);
-    if (monk) {
+    if (monk && !suppliedModel) {
       const hand = node('anatomical_hand');
       hand.asset = side < 0 ? 'hand_right' : 'hand_left';
       if (stone) hand.surface = 'stone';
@@ -159,7 +168,10 @@ export function characterModel(
       rough: 0.84,
     });
     const l = leg.mesh(pose === 'kneeling' ? 'kneeling_leg' : 'leg');
-    if (!monk) {
+    if (suppliedModel) {
+      l.geometry = undefined;
+      l.asset = suppliedModel.legs[side < 0 ? 0 : 1];
+    } else if (!monk) {
       l.geometry = undefined;
       l.asset = id + (side < 0 ? '_right_leg' : '_left_leg');
     }

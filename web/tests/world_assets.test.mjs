@@ -91,12 +91,14 @@ test('all character poses and the statue resolve current meshes with head and ne
     if (n.asset) assert.ok(manifest.meshes[n.asset], n.asset);
     n.children.forEach(visit);
   };
-  for (const id of ['linlan', 'zhouyan', 'xuzhi', 'luchen', 'huipu', 'shangong']) {
+  for (const id of ['linlan', 'zhouyan', 'xuzhi', 'luchen', 'huipu', 'shangong', 'zhaoxi']) {
     for (const pose of ['standing', 'seated', 'kneeling']) visit(characterModel(id, pose).root);
     visit(characterModel(id, 'standing', true).root);
   }
   visit(bodhisattva([0, 0, 0]));
-  for (const [id, m] of Object.entries(manifest.meshes).filter(([id]) => id.endsWith('_head'))) {
+  for (const [id, m] of Object.entries(manifest.meshes).filter(
+    ([id]) => id.endsWith('_head') && !id.includes('_model_'),
+  )) {
     const v = new Float32Array(binary, m.vertexOffset, m.vertexCount);
     let min = Infinity,
       max = -Infinity;
@@ -105,6 +107,22 @@ test('all character poses and the statue resolve current meshes with head and ne
       max = Math.max(max, v[i]);
     }
     assert.ok(min > -0.5 && min < -0.1 && max > 0.14 && max < 0.19, id);
+  }
+});
+
+test('user supplied character models are packed as six current static rig parts', () => {
+  const expected = ['huipu', 'linlan', 'luchen', 'xuzhi', 'zhaoxi', 'zhouyan'];
+  assert.deepEqual(Object.keys(manifest.characterModels || {}).sort(), expected);
+  for (const [id, model] of Object.entries(manifest.characterModels)) {
+    assert.equal(model.static, true, id);
+    assert.equal(model.parts.length, 6, id);
+    for (const part of model.parts) {
+      assert.ok(manifest.meshes[part], part);
+      const range = manifest.meshes[part];
+      const vertices = new Float32Array(binary, range.vertexOffset, range.vertexCount);
+      assert.ok(vertices.every(Number.isFinite), part);
+      assert.ok(vertices.every((value, index) => index % 16 < 3 ? Math.abs(value) < 3 : true), part);
+    }
   }
 });
 

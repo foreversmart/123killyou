@@ -30,7 +30,7 @@ type TravelBeat = {
 const travelBeats: Record<string, TravelBeat> = {
   mini_register: {
     id: 'arrival_walk_register',
-    title: '跟随陆沉进入东院',
+    title: '慢速跟随陆沉进入东院',
     kind: 'walk',
     durationMs: CORRIDOR_TRAVEL_REGISTER_SECONDS * 1000,
   },

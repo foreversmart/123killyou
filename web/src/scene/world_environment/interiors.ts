@@ -71,15 +71,14 @@ export function interior(
     for (const x of kind === 'hall' ? [-2.3, 2.3] : [-1.2])
       root.children.push(bodhisattva([x, 0, kind === 'hall' ? -3.1 : -2.5]));
   if (kind === 'hall') {
-    // The four full-size guardians form a clear row before the recessed
-    // Guanyin altars. In two deep side rows, the rear kings intersected those
-    // plinths and the front pair hid them; the parasol also entered a column.
-    // All four attributes now face the existing camera above the procession.
+    // The four full-size guardians sit close to the side walls in two deep
+    // columns. Each side keeps a front and rear figure, and both columns turn
+    // inward so the guardians face one another across the central passage.
     root.children.push(
-      heavenlyKing([-3.4, 0, -1.3], 'pipa', 0.1),
-      heavenlyKing([-1.15, 0, -1.3], 'sword', 0.04),
-      heavenlyKing([1.0, 0, -1.3], 'dragon', -0.04),
-      heavenlyKing([3.05, 0, -1.3], 'umbrella', -0.18),
+      heavenlyKing([-3.6, 0, -1.45], 'pipa', Math.PI / 2),
+      heavenlyKing([-3.6, 0, 0.8], 'sword', Math.PI / 2),
+      heavenlyKing([3.6, 0, -1.45], 'dragon', -Math.PI / 2),
+      heavenlyKing([3.6, 0, 0.8], 'umbrella', -Math.PI / 2),
       buddhistMural([-4.82, 1.38, -2.95], Math.PI / 2, 0xb36d4e),
       buddhistMural([4.82, 1.38, -2.95], -Math.PI / 2, 0x8d6b45),
       buddhistMural([-4.82, 1.38, -1.12], Math.PI / 2, 0x4f7569),

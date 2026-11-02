@@ -49,6 +49,8 @@ export type Lighting = {
   fog: number;
   exposure: number;
   daylight: boolean;
+  /** Half-width of the directional shadow volume, in world metres. */
+  shadowRadius?: number;
   lamps: { position: V3; color: V3; power: number; anchor?: Anchor }[];
   contacts?: { position: V3; radius: number; anchor: Anchor }[];
 };

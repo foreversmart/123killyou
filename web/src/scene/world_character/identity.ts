@@ -65,6 +65,10 @@ export const identities = {
     height: 0.95,
     face: 29,
   },
+  zhaoxi: {
+    name: '赵熙', skin: 0xbe9b76, coat: 0x897047, shirt: 0xbca27a,
+    trousers: 0x6a5b43, hair: 0x514a39, hairLength: 0, height: 1, face: 30,
+  },
 };
 export type Identity = keyof typeof identities;
 

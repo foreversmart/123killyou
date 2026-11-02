@@ -86,12 +86,20 @@ fn fbm(p: vec3f) -> f32 { return noise(p) * 0.55 + noise(p * 2.13 + 7.1) * 0.3 +
 fn shadeShadow(p: vec3f, n: vec3f) -> f32 {
   let sc = frame.shadow * vec4f(p + n * 0.003, 1);
   let uv = sc.xy / sc.w * vec2f(0.5, -0.5) + 0.5;
-  let z = sc.z / sc.w - 0.00015;
+  // Express receiver bias in metres so a larger mountain shadow volume
+  // does not lift the coach's shadow away from its tyres.
+  let depthScale = length(vec3f(frame.shadow[0].z, frame.shadow[1].z, frame.shadow[2].z));
+  let z = sc.z / sc.w - 0.008 * depthScale;
+  let texel = 1.0 / vec2f(textureDimensions(shadowMap));
   var sum = 0.0;
   for (var x = -1; x <= 1; x++) { for (var y = -1; y <= 1; y++) {
-    sum += textureSampleCompareLevel(shadowMap, shadowSampler, uv + vec2f(f32(x), f32(y)) / 2048.0, z);
+    sum += textureSampleCompareLevel(shadowMap, shadowSampler, uv + vec2f(f32(x), f32(y)) * texel, z);
   }}
-  return select(sum / 9.0, 1.0, any(uv < vec2f(0)) || any(uv > vec2f(1)) || z > 1.0);
+  // Fade before the finite map boundary instead of drawing its rectangle
+  // across a tree shadow or the road as the camera moves.
+  let edge = min(min(uv.x, uv.y), min(1.0 - uv.x, 1.0 - uv.y));
+  let coverage = smoothstep(0.0, 0.065, edge);
+  return select(mix(1.0, sum / 9.0, coverage), 1.0, z <= 0.0 || z >= 1.0);
 }
 // GGX + Lambert, the same roughness/metalness model as Tidewater's scene lighting.
 fn brdf(n: vec3f, v: vec3f, l: vec3f, albedo: vec3f, rough: f32, metal: f32) -> vec3f {
@@ -129,6 +137,7 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   let uv = surfaceUv(i); let ux = dpdx(uv); let uy = dpdy(uv);
   let dx = dpdx(i.position); let dy = dpdy(i.position);
   var occlusion = 1.0;
+  var coverage = 1.0;
   if (pat > 0.5 && pat < 1.5) {
     let grain = fbm(p * vec3f(35.0, 1.8, 35.0));
     let crack = smoothstep(0.66, 0.76, noise(p * vec3f(90, 3, 90)));
@@ -153,7 +162,10 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   } else if (usesTexture(pat)) {
     let slot = surfaceSlot(pat);
     let sample = textureSampleGrad(surfaceColor, surfaceSampler, uv, slot, ux, uy);
-    if (pat >= 16.0 && sample.a < 0.42) { discard; }
+    if (pat >= 16.0) {
+      coverage = smoothstep(0.32, 0.52, sample.a);
+      if (coverage <= 0.0) { discard; }
+    }
     let arm = textureSampleGrad(surfaceArm, surfaceSampler, uv, slot, ux, uy).rgb;
     let detail = textureSampleGrad(surfaceNormal, surfaceSampler, uv, slot, ux, uy).xyz * 2.0 - 1.0;
     n = mappedNormal(n, dx, dy, ux, uy, detail * vec3f(0.65,0.65,1));
@@ -189,5 +201,5 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   lit += col * i.material.w;
   let fog = 1.0 - exp(-distance(frame.eye.xyz, i.position) * frame.sky.w);
   lit = mix(lit, frame.sky.rgb * 0.7, fog);
-  return vec4f(film(lit), 1);
+  return vec4f(film(lit), coverage);
 }

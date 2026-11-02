@@ -173,6 +173,42 @@
       "albedo": "guardian_pigment_albedo.webp",
       "normal": "guardian_pigment_normal.webp",
       "arm": "guardian_pigment_arm.webp"
+    },
+    {
+      "id": "huipu_model",
+      "albedo": "huipu_model_albedo.webp",
+      "normal": "huipu_model_normal.webp",
+      "arm": "huipu_model_arm.webp"
+    },
+    {
+      "id": "linlan_model",
+      "albedo": "linlan_model_albedo.webp",
+      "normal": "linlan_model_normal.webp",
+      "arm": "linlan_model_arm.webp"
+    },
+    {
+      "id": "luchen_model",
+      "albedo": "luchen_model_albedo.webp",
+      "normal": "luchen_model_normal.webp",
+      "arm": "luchen_model_arm.webp"
+    },
+    {
+      "id": "xuzhi_model",
+      "albedo": "xuzhi_model_albedo.webp",
+      "normal": "xuzhi_model_normal.webp",
+      "arm": "xuzhi_model_arm.webp"
+    },
+    {
+      "id": "zhaoxi_model",
+      "albedo": "zhaoxi_model_albedo.webp",
+      "normal": "zhaoxi_model_normal.webp",
+      "arm": "zhaoxi_model_arm.webp"
+    },
+    {
+      "id": "zhouyan_model",
+      "albedo": "zhouyan_model_albedo.webp",
+      "normal": "zhouyan_model_normal.webp",
+      "arm": "zhouyan_model_arm.webp"
     }
   ],
   "meshes": {
@@ -379,11 +415,319 @@
       "vertexCount": 627200,
       "indexOffset": 16318280,
       "indexCount": 164979
+    },
+    "huipu_model_torso": {
+      "vertexOffset": 16978196,
+      "vertexCount": 117488,
+      "indexOffset": 17448148,
+      "indexCount": 26511
+    },
+    "huipu_model_head": {
+      "vertexOffset": 17554192,
+      "vertexCount": 89200,
+      "indexOffset": 17910992,
+      "indexCount": 17997
+    },
+    "huipu_model_left_arm": {
+      "vertexOffset": 17982980,
+      "vertexCount": 58272,
+      "indexOffset": 18216068,
+      "indexCount": 11994
+    },
+    "huipu_model_right_arm": {
+      "vertexOffset": 18264044,
+      "vertexCount": 61056,
+      "indexOffset": 18508268,
+      "indexCount": 12000
+    },
+    "huipu_model_left_leg": {
+      "vertexOffset": 18556268,
+      "vertexCount": 65088,
+      "indexOffset": 18816620,
+      "indexCount": 11997
+    },
+    "huipu_model_right_leg": {
+      "vertexOffset": 18864608,
+      "vertexCount": 62800,
+      "indexOffset": 19115808,
+      "indexCount": 11997
+    },
+    "linlan_model_torso": {
+      "vertexOffset": 19163796,
+      "vertexCount": 152944,
+      "indexOffset": 19775572,
+      "indexCount": 36000
+    },
+    "linlan_model_head": {
+      "vertexOffset": 19919572,
+      "vertexCount": 74608,
+      "indexOffset": 20218004,
+      "indexCount": 17991
+    },
+    "linlan_model_left_arm": {
+      "vertexOffset": 20289968,
+      "vertexCount": 49648,
+      "indexOffset": 20488560,
+      "indexCount": 12000
+    },
+    "linlan_model_right_arm": {
+      "vertexOffset": 20536560,
+      "vertexCount": 51024,
+      "indexOffset": 20740656,
+      "indexCount": 12000
+    },
+    "linlan_model_left_leg": {
+      "vertexOffset": 20788656,
+      "vertexCount": 44432,
+      "indexOffset": 20966384,
+      "indexCount": 12000
+    },
+    "linlan_model_right_leg": {
+      "vertexOffset": 21014384,
+      "vertexCount": 43696,
+      "indexOffset": 21189168,
+      "indexCount": 11997
+    },
+    "luchen_model_torso": {
+      "vertexOffset": 21237156,
+      "vertexCount": 161296,
+      "indexOffset": 21882340,
+      "indexCount": 36000
+    },
+    "luchen_model_head": {
+      "vertexOffset": 22026340,
+      "vertexCount": 68128,
+      "indexOffset": 22298852,
+      "indexCount": 18000
+    },
+    "luchen_model_left_arm": {
+      "vertexOffset": 22370852,
+      "vertexCount": 50976,
+      "indexOffset": 22574756,
+      "indexCount": 12000
+    },
+    "luchen_model_right_arm": {
+      "vertexOffset": 22622756,
+      "vertexCount": 53696,
+      "indexOffset": 22837540,
+      "indexCount": 11997
+    },
+    "luchen_model_left_leg": {
+      "vertexOffset": 22885528,
+      "vertexCount": 50816,
+      "indexOffset": 23088792,
+      "indexCount": 11997
+    },
+    "luchen_model_right_leg": {
+      "vertexOffset": 23136780,
+      "vertexCount": 52400,
+      "indexOffset": 23346380,
+      "indexCount": 12000
+    },
+    "xuzhi_model_torso": {
+      "vertexOffset": 23394380,
+      "vertexCount": 161952,
+      "indexOffset": 24042188,
+      "indexCount": 35997
+    },
+    "xuzhi_model_head": {
+      "vertexOffset": 24186176,
+      "vertexCount": 76544,
+      "indexOffset": 24492352,
+      "indexCount": 18000
+    },
+    "xuzhi_model_left_arm": {
+      "vertexOffset": 24564352,
+      "vertexCount": 49360,
+      "indexOffset": 24761792,
+      "indexCount": 12000
+    },
+    "xuzhi_model_right_arm": {
+      "vertexOffset": 24809792,
+      "vertexCount": 50512,
+      "indexOffset": 25011840,
+      "indexCount": 12000
+    },
+    "xuzhi_model_left_leg": {
+      "vertexOffset": 25059840,
+      "vertexCount": 42864,
+      "indexOffset": 25231296,
+      "indexCount": 12000
+    },
+    "xuzhi_model_right_leg": {
+      "vertexOffset": 25279296,
+      "vertexCount": 44384,
+      "indexOffset": 25456832,
+      "indexCount": 12000
+    },
+    "zhaoxi_model_torso": {
+      "vertexOffset": 25504832,
+      "vertexCount": 117488,
+      "indexOffset": 25974784,
+      "indexCount": 26511
+    },
+    "zhaoxi_model_head": {
+      "vertexOffset": 26080828,
+      "vertexCount": 89200,
+      "indexOffset": 26437628,
+      "indexCount": 17997
+    },
+    "zhaoxi_model_left_arm": {
+      "vertexOffset": 26509616,
+      "vertexCount": 58272,
+      "indexOffset": 26742704,
+      "indexCount": 11994
+    },
+    "zhaoxi_model_right_arm": {
+      "vertexOffset": 26790680,
+      "vertexCount": 61056,
+      "indexOffset": 27034904,
+      "indexCount": 12000
+    },
+    "zhaoxi_model_left_leg": {
+      "vertexOffset": 27082904,
+      "vertexCount": 65088,
+      "indexOffset": 27343256,
+      "indexCount": 11997
+    },
+    "zhaoxi_model_right_leg": {
+      "vertexOffset": 27391244,
+      "vertexCount": 62800,
+      "indexOffset": 27642444,
+      "indexCount": 11997
+    },
+    "zhouyan_model_torso": {
+      "vertexOffset": 27690432,
+      "vertexCount": 168016,
+      "indexOffset": 28362496,
+      "indexCount": 36000
+    },
+    "zhouyan_model_head": {
+      "vertexOffset": 28506496,
+      "vertexCount": 72272,
+      "indexOffset": 28795584,
+      "indexCount": 18000
+    },
+    "zhouyan_model_left_arm": {
+      "vertexOffset": 28867584,
+      "vertexCount": 53744,
+      "indexOffset": 29082560,
+      "indexCount": 12000
+    },
+    "zhouyan_model_right_arm": {
+      "vertexOffset": 29130560,
+      "vertexCount": 51456,
+      "indexOffset": 29336384,
+      "indexCount": 11997
+    },
+    "zhouyan_model_left_leg": {
+      "vertexOffset": 29384372,
+      "vertexCount": 45552,
+      "indexOffset": 29566580,
+      "indexCount": 11997
+    },
+    "zhouyan_model_right_leg": {
+      "vertexOffset": 29614568,
+      "vertexCount": 46384,
+      "indexOffset": 29800104,
+      "indexCount": 11997
     }
   },
   "binary": "library.bin",
   "skies": [
     "sky_day.webp",
     "sky_night.webp"
-  ]
+  ],
+  "characterModels": {
+    "huipu": {
+      "name": "慧普",
+      "surface": 29,
+      "scale": 0.85,
+      "source": "huipu.glb",
+      "static": true,
+      "parts": [
+        "huipu_model_torso",
+        "huipu_model_head",
+        "huipu_model_left_arm",
+        "huipu_model_right_arm",
+        "huipu_model_left_leg",
+        "huipu_model_right_leg"
+      ]
+    },
+    "linlan": {
+      "name": "林岚",
+      "surface": 30,
+      "scale": 0.85,
+      "source": "lin_lan.glb",
+      "static": true,
+      "parts": [
+        "linlan_model_torso",
+        "linlan_model_head",
+        "linlan_model_left_arm",
+        "linlan_model_right_arm",
+        "linlan_model_left_leg",
+        "linlan_model_right_leg"
+      ]
+    },
+    "luchen": {
+      "name": "陆沉",
+      "surface": 31,
+      "scale": 0.85,
+      "source": "lu_chen.glb",
+      "static": true,
+      "parts": [
+        "luchen_model_torso",
+        "luchen_model_head",
+        "luchen_model_left_arm",
+        "luchen_model_right_arm",
+        "luchen_model_left_leg",
+        "luchen_model_right_leg"
+      ]
+    },
+    "xuzhi": {
+      "name": "许栀",
+      "surface": 32,
+      "scale": 0.85,
+      "source": "xu_zhi.glb",
+      "static": true,
+      "parts": [
+        "xuzhi_model_torso",
+        "xuzhi_model_head",
+        "xuzhi_model_left_arm",
+        "xuzhi_model_right_arm",
+        "xuzhi_model_left_leg",
+        "xuzhi_model_right_leg"
+      ]
+    },
+    "zhaoxi": {
+      "name": "赵熙",
+      "surface": 33,
+      "scale": 0.85,
+      "source": "zhaoxi.glb",
+      "static": true,
+      "parts": [
+        "zhaoxi_model_torso",
+        "zhaoxi_model_head",
+        "zhaoxi_model_left_arm",
+        "zhaoxi_model_right_arm",
+        "zhaoxi_model_left_leg",
+        "zhaoxi_model_right_leg"
+      ]
+    },
+    "zhouyan": {
+      "name": "周砚",
+      "surface": 34,
+      "scale": 0.85,
+      "source": "zhou_yan.glb",
+      "static": true,
+      "parts": [
+        "zhouyan_model_torso",
+        "zhouyan_model_head",
+        "zhouyan_model_left_arm",
+        "zhouyan_model_right_arm",
+        "zhouyan_model_left_leg",
+        "zhouyan_model_right_leg"
+      ]
+    }
+  }
 }

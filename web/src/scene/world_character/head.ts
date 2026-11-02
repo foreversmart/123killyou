@@ -1,12 +1,13 @@
 import { Builder } from '@/scene/geometry/builder';
 import { type Identity } from '@/scene/world_character/identity';
 import { node } from '@/scene/world/types';
+import { characterModelAssets } from '@/scene/world_character/model_assets';
 
 export function characterHead(id: Identity, stone = false) {
   const head = node(id + '_head');
   head.position[1] = ['luchen', 'huipu', 'shangong'].includes(id) ? 1.52 : 1.57;
   const face = node('anatomical_face');
-  face.asset = (id === 'huipu' ? 'luchen' : id) + '_head';
+  face.asset = characterModelAssets(id)?.head || (id === 'huipu' ? 'luchen' : id) + '_head';
   // Reuse the continuous joint deformation for a small lower-jaw movement.
   face.bend = { pivot: [0, -0.045, 0.035], angle: 0 };
   if (stone) face.surface = 'stone';

@@ -1,6 +1,7 @@
 import shader from '@/scene/renderer/scene.wgsl?raw';
 import skyShader from '@/scene/renderer/sky.wgsl?raw';
 import surfaces from '@/scene/renderer/surfaces.wgsl?raw';
+import particleShader from '@/scene/renderer/particles.wgsl?raw';
 
 export async function createPipelines(device: GPUDevice, format: GPUTextureFormat) {
   const frameLayout = device.createBindGroupLayout({
@@ -66,7 +67,7 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
       fragment: { module, entryPoint: 'fragment', targets: [{ format }] },
       primitive: { topology: 'triangle-list', cullMode: 'none' },
       depthStencil: { format: 'depth24plus', depthWriteEnabled: true, depthCompare: 'less' },
-      multisample: { count: 4 },
+      multisample: { count: 4, alphaToCoverageEnabled: true },
     }),
     device.createRenderPipelineAsync({
       label: 'Temple shadow',
@@ -79,7 +80,7 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
         depthWriteEnabled: true,
         depthCompare: 'less',
         depthBias: 2,
-        depthBiasSlopeScale: 2,
+        depthBiasSlopeScale: 1,
       },
     }),
   ]);
@@ -91,5 +92,34 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
     depthStencil: { format: 'depth24plus', depthWriteEnabled: false, depthCompare: 'always' },
     multisample: { count: 4 },
   });
-  return { main, shadow, sky, frameLayout, objectLayout, shadowLayout };
+  const particlesModule = device.createShaderModule({
+    label: 'Sunlit air particles',
+    code: particleShader,
+  });
+  const particlesInfo = await particlesModule.getCompilationInfo();
+  const particleErrors = particlesInfo.messages.filter((message) => message.type === 'error');
+  if (particleErrors.length)
+    throw new Error(particleErrors.map((message) => message.message).join('\n'));
+  const particles = await device.createRenderPipelineAsync({
+    label: 'Sunlit air particles',
+    layout: device.createPipelineLayout({ bindGroupLayouts: [frameLayout] }),
+    vertex: { module: particlesModule, entryPoint: 'vertex' },
+    fragment: {
+      module: particlesModule,
+      entryPoint: 'fragment',
+      targets: [
+        {
+          format,
+          blend: {
+            color: { srcFactor: 'one', dstFactor: 'one-minus-src-alpha' },
+            alpha: { srcFactor: 'one', dstFactor: 'one-minus-src-alpha' },
+          },
+        },
+      ],
+    },
+    primitive: { topology: 'triangle-strip', cullMode: 'none' },
+    depthStencil: { format: 'depth24plus', depthWriteEnabled: false, depthCompare: 'less-equal' },
+    multisample: { count: 4 },
+  });
+  return { main, shadow, sky, particles, frameLayout, objectLayout, shadowLayout };
 }

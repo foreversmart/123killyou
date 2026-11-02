@@ -1,6 +1,7 @@
 import type { CharacterRig } from '@/scene/world_character/model';
 import type { Performance } from '@/scene/world_character/performance';
 import { bend, ease } from '@/scene/world_character/joints';
+import { walkAction } from '@/scene/world_character/walk_action';
 
 export function armPose(
   rig: CharacterRig,
@@ -101,17 +102,7 @@ export function dayAction(
 ) {
   const { head, body } = rig;
   const arrive = ease(t, 0.8);
-  if (action === 'walk') {
-    // Walking is shared by the transition shots, but each person should still
-    // feel occupied: a brief look toward a companion and a loose arm swing
-    // keep the procession from reading as a rigid marching line.
-    const look = Math.sin(t * 0.82 + seed) * 0.16;
-    head.rotation[1] = look;
-    head.rotation[0] = Math.sin(t * 0.54 + seed * 0.7) * 0.025;
-    body.rotation[0] = Math.sin(t * 0.9 + seed) * 0.018;
-    armPose(rig, 0, -0.08, -0.12, 0.035 + Math.sin(t * 1.8 + seed) * 0.02);
-    armPose(rig, 1, -0.08, -0.12, -0.035 - Math.sin(t * 1.8 + seed) * 0.02);
-  }
+  walkAction(rig, action, t, seed);
   if (action === 'write') {
     // The supporting hand stays fixed; the brush hand makes short strokes.
     const seat = body.position[1] - 0.46;

@@ -9,7 +9,17 @@ export function performanceFor(
   const shot = state.shotKey || '';
   if (actor.id === 'victim') return 'still';
   if (actor.id === 'shangong' && state.flags.cup_failed) return 'stone';
-  if (walking) return 'walk';
+  if (walking) {
+    // The gate-to-registration passage is a flock: Lu Chen keeps a calm lead
+    // while each guest continues a small personal observation as they follow.
+    if (state.sceneKey === 'mini_register') {
+      if (actor.id === 'luchen') return 'walk_lead';
+      if (actor.id === 'linlan') return 'walk_camera';
+      if (actor.id === 'zhouyan') return 'walk_architecture';
+      if (actor.id === 'xuzhi') return 'walk_companion';
+    }
+    return 'walk';
+  }
   if (
     state.sceneKey === 'mini_arrival' &&
     (shot === 'arrival_gate' || shot.startsWith('arrival_'))

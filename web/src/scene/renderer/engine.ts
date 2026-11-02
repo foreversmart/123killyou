@@ -1,7 +1,7 @@
 import { mat4, vec3 } from 'wgpu-matrix';
 import { createPipelines } from '@/scene/renderer/pipelines';
 import { createAtlas } from '@/scene/renderer/atlas';
-import { frameData } from '@/scene/renderer/frame';
+import { frameData, SHADOW_MAP_SIZE } from '@/scene/renderer/frame';
 import type { World, WorldNode, V3 } from '@/scene/world/types';
 import { createResources } from '@/scene/renderer/resources';
 import { createDraws, destroyDraws, type Draw } from '@/scene/renderer/draws';
@@ -70,7 +70,7 @@ export class TempleRenderer {
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
     this.shadow = d.createTexture({
-      size: [2048, 2048],
+      size: [SHADOW_MAP_SIZE, SHADOW_MAP_SIZE],
       format: 'depth32float',
       usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING,
     });
@@ -213,6 +213,12 @@ export class TempleRenderer {
     pass.setPipeline(this.pipelines.main);
     pass.setBindGroup(0, this.frameGroup);
     this.draw(pass, false);
+    // A small camera-relative layer of dust and pollen catches the low sun.
+    // It stays depth-tested against the scene, so it reads as air in the
+    // courtyard rather than a screen-space overlay.
+    pass.setPipeline(this.pipelines.particles);
+    pass.setBindGroup(0, this.frameGroup);
+    pass.draw(4, 160);
     pass.end();
     d.queue.submit([encoder.finish()]);
     return vp;

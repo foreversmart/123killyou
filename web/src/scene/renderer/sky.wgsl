@@ -19,6 +19,22 @@ struct SkyVertex { @builtin(position) position: vec4f, @location(0) ray: vec3f }
   let day = frame.eye.w > 0.5;
   let panorama = textureSampleLevel(skyTexture, skySampler, uv, select(1,0,day),0).rgb;
   let horizon = smoothstep(0.02,0.18,d.y);
-  let color = mix(frame.sky.rgb * 0.75, panorama * select(0.12,0.78,day), horizon);
+  var color = mix(frame.sky.rgb * 0.75, panorama * select(0.12,0.78,day), horizon);
+
+  // Late-afternoon atmospheric scattering: the sun is low enough to warm the
+  // horizon while the upper sky keeps Tidewater's muted blue-grey fill. The
+  // glow is directional, so it reads as a real sun rather than a flat overlay.
+  let sunDir = normalize(frame.direction.xyz);
+  let sunH = normalize(vec3f(sunDir.x, 0.0, sunDir.z));
+  let viewH = normalize(vec3f(d.x, 0.0, d.z));
+  let towardSun = max(dot(viewH, sunH), 0.0);
+  let sunsetBand = (1.0 - smoothstep(-0.12, 0.34, d.y)) * (1.0 - smoothstep(0.2, 0.75, sunDir.y));
+  let horizonGlow = pow(towardSun, 5.0) * sunsetBand;
+  color += vec3f(0.18, 0.045, 0.008) * horizonGlow * select(0.0, 1.0, day);
+
+  // A small, soft solar disc anchors the direction of the key light in wide
+  // exterior shots without competing with the authored environment panorama.
+  let disc = smoothstep(0.9996, 0.99996, dot(d, sunDir)) * smoothstep(-0.08, 0.12, sunDir.y);
+  color += vec3f(1.0, 0.32, 0.07) * disc * select(0.0, 1.6, day);
   return vec4f(pow(max(color,vec3f(0)),vec3f(1.0/2.2)),1);
 }

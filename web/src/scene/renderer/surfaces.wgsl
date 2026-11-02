@@ -57,8 +57,9 @@ fn terrainSurface(p: vec3f, n: vec3f, dx: vec3f, dy: vec3f) -> vec3f {
   return mix(vegetation, rock * vec3f(0.72, 0.77, 0.72), 1.0 - smoothstep(0.48, 0.81, n.y));
 }
 @fragment fn shadowFragment(i: Surface) {
+  let dx = dpdx(i.uv); let dy = dpdy(i.uv);
   if (i.material.z >= 16.0) {
-    let alpha = textureSampleLevel(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), 0.0).a;
+    let alpha = textureSampleGrad(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), dx, dy).a;
     if (alpha < 0.42) { discard; }
   }
 }

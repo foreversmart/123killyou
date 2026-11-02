@@ -52,6 +52,7 @@ for (let segment = 0; segment < controls.length - 1; segment++)
     samples.push({ position, distance });
   }
 export const ROAD_LENGTH = samples.at(-1)!.distance;
+export const ROAD_SURFACE_SPACING = 0.85;
 
 function center(distance: number): V3 {
   const d = Math.max(0, Math.min(ROAD_LENGTH, distance));

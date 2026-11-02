@@ -16,8 +16,13 @@ registerHooks({
 });
 const { createWorld } = await import('../src/scene/world/create_world.ts');
 const { scenePlace, visibleActors, isDaylight } = await import('../src/scene/world/scene_state.ts');
-const { actorMovement, gateActivityPosition, CORRIDOR_TRAVEL_END_Z, CORRIDOR_TRAVEL_START_Z } =
-  await import('../src/scene/world/movement.ts');
+const {
+  actorMovement,
+  gateActivityPosition,
+  movementPosition,
+  CORRIDOR_TRAVEL_END_Z,
+  CORRIDOR_TRAVEL_START_Z,
+} = await import('../src/scene/world/movement.ts');
 const { performanceKey } = await import('../src/scene/world/performance_key.ts');
 const { performanceFor } = await import('../src/scene/world_character/performance.ts');
 const { box, sphere, cylinder, torus } = await import('../src/scene/geometry/primitives.ts');
@@ -184,6 +189,35 @@ test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行�
   assert.equal(hall?.to[2], hall?.from[2]);
 });
 
+test('登记转场用慢速鸟群跟随陆沉，并让每个人保留自己的步行动作', () => {
+  const actors = ['luchen', 'linlan', 'zhouyan', 'xuzhi'].map((id) => actor(id));
+  const game = state('mini_register', { actors });
+  const movements = Object.fromEntries(
+    actors.map((person) => [person.id, actorMovement(person, game, 'travel', [0, 0, 0])]),
+  );
+  assert.equal(movements.luchen?.duration, 9.6);
+  assert.ok(movements.linlan?.flock, '登记队伍共享鸟群运动状态');
+  assert.deepEqual(
+    movementPosition(movements.luchen, 0),
+    movements.luchen.from,
+    '陆沉从领队起点开始',
+  );
+  assert.deepEqual(
+    movementPosition(movements.linlan, movements.linlan.duration),
+    movements.linlan.to,
+    '林岚在登记室门前稳定收束',
+  );
+  const middle = actors.map((person) => movementPosition(movements[person.id], 4.8));
+  assert.ok(middle[0][2] < middle[1][2], '陆沉在队伍前方');
+  assert.ok(middle[1][2] < middle[2][2], '林岚与周砚保持前后距离');
+  assert.ok(middle[2][2] < middle[3][2], '周砚与许栀保持前后距离');
+  assert.ok(new Set(middle.map(([x]) => x.toFixed(3))).size > 2, '队伍有自然侧向错落');
+  assert.deepEqual(
+    ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => performanceFor(actor(id), game, true)),
+    ['walk_camera', 'walk_architecture', 'walk_companion', 'walk_lead'],
+  );
+});
+
 test('人物移动时镜头固定为远景监控机位，不随队伍推进或翻转', () => {
   const outward = createWorld({ state: state('mini_refectory'), mode: 'travel' });
   const inward = createWorld({ state: state('mini_corridor_candle'), mode: 'travel' });
@@ -226,7 +260,7 @@ test('回廊队伍在侧门前停步并转向，镜头目标留在尽头墙前',
   });
   const linlan = world.root.children.find((node) => node.name === 'linlan');
   assert.ok(linlan?.animate);
-  linlan.animate(7, 0);
+  linlan.animate(9.6, 0);
   assert.ok(linlan.position[2] > -7.8, '角色停在尽头墙前');
   assert.ok(Math.abs(linlan.rotation[1] + Math.PI / 2) < 0.08, '角色转向侧门');
   const cameraAtStart = { eye: [...world.camera.eye], target: [...world.camera.target] };

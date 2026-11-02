@@ -21,6 +21,14 @@ import { speechMotion } from '@/scene/world_character/speech';
 // read as a sliding translation on the longer gate approach. A steady cadence
 // lets the body cover a larger scene distance while the two legs alternate.
 const WALK_CYCLE_RATE = 5.8;
+const REGISTER_WALK_CYCLE_RATE = 4.6;
+const WALK_PERFORMANCES = new Set([
+  'walk',
+  'walk_lead',
+  'walk_camera',
+  'walk_architecture',
+  'walk_companion',
+]);
 
 export function animateCharacter(
   rig: CharacterRig,
@@ -98,7 +106,7 @@ export function animateCharacter(
   }
   root.animate = (t, delta) => {
     const moving = duration > 0 && t < duration;
-    const currentAction = moving ? 'walk' : action === 'walk' ? 'idle' : action;
+    const currentAction = moving ? action : WALK_PERFORMANCES.has(action) ? 'idle' : action;
     const actionTime = Math.max(0, t - duration);
     body.scale[1] = 1 + (still || action === 'write' ? 0 : Math.sin(t * 1.6 + seed) * 0.002);
     body.position[1] = bodyY;
@@ -121,7 +129,11 @@ export function animateCharacter(
     });
     if (still) return;
     if (duration > 0 || (options.gaiting && root.gaitMoving)) {
-      const stride = t * WALK_CYCLE_RATE + seed;
+      const walkCycleRate =
+        state.sceneKey === 'mini_register' && options.traveling
+          ? REGISTER_WALK_CYCLE_RATE
+          : WALK_CYCLE_RATE;
+      const stride = t * walkCycleRate + seed;
       const weight = duration > 0 ? ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5)) : 0.78;
       body.position[1] += Math.abs(Math.sin(stride)) * 0.035 * weight;
       body.rotation[1] = Math.sin(stride) * 0.055 * weight;

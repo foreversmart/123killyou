@@ -16,7 +16,9 @@ export const DEPARTURE_ROAD_DURATION_MS = 10_000;
 // Authored first-person travel shots. Keep the scene transition clock and the
 // character walk clock on the same values so the cut happens after the group
 // has finished walking and the camera has had time to show the route.
-export const CORRIDOR_TRAVEL_REGISTER_SECONDS = 6.4;
+// The gate-to-registration procession is deliberately unhurried so the
+// followers have time to settle into a loose group around Lu Chen.
+export const CORRIDOR_TRAVEL_REGISTER_SECONDS = 9.6;
 export const CORRIDOR_TRAVEL_REFECTORY_SECONDS = 6.2;
 export const CORRIDOR_TRAVEL_RETURN_SECONDS = 6.0;
 export const CORRIDOR_TRAVEL_LISTEN_SECONDS = 6.0;
