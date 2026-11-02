@@ -29,15 +29,32 @@
   pointer-events: none;
   background: #000;
   opacity: 0;
-  transition: opacity 0.42s cubic-bezier(0, 0, 0.2, 1);
 }
 .scene-transition--leaving,
 .scene-transition--black {
   opacity: 1;
 }
 .scene-transition--leaving {
-  transition-duration: 0.3s;
-  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  animation: room-fade-out 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+}
+.scene-transition[data-phase='entering'] {
+  animation: room-fade-in 0.42s cubic-bezier(0, 0, 0.2, 1) both;
+}
+@keyframes room-fade-out {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes room-fade-in {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .scene-caption {
   position: absolute;

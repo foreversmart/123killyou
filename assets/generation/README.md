@@ -11,6 +11,7 @@
 | 东院行进·跟随陆沉         | [arrival_walk_register.png](../scenes/east_courtyard/arrival_walk_register.png) | 1672 × 941 | 山门到登记室的专用转场；陆沉持铜钥匙领路，三位同伴自然跟随，四块房牌文字直接绘入 |
 | 东院回廊·晴日下午         | [corridor_afternoon.png](../scenes/east_courtyard/corridor_afternoon.png)       | 1672 × 941        | 东院回廊·晴日下午                                                                          |
 | 主角门房·夜间亮烛底图     | [room_candlelit.png](../scenes/player_room/room_candlelit.png)                  | 1672 × 941        | 主角门房·夜间亮烛底图                                                                      |
+| 赵熙·正常站姿 | [standing.png](../characters/zhao_xi/standing.png) | 1024 × 1536，透明 | 主角全身人物定型参考；imagecreate/custom/gpt-image-2 文字生成并本地抠色，当前不新增运行时接入 |
 | 林岚·正常站姿             | [standing.png](../characters/lin_lan/standing.png)                              | 1024 × 1536，透明 | 01正常带盖同行、12取回盖后使用；入住放盖后切 standing_cap_removed                          |
 | 陆沉·提灯站姿             | [standing_lantern.png](../characters/lu_chen/standing_lantern.png)              | 1024 × 1536，透明 | 04入夜带路和巡门的提灯站姿；登记与清晨回收使用白日接待姿态                                 |
 | 周砚·正常站姿             | [standing.png](../characters/zhou_yan/standing.png)                             | 1024 × 1536，透明 | 正常同行与古建观察；用斋、显露缝线和晨间头像使用各自状态                                   |

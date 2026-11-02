@@ -1,10 +1,26 @@
 import { Builder } from '@/scene/geometry/builder';
+import { roundedBox } from '@/scene/geometry/rounded_box';
 import { cylinder, lathe } from '@/scene/geometry/primitives';
 import { node } from '@/scene/world/types';
 import { coachBody, finish } from '@/scene/world_vehicle/body';
 import { coachDetails } from '@/scene/world_vehicle/details';
 
 export const WHEEL_RADIUS = 0.55;
+
+/**
+ * The coach is made from many overlapping panels and trim pieces. Feeding all
+ * of those thin surfaces into the shadow map creates acne and dark seams while
+ * the vehicle turns. Keep one broad, hidden silhouette for the cast shadow so
+ * the visible model stays clean without losing contact with the road.
+ */
+function coachShadow() {
+  const b = new Builder();
+  b.add(roundedBox(2.36, 1.7, 9.42, 0.2), finish.paint, [0, 2.28, 0]);
+  b.add(roundedBox(1.98, 0.44, 8.72, 0.08), finish.rubber, [0, 1.03, 0]);
+  const shadow = b.mesh('coach_shadow');
+  shadow.shadowOnly = true;
+  return shadow;
+}
 
 function wheel(side: number) {
   const b = new Builder();
@@ -60,12 +76,17 @@ export function coach() {
   coachBody(b);
   coachDetails(b);
   const root = node('bus');
-  root.children.push(b.mesh('coach_body'));
+  const body = b.mesh('coach_body');
+  body.shadow = false;
+  body.receiveShadow = false;
+  root.children.push(body, coachShadow());
   const axles = [-2.85, 2.75].flatMap((z) =>
     [-1, 1].map((side) => {
       const steering = node(z > 0 ? 'front_axle' : 'rear_axle');
       steering.position = [side * 1.14, WHEEL_RADIUS + 0.02, z];
       const tyre = wheel(side);
+      tyre.shadow = false;
+      tyre.receiveShadow = false;
       steering.children.push(tyre);
       root.children.push(steering);
       return { steering, tyre, front: z > 0 };

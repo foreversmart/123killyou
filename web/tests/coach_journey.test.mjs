@@ -119,7 +119,9 @@ for (const departing of [false, true]) {
       // remain readable in both wide and portrait compositions.
       for (const aspect of [16 / 9, 320 / 740]) {
         const matrix = cameraMatrix(frame.camera, aspect);
-        if (step >= 40 && step <= 160)
+        // The new opening starts with a close overhead view; begin the
+        // full-body framing assertion after that first camera handoff.
+        if (departing && step >= 40 && step <= 160)
           for (const x of [-1.3, 1.3])
             for (const y of [0, 3.35])
               for (const z of [-4.8, 4.8])
@@ -133,20 +135,22 @@ for (const departing of [false, true]) {
     assert.ok(pitched, '实际经过有坡度的路段');
     const startFrame = journeyFrame(0, departing);
     const endFrame = journeyFrame(duration, departing);
-    for (const aspect of [16 / 9, 320 / 740]) {
-      for (const [frame, matrix] of [
-        [startFrame, cameraMatrix(startFrame.camera, aspect)],
-        [endFrame, cameraMatrix(endFrame.camera, aspect)],
-      ])
-        assert.equal(
-          [-1.3, 1.3].some((x) =>
-            [0, 3.35].some((y) =>
-              [-4.8, 4.8].some((z) => project(vehiclePoint(frame, [x, y, z]), matrix)),
+    if (departing) {
+      for (const aspect of [16 / 9, 320 / 740]) {
+        for (const [frame, matrix] of [
+          [startFrame, cameraMatrix(startFrame.camera, aspect)],
+          [endFrame, cameraMatrix(endFrame.camera, aspect)],
+        ])
+          assert.equal(
+            [-1.3, 1.3].some((x) =>
+              [0, 3.35].some((y) =>
+                [-4.8, 4.8].some((z) => project(vehiclePoint(frame, [x, y, z]), matrix)),
+              ),
             ),
-          ),
-          false,
-          '大巴首尾应从画外进入或驶出',
-        );
+            false,
+            '离寺大巴首尾应从画外进入或驶出',
+          );
+      }
     }
     for (const aspect of [16 / 9, 320 / 740]) {
       const middle = journeyFrame(duration * 0.5, departing);
@@ -171,6 +175,11 @@ test('道路场景使用同一行车轨迹更新车身、车轮和摄像机，�
     const camera = { eye: [0, 0, 0], target: [0, 0, 0] };
     const root = road(departing, camera);
     const bus = root.children.find((n) => n.name === 'bus');
+    const body = bus.children.find((n) => n.name === 'coach_body');
+    const shadow = bus.children.find((n) => n.name === 'coach_shadow');
+    assert.equal(body.shadow, false, '可见车身不参与细节阴影投射');
+    assert.equal(body.receiveShadow, false, '可见车身不接收自身的低模阴影');
+    assert.equal(shadow.shadowOnly, true, '大巴使用独立的干净阴影轮廓');
     const axles = bus.children.filter((n) => n.name.endsWith('_axle'));
     assert.equal(axles.length, 4);
     bus.animate(5, 0);
@@ -234,23 +243,83 @@ test('道路场景使用同一行车轨迹更新车身、车轮和摄像机，�
   }
 });
 
-test('入寺镜头收尾保持车辆相对机位，避免最后一拍向右急拉', () => {
+test('入寺镜头沿单一路径推进并在山门结束', () => {
   const duration = OPENING_ROAD_DURATION_MS / 1000;
-  // `progress` is eased, so the final camera handoff is effectively complete
-  // by 98% of wall-clock time. Compare inside that settled window so the
-  // assertion measures a sudden lateral pull rather than the deliberate
-  // establishing-shot move leading into the handoff.
-  const previous = journeyFrame(duration * 0.98, false);
+  const previous = journeyFrame(duration * 0.75, false);
   const ending = journeyFrame(duration, false);
-  assert.ok(Math.abs(ending.camera.eye[0] - ending.position[0] - 17) < 1e-6);
-  assert.ok(Math.abs(ending.camera.eye[2] - ending.position[2] - 23) < 1e-6);
-  const previousOffset = previous.camera.eye.map((v, i) => v - previous.position[i]);
-  const endingOffset = ending.camera.eye.map((v, i) => v - ending.position[i]);
   assert.ok(
-    distance(previousOffset, endingOffset) < 0.05,
-    '收尾应保持车辆相对机位，不应额外把镜头拉向右侧',
+    distance(ending.camera.target, [0, 2, -2]) < distance(previous.camera.target, [0, 2, -2]),
+    '镜头应持续向寺门推进',
   );
-  assert.deepEqual(ending.camera.target, [0, 45, -55]);
+  assert.deepEqual(ending.camera.eye, [25, 30, 43]);
+  assert.deepEqual(ending.camera.target, [0, 2, -2]);
+});
+
+test('入寺首帧大巴从横竖屏画面边缘驶入', () => {
+  const frame = journeyFrame(0, false);
+  const corners = [-1.3, 1.3].flatMap((x) =>
+    [0, 3.35].flatMap((y) => [-4.8, 4.8].map((z) => vehiclePoint(frame, [x, y, z]))),
+  );
+  const landscape = corners
+    .map((point) => project(point, cameraMatrix(frame.camera, 16 / 9)))
+    .filter(Boolean);
+  const portrait = corners
+    .map((point) => project(point, cameraMatrix(frame.camera, 320 / 740)))
+    .filter(Boolean);
+  assert.ok(
+    landscape.some((point) => point.x > 65),
+    '横屏首帧应在画面右侧露出车身',
+  );
+  assert.ok(
+    portrait.some((point) => point.x > 90),
+    '竖屏首帧应贴近画面右边缘',
+  );
+});
+
+test('入寺开场用受控距离的高位偏俯视镜头，缓慢平移到山门', () => {
+  const duration = OPENING_ROAD_DURATION_MS / 1000;
+  assert.ok(duration >= 30, '入寺行车应留出更慢的完整盘山镜头');
+
+  const middle = journeyFrame(duration * 0.5, false);
+  const late = journeyFrame(duration * 0.75, false);
+  const handoff = journeyFrame(duration * 0.9, false);
+  const middleOffset = middle.camera.eye.map((value, index) => value - middle.position[index]);
+
+  assert.ok(middleOffset[1] >= 40, '中段镜头应明显高于大巴');
+  assert.ok(middle.camera.eye[2] <= 200, '中段机位应留在已建模道路范围内');
+  assert.ok(middle.camera.eye[0] <= 110, '中段机位不应越出道路近景范围');
+  assert.ok(
+    middle.camera.target[1] < middle.camera.eye[1] - 20,
+    '中段镜头目标应低于机位，保持偏俯视视角',
+  );
+  assert.ok(
+    distance(late.camera.target, [0, 2, -2]) < distance(middle.camera.target, [0, 2, -2]),
+    '镜头目标应从山路远景向山门靠近',
+  );
+  assert.ok(
+    distance(handoff.camera.target, [0, 2, -2]) < distance(late.camera.target, [0, 2, -2]),
+    '镜头后段继续平移并转向山门',
+  );
+  assert.notDeepEqual(
+    middle.camera.target.map((value, index) => value - middle.position[index]),
+    late.camera.target.map((value, index) => value - late.position[index]),
+    '镜头目标不应锁在大巴身上',
+  );
+  assert.ok(journeyFrame(0, false).camera.eye[2] <= 250, '首帧机位不应拍到地形外的空区');
+});
+
+test('入寺大巴在盘山弯道中自动减速', () => {
+  const step = 0.05;
+  const speedAt = (time) => {
+    const start = journeyFrame(time, false).position;
+    const end = journeyFrame(time + step, false).position;
+    return distance(start, end) / step;
+  };
+  // Around t=16s the coach enters the tight return bend near route distance
+  // 300m; t=12s is a comparable straight section farther down the climb.
+  const bendSpeed = speedAt(16);
+  const straightSpeed = speedAt(12);
+  assert.ok(bendSpeed < straightSpeed * 0.75, '进入急弯时车速应明显低于直线路段');
 });
 
 test('连续盘山路面在折返弯与两侧车道都有可通行表面', () => {

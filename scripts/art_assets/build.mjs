@@ -7,6 +7,7 @@ import { bodyParts } from './pose.mjs';
 import { foliage } from './foliage.mjs';
 import { addHeads } from './heads.mjs';
 import { addStatue } from './statue.mjs';
+import { preserveSurfaces } from './preserve_surfaces.mjs';
 
 // Usage: node scripts/art_assets/build.mjs <Poly Haven downloads> <Rocketbox GLBs>
 const source = process.argv[2],
@@ -165,4 +166,7 @@ await copyFile(
   path.join(characters, 'LICENSE-Rocketbox.md'),
   'assets/environment/LICENSE-Rocketbox.md',
 );
+// Project-generated architecture and sculpture textures follow the packed
+// source materials. Preserve their order without rewriting their image files.
+await preserveSurfaces(lib.manifest, output);
 await lib.save();

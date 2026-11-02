@@ -17,6 +17,12 @@ export function useSpeechOutput(
     player.current?.stop();
     player.current = null;
   }, []);
+  const pause = useCallback(() => {
+    player.current?.pause?.();
+  }, []);
+  const resume = useCallback(() => {
+    player.current?.resume?.();
+  }, []);
 
   const stream = useCallback(
     (event: SpeechEvent) => {
@@ -59,5 +65,5 @@ export function useSpeechOutput(
     [enabled, setStatus, stop, onProblem],
   );
 
-  return { speak, stream, stop };
+  return { speak, stream, stop, pause, resume };
 }

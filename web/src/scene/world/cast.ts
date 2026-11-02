@@ -7,7 +7,14 @@ import { identityOf } from '@/scene/world_character/identity';
 import { characterModel } from '@/scene/world_character/model';
 import { animateCharacter } from '@/scene/world_character/animation';
 import { ease } from '@/scene/world_character/joints';
-import { actorFacing, actorMovement, movementPosition } from '@/scene/world/movement';
+import {
+  actorFacing,
+  actorMovement,
+  corridorTravelReversed,
+  gateActivityPosition,
+  movementPosition,
+} from '@/scene/world/movement';
+import { performanceFor } from '@/scene/world_character/performance';
 
 export function addCast(world: World, state: GameState, place: Place, mode: WorldMode) {
   visibleActors(state, mode).forEach((actor, index) => {
@@ -41,16 +48,21 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
         };
         position = hallLine[actor.id] || [2 - index * 0.65, 0, 1.5 - index * 0.7];
       } else if (state.sceneKey !== 'mini_ending') {
-        // Start at the near end of the covered passage. The offsets keep the
-        // group in a loose conversational stagger while the movement system
-        // carries them all the way to the far end.
+        // Start at the route's actual end. The refectory route begins by the
+        // side rooms and walks outward; return routes begin at the open end
+        // and walk back toward those rooms.
+        const reversed = corridorTravelReversed(state);
         const corridorLine: Record<string, V3> = {
-          luchen: [0, 0, 6.2],
-          linlan: [-0.38, 0, 5.75],
-          zhouyan: [0.08, 0, 5.3],
-          xuzhi: [0.45, 0, 4.85],
+          luchen: [0, 0, reversed ? -6.2 : 6.2],
+          linlan: [-0.38, 0, reversed ? -5.75 : 5.75],
+          zhouyan: [0.08, 0, reversed ? -5.3 : 5.3],
+          xuzhi: [0.45, 0, reversed ? -4.85 : 4.85],
         };
-        position = corridorLine[actor.id] || [index * 0.18 - 0.3, 0, 5.8 - index * 0.45];
+        position = corridorLine[actor.id] || [
+          index * 0.18 - 0.3,
+          0,
+          (reversed ? -5.8 : 5.8) + (reversed ? 1 : -1) * index * 0.45,
+        ];
       } else {
         position = [index % 2 ? 0.8 : -0.8, 0, -1 - index * 1.1];
       }
@@ -59,7 +71,9 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     rig.root.rotation[1] = walking
       ? mode === 'hall'
         ? -Math.PI / 2
-        : Math.PI
+        : corridorTravelReversed(state)
+          ? 0
+          : Math.PI
       : Math.atan2(world.camera.eye[0] - position[0], world.camera.eye[2] - position[2]) * 0.5;
     if (place === 'refectory' && !walking) {
       if (actor.id === 'linlan') rig.root.rotation[1] = 1.2;
@@ -78,11 +92,19 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.position = [-2.8, 0, 0.25];
       rig.root.rotation[1] = 0.1;
     }
+    const activityBase = [...rig.root.position] as V3;
     const movement = actorMovement(actor, state, mode, rig.root.position);
+    const activity = performanceFor(actor, state, false, mode === 'alighting');
+    const gateDrift =
+      !movement &&
+      mode === 'story' &&
+      state.sceneKey === 'mini_arrival' &&
+      state.shotKey?.startsWith('arrival_');
     const { held, heldBowl } = animateCharacter(rig, actor, state, {
       walkDuration: movement?.duration,
       traveling: walking,
       alighting: mode === 'alighting',
+      gaiting: gateDrift,
       speaker: () => world.speaker || '',
     });
     if (actor.id !== 'victim') {
@@ -128,6 +150,44 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.animate = (t, dt) => {
         perform(t, dt);
         rig.root.rotation[1] = origin + turn * ease(t, 1.1);
+      };
+    }
+    if (gateDrift) {
+      const perform = rig.root.animate!;
+      rig.root.animate = (t, dt) => {
+        const next = gateActivityPosition(actor, state, activity, t, activityBase);
+        const previous = [...rig.root.position] as V3;
+        rig.root.gaitMoving = Math.hypot(next[0] - previous[0], next[2] - previous[2]) > 0.0002;
+        perform(t, dt);
+        rig.root.position = next;
+        if (next[0] !== previous[0] || next[2] !== previous[2]) {
+          const drift = Math.atan2(next[0] - previous[0], next[2] - previous[2]);
+          const driftTurn = Math.atan2(
+            Math.sin(drift - authoredFacing),
+            Math.cos(drift - authoredFacing),
+          );
+          rig.root.rotation[1] = authoredFacing + driftTurn * 0.12;
+        }
+      };
+    }
+    const continuity = rig.root.animationContinuity;
+    if (continuity) {
+      const perform = rig.root.animate!;
+      const fromPosition = [...continuity.position] as V3;
+      const fromRotation = continuity.rotationY;
+      rig.root.animate = (t, dt) => {
+        perform(t, dt);
+        const progress = ease(t - continuity.time, 0.42);
+        const turn = Math.atan2(
+          Math.sin(rig.root.rotation[1] - fromRotation),
+          Math.cos(rig.root.rotation[1] - fromRotation),
+        );
+        const targetPosition = [...rig.root.position] as V3;
+        rig.root.position = fromPosition.map(
+          (value, index) => value + (targetPosition[index] - value) * progress,
+        ) as V3;
+        rig.root.rotation[1] = fromRotation + turn * progress;
+        if (progress >= 1) rig.root.animationContinuity = undefined;
       };
     }
     if (held) {

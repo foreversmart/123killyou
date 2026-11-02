@@ -16,7 +16,10 @@ registerHooks({
 });
 const { createWorld } = await import('../src/scene/world/create_world.ts');
 const { scenePlace, visibleActors, isDaylight } = await import('../src/scene/world/scene_state.ts');
-const { actorMovement, CORRIDOR_TRAVEL_END_Z } = await import('../src/scene/world/movement.ts');
+const { actorMovement, gateActivityPosition, CORRIDOR_TRAVEL_END_Z, CORRIDOR_TRAVEL_START_Z } =
+  await import('../src/scene/world/movement.ts');
+const { performanceKey } = await import('../src/scene/world/performance_key.ts');
+const { performanceFor } = await import('../src/scene/world_character/performance.ts');
 const { box, sphere, cylinder, torus } = await import('../src/scene/geometry/primitives.ts');
 const { roofTile } = await import('../src/scene/geometry/roof_tile.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
@@ -91,15 +94,129 @@ test('peephole, false dawn, the gate and the departure shot follow existing stor
   assert.equal(visibleActors(ending, 'travel').length, 1);
 });
 
+test('山门参观会沿当前活动持续换位，并保持在既有构图范围内', () => {
+  const arrival = state('mini_arrival', {
+    shotKey: 'arrival_weather',
+    actors: ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id)),
+  });
+  const baseById = {
+    linlan: [-2.1, 0, 2.2],
+    zhouyan: [2.25, 0, 1.2],
+    xuzhi: [1.05, 0, 3],
+    luchen: [-0.2, 0.24, -0.6],
+  };
+  const world = createWorld({ state: arrival });
+  const roots = Object.fromEntries(
+    arrival.actors.map(({ id }) => [id, world.root.children.find((node) => node.name === id)]),
+  );
+  const samples = [0, 2.1, 4.8].map((time) =>
+    arrival.actors.map((person) => {
+      const root = roots[person.id];
+      assert.ok(root?.animate, `${person.id} has an animation callback`);
+      root.animate(time, 0);
+      return [...root.position];
+    }),
+  );
+  for (let index = 0; index < arrival.actors.length; index++) {
+    const id = arrival.actors[index].id;
+    const positions = samples.map((sample) => sample[index]);
+    const moved = Math.max(
+      ...positions.map((position) =>
+        Math.hypot(position[0] - baseById[id][0], position[2] - baseById[id][2]),
+      ),
+    );
+    assert.ok(moved > 0.02, `${id} keeps moving while performing its activity`);
+    assert.ok(moved < 0.5, `${id} stays inside the gate tableau`);
+    assert.ok(
+      positions.some(
+        (position, sampleIndex) =>
+          sampleIndex > 0 &&
+          Math.hypot(
+            position[0] - positions[sampleIndex - 1][0],
+            position[2] - positions[sampleIndex - 1][2],
+          ) > 0.01,
+      ),
+      `${id} changes position between observation beats`,
+    );
+  }
+  assert.notDeepEqual(samples[1][0], samples[1][1], 'different visitors use different phases');
+
+  const cameraAtStart = gateActivityPosition(
+    actor('linlan'),
+    arrival,
+    'camera',
+    0,
+    baseById.linlan,
+  );
+  assert.notDeepEqual(
+    gateActivityPosition(actor('linlan'), arrival, 'camera', 2.1, baseById.linlan),
+    cameraAtStart,
+  );
+  assert.deepEqual(
+    gateActivityPosition(actor('linlan'), state('mini_register'), 'camera', 2.1, baseById.linlan),
+    baseById.linlan,
+    'gate activity does not leak into interior scenes',
+  );
+});
+
+test('山门连续镜头保留同一组活动键，便于渲染器延续动作时钟', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const first = state('mini_arrival', { shotKey: 'arrival_gate', actors });
+  const next = state('mini_arrival', { shotKey: 'arrival_weather', actors });
+  assert.notEqual(performanceKey(first, 'story'), performanceKey(next, 'story'));
+  assert.equal(scenePlace(first), 'gate');
+  assert.equal(scenePlace(next), 'gate');
+});
+
 test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行走', () => {
   const guest = actor('linlan');
   const corridor = actorMovement(guest, state('mini_refectory'), 'travel', [0.8, 0, -1]);
+  const returnWalk = actorMovement(guest, state('mini_corridor_candle'), 'travel', [0.8, 0, 5.7]);
   const hall = actorMovement(guest, state('mini_refectory'), 'hall', [2, 0, 1.5]);
-  assert.equal(corridor?.duration, 5.6);
-  assert.ok((corridor?.to[2] ?? 0) < (corridor?.from[2] ?? 0));
-  assert.equal(hall?.duration, 7);
+  assert.equal(corridor?.duration, 6.2);
+  assert.ok((corridor?.to[2] ?? 0) < (corridor?.from[2] ?? 0), '偏房去大殿向外走');
+  assert.ok((corridor?.to[2] ?? 0) < CORRIDOR_TRAVEL_END_Z + 0.5);
+  assert.equal(returnWalk?.duration, 6);
+  assert.ok((returnWalk?.to[2] ?? 0) > (returnWalk?.from[2] ?? 0), '回程沿原路返回');
+  assert.ok((returnWalk?.to[2] ?? 0) > CORRIDOR_TRAVEL_START_Z - 0.5);
+  assert.equal(hall?.duration, 7.6);
   assert.ok((hall?.to[0] ?? 0) < (hall?.from[0] ?? 0));
   assert.equal(hall?.to[2], hall?.from[2]);
+});
+
+test('人物移动时镜头固定为远景监控机位，不随队伍推进或翻转', () => {
+  const outward = createWorld({ state: state('mini_refectory'), mode: 'travel' });
+  const inward = createWorld({ state: state('mini_corridor_candle'), mode: 'travel' });
+  const outwardShot = { eye: [...outward.camera.eye], target: [...outward.camera.target] };
+  const inwardShot = { eye: [...inward.camera.eye], target: [...inward.camera.target] };
+  assert.equal(outward.root.animate, undefined, '去程不绑定跟随人物的镜头动画');
+  assert.equal(inward.root.animate, undefined, '回程不绑定跟随人物的镜头动画');
+  assert.ok(outward.camera.eye[1] > 2, '去程使用高位远景');
+  assert.ok(inward.camera.eye[1] > 2, '回程使用高位远景');
+  assert.ok(
+    Math.hypot(...outward.camera.eye.map((value, index) => value - outward.camera.target[index])) >
+      8,
+  );
+  assert.ok(
+    Math.hypot(...inward.camera.eye.map((value, index) => value - inward.camera.target[index])) > 8,
+  );
+  for (const time of [0, 3.1, 6.2]) {
+    outward.root.animate?.(time, 0);
+    inward.root.animate?.(time, 0);
+    assert.deepEqual(outward.camera.eye, outwardShot.eye);
+    assert.deepEqual(outward.camera.target, outwardShot.target);
+    assert.deepEqual(inward.camera.eye, inwardShot.eye);
+    assert.deepEqual(inward.camera.target, inwardShot.target);
+  }
+  const hall = createWorld({ state: state('mini_refectory'), mode: 'hall' });
+  const hallShot = { eye: [...hall.camera.eye], target: [...hall.camera.target] };
+  assert.equal(hall.root.animate, undefined, '大殿横移也保持固定机位');
+  hall.root.animate?.(7.6, 0);
+  assert.deepEqual(hall.camera.eye, hallShot.eye);
+  assert.deepEqual(hall.camera.target, hallShot.target);
+  const ending = createWorld({ state: state('mini_ending'), mode: 'travel' });
+  assert.equal(ending.root.animate, undefined, '返程山门也保持固定远景');
+  assert.ok(ending.camera.eye[1] > 3, '返程使用山门外的高位远景');
 });
 
 test('回廊队伍在侧门前停步并转向，镜头目标留在尽头墙前', () => {
@@ -112,9 +229,11 @@ test('回廊队伍在侧门前停步并转向，镜头目标留在尽头墙前',
   linlan.animate(7, 0);
   assert.ok(linlan.position[2] > -7.8, '角色停在尽头墙前');
   assert.ok(Math.abs(linlan.rotation[1] + Math.PI / 2) < 0.08, '角色转向侧门');
+  const cameraAtStart = { eye: [...world.camera.eye], target: [...world.camera.target] };
   world.root.animate?.(7, 0);
   assert.ok(world.camera.target[2] > -7.8, '镜头目标没有穿过尽头墙');
-  assert.ok(world.camera.target[0] > 1, '镜头在收尾时转向侧门');
+  assert.deepEqual(world.camera.eye, cameraAtStart.eye, '镜头抵达前不翻转');
+  assert.deepEqual(world.camera.target, cameraAtStart.target, '镜头抵达前保持原取景');
   assert.ok(CORRIDOR_TRAVEL_END_Z > -7.8);
 });
 
@@ -127,6 +246,82 @@ test('东院回廊门间墙面挂有六块矿物颜料佛教壁画', () => {
   };
   visit(world.root);
   assert.equal(names.filter((name) => name === 'hall_buddhist_mural').length, 6);
+});
+
+test('登记时三位游客围桌看和尚，许栀朝院景并保持动作', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const world = createWorld({
+    state: state('mini_register', { shotKey: 'register_desk', actors }),
+  });
+  const roots = Object.fromEntries(
+    actors.map(({ id }) => [id, world.root.children.find((node) => node.name === id)]),
+  );
+  assert.deepEqual(roots.linlan.position, [-1.15, 0, 0.28]);
+  assert.deepEqual(roots.zhouyan.position, [1.05, 0, 0.18]);
+  assert.deepEqual(roots.xuzhi.position, [1.32, 0, 0.72]);
+  // The glance is head-led. Once the short settle finishes, every guest's
+  // torso still faces the keeper behind the desk rather than turning toward
+  // the window or back toward the player.
+  for (const id of ['linlan', 'zhouyan', 'xuzhi']) {
+    const root = roots[id];
+    root.animate(1.2, 0);
+    const [x, , z] = root.position;
+    const expected = Math.atan2(-x, -0.7 - z);
+    const delta = Math.atan2(
+      Math.sin(root.rotation[1] - expected),
+      Math.cos(root.rotation[1] - expected),
+    );
+    assert.ok(Math.abs(delta) < 0.08, `${id} faces the keeper at the desk`);
+  }
+  assert.equal(
+    performanceFor(actors[0], state('mini_register', { shotKey: 'register_desk' })),
+    'camera',
+  );
+  assert.equal(
+    performanceFor(actors[1], state('mini_register', { shotKey: 'register_desk' })),
+    'inspect',
+  );
+  assert.equal(
+    performanceFor(actors[2], state('mini_register', { shotKey: 'register_desk' })),
+    'glance',
+  );
+  const zhouyanBody = roots.zhouyan.children.find((node) => node.name === 'body');
+  const zhouyanBefore = [...zhouyanBody.rotation];
+  roots.zhouyan.animate(2, 0);
+  assert.notDeepEqual(zhouyanBody.rotation, zhouyanBefore, '周砚会随笔尖持续换重心');
+  const linlanCamera = roots.linlan.children
+    .find((node) => node.name === 'body')
+    .children.find((node) => node.name === 'held_camera');
+  const cameraBefore = [...linlanCamera.position];
+  roots.linlan.animate(4, 0);
+  assert.notDeepEqual(linlanCamera.position, cameraBefore, '林岚会抬放相机检查取景');
+  const before = roots.xuzhi.children.find((node) => node.name === 'body').rotation.slice();
+  roots.xuzhi.animate(2, 0);
+  const after = roots.xuzhi.children.find((node) => node.name === 'body').rotation;
+  assert.notDeepEqual(after, before, '许栀持续观察院景时身体会有轻微回看');
+});
+
+test('质疑拖痕时登记队伍仍面向陆沉并留在桌边', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const world = createWorld({
+    state: state('mini_register', { shotKey: 'register_drag_mark', actors }),
+  });
+  const roots = Object.fromEntries(
+    actors.map(({ id }) => [id, world.root.children.find((node) => node.name === id)]),
+  );
+  for (const id of ['linlan', 'zhouyan', 'xuzhi']) {
+    const root = roots[id];
+    root.animate(1.2, 0);
+    const [x, , z] = root.position;
+    const expected = Math.atan2(-x, -0.7 - z);
+    const delta = Math.atan2(
+      Math.sin(root.rotation[1] - expected),
+      Math.cos(root.rotation[1] - expected),
+    );
+    assert.ok(Math.abs(delta) < 0.08, `${id} faces Lu Chen during the drag-mark question`);
+  }
+  assert.deepEqual(roots.zhouyan.position, [1.05, 0, 0.18]);
+  assert.deepEqual(roots.luchen.position, [0, 0, -0.85]);
 });
 
 test('大殿保留两尊主像并新增四大天王与四幅壁画', () => {

@@ -92,7 +92,13 @@ function reachAcross(rig: CharacterRig, side: number, x: number, y: number, z: n
   rig.arms[side].rotation[1] = Math.atan2(offset, z);
 }
 
-export function dayAction(rig: CharacterRig, action: Performance, t: number, seed: number) {
+export function dayAction(
+  rig: CharacterRig,
+  action: Performance,
+  t: number,
+  seed: number,
+  registerDesk = false,
+) {
   const { head, body } = rig;
   const arrive = ease(t, 0.8);
   if (action === 'walk') {
@@ -145,16 +151,58 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     // lines of dialogue (useful around the registration desk and windows).
     const sweep = Math.sin(t * 0.7 + seed * 0.11);
     const pause = 0.72 + 0.28 * Math.cos(t * 0.35 + seed * 0.07);
-    head.rotation[1] = -0.62 * sweep * pause;
+    if (registerDesk) {
+      // Keep the registration group oriented toward Lu Chen. Xu Zhi gets one
+      // visible look toward the courtyard, then eases her attention back to
+      // the desk instead of continuously sweeping the room like a searchlight.
+      const cycle = t % 7.2;
+      const towardWindow = ease(cycle - 0.8, 0.9) * (1 - ease(cycle - 2.8, 1.3));
+      const windowLook = Math.max(0, Math.min(1, towardWindow));
+      head.rotation[1] = 0.055 + 0.52 * windowLook + Math.sin(t * 0.55 + seed) * 0.018;
+      body.rotation[1] = 0.035 * windowLook + Math.sin(t * 0.3 + seed) * 0.018;
+    } else {
+      head.rotation[1] = -0.62 * sweep * pause;
+      body.rotation[1] = Math.sin(t * 0.34 + seed * 0.17) * 0.045;
+    }
     head.rotation[0] = 0.035 + Math.sin(t * 0.92 + seed) * 0.018;
-    body.rotation[1] = Math.sin(t * 0.34 + seed * 0.17) * 0.045;
     armPose(rig, 0, -0.055, -0.1, 0.045 + Math.sin(t * 0.63 + seed) * 0.018);
     armPose(rig, 1, -0.06, -0.1, -0.045 - Math.sin(t * 0.63 + seed) * 0.018);
   }
+  if (action === 'point_floor') {
+    // During the drag-mark question Zhou Yan stays in the registration
+    // tableau, facing Lu Chen with the rest of the group, while his near hand
+    // clearly indicates the mark on the floor. Keep the lean and lowered gaze
+    // continuous so the gesture reads as a deliberate reference rather than
+    // the ledger inspection pose.
+    const settle = ease(t, 0.8);
+    const trace = Math.sin(t * 0.72 + seed * 0.08) * 0.025;
+    body.rotation[0] = (0.38 + trace) * settle;
+    head.rotation[0] = 0.46 * settle;
+    head.rotation[1] = 0.08 + Math.sin(t * 0.46 + seed) * 0.018;
+    armPose(rig, 0, -0.62 - 0.025 * trace, -1.36, 0.12);
+    armPose(rig, 1, -0.06, -0.1, -0.045);
+  }
   if (action === 'inspect') {
-    body.rotation[0] = 0.3 * arrive;
-    head.rotation[0] = 0.35 * arrive;
-    armPose(rig, 0, -0.3, -0.7, 0.08);
+    // Keep the reader engaged with the ledger after the first lean-in. A
+    // small weight shift, eye trace and hand adjustment follow the brush
+    // instead of leaving Zhou Yan frozen in one completed pose.
+    const trace = Math.sin(t * 0.82 + seed * 0.08);
+    const settle = 0.78 + 0.22 * ease(t, 0.8);
+    body.rotation[0] = (0.26 + 0.035 * trace) * settle;
+    body.rotation[1] = registerDesk
+      ? 0.028 + Math.sin(t * 0.38 + seed) * 0.018
+      : Math.sin(t * 0.38 + seed) * 0.028;
+    head.rotation[0] = (0.3 + 0.035 * Math.sin(t * 0.7 + seed)) * settle;
+    head.rotation[1] = registerDesk
+      ? 0.1 + 0.035 * Math.sin(t * 0.56 + seed * 0.13)
+      : 0.09 * Math.sin(t * 0.56 + seed * 0.13);
+    armPose(
+      rig,
+      0,
+      -0.3 - 0.035 * trace,
+      -0.7 - 0.06 * Math.sin(t * 0.82 + seed * 0.08 + 0.45),
+      0.08 + 0.018 * Math.sin(t * 0.63 + seed),
+    );
   }
   if (action === 'admire' || action === 'look_up') {
     // Finish one deliberate scan, then settle on the eave with only a small
@@ -194,10 +242,18 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
     head.rotation[0] = 0.1 * invite;
   }
   if (action === 'camera' || action === 'review_camera') {
-    // Raise the camera once, check the frame, then lower it a little while
-    // keeping the strap and elbows engaged. The small second phase prevents a
-    // character from holding the exact same pose for the whole dialogue.
-    const lift = ease(t, 1.2) * (1 - 0.12 * ease(t - 3.8, 1.6));
+    // Repeat a quiet “raise, check, lower, glance back” beat. A single ease
+    // left Lin Lan holding the camera at one height for the rest of the
+    // registration exchange, which read as a mannequin pose.
+    const cycle = t % 6.4;
+    const lift =
+      cycle < 1.2
+        ? ease(cycle, 1.2)
+        : cycle < 2.4
+          ? 1 - 0.035 * ease(cycle - 1.2, 1.2)
+          : cycle < 4.3
+            ? 0.965 - 0.72 * ease(cycle - 2.4, 1.9)
+            : 0.245 + 0.7 * ease(cycle - 4.3, 2.1);
     const height = action === 'camera' ? 0.18 : -0.12;
     for (const side of [0, 1]) {
       reachAcross(
@@ -216,7 +272,9 @@ export function dayAction(rig: CharacterRig, action: Performance, t: number, see
         Math.sin(Math.max(0, t - 1.6) * 0.7) * 0.025 * check;
     }
     head.rotation[0] = (action === 'camera' ? -0.08 : 0.26) * lift;
-    head.rotation[1] = Math.sin(Math.max(0, t - 2.8) * 0.7) * 0.04 * ease(t - 2.8, 1.2);
+    const lookBack = registerDesk ? 0.16 * (1 - lift) : 0.11 * (1 - lift);
+    head.rotation[1] = lookBack + Math.sin(t * 0.7) * 0.035;
+    body.rotation[1] = (registerDesk ? 0.035 : 0) + Math.sin(t * 0.34) * 0.022 * (1 - 0.25 * lift);
   }
   if (action === 'ribbon') {
     armPose(rig, 1, -0.3, -2.1 * arrive, -0.32);

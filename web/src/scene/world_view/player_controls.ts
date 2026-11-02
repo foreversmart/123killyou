@@ -1,9 +1,6 @@
 import type { GameState } from '@/shared/types/game';
 import type { CameraShot, V3, World } from '@/scene/world/types';
-
-type AxisRange = [number, number];
-type Aabb = { x: AxisRange; z: AxisRange };
-type WalkVolume = Aabb & { obstacles: Aabb[] };
+import { PLAYER_RADIUS, walkVolume, type WalkVolume } from '@/scene/world_view/player_bounds';
 
 export type PlayerControls = {
   keys: Set<string>;
@@ -47,74 +44,9 @@ export function resetPlayerControls(controls: PlayerControls, world: World) {
   controls.pointerId = undefined;
 }
 
-/**
- * Playable camera volumes are intentionally smaller than the authored meshes.
- * The margin leaves enough room for a person-sized eye and keeps the camera
- * from entering side walls, the corridor end wall, or the furniture blocks.
- */
-function walkVolume(state: GameState, base: CameraShot): WalkVolume {
-  if (state.sceneKey === 'mini_refectory')
-    return {
-      x: [-3.55, 3.55],
-      z: [-7.3, 3.4],
-      obstacles: [
-        { x: [-2.05, 2.05], z: [-1.3, 1.25] },
-        { x: [-3.05, -1.85], z: [-1.45, 1.25] },
-        { x: [1.85, 3.05], z: [-1.45, 1.25] },
-      ],
-    };
-  if (state.sceneKey === 'mini_register')
-    return {
-      x: [-3.8, 3.8],
-      z: [-4.2, 4.2],
-      obstacles: [
-        { x: [-1.45, 1.45], z: [-0.9, 0.45] },
-        { x: [-3.95, -3.15], z: [-2.95, -2.05] },
-      ],
-    };
-  if (state.sceneKey === 'mini_corridor_candle' || state.sceneKey === 'mini_dawn')
-    return {
-      x: [-4.3, 4.3],
-      // Offset is measured from the authored eye at z=5.7. The covered
-      // passage ends at the plaster wall around z=-7.8, so stop the eye near
-      // z=-6.7 (offset -12.4) before the side-door threshold.
-      z: [-12.4, 3.9],
-      obstacles: [],
-    };
-  if (state.sceneKey === 'mini_arrival') return { x: [-4.6, 4.6], z: [-4.5, 4.5], obstacles: [] };
-  if (state.sceneKey === 'mini_oracle')
-    return {
-      x: [-4.2, 4.2],
-      z: [-8, 4.2],
-      obstacles: [{ x: [-0.3, 1.6], z: [-0.48, 0.68] }],
-    };
-  if (state.sceneKey === 'mini_listen')
-    return {
-      x: [-4.2, 4.2],
-      z: [-7.4, 4.2],
-      obstacles: [{ x: [-3.9, -2.05], z: [-3.1, -0.2] }],
-    };
-  const fallback = {
-    x: [-3.7, 3.7] as AxisRange,
-    z: [-4.2, 4.2] as AxisRange,
-    obstacles: [] as Aabb[],
-  };
-  // Furniture is authored in world coordinates while player offsets are
-  // measured from the current shot. Convert obstacle rectangles once so the
-  // collision test remains correct when a shot starts from another angle.
-  return {
-    ...fallback,
-    obstacles: fallback.obstacles.map((obstacle) => ({
-      x: [obstacle.x[0] - base.eye[0], obstacle.x[1] - base.eye[0]] as AxisRange,
-      z: [obstacle.z[0] - base.eye[2], obstacle.z[1] - base.eye[2]] as AxisRange,
-    })),
-  };
-}
-
-const PLAYER_RADIUS = 0.32;
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-function isBlocked(x: number, z: number, obstacle: Aabb) {
+function isBlocked(x: number, z: number, obstacle: WalkVolume['obstacles'][number]) {
   return (
     x > obstacle.x[0] - PLAYER_RADIUS &&
     x < obstacle.x[1] + PLAYER_RADIUS &&
@@ -201,10 +133,6 @@ export function updatePlayerView(
     controls.velocity[1] *= damping;
   }
   const volume = walkVolume(state, base);
-  for (const obstacle of volume.obstacles) {
-    obstacle.x = [obstacle.x[0] - base.eye[0], obstacle.x[1] - base.eye[0]];
-    obstacle.z = [obstacle.z[0] - base.eye[2], obstacle.z[1] - base.eye[2]];
-  }
   const next = resolvePosition(
     controls.offset,
     [

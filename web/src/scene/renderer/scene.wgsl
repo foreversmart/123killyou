@@ -6,7 +6,7 @@ struct Frame {
   ground: vec4f,
   sun: vec4f,
   direction: vec4f,
-  lamps: array<vec4f, 8>,
+  lamps: array<vec4f, 24>,
   inverseView: mat4x4f,
   contacts: array<vec4f, 8>,
 };
@@ -179,8 +179,9 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   if (pat == 3.0) {
     lit += col * vec3f(0.1,0.036,0.018) * pow(max(0.0,dot(-n,normalize(frame.direction.xyz))),2.0);
   }
-  lit += brdf(n, v, normalize(frame.direction.xyz), col, rough, metal) * frame.sun.rgb * shadeShadow(i.position, n);
-  for (var j = 0; j < 4; j++) {
+  let directionalShadow = select(1.0, shadeShadow(i.position, n), object.effects.y > 0.5);
+  lit += brdf(n, v, normalize(frame.direction.xyz), col, rough, metal) * frame.sun.rgb * directionalShadow;
+  for (var j = 0; j < 12; j++) {
     let source = frame.lamps[j * 2]; let color = frame.lamps[j * 2 + 1];
     let d = source.xyz - i.position; let distance = max(dot(d, d), 0.05);
     lit += brdf(n, v, normalize(d), col, rough, metal) * color.rgb * source.w / (1.0 + distance);

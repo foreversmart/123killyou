@@ -1,104 +1,102 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
-import { cylinder } from '@/scene/geometry/primitives';
-import { floor, plaque, roof, windowLattice } from '@/scene/world_environment/architecture';
-import { doorLeaf } from '@/scene/world_environment/doors';
+import { roof } from '@/scene/world_environment/architecture';
 import type { WorldNode } from '@/scene/world/types';
-import { lantern } from '@/scene/world_prop/ritual';
 import { landscape } from '@/scene/world_environment/terrain';
-import { addVegetation, addCourtyardGarden } from '@/scene/world_environment/vegetation';
-import { gateCarpentry } from '@/scene/world_environment/doors';
+import { addVegetation, addForecourtGarden } from '@/scene/world_environment/vegetation';
 import { templeCompound } from '@/scene/world_environment/temple_compound';
-import { compoundRoof } from '@/scene/world_environment/compound_roof';
+import { templeEntrance } from '@/scene/world_environment/temple_entrance';
+import { corridorTerminals } from '@/scene/world_environment/corridor_terminals';
+import { courtyardGround, courtyardGarden } from '@/scene/world_environment/courtyard_garden';
+import { courtyardWall, moonGate } from '@/scene/world_environment/courtyard_walls';
+import { courtyardRoom } from '@/scene/world_environment/courtyard_rooms';
+import { courtyardSconce } from '@/scene/world_environment/courtyard_lights';
+import { CORRIDOR_ENCLOSURE } from '@/scene/world_environment/enclosure_layout';
 import { buddhistMural } from '@/scene/world_environment/statue';
+import { bracket } from '@/scene/world_environment/temple_facade';
+import { cloudScroll, paintedBeam } from '@/scene/world_environment/temple_ornament';
+import { templeGold, templeJade, templeRed } from '@/scene/world_environment/temple_palette';
 
-export function templeEntrance(distant = false): WorldNode {
-  const b = new Builder();
-  if (!distant) floor(b, 17, 14, 'stone');
-  for (let i = 0; i < 3; i++)
-    b.box([8 - i * 0.5, 0.12, 2.2 - i * 0.45], [0, i * 0.12, -0.8 - i * 0.25], M.stone);
-  for (const x of [-3.1, 3.1]) {
-    b.add(cylinder(0.2, 0.24, 3.65), M.redWood, [x, 2.05, -2]);
-    b.add(cylinder(0.32, 0.37, 0.35), M.stone, [x, 0.35, -2]);
-    b.box([3.8, 2.8, 0.65], [x + Math.sign(x) * 2, 1.6, -2.4], M.plaster);
-    if (distant) compoundRoof(b, x + Math.sign(x) * 2, -2.4, 4, 1.3, 2.95, 0.5);
-    else roof(b, x + Math.sign(x) * 2, -2.4, 4, 1.3, 2.95);
-  }
-  b.box([6.6, 0.4, 0.35], [0, 3.55, -2], M.redWood);
-  if (distant) compoundRoof(b, 0, -2, 7.5, 3.7, 3.8, 1.05);
-  else roof(b, 0, -2, 7.5, 3.7, 3.8);
-  gateCarpentry(b);
-  plaque(b, '红烛寺', [0, 2.9, -1.76], 2.15, 0.61);
-  plaque(b, '明照寺', [-3.9, 1.2, -1.95], 0.58, 0.85, 0.1);
-  plaque(b, '香客止步', [4.5, 0.65, 0.6], 0.6, 0.8, -0.25);
-  return b.mesh('temple_entrance');
-}
+export { templeEntrance } from '@/scene/world_environment/temple_entrance';
 
 export function templeGate(): WorldNode {
   const b = new Builder();
   landscape(b);
   const root = b.mesh('temple_gate');
-  root.children.push(templeEntrance(), templeCompound());
+  root.children.push(templeEntrance(), templeCompound(true));
   addVegetation(root);
+  addForecourtGarden(root);
   return root;
 }
 
+/** Repeated polychrome bays connect the courtyard to the carved worship halls. */
 export function corridor(daylight: boolean): WorldNode {
   const b = new Builder();
-  floor(b, 12, 22);
-  // The east courtyard is a covered passage: guest rooms sit behind the
-  // plaster side walls, with every doorway opening toward the walkway. The
-  // previous layout put four doors across the vanishing point, which read as
-  // freestanding panels rather than rooms.
-  const roomDoors = [-2, -6] as const;
+  courtyardGround(b);
+  const timber = templeRed;
   for (const side of [-1, 1] as const) {
-    for (let i = 0; i < 4; i++) {
-      const z = 4 - i * 4.6;
-      b.add(cylinder(0.12, 0.16, 3.5), M.redWood, [side * 3.9, 1.75, z]);
-      b.box([0.24, 0.24, 5], [side * 3.9, 3.45, z - 2], M.darkWood);
-    }
-    // Leave proper door openings in the side wall. The deep timber trim and
-    // dark recess make each room legible even when its leaves are closed.
-    const boundaries = [
-      6,
-      roomDoors[0] + 0.82,
-      roomDoors[0] - 0.82,
-      roomDoors[1] + 0.82,
-      roomDoors[1] - 0.82,
-      -16,
+    const wallCenter = -0.2;
+    const openings = [
+      ...[-2, -6].map((z) => ({ x: side * (z - wallCenter), width: 1.64, bottom: 0, top: 2.65 })),
+      { x: side * (-4.08 - wallCenter), width: 1.46, bottom: 1.05, top: 2.65, lattice: true },
     ];
-    for (let i = 0; i < boundaries.length - 1; i++) {
-      const top = boundaries[i];
-      const bottom = boundaries[i + 1];
-      if (top <= bottom) continue;
-      const depth = top - bottom;
-      b.box([0.24, 3.3, depth], [side * 5.5, 1.65, (top + bottom) / 2], M.plaster);
+    if (side === -1)
+      openings.push({
+        x: side * (3.2 - wallCenter),
+        width: 1.85,
+        bottom: 1.05,
+        top: 2.65,
+        lattice: true,
+      });
+    else openings.push({ x: 3.3 - wallCenter, width: 3.44, bottom: 0, top: 3.22 });
+    courtyardWall(b, [side * 5.5, 0, wallCenter], 16, 3.55, openings, (-side * Math.PI) / 2);
+    if (side === 1) moonGate(b, [5.5, 0, 3.3], -Math.PI / 2);
+    for (const z of [-2, -6]) courtyardRoom(b, side, z);
+    for (const z of [6.5, 0.35, -4.1, -7.35]) {
+      b.box([0.29, 3.58, 0.29], [side * 4.65, 1.89, z], timber);
+      b.box([0.45, 0.34, 0.45], [side * 4.65, 0.17, z], { ...M.stone, color: 0x8d9289 });
+      b.box([0.5, 0.075, 0.5], [side * 4.65, 0.36, z], M.stone);
+      b.box([0.7, 0.16, 0.9], [side * 4.65, 3.5, z], timber);
+      b.box([0.36, 0.15, 1.26], [side * 4.65, 3.67, z], timber);
+      bracket(b, [side * 4.65, 3.29, z], Math.PI / 2, 0.58);
+      b.box([0.32, 0.05, 0.32], [side * 4.65, 0.56, z], templeGold);
+      cloudScroll(b, [side * 4.49, 3.08, z], 0.34, (-side * Math.PI) / 2);
+      for (const end of [-1, 1])
+        b.rod([side * 4.65, 3.03, z], [side * 4.65, 3.48, z + end * 0.61], 0.055, timber);
+      if (z === 0.35 || z === -4.1) courtyardSconce(b, [side * 4.65, 1.95, z + 0.19], !daylight);
     }
-    for (const z of roomDoors) {
-      sideRoomBay(b, side, z);
-      sideRoomDoor(b, side, z);
-    }
-    // A continuous eave beam and short brackets give the side rooms the
-    // restrained, weathered timber character of an old mountain temple.
-    b.box([0.34, 0.22, 22], [side * 5.36, 3.42, -5], M.darkWood);
-    for (const z of [4.7, 0.7, -3.3, -7.3, -11.3, -15.3]) {
-      b.box([0.42, 0.18, 0.8], [side * 5.27, 3.18, z], M.redWood);
-      b.box([0.28, 0.62, 0.2], [side * 5.34, 2.88, z], M.darkWood);
-    }
+    b.box([0.24, 0.28, 16.6], [side * 4.65, 3.66, -0.35], timber);
+    b.box([0.18, 0.22, 16.6], [side * 5.43, 3.54, -0.35], timber);
+    b.box([0.15, 0.15, 16.7], [side * 3.48, 3.59, -0.35], timber);
+    paintedBeam(b, [side * 4.49, 3.62, -0.35], 16.6, 0.3, (-side * Math.PI) / 2);
+    paintedBeam(b, [side * 5.28, 3.36, -0.35], 16.5, 0.22, (-side * Math.PI) / 2);
+    for (let z = -8.35; z <= 8; z += 0.4)
+      b.box([2.7, 0.11, 0.07], [side * 4.65, 3.7, z], templeJade);
+    // The ridge follows the corridor; slope and tiles run across its short span.
+    const canopy = new Builder();
+    roof(canopy, 0, 0, 17.1, 2.8, 3.74);
+    b.merge(canopy.build(), [side * 4.65, 0, -0.35], [0, Math.PI / 2, 0]);
   }
-  b.box([11, 3.5, 0.2], [0, 1.75, -7.8], M.plaster);
-  windowLattice(b, 0, 1.7, -7.6, 1.6, 1.5, daylight);
-  for (const side of [-1, 1]) roof(b, side * 4.5, -4.5, 2.4, 22, 3.5);
-  // The old drag mark remains a physical trace in the floor.
+  courtyardWall(b, [0, 0, CORRIDOR_ENCLOSURE.front], 11, 3.55, [
+    { x: 0, width: 3.05, bottom: 0, top: 2.85 },
+    { x: -3.8, width: 1.75, bottom: 1.05, top: 2.65, lattice: true },
+    { x: 3.8, width: 1.75, bottom: 1.05, top: 2.65, lattice: true },
+  ]);
+  roof(b, 0, -7.85, 11.5, 1.25, 3.6);
+  // A recessed hall vestibule gives the middle door real depth beyond the wall.
+  b.box([3.15, 0.1, 3.2], [0, -0.02, -9.3], M.wood);
+  b.box([3.15, 0.14, 3.2], [0, 2.93, -9.3], timber);
+  b.box([3.15, 3, 0.18], [0, 1.5, -10.85], { ...M.darkWood, color: 0x262822 });
+  for (const side of [-1, 1]) b.box([0.15, 3, 3.2], [side * 1.57, 1.5, -9.3], timber);
+  // The story's drag mark remains on the central slabs, with no planting over it.
   for (let i = 0; i < 17; i++)
-    b.box([0.022, 0.007, 0.18], [-0.9 + i * 0.045, 0.006, -i * 0.28], {
+    b.box([0.022, 0.004, 0.18], [-0.9 + i * 0.045, 0.006, -i * 0.28], {
       ...M.stone,
       color: 0x45463c,
     });
   const root = b.mesh('east_courtyard');
-  addCourtyardGarden(root);
-  // The open wall bays carry small mineral-pigment murals. They sit between
-  // guest doors so the player's walk reveals them without turning the rooms
-  // into shrines or hiding the room plaques.
+  // Keep the six painted panels between the room bays; the enclosed terminal
+  // behind the side gate is additional architecture, not a replacement for
+  // this corridor landmark sequence.
   for (const side of [-1, 1] as const)
     for (const [z, accent] of [
       [1.35, 0xb36d4e],
@@ -108,72 +106,6 @@ export function corridor(daylight: boolean): WorldNode {
       root.children.push(
         buddhistMural([side * 5.34, 1.02, z], side === -1 ? Math.PI / 2 : -Math.PI / 2, accent),
       );
-  for (const x of [-3.9, 3.9]) {
-    const lamp = new Builder();
-    lantern(lamp, !daylight);
-    const model = lamp.mesh('eave_lamp');
-    model.position = [x, 2.45, 0];
-    root.children.push(model);
-  }
+  root.children.push(...corridorTerminals(daylight), courtyardGarden(daylight));
   return root;
-}
-
-/** Build one side-facing room door in the corridor wall. */
-function sideRoomDoor(b: Builder, side: -1 | 1, z: number) {
-  const x = side * 5.5;
-  const facing = side === -1 ? Math.PI / 2 : -Math.PI / 2;
-  const doorWidth = 1.42;
-  const doorHeight = 2.36;
-  // The opening is recessed one handspan behind the plaster face.
-  b.box([0.12, doorHeight, doorWidth], [x - side * 0.08, doorHeight / 2, z], M.black);
-  for (const offset of [-0.75, 0.75]) {
-    b.box([0.18, 2.62, 0.18], [x, 1.31, z + offset], M.darkWood, [0, facing, 0]);
-  }
-  b.box([0.2, 0.18, 1.62], [x, 2.58, z], M.darkWood, [0, facing, 0]);
-  b.box([0.25, 0.12, 1.5], [x + side * 0.05, 0.04, z], M.stone, [0, facing, 0]);
-
-  // Two old plank leaves are hinged into the rooms. Their slight angle keeps
-  // the corridor-facing orientation readable without blocking the walkway.
-  for (const leaf of [-1, 1] as const) {
-    const panel = doorLeaf(0.66, doorHeight, leaf);
-    b.merge(panel, [x - side * 0.07, 0.07, z + leaf * 0.34], [0, facing + leaf * 0.22, 0]);
-  }
-  // A small room plaque is turned toward the passage, not toward the camera's
-  // end wall, so the four room identities remain discoverable in motion.
-  const labels = side === -1 ? (z === -2 ? '听' : '灯') : z === -2 ? '门' : '纸';
-  plaque(b, labels, [x - side * 0.14, 2.63, z], 0.27, 0.4, facing, true);
-}
-
-/**
- * A shallow room bay behind every corridor door keeps the side rooms from
- * reading as painted panels.  The opening reveals a timber threshold, an
- * uneven plaster rear wall and a small transom, which is enough depth to make
- * the old guest rooms believable while leaving the playable walkway clear.
- */
-function sideRoomBay(b: Builder, side: -1 | 1, z: number) {
-  const inner = side * 7.15;
-  const rear = side * 8.55;
-  const plaster = { ...M.plaster, color: 0xb2ab91, rough: 1 };
-  const beam = { ...M.darkWood, color: 0x3a3028, rough: 0.96 };
-  b.box([2.72, 0.12, 3.35], [side * 7.05, -0.03, z], M.wood);
-  b.box([0.18, 3.1, 3.35], [rear, 1.5, z], plaster);
-  b.box([0.22, 3.2, 0.16], [inner, 1.58, z - 1.68], beam);
-  b.box([0.22, 3.2, 0.16], [inner, 1.58, z + 1.68], beam);
-  b.box([0.22, 0.18, 3.6], [side * 7.05, 3.07, z], beam);
-  b.box([0.22, 0.16, 3.4], [rear - side * 0.06, 0.42, z], beam);
-  b.box([2.9, 0.1, 3.35], [side * 7.05, 3.11, z], {
-    ...M.wood,
-    color: 0x40372c,
-    rough: 0.97,
-  });
-
-  // A dim paper lattice on the rear wall catches daylight and warm eave light.
-  b.box([0.04, 1.1, 1.45], [rear - side * 0.11, 1.9, z], {
-    color: 0x9c9c82,
-    rough: 1,
-    glow: 0.04,
-  });
-  for (const offset of [-0.58, -0.19, 0.19, 0.58])
-    b.box([0.06, 1.22, 0.04], [rear - side * 0.15, 1.9, z + offset], beam);
-  for (const y of [1.35, 1.9, 2.45]) b.box([0.06, 0.04, 1.5], [rear - side * 0.15, y, z], beam);
 }

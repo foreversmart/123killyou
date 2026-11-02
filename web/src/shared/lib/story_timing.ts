@@ -6,6 +6,18 @@
 // mountain road and climbing the full surveyed route to the temple apron.
 // The previous 14-second cut began near the top of the road and read as a
 // teleport into the forecourt.
-export const OPENING_ROAD_DURATION_MS = 24_000;
+// Let the arrival coach take a slower, calmer pass through the mountain road.
+// The camera uses this same clock, so its elevated pull-in also reads more
+// slowly instead of racing toward the gate at the end of the opening.
+export const OPENING_ROAD_DURATION_MS = 36_000;
 export const OPENING_ALIGHTING_DURATION_MS = 6_000;
 export const DEPARTURE_ROAD_DURATION_MS = 10_000;
+
+// Authored first-person travel shots. Keep the scene transition clock and the
+// character walk clock on the same values so the cut happens after the group
+// has finished walking and the camera has had time to show the route.
+export const CORRIDOR_TRAVEL_REGISTER_SECONDS = 6.4;
+export const CORRIDOR_TRAVEL_REFECTORY_SECONDS = 6.2;
+export const CORRIDOR_TRAVEL_RETURN_SECONDS = 6.0;
+export const CORRIDOR_TRAVEL_LISTEN_SECONDS = 6.0;
+export const HALL_TRAVEL_SECONDS = 7.6;

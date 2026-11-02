@@ -22,7 +22,7 @@ var miniShotDescriptions = map[string]string{
 	"arrival_plaque":       "镜头贴近山门新匾，雨水磨花的旧字藏在金漆边缘，树影正好从中间切过。",
 	"register_desk":        "登记室的桌前只放一本小型登记簿。陆沉用毛笔逐一写下四个人的名字，只有执笔的手随笔尖移动，另一只手安静扶在桌边。",
 	"register_key_tags":    "墨迹吹干后，四块旧铜牌在登记桌上依次排开，‘听、灯、纸、门’的字被指腹磨得发亮。",
-	"register_drag_mark":   "周砚在登记室门槛旁停下，顺着目光看见地砖上的旧拖痕；痕迹从偏殿方向延来。",
+	"register_drag_mark":   "登记仍在进行，四位游客围在桌旁面向陆沉；周砚留在桌边，伸手指向脚边地砖上的旧拖痕，痕迹从偏殿方向延来。",
 	"register_camera_bell": "林岚把相机盖放到听房门边的铜铃旁，铃舌余音在回廊里慢慢散开。",
 	"register_ribbon":      "许栀的蓝色发圈夹住入住须知的一角，她抬头看向回廊尽头那扇合上的门。",
 	"register_rooms":       "东院四间偏房分列回廊两侧。林岚停在听房，周砚弯腰看灯房门轴，许栀用蓝色发圈夹住纸房的入住须知。",
@@ -127,6 +127,25 @@ func syncMiniStaging(state *State) {
 
 	for index := range state.Actors {
 		actor := &state.Actors[index]
+		if state.SceneKey == "mini_register" && state.ShotKey == "register_drag_mark" {
+			switch actor.ID {
+			case "player":
+				actor.Position = "登记桌前沿 / 第一视角面向陆沉"
+				actor.Status = "保持登记姿态，看向和尚"
+			case "luchen":
+				actor.Position = "登记桌内侧 / 停笔看向地板"
+				actor.Status = "仍在登记桌旁，面向来客并看向拖痕"
+			case "linlan":
+				actor.Position = "登记桌左侧 / 面向陆沉"
+				actor.Status = "放低相机，面向和尚等待说明"
+			case "zhouyan":
+				actor.Position = "登记桌右前角 / 面向陆沉"
+				actor.Status = "面向和尚，伸手指着地板上的旧拖痕"
+			case "xuzhi":
+				actor.Position = "登记桌外侧 / 面向陆沉"
+				actor.Status = "保持登记姿态，面向和尚等待说明"
+			}
+		}
 		if state.SceneKey == "mini_refectory" && state.ShotKey == "refectory_eating" {
 			switch actor.ID {
 			case "player":

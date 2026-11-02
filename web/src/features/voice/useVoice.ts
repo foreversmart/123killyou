@@ -14,6 +14,7 @@ export type { VoiceStatus } from '@/features/voice/types';
 export function useVoice(
   onText: (text: string, controls: TurnControls) => Promise<VoiceAnswer>,
   openTranscription: () => AudioTranscription,
+  paused = false,
 ) {
   const [status, setStatus] = useState<VoiceStatus>('idle');
   const [problem, setProblem] = useState('');
@@ -35,6 +36,8 @@ export function useVoice(
   const ambient = useRef<GainNode | null>(null);
   const initializing = useRef(false);
   const mounted = useRef(true);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
 
   const report = useCallback((message: string) => {
     setProblem(message);
@@ -44,7 +47,19 @@ export function useVoice(
     speak,
     stream: receiveSpeech,
     stop,
+    pause: pauseSpeech,
+    resume: resumeSpeech,
   } = useSpeechOutput(outputEnabled, wanted, setStatus, audio, report);
+
+  useEffect(() => {
+    if (paused) {
+      pauseSpeech();
+      void audio.current?.suspend?.();
+    } else {
+      void audio.current?.resume?.();
+      resumeSpeech();
+    }
+  }, [paused, pauseSpeech, resumeSpeech]);
   const enablePlayback = useCallback(async () => {
     setProblem('');
     try {
@@ -70,6 +85,7 @@ export function useVoice(
           setCaption(null);
         },
         stream(event) {
+          if (pausedRef.current) return;
           if (event.kind === 'start')
             setCaption({
               speaker: event.speaker || '系统',
@@ -89,6 +105,7 @@ export function useVoice(
         },
         answer(answer) {
           setStatus(wanted.current ? 'listening' : 'idle');
+          if (pausedRef.current) return;
           speak(answer);
         },
         problem(message) {
@@ -102,6 +119,8 @@ export function useVoice(
   const submit = useCallback(
     async (text: string) => {
       capture.current?.cancel();
+      const normalized = text.replace(/[“”"。，！？!?\s]/g, '');
+      if (pausedRef.current && !/^(继续游戏|恢复游戏|继续吧|继续)$/.test(normalized)) return;
       await turns.submit(text);
     },
     [turns],

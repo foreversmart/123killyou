@@ -9,8 +9,9 @@ export function createPCMPlayer(context: AudioContext, sampleRate: number, onEnd
   let nextAt = 0;
   let finished = false;
   let stopped = false;
+  let suspended = false;
   const flush = () => {
-    if (!frames || stopped) return;
+    if (!frames || stopped || suspended) return;
     const buffer = context.createBuffer(1, frames, sampleRate);
     const data = buffer.getChannelData(0);
     let offset = 0;
@@ -64,7 +65,20 @@ export function createPCMPlayer(context: AudioContext, sampleRate: number, onEnd
       if (stopped || finished) return;
       finished = true;
       flush();
-      if (sources.size === 0) {
+      if (!suspended && sources.size === 0) {
+        stopped = true;
+        onEnd();
+      }
+    },
+    pause() {
+      suspended = true;
+      context.suspend?.();
+    },
+    resume() {
+      suspended = false;
+      void context.resume();
+      flush();
+      if (finished && sources.size === 0 && !stopped) {
         stopped = true;
         onEnd();
       }

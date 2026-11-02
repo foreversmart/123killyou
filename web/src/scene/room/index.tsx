@@ -16,6 +16,7 @@ export function Room({
   interactive,
   onAvailability,
   onTravelActive,
+  motionPaused = false,
 }: {
   state: GameState;
   speaker?: string;
@@ -25,6 +26,7 @@ export function Room({
   interactive?: boolean;
   onAvailability?: (available: boolean) => void;
   onTravelActive?: (active: boolean) => void;
+  motionPaused?: boolean;
 }) {
   return (
     <section
@@ -37,6 +39,7 @@ export function Room({
         speaker={speaker}
         onAction={onAction}
         interactive={interactive}
+        motionPaused={motionPaused || phase !== 'idle'}
         onAvailability={onAvailability}
       />
       <div

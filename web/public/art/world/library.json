@@ -137,6 +137,42 @@
       "albedo": "guanyin_albedo.webp",
       "normal": "guanyin_normal.webp",
       "arm": "guanyin_arm.webp"
+    },
+    {
+      "id": "temple_paint",
+      "albedo": "temple_paint_albedo.webp",
+      "normal": "temple_paint_normal.webp",
+      "arm": "temple_paint_arm.webp"
+    },
+    {
+      "id": "temple_relief",
+      "albedo": "temple_relief_albedo.webp",
+      "normal": "temple_relief_normal.webp",
+      "arm": "temple_relief_arm.webp"
+    },
+    {
+      "id": "guardian_gilding",
+      "albedo": "guardian_gilding_albedo.webp",
+      "normal": "guardian_gilding_normal.webp",
+      "arm": "guardian_gilding_arm.webp"
+    },
+    {
+      "id": "guardian_clouds",
+      "albedo": "guardian_clouds_albedo.webp",
+      "normal": "guardian_clouds_normal.webp",
+      "arm": "guardian_clouds_arm.webp"
+    },
+    {
+      "id": "guardian_lamellar",
+      "albedo": "guardian_lamellar_albedo.webp",
+      "normal": "guardian_lamellar_normal.webp",
+      "arm": "guardian_lamellar_arm.webp"
+    },
+    {
+      "id": "guardian_pigment",
+      "albedo": "guardian_pigment_albedo.webp",
+      "normal": "guardian_pigment_normal.webp",
+      "arm": "guardian_pigment_arm.webp"
     }
   ],
   "meshes": {

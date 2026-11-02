@@ -100,25 +100,41 @@ test('arrival gestures settle into a follow-up observation instead of looping th
   assert.ok(photographer.camera.position[1] > 0.2, 'the camera remains in the hands');
 });
 
-test('arrival actors walk before their scripted gestures and stop at the authored position', () => {
+test('arrival story shots keep their activities while visitors continue to drift', () => {
   for (const [id, shot] of [
     ['linlan', 'arrival_unload'],
     ['zhouyan', 'arrival_zhouyan'],
     ['luchen', 'arrival_luchen'],
   ]) {
-    const world = createWorld({ state: state(shot, [actor(id)]) });
-    const root = world.root.children.find((node) => node.name === id);
+    const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((name) => actor(name));
+    const world = createWorld({ state: state(shot, actors) });
+    const roots = actors.map(({ id: name }) =>
+      world.root.children.find((node) => node.name === name),
+    );
+    const root = roots.find((candidate) => candidate.name === id);
     root.animate(0, 0);
     const start = [...root.position];
+    const standingLegs = root.children.filter((node) => node.name === 'leg');
+    assert.ok(
+      standingLegs.every(
+        (leg) => Math.abs(leg.rotation[0]) < 0.001 && Math.abs(leg.bend.angle) < 0.001,
+      ),
+      `${id} stands normally when the gate task has not moved yet`,
+    );
     root.animate(0.7, 0);
-    assert.ok(Math.hypot(...root.position.map((p, i) => p - start[i])) > 0.2);
-    const legs = root.children.filter((node) => node.name === 'leg');
-    assert.ok(legs.some((leg) => Math.abs(leg.rotation[0]) > 0.05));
+    const moved = Math.hypot(...root.position.map((p, i) => p - start[i]));
+    assert.ok(moved > 0.01, `${id} keeps moving around the gate while performing`);
+    assert.ok(moved < 0.5, `${id} stays within the gate tableau`);
     root.animate(3, 0);
     const end = [...root.position];
     root.animate(9, 0);
-    assert.deepEqual(root.position, end);
-    assert.ok(legs.every((leg) => leg.rotation[0] === 0 && leg.bend.angle === 0));
+    const afterBeat = Math.hypot(...root.position.map((p, i) => p - end[i]));
+    assert.ok(afterBeat > 0.01, `${id} continues its activity after the first beat`);
+    const legs = root.children.filter((node) => node.name === 'leg');
+    assert.ok(
+      legs.some((leg) => Math.abs(leg.rotation[0]) > 0.02 || Math.abs(leg.bend.angle) > 0.02),
+      `${id} keeps an alternating footstep while drifting around the gate`,
+    );
     if (id === 'zhouyan') {
       const head = root.children
         .find((node) => node.name === 'body')
@@ -201,6 +217,7 @@ test("arrival and registration beats carry each companion's established activity
     ['arrival_weather', 'xuzhi', 'admire'],
     ['arrival_zhouyan', 'zhouyan', 'look_up'],
     ['register_camera_bell', 'linlan', 'camera'],
+    ['register_drag_mark', 'zhouyan', 'point_floor'],
     ['register_ribbon', 'xuzhi', 'ribbon'],
     ['register_luggage', 'zhouyan', 'inspect'],
   ];
@@ -210,6 +227,27 @@ test("arrival and registration beats carry each companion's established activity
       action,
       `${id} keeps ${action} in ${shot}`,
     );
+});
+
+test('拖痕质疑时周砚仍面向陆沉并用手指向地面', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const game = state('register_drag_mark', actors);
+  game.sceneKey = 'mini_register';
+  const world = createWorld({ state: game });
+  const zhouyan = world.root.children.find((node) => node.name === 'zhouyan');
+  zhouyan.animate(1.2, 0);
+  const [x, , z] = zhouyan.position;
+  const expectedFacing = Math.atan2(-x, -0.7 - z);
+  const facingDelta = Math.atan2(
+    Math.sin(zhouyan.rotation[1] - expectedFacing),
+    Math.cos(zhouyan.rotation[1] - expectedFacing),
+  );
+  assert.ok(Math.abs(facingDelta) < 0.08, '周砚身体继续面向登记桌旁的陆沉');
+  const body = zhouyan.children.find((node) => node.name === 'body');
+  const head = body.children.find((node) => node.name.endsWith('_head'));
+  assert.ok(body.rotation[0] > 0.25, '周砚俯身指向地面');
+  assert.ok(head.rotation[0] > 0.3, '周砚视线落到拖痕');
+  assert.equal(performanceFor(actor('zhouyan'), game), 'point_floor');
 });
 
 test('meal utensil follows the bowl and mouth anchors with a natural wrist roll', () => {

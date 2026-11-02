@@ -1,7 +1,7 @@
 {
-  "date": "2026-10-31",
+  "date": "2026-11-02",
   "status": "current",
-  "generator": "built-in image_gen",
+  "generator": "built-in image_gen; imagecreate/custom/gpt-image-2",
   "externalModelReferences": {
     "manifest": "assets/environment/guardian_monk_sources.json",
     "policy": "offline_only",
@@ -16,6 +16,41 @@
     "assets/references/style_reference/ref_04_night_exterior.png"
   ],
   "assets": [
+    {
+      "id": "zhao_xi",
+      "name": "赵熙·正常站姿",
+      "kind": "character_reference",
+      "path": "assets/characters/zhao_xi/standing.png",
+      "width": 1024,
+      "height": 1536,
+      "format": "png",
+      "hasAlpha": true,
+      "bytes": 784860,
+      "sha256": "79673266436e2bc9ffc81650444d284f6262a64814e5b98c149ecfa7f2748888",
+      "status": "generated",
+      "generator": "imagecreate",
+      "provider": "custom",
+      "model": "gpt-image-2",
+      "operation": "generate",
+      "inputImages": [],
+      "referenceUse": "现有主角与同伴图像仅经查看后转写为文字造型与画风约束，未作为图像输入发送到 API。",
+      "postprocess": "以纯品红 #ff00ff 背景生成，再使用 imagecreate remove_chroma_key.py 本地提取透明通道。",
+      "promptSet": "assets/generation/character_prompts.json",
+      "alphaCheck": {
+        "transparentPixels": 1190440,
+        "nearOpaquePixels": 374814,
+        "silhouetteBounds": {
+          "minX": 299,
+          "minY": 24,
+          "maxX": 701,
+          "maxY": 1502
+        }
+      },
+      "usage": {
+        "storyBeats": [],
+        "purpose": "主角赵熙的全身人物定型参考：警觉克制、自然短黑发、深炭蓝夹克、浅灰米色衬衣和深灰裤，无挎包与手持物；供后续美术使用，当前不新增运行时角色或头像接入。"
+      }
+    },
     {
       "id": "companion_walk_listen",
       "name": "回廊偏房·两人偷听",
@@ -3128,7 +3163,24 @@
     "assetLibrary": "web/public/art/world/library.json",
     "sources": "assets/environment/README.md",
     "statue": "MIA CC0 观音扫描，来源见 assets/environment/guanyin_source.json",
-    "articulation": "完整肢体的肘膝连续变形、髋部伏身、掌心道具绑定、步行实际位移与脚底接触阴影"
+    "articulation": "完整肢体的肘膝连续变形、髋部伏身、掌心道具绑定、步行实际位移与脚底接触阴影",
+    "guardianStatues": {
+      "entry": "web/src/scene/world_environment/guardian_sculpture.ts",
+      "materials": "web/src/scene/world_environment/guardian_materials.ts",
+      "parts": [
+        "guardian_body.ts",
+        "guardian_face.ts",
+        "guardian_attributes.ts",
+        "guardian_forms.ts"
+      ],
+      "attributes": [
+        "pipa",
+        "sword",
+        "dragon",
+        "umbrella"
+      ],
+      "description": "本地立体造像；赭、青绿、朱红、青蓝面孔，嵌佛冠饰、兽首肩甲、双胸甲、层叠甲裙、战靴和曲线飘带。琵琶带弦和品，龙绕抬起的前臂，宝伞带伞骨和垂穗。"
+    }
   },
   "media": [
     {

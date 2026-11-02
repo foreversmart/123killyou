@@ -4,12 +4,17 @@ import { node, type Geometry, type Material, type V3, type WorldNode } from '@/s
 
 export const PAT = { plain: 0, wood: 1, cloth: 2, skin: 3, stone: 4, bronze: 5, wax: 6, tile: 7 };
 export const materials = {
-  wood: { color: 0x544536, rough: 0.88, pattern: PAT.wood },
-  darkWood: { color: 0x302a25, rough: 0.86, pattern: PAT.wood },
-  redWood: { color: 0x793b30, rough: 0.8, pattern: PAT.wood },
-  stone: { color: 0x8a8c7b, rough: 0.93, pattern: PAT.stone },
-  plaster: { color: 0xc9c4ae, rough: 0.98, pattern: 10 },
-  roof: { color: 0x414e47, rough: 0.78, pattern: PAT.tile },
+  wood: { color: 0x554439, rough: 0.88, pattern: PAT.wood },
+  darkWood: { color: 0x292522, rough: 0.86, pattern: PAT.wood },
+  redWood: { color: 0x6e3b31, rough: 0.8, pattern: PAT.wood },
+  stone: { color: 0x8f9186, rough: 0.87, pattern: PAT.stone },
+  // Courtyard slabs in the reference stay readable after rain: a cooler tint
+  // and lower roughness let the existing environment texture catch soft sky
+  // reflections without turning the walkway into a mirror.
+  courtyardStone: { color: 0x858b86, rough: 0.58, metal: 0.03, pattern: PAT.stone },
+  courtGrass: { color: 0x30412f, rough: 0.98 },
+  plaster: { color: 0xc8c5b7, rough: 0.98, pattern: 10 },
+  roof: { color: 0x485855, rough: 0.72, pattern: PAT.tile },
   brass: { color: 0xb39250, rough: 0.38, metal: 0.72, pattern: PAT.bronze },
   paper: { color: 0xe6d5ad, rough: 0.95 },
   black: { color: 0x252622, rough: 0.86 },

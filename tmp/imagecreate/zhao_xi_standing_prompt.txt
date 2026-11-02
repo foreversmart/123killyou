@@ -1,0 +1,16 @@
+Use case: illustration-story
+Asset type: one full-body character design for the Chinese narrative adventure game 红烛无声.
+
+Primary request: draw the established protagonist Zhao Xi / 赵熙 as one complete standing figure. His character is alert, restrained, thoughtful and grounded, a young adult Chinese male traveler, about 27, lean average build. This design is based on the game's existing seated protagonist and existing hand-drawn companion cast.
+
+Identity: natural short black hair with slightly tousled separated locks swept loosely across the forehead, dark attentive eyes of ordinary size, natural straight brows, straight nose, an angular oval face with a defined but not exaggerated jaw, clean shaven, closed mouth, watchful thoughtful expression. Slightly younger and less formally groomed than his older companion Zhou Yan, who has a longer rectangular face, neat side part and crossbody satchel. Zhao Xi has no satchel. No beauty retouching or idol face.
+
+Costume: the existing player's simple dark charcoal/navy travel jacket with a normal folded collar and two understated chest pockets, worn open over a muted light gray-beige buttoned collared shirt; charcoal-gray straight trousers; plain dark practical walking shoes. Understated everyday contemporary Chinese travel clothes. No logos, jewelry, glasses, camera, hat, backpack, shoulder strap, lantern, books or held objects.
+
+Ensemble style: realistic human proportions in a distinctly TWO-DIMENSIONAL hand-drawn Chinese narrative-game illustration. Thin clear dark contour lines and selective facial structure lines, broad matte low-saturation color planes, grouped hair masses with a few strands, sparse main clothing folds, a small number of simple soft shadow shapes, light uniform drawn-paper texture. The other travelers in this cast wear a sand-beige field jacket with camera, a dark navy jacket with satchel, and a gray-green cardigan with cream tote: match their modest everyday aesthetic and economical illustration detail, while drawing ONLY Zhao Xi. No extra characters.
+
+Composition: portrait 2:3 canvas, one full-body standing figure centered, mild three-quarter orientation, face turned gently toward viewer as if listening. Relaxed shoulders, believable balance, both feet planted, both arms and hands naturally resting at his sides. Head, hair, both hands and shoes entirely visible with clear margins. Neutral soft lighting, restrained warm-gray shadows, no dramatic glow.
+
+Background: perfectly uniform solid MAGENTA #ff00ff for chroma-key removal. No magenta reflected onto the person. Background must have no gradient, haze, floor, cast shadow, vignette or checkerboard. The figure is completely opaque with a clean complete silhouette.
+
+Avoid: photorealism, 3D gloss, anime eyes, childlike proportions, dense painterly texture, glamour posing, heroic costume, props, multiple people, panels, text, names, captions, UI, logos, frame, border, watermark, cropped hair or feet, extra limbs, malformed hands.

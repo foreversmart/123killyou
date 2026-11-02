@@ -7,12 +7,14 @@ export function StartChoices({
   ready,
   busy,
   voiceActive,
+  paused,
   onReady,
   onBegin,
 }: {
   ready: boolean;
   busy: boolean;
   voiceActive: boolean;
+  paused?: boolean;
   onReady: () => void;
   onBegin: () => Promise<void>;
 }) {
@@ -23,6 +25,17 @@ export function StartChoices({
   useEffect(() => {
     void reel.current?.play().catch(() => setPlayBlocked(true));
   }, []);
+
+  useEffect(() => {
+    const video = reel.current;
+    if (!video || ready) return;
+    if (paused) video.pause();
+    else
+      void video
+        .play()
+        .then(() => setPlayBlocked(false))
+        .catch(() => setPlayBlocked(true));
+  }, [paused, ready]);
 
   useEffect(() => {
     if (ready) return;

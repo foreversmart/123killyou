@@ -193,6 +193,10 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
         }
       });
       sources.current = [];
+      // The Web Audio sources cannot be rewound after an early stop. Allow
+      // the same cue signature to be scheduled again when the player resumes
+      // so pausing never loses the current scene's sound cue.
+      if (signature) played.current.delete(signature);
       setBusy(false);
       return;
     }

@@ -20,7 +20,7 @@ export function shadowMatrix(lighting: Lighting, target: V3) {
 }
 
 export function frameData(camera: CameraShot, lighting: Lighting, aspect: number, offset: V3) {
-  const data = new Float32Array(132);
+  const data = new Float32Array(196);
   const vp = cameraMatrix(camera, aspect, offset);
   data.set(vp);
   data.set(shadowMatrix(lighting, camera.target), 16);
@@ -29,13 +29,13 @@ export function frameData(camera: CameraShot, lighting: Lighting, aspect: number
   data.set([...lighting.ground, lighting.exposure], 40);
   data.set([...lighting.sun, 0], 44);
   data.set([...lighting.direction, 0], 48);
-  lighting.lamps.slice(0, 4).forEach((lamp, i) => {
+  lighting.lamps.slice(0, 12).forEach((lamp, i) => {
     data.set([...lamp.position, lamp.power], 52 + i * 8);
     data.set([...lamp.color, 0], 56 + i * 8);
   });
-  data.set(mat4.inverse(vp), 84);
+  data.set(mat4.inverse(vp), 148);
   lighting.contacts?.slice(0, 8).forEach((contact, i) => {
-    data.set([...contact.position, contact.radius], 100 + i * 4);
+    data.set([...contact.position, contact.radius], 164 + i * 4);
   });
   return { data, vp };
 }

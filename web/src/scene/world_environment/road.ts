@@ -1,6 +1,6 @@
 import { Builder } from '@/scene/geometry/builder';
 import { landscape } from '@/scene/world_environment/terrain';
-import { addVegetation } from '@/scene/world_environment/vegetation';
+import { addVegetation, addForecourtGarden } from '@/scene/world_environment/vegetation';
 import { templeEntrance } from '@/scene/world_environment/exterior';
 import { templeCompound } from '@/scene/world_environment/temple_compound';
 import { roadSurface } from '@/scene/world_environment/road_surface';
@@ -16,9 +16,10 @@ export function road(departing: boolean, camera: CameraShot) {
     b.mesh('mountain_landscape'),
     roadSurface(),
     templeEntrance(true),
-    templeCompound(),
+    templeCompound(true),
   );
   addVegetation(root, true);
+  addForecourtGarden(root, true);
   const vehicle = coach();
   vehicle.root.animate = (t) => {
     const frame = journeyFrame(t, departing);

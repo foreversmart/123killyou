@@ -3,20 +3,31 @@ import type { GameState } from '@/shared/types/game';
 
 export type RoomPhase = 'idle' | 'leaving' | 'black' | 'entering';
 
+type TransitionTimer = {
+  callback: () => void;
+  dueAt: number;
+  remaining?: number;
+  handle?: ReturnType<typeof setTimeout>;
+  run?: () => void;
+};
+
 export function useRoomTransition(incoming: GameState | null) {
   const [state, setState] = useState(incoming);
   const [phase, setPhase] = useState<RoomPhase>('idle');
   const displayed = useRef(incoming);
   const latest = useRef(incoming);
   const currentPhase = useRef<RoomPhase>('idle');
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const timers = useRef<TransitionTimer[]>([]);
+  const paused = useRef(Boolean(incoming?.paused));
   const reducedMotion = useRef(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   latest.current = incoming;
 
   useEffect(() => {
     if (!incoming) return;
     const clearTimers = () => {
-      timers.current.forEach(clearTimeout);
+      timers.current.forEach((timer) => {
+        if (timer.handle) clearTimeout(timer.handle);
+      });
       timers.current = [];
     };
     const changePhase = (next: RoomPhase) => {
@@ -28,7 +39,14 @@ export function useRoomTransition(incoming: GameState | null) {
       setState(next);
     };
     const schedule = (callback: () => void, delay: number) => {
-      timers.current.push(setTimeout(callback, delay));
+      const timer: TransitionTimer = { callback, dueAt: Date.now() + delay };
+      timer.run = () => {
+        timers.current = timers.current.filter((active) => active !== timer);
+        timer.handle = undefined;
+        callback();
+      };
+      if (!incoming.paused) timer.handle = setTimeout(timer.run, delay);
+      timers.current.push(timer);
     };
     const reveal = () => {
       schedule(
@@ -39,6 +57,31 @@ export function useRoomTransition(incoming: GameState | null) {
         reducedMotion.current ? 80 : 140,
       );
     };
+
+    if (incoming.paused !== paused.current) {
+      if (incoming.paused) {
+        timers.current.forEach((timer) => {
+          timer.remaining = Math.max(0, timer.dueAt - Date.now());
+          if (timer.handle) clearTimeout(timer.handle);
+          timer.handle = undefined;
+        });
+      } else {
+        timers.current.forEach((timer) => {
+          const delay = timer.remaining ?? Math.max(0, timer.dueAt - Date.now());
+          timer.dueAt = Date.now() + delay;
+          timer.handle = setTimeout(timer.run || timer.callback, delay);
+          timer.remaining = undefined;
+        });
+      }
+      paused.current = incoming.paused;
+    }
+
+    if (incoming.paused) {
+      // A paused snapshot can still update dialogue and overlays, but must not
+      // start or advance a room fade until the player resumes.
+      if (displayed.current && incoming.room === displayed.current.room) commit(incoming);
+      return;
+    }
 
     if (!displayed.current) {
       commit(incoming);
@@ -81,7 +124,9 @@ export function useRoomTransition(incoming: GameState | null) {
 
   useEffect(
     () => () => {
-      timers.current.forEach(clearTimeout);
+      timers.current.forEach((timer) => {
+        if (timer.handle) clearTimeout(timer.handle);
+      });
     },
     [],
   );

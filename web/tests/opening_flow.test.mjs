@@ -13,15 +13,15 @@ async function fixture() {
   );
   return {
     runtime,
-    render: () => {
-      const flow = runtime.render(hook);
+    render: (paused = false) => {
+      const flow = runtime.render(hook, paused);
       flow.setJourneyReady(true);
-      return runtime.render(hook);
+      return runtime.render(hook, paused);
     },
   };
 }
 
-test('片头结束停在标题等待开始，随后山路24秒、门口停留6秒，最后交给正片', async () => {
+test('片头结束停在标题等待开始，随后山路36秒、门口停留6秒，最后交给正片', async () => {
   const f = await fixture();
   let flow = f.render();
   assert.equal(flow.openingPhase, 'reel');
@@ -37,7 +37,7 @@ test('片头结束停在标题等待开始，随后山路24秒、门口停留6�
   flow.startOpening();
   flow = f.render();
   assert.equal(flow.openingPhase, 'road');
-  assert.deepEqual(f.runtime.pendingDelays, [24000]);
+  assert.deepEqual(f.runtime.pendingDelays, [36000]);
   f.runtime.flushTimers();
   flow = f.render();
   assert.equal(flow.openingPhase, 'alighting');
@@ -45,6 +45,28 @@ test('片头结束停在标题等待开始，随后山路24秒、门口停留6�
   f.runtime.flushTimers();
   assert.equal(f.render().openingPhase, 'done');
   assert.equal(f.runtime.pendingTimers, 0);
+  f.runtime.dispose();
+});
+
+test('片头山路暂停时冻结计时，恢复后沿剩余时间继续', async () => {
+  const f = await fixture();
+  let flow = f.render();
+  flow.finishOpeningVideo();
+  flow = f.render();
+  flow.startOpening();
+  flow = f.render();
+  assert.equal(flow.openingPhase, 'road');
+  assert.deepEqual(f.runtime.pendingDelays, [36000]);
+
+  flow = f.render(true);
+  assert.equal(flow.openingPhase, 'road');
+  assert.equal(f.runtime.pendingTimers, 0);
+
+  flow = f.render(false);
+  assert.equal(flow.openingPhase, 'road');
+  assert.deepEqual(f.runtime.pendingDelays, [36000]);
+  f.runtime.flushTimers();
+  assert.equal(f.render(false).openingPhase, 'alighting');
   f.runtime.dispose();
 });
 
@@ -57,7 +79,7 @@ test('点击和语音重复开始、延迟到达的片尾事件均不重启或�
   flow.startOpening();
   flow.finishOpeningVideo();
   assert.equal(f.render().openingPhase, 'road');
-  assert.deepEqual(f.runtime.pendingDelays, [24000]);
+  assert.deepEqual(f.runtime.pendingDelays, [36000]);
   f.runtime.flushTimers();
   flow.startOpening();
   flow.finishOpeningVideo();

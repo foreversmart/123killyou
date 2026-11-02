@@ -1,6 +1,6 @@
 struct Frame {
   view: mat4x4f, shadow: mat4x4f, eye: vec4f, sky: vec4f,
-  ground: vec4f, sun: vec4f, direction: vec4f, lamps: array<vec4f, 8>, inverseView: mat4x4f,
+  ground: vec4f, sun: vec4f, direction: vec4f, lamps: array<vec4f, 24>, inverseView: mat4x4f,
 };
 @group(0) @binding(0) var<uniform> frame: Frame;
 @group(0) @binding(8) var skySampler: sampler;

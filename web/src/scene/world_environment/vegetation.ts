@@ -5,6 +5,7 @@ import { forestCanopy } from '@/scene/world_environment/forest_canopy';
 import { noise, rockExposure } from '@/scene/world_environment/terrain_noise';
 import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
 import { wildflowers } from '@/scene/world_environment/wildflowers';
+import { Builder, materials as M } from '@/scene/geometry/builder';
 
 export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0) {
   const result = node(asset);
@@ -96,5 +97,47 @@ export function addCourtyardGarden(root: WorldNode) {
         angle,
       ),
     );
+  }
+}
+
+/** Low planting beds soften the paved forecourt's outer edge where it meets
+ * the mountain shoulder.  They sit outside the coach turning surface and the
+ * compound slab, leaving a clear walking line through the gate. */
+export function addForecourtGarden(root: WorldNode, road = false) {
+  const beds = new Builder();
+  for (const side of [-1, 1] as const) {
+    for (const z of [-4.6, 8.8]) {
+      const x = side * 21.8;
+      beds.box([3.8, 0.08, 1.45], [x, -0.1, z], { ...M.stone, color: 0x66685c });
+      beds.box([3.15, 0.055, 0.95], [x, -0.055, z], { ...M.stone, color: 0x4f4d3e });
+    }
+  }
+  root.children.push(beds.mesh('forecourt_planting_beds'));
+
+  const plants: Array<[number, number, string, number]> = [
+    [-22.4, -4.6, 'fern', 0.75],
+    [-21.5, -4.45, 'grass2', 0.7],
+    [22.2, -4.55, 'grass', 0.72],
+    [21.3, -4.4, 'fern', 0.7],
+    [-22.5, 8.8, 'grass1', 0.78],
+    [-21.4, 8.85, 'fern', 0.72],
+    [22.4, 8.8, 'fern', 0.76],
+    [21.3, 8.85, 'grass2', 0.75],
+  ];
+  for (const [x, z, asset, scale] of plants)
+    root.children.push(
+      modelAsset(asset, [x, terrainHeight(x, z, road) - 0.035, z], scale, x * 0.17),
+    );
+
+  // A pair of small trees frame the approach and visually continue the forest
+  // line without narrowing the road or hiding the gate plaque.
+  for (const [x, z, scale] of [
+    [-25.5, 11.5, 1.05],
+    [25.5, 11.5, 1.12],
+  ] as const) {
+    const y = terrainHeight(x, z, road);
+    const tree = modelAsset('tree', [x, y - 0.12, z], scale, x < 0 ? 0.35 : -0.35);
+    tree.shadow = true;
+    root.children.push(tree);
   }
 }

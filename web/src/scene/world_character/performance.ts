@@ -69,8 +69,8 @@ export function performanceFor(
       if (actor.id === 'zhouyan') return 'admire';
       return 'luggage';
     }
-    if (actor.id === 'zhouyan' && ['register_drag_mark', 'dawn_axis'].includes(shot))
-      return 'inspect';
+    if (actor.id === 'zhouyan' && shot === 'register_drag_mark') return 'point_floor';
+    if (actor.id === 'zhouyan' && shot === 'dawn_axis') return 'inspect';
     if (actor.id === 'zhouyan' && shot === 'arrival_zhouyan') return 'look_up';
     if (actor.id === 'xuzhi' && shot === 'arrival_gate_beauty') return 'admire';
     if (actor.id === 'linlan') {
@@ -94,7 +94,12 @@ export function performanceFor(
   // and registration montage so the tableau feels continuous.
   const ambient: Record<string, Record<string, string>> = {
     register_key_tags: { linlan: 'camera', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'offer' },
-    register_drag_mark: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'glance' },
+    register_drag_mark: {
+      linlan: 'glance',
+      zhouyan: 'point_floor',
+      xuzhi: 'glance',
+      luchen: 'glance',
+    },
     register_camera_bell: { linlan: 'camera', zhouyan: 'glance', xuzhi: 'glance' },
     register_ribbon: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'ribbon' },
     register_rooms: { linlan: 'camera', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'offer' },

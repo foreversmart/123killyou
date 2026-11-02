@@ -23,7 +23,13 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
     ],
   });
   const objectLayout = device.createBindGroupLayout({
-    entries: [{ binding: 0, visibility: GPUShaderStage.VERTEX, buffer: { type: 'uniform' } }],
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT,
+        buffer: { type: 'uniform' },
+      },
+    ],
   });
   const shadowLayout = device.createBindGroupLayout({
     entries: [

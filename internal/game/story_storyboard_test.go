@@ -72,6 +72,34 @@ func TestStoryboardConversationsKeepTheirActorsAndStopAtChoices(t *testing.T) {
 	}
 }
 
+func TestRegistrationDragMarkKeepsGroupFacingKeeperAndPointsToFloor(t *testing.T) {
+	e := newStoryTestEngine(t)
+	s := e.Initial("registration-drag-staging")
+	e.Apply(&s, "登记入住")
+	if s.ShotKey != "register_desk" {
+		t.Fatalf("登记入住没有进入登记桌镜头: %q", s.ShotKey)
+	}
+	e.Apply(&s, "听入住对白")
+	if s.ShotKey != "register_drag_mark" {
+		t.Fatalf("拖痕质疑没有进入对应镜头: %q", s.ShotKey)
+	}
+	byID := make(map[string]SceneActor, len(s.Actors))
+	for _, actor := range s.Actors {
+		byID[actor.ID] = actor
+	}
+	for _, id := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
+		if !strings.Contains(byID[id].Position, "面向陆沉") {
+			t.Fatalf("%s 未保持面向和尚的登记姿态: %+v", id, byID[id])
+		}
+	}
+	if !strings.Contains(byID["zhouyan"].Status, "指着地板") {
+		t.Fatalf("周砚没有指向地板拖痕: %+v", byID["zhouyan"])
+	}
+	if !strings.Contains(byID["luchen"].Status, "登记桌旁") {
+		t.Fatalf("陆沉没有保持登记状态: %+v", byID["luchen"])
+	}
+}
+
 func TestCorridorScriptUsesTheUpdatedRedCandleAndTimeWarnings(t *testing.T) {
 	e := newStoryTestEngine(t)
 	s := e.Initial("corridor-script")

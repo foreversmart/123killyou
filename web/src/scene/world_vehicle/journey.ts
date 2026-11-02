@@ -7,15 +7,62 @@ const smooth = (t: number) => t * t * (3 - 2 * t);
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 const mixVector = (a: V3, b: V3, t: number): V3 => a.map((v, i) => mix(v, b[i], t)) as V3;
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+// Keep the coach's timing in route metres rather than normalized spline
+// progress. A normalized lerp gives the same speed through a straight and a
+// hairpin, which makes a large coach look as if it is ignoring the bend. The
+// surveyed curvature is converted to a conservative speed limit and
+// integrated once for each journey direction so frame updates only need to
+// look up the distance reached at the current clock time.
+const JOURNEY_TIMING_SAMPLES = 512;
+const MIN_CURVE_SPEED = 0.42;
+const CURVE_SPEED_SENSITIVITY = 5;
+type JourneyTiming = { distances: number[]; elapsed: number[]; total: number };
+
+function curveSpeed(distance: number) {
+  return clamp(
+    1 - Math.abs(roadSample(distance).curvature) * CURVE_SPEED_SENSITIVITY,
+    MIN_CURVE_SPEED,
+    1,
+  );
+}
+
+function createJourneyTiming(start: number, end: number): JourneyTiming {
+  const distances = Array.from({ length: JOURNEY_TIMING_SAMPLES + 1 }, (_, index) =>
+    mix(start, end, index / JOURNEY_TIMING_SAMPLES),
+  );
+  const elapsed = [0];
+  for (let index = 1; index < distances.length; index++) {
+    const segment = Math.abs(distances[index] - distances[index - 1]);
+    const midpoint = (distances[index] + distances[index - 1]) / 2;
+    elapsed.push(elapsed[index - 1] + segment / curveSpeed(midpoint));
+  }
+  return { distances, elapsed, total: elapsed.at(-1)! };
+}
+
+function timedDistance(timing: JourneyTiming, progress: number) {
+  const target = clamp(progress, 0, 1) * timing.total;
+  let low = 0,
+    high = timing.elapsed.length - 1;
+  while (low + 1 < high) {
+    const middle = (low + high) >> 1;
+    if (timing.elapsed[middle] < target) low = middle;
+    else high = middle;
+  }
+  const segment = timing.elapsed[high] - timing.elapsed[low];
+  const local = segment > 0 ? (target - timing.elapsed[low]) / segment : 0;
+  return mix(timing.distances[low], timing.distances[high], local);
+}
 // Distance is measured from the lower road controls toward the temple. Start
 // at the first surveyed point so the arrival shot visibly climbs from the
 // mountain foot instead of appearing halfway up the final bend.
 export const JOURNEY_START = ROAD_LENGTH - 66;
-// Leave a short surveyed lead-in so the coach's rear axle is already on the
-// pavement at the first frame while still starting at the lower mountain
-// approach, well before the final temple bends.
-export const ARRIVAL_START = 10;
+// Begin around the middle of the surveyed climb so the opening starts from
+// the half-mountain approach instead of replaying the lower foothill section.
+export const ARRIVAL_START = 180;
 export const JOURNEY_END = ROAD_LENGTH - 7;
+const arrivalTiming = createJourneyTiming(ARRIVAL_START, JOURNEY_END);
+const departureTiming = createJourneyTiming(JOURNEY_END, JOURNEY_START);
 
 function routePosition(distance: number, lane: number): V3 {
   const surveyed = roadSample(clamp(distance, 0, ROAD_LENGTH), lane);
@@ -29,10 +76,6 @@ function routePosition(distance: number, lane: number): V3 {
 
 function routeCamera(distance: number, lane: number, direction: number, scale = 1): CameraShot {
   const position = routePosition(distance, lane);
-  // A distant opening camera looks back along the mountain road so the coach
-  // starts beyond the frame. Once it has entered, the regular forward target
-  // resumes; this prevents the establishing shot from exposing the bus on its
-  // very first frame.
   const target = scale > 1 ? ([0, 45, -55] as V3) : routePosition(distance + direction * 14, lane);
   return {
     eye: [position[0] + 17 * scale, position[1] + 9 * scale, position[2] + 23 * scale],
@@ -60,7 +103,9 @@ export function journeyFrame(time: number, departing: boolean) {
     lane = direction * 1.5;
   const start = departing ? JOURNEY_END : ARRIVAL_START,
     end = departing ? JOURNEY_START : JOURNEY_END,
-    along = mix(start, end, progress);
+    // Ease the shot in/out, then apply the curvature timing map. The latter
+    // spends more clock time in bends while preserving the authored endpoints.
+    along = timedDistance(departing ? departureTiming : arrivalTiming, progress);
   const frame = roadSample(along, lane),
     before = roadSample(along - direction * 0.2, lane).position,
     after = roadSample(along + direction * 0.2, lane).position;
@@ -79,64 +124,42 @@ export function journeyFrame(time: number, departing: boolean) {
     previous = next;
   }
   const [x, y, z] = contact.position;
-  // The arrival establishing shot starts high and far, then eases toward the
-  // coach as it reaches the temple. The departure reverses that pull so the
-  // monastery recedes into the mountain. Keeping this choice explicit avoids
-  // the opening accidentally inheriting the old pull-away move.
-  const cameraProgress = departing ? progress : 1 - progress;
-  const eye = [
-    x + mix(17, 73, cameraProgress),
-    y + mix(9, 53, cameraProgress),
-    z + mix(23, 94, cameraProgress),
+  // Keep one continuous arrival move above the coach. The first frame starts
+  // over the half-mountain road, then the eye and look-at point move steadily
+  // toward the gate without a distant pull-out or a second push-in.
+  const arrivalCamera = (() => {
+    const t = smooth(Math.pow(progress, 1.05));
+    return {
+      eye: mixVector([x + 12, y + 46, z + 38], [25, 30, 43], t),
+      target: mixVector([x, y + 1.5, z + 28], [0, 2, -2], t),
+      // Keep a wide enough lens for the coach to remain readable while the
+      // camera advances over the road, including portrait framing.
+      fov: 72,
+    };
+  })();
+  // Departure keeps the established vehicle-relative pull-away. Arrival uses
+  // the independent pan above so the coach crosses the frame at its own speed.
+  const departureCameraProgress = progress;
+  const nearOffset: V3 = [17, 9, 23];
+  const farOffset: V3 = [73, 53, 94];
+  const departureEye = [
+    x + mix(nearOffset[0], farOffset[0], departureCameraProgress),
+    y + mix(nearOffset[1], farOffset[1], departureCameraProgress),
+    z + mix(nearOffset[2], farOffset[2], departureCameraProgress),
   ] as V3;
-  const baseTarget = mixVector(
-    [x, y + 1.5, z],
-    [0, 45, -55],
-    // Keep the arrival lens locked to the coach while it pulls in from the
-    // distant establishing frame. The old fixed mountain target let the bus
-    // drift out of portrait view once the camera moved closer.
-    departing ? progress * 0.6 : 0,
-  );
-  const followCamera: CameraShot = {
-    eye,
-    target: baseTarget,
-    // A slightly wider opening lens keeps the coach readable while it enters
-    // from the edge on narrow portrait screens as well as landscape screens.
+  const departureTarget = mixVector([x, y + 1.5, z], [0, 45, -55], progress * 0.6);
+  const departureFollowCamera: CameraShot = {
+    eye: departureEye,
+    target: departureTarget,
     fov: mix(56, 60, progress),
   };
-  // Keep the first and last beats on an empty stretch of road. The coach is
-  // already travelling on the surveyed lane, but the camera is staged 24m
-  // ahead, so it enters from beyond the frame and leaves it before the shot
-  // hands off to the gate or the next scene. The follow camera takes over
-  // during the middle 68% of the journey.
   const intro = 1 - smooth(clamp(progress / 0.16, 0, 1));
-  // Keep the coach readable through almost the entire 14-second shot. A
-  // shorter handoff window leaves room for the last road bend while avoiding
-  // a premature lens turn that crops the bus on portrait screens.
   const outro = smooth(clamp((progress - 0.94) / 0.06, 0, 1));
-  const entryCamera = routeCamera(
-    start + direction * (departing ? 24 : 60),
-    lane,
-    direction,
-    // Keep the initial opening frame genuinely empty while the coach eases
-    // in from beyond the road bend. The distant establishing lens takes over
-    // immediately after this short empty lead-in.
-    1,
-  );
-  // On arrival the gate handoff happens while the coach is already beside the
-  // forecourt. The old exit camera sampled another point on the bend, which
-  // moved the eye sideways in the last 16% of the shot and read as a sudden
-  // pull to the right. Keep the eye at the same vehicle-relative offset and
-  // let the long target carry the coach out of frame instead. Departure keeps
-  // the route camera so the monastery can recede naturally down the slope.
-  const exitCamera = departing
-    ? routeCamera(end + direction * 24, lane, direction, 1)
-    : {
-        eye: [x + 17, y + 9, z + 23] as V3,
-        target: [0, 45, -55] as V3,
-        fov: 60,
-      };
-  const camera = mixCamera(mixCamera(followCamera, entryCamera, intro), exitCamera, outro);
+  const entryCamera = routeCamera(start + direction * 24, lane, direction);
+  const exitCamera = routeCamera(end + direction * 24, lane, direction);
+  const camera = departing
+    ? mixCamera(mixCamera(departureFollowCamera, entryCamera, intro), exitCamera, outro)
+    : arrivalCamera;
   return {
     ...contact,
     yaw,

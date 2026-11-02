@@ -1,12 +1,14 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import { cylinder, torus } from '@/scene/geometry/primitives';
 import { node, type V3 } from '@/scene/world/types';
+import { cloudScroll, lotusBoss, paintedBeam } from '@/scene/world_environment/temple_ornament';
+import { templeGold, templeJade, templeRed } from '@/scene/world_environment/temple_palette';
 
 export type DoorState = 'closed' | 'ajar' | 'opening' | 'open';
 
 export function doorLeaf(width: number, height: number, direction: number) {
   const b = new Builder();
-  const wood = { ...M.wood, color: 0x77604a };
+  const wood = templeRed;
   for (let i = 0; i < 5; i++) {
     const x = (direction * (i + 0.5) * width) / 5;
     b.box([width / 5 - 0.004, height, 0.08], [x, height / 2, 0], wood);
@@ -21,9 +23,23 @@ export function doorLeaf(width: number, height: number, direction: number) {
     }
   }
   for (const y of [0.13, height * 0.49, height - 0.14])
-    b.box([width, 0.09, 0.055], [(direction * width) / 2, y, 0.055], M.darkWood);
+    b.box([width, 0.09, 0.055], [(direction * width) / 2, y, 0.055], templeJade);
   for (const x of [0.04, width - 0.04])
-    b.box([0.07, height, 0.035], [direction * x, height / 2, 0.06], M.darkWood);
+    b.box([0.07, height, 0.035], [direction * x, height / 2, 0.06], templeJade);
+  for (const y of [height * 0.25, height * 0.74]) {
+    b.box([width * 0.68, height * 0.29, 0.025], [(direction * width) / 2, y, 0.06], {
+      ...templeRed,
+      color: 0x5c2d27,
+    });
+    for (const edge of [-1, 1])
+      b.box(
+        [width * 0.69, 0.019, 0.036],
+        [(direction * width) / 2, y + edge * height * 0.145, 0.083],
+        templeGold,
+      );
+    lotusBoss(b, [(direction * width) / 2, y, 0.105], Math.min(width * 0.15, 0.13));
+    if (width > 1) cloudScroll(b, [(direction * width) / 2, y + height * 0.1, 0.105], width * 0.22);
+  }
   const hx = direction * (width - 0.12),
     hy = height * 0.48;
   b.add(
@@ -42,9 +58,12 @@ export function doorLeaf(width: number, height: number, direction: number) {
 }
 
 export function doorFrame(b: Builder, p: V3) {
-  for (const side of [-1, 1])
-    b.box([0.16, 2.55, 0.2], [p[0] + side * 0.7, p[1] + 1.27, p[2]], M.darkWood);
-  b.box([1.56, 0.18, 0.22], [p[0], p[1] + 2.5, p[2]], M.darkWood);
+  for (const side of [-1, 1]) {
+    b.box([0.16, 2.55, 0.2], [p[0] + side * 0.7, p[1] + 1.27, p[2]], templeRed);
+    b.box([0.025, 2.4, 0.025], [p[0] + side * 0.7, p[1] + 1.27, p[2] + 0.112], templeGold);
+    lotusBoss(b, [p[0] + side * 0.7, p[1] + 2.22, p[2] + 0.12], 0.07);
+  }
+  paintedBeam(b, [p[0], p[1] + 2.5, p[2]], 1.56, 0.18);
   b.box([1.5, 0.11, 0.28], [p[0], p[1] + 0.03, p[2]], M.stone);
 }
 

@@ -66,7 +66,7 @@ export class TempleRenderer {
     this.pipelines = await createPipelines(d, this.format);
     this.context.configure({ device: d, format: this.format, alphaMode: 'opaque' });
     this.frame = d.createBuffer({
-      size: 528,
+      size: 784,
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
     this.shadow = d.createTexture({
@@ -165,6 +165,7 @@ export class TempleRenderer {
         transforms.set(m);
         transforms.set(mat4.transpose(mat4.inverse(m)), 16);
         transforms[32] = n.wind ?? 0;
+        transforms[33] = n.receiveShadow === false ? 0 : 1;
         if (n.bend) transforms.set([...n.bend.pivot, n.bend.angle], 36);
         d.queue.writeBuffer(draw.uniform, 0, transforms);
       }
@@ -219,6 +220,7 @@ export class TempleRenderer {
 
   private draw(pass: GPURenderPassEncoder, shadows: boolean) {
     for (const draw of this.draws.values()) {
+      if (draw.node.shadowOnly && !shadows) continue;
       if (shadows && draw.node.shadow === false) continue;
       pass.setBindGroup(1, draw.group);
       pass.setVertexBuffer(0, draw.vertex);

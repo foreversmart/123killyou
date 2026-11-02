@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { RoomPhase } from '@/scene/room/useRoomTransition';
+import {
+  CORRIDOR_TRAVEL_LISTEN_SECONDS,
+  CORRIDOR_TRAVEL_REFECTORY_SECONDS,
+  CORRIDOR_TRAVEL_REGISTER_SECONDS,
+  CORRIDOR_TRAVEL_RETURN_SECONDS,
+  HALL_TRAVEL_SECONDS,
+} from '@/shared/lib/story_timing';
 import { WorldView } from '@/scene/world_view';
 import styles from './style.module.css';
 
@@ -25,7 +32,7 @@ const travelBeats: Record<string, TravelBeat> = {
     id: 'arrival_walk_register',
     title: '跟随陆沉进入东院',
     kind: 'walk',
-    durationMs: 5600,
+    durationMs: CORRIDOR_TRAVEL_REGISTER_SECONDS * 1000,
   },
   mini_refectory: {
     id: 'register_walk_refectory',
@@ -37,28 +44,33 @@ const travelBeats: Record<string, TravelBeat> = {
     // hall. Keeping the hall as its own phase gives the lateral tableau room
     // to read before the refectory scene appears.
     phases: [
-      { mode: 'travel', title: '先穿过东院回廊', durationMs: 5600 },
-      { mode: 'hall', title: '经过大殿（从右向左通行）', durationMs: 7000 },
+      {
+        mode: 'travel',
+        title: '先穿过东院回廊',
+        durationMs: CORRIDOR_TRAVEL_REFECTORY_SECONDS * 1000,
+      },
+      { mode: 'hall', title: '经过大殿（从右向左通行）', durationMs: HALL_TRAVEL_SECONDS * 1000 },
     ],
-    durationMs: 12600,
-    interludeDurationMs: 7000,
+    durationMs: (CORRIDOR_TRAVEL_REFECTORY_SECONDS + HALL_TRAVEL_SECONDS) * 1000,
+    interludeDurationMs: HALL_TRAVEL_SECONDS * 1000,
   },
   mini_corridor_candle: {
     id: 'refectory_walk_corridor',
     title: '晚膳后沿回廊返回',
     kind: 'walk',
-    durationMs: 5200,
+    durationMs: CORRIDOR_TRAVEL_RETURN_SECONDS * 1000,
   },
   mini_room: {
     id: 'corridor_return_room',
     title: '二更了，各自回房',
     kind: 'walk',
+    durationMs: CORRIDOR_TRAVEL_RETURN_SECONDS * 1000,
   },
   mini_listen: {
     id: 'companion_walk_listen',
     title: '沿回廊走向半掩的偏房',
     kind: 'walk',
-    durationMs: 5200,
+    durationMs: CORRIDOR_TRAVEL_LISTEN_SECONDS * 1000,
   },
   mini_wake_three_gongs: {
     id: 'room_sleep_blackout',

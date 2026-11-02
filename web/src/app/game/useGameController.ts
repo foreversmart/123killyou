@@ -20,6 +20,8 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     openTranscription,
   } = useGameSession();
   const { state, phase: roomPhase } = useRoomTransition(incomingState);
+  const [openingPaused, setOpeningPaused] = useState(false);
+  const pauseActive = openingPaused || Boolean(incomingState?.paused || state?.paused);
   const [notice, setNotice] = useState('');
   const [sceneReady, setSceneReady] = useState(false);
   const [travelActive, setTravelActive] = useState(false);
@@ -34,8 +36,11 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     finishOpening,
     journeyReady,
     setJourneyReady,
-  } = useOpeningFlow();
+  } = useOpeningFlow(pauseActive);
   const openingFlow = openingPhase !== 'done';
+  useEffect(() => {
+    if (!openingFlow && openingPaused) setOpeningPaused(false);
+  }, [openingFlow, openingPaused]);
   const openingAnnounced = useRef(false);
   const voicePriming = useRef(false);
   const latestAction = useRef(0);
@@ -43,14 +48,23 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     async (text: string, controls?: Partial<TurnControls>) => {
       const action = ++latestAction.current;
       const gate = openingGate.current;
-      const openingAlightingDialogue =
-        gate === 'alighting' && text.replace(/[“”"。，！？!?\s]/g, '') === '听第一话';
+      const normalizedText = text.replace(/[“”"。，！？!?\s]/g, '');
+      const pauseCommand = /^(暂停游戏|暂停一下|暂停|继续游戏|恢复游戏|继续吧|继续)$/.test(
+        normalizedText,
+      );
+      const openingAlightingDialogue = gate === 'alighting' && normalizedText === '听第一话';
+      if (pauseCommand && gate !== 'done') {
+        const resumeCommand = /^(继续游戏|恢复游戏|继续吧|继续)$/.test(normalizedText);
+        setOpeningPaused(resumeCommand ? false : true);
+        setNotice('');
+        return { text: '', streamed: false, problem: '', sceneOnly: true };
+      }
       if (gate !== 'done' && !openingAlightingDialogue) {
         if (gate !== 'ready') {
           setNotice(gate === 'reel' ? '片头播放结束后，请说“开始游戏”。' : '山门将近，请稍候。');
           return { text: '', streamed: false, problem: '', sceneOnly: true };
         }
-        if (!/(开始游戏|开始旅程|进入游戏)/.test(text.replace(/[“”"。，！？!?\s]/g, ''))) {
+        if (!/(开始游戏|开始旅程|进入游戏)/.test(normalizedText)) {
           setNotice('请说“开始游戏”开始旅程。');
           return { text: '', streamed: false, problem: '', sceneOnly: true };
         }
@@ -58,7 +72,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
         setNotice('');
         return { text: '', streamed: false, problem: '', sceneOnly: true };
       }
-      if (!sceneAvailable.current)
+      if (!sceneAvailable.current && !pauseCommand)
         return {
           text: '',
           streamed: false,
@@ -113,7 +127,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     },
     [openingGate, send, startOpening],
   );
-  const voiceSession = useVoice(act, openTranscription);
+  const voiceSession = useVoice(act, openTranscription, pauseActive);
   const connectVoice = useCallback(
     async (announce: boolean) => {
       try {
@@ -140,9 +154,10 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
       voicePriming.current = false;
     });
   }, [connectVoice, openingFlow, voiceReady, voiceSession.microphoneOn]);
-  const soundBusy = useStorySound(state, voice.status);
+  const renderedState = state ? { ...state, paused: pauseActive } : state;
+  const soundBusy = useStorySound(renderedState, voice.status);
   useStoryPlayback(
-    incomingState,
+    incomingState ? { ...incomingState, paused: pauseActive } : incomingState,
     voice,
     !openingFlow && connected && sceneReady && !travelActive && roomPhase === 'idle' && !soundBusy,
   );
@@ -174,6 +189,13 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     }
   }, [enter, finishOpening, voiceSession.enablePlayback, voiceSession.submit]);
   const voiceStarted = voice.microphoneOn;
+  const togglePause = useCallback(async () => {
+    if (openingFlow) {
+      setOpeningPaused((paused) => !paused);
+      return;
+    }
+    await voiceSession.submit(pauseActive ? '继续游戏' : '暂停游戏');
+  }, [openingFlow, pauseActive, voiceSession.submit]);
 
   useEffect(() => {
     if (!notice) return;
@@ -184,14 +206,14 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
   const { demo, demoText, tour } = useDemoTour(act, setNotice);
   const showNotice = Boolean(
     notice &&
-    state &&
-    incomingState?.room === state.room &&
+    renderedState &&
+    incomingState?.room === renderedState.room &&
     roomPhase !== 'leaving' &&
     roomPhase !== 'black' &&
-    (systemNotice || (!state.overlay && !state.paused && !state.caught)),
+    (systemNotice || (!renderedState.overlay && !renderedState.paused && !renderedState.caught)),
   );
   return {
-    state,
+    state: renderedState,
     sceneReady,
     setSceneReady,
     setTravelActive,
@@ -214,5 +236,6 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     demoText,
     tour,
     act,
+    togglePause,
   };
 }

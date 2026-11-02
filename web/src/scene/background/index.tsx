@@ -6,12 +6,14 @@ export function Scene({
   speaker,
   onAction,
   interactive,
+  motionPaused,
   onAvailability,
 }: {
   state: GameState;
   speaker?: string;
   onAction: (command: string) => Promise<void>;
   interactive?: boolean;
+  motionPaused?: boolean;
   onAvailability?: (available: boolean) => void;
 }) {
   return (
@@ -20,6 +22,7 @@ export function Scene({
       speaker={speaker}
       onAction={onAction}
       interactive={interactive}
+      motionPaused={motionPaused}
       onAvailability={onAvailability}
     />
   );

@@ -3,31 +3,33 @@ import type { GameState } from '@/shared/types/game';
 import { createWorld } from '@/scene/world/create_world';
 import { performanceKey } from '@/scene/world/performance_key';
 import { visualKey } from '@/scene/world/visual_key';
+import { scenePlace } from '@/scene/world/scene_state';
 import type { WorldMode, V3 } from '@/scene/world/types';
 import { TempleRenderer } from '@/scene/renderer/engine';
 import { project } from '@/scene/renderer/frame';
 import styles from '@/scene/world_view/style.module.css';
+import { WorldOverlay } from '@/scene/world_view/world_overlay';
 import {
   createPlayerControls,
   updateMouseLook,
   updatePlayerView,
   type PlayerControls,
 } from '@/scene/world_view/player_controls';
-
 type Props = {
   state: GameState;
   speaker?: string;
   mode?: WorldMode;
   interactive?: boolean;
+  motionPaused?: boolean;
   onAction?: (command: string) => Promise<void>;
   onAvailability?: (available: boolean) => void;
 };
-
 export function WorldView({
   state,
   speaker = '',
   mode = 'story',
   interactive = false,
+  motionPaused = false,
   onAction,
   onAvailability,
 }: Props) {
@@ -40,8 +42,24 @@ export function WorldView({
   const previousSceneKey = useRef(sceneKey);
   const [settling, setSettling] = useState(false);
   const actionKey = performanceKey(state, mode);
-  const latest = useRef({ world, actionKey, speaker, state, paused: state.paused, onAvailability });
-  latest.current = { world, actionKey, speaker, state, paused: state.paused, onAvailability };
+  const latest = useRef({
+    world,
+    actionKey,
+    speaker,
+    state,
+    paused: state.paused,
+    motionPaused,
+    onAvailability,
+  });
+  latest.current = {
+    world,
+    actionKey,
+    speaker,
+    state,
+    paused: state.paused,
+    motionPaused,
+    onAvailability,
+  };
   const aim = useRef<V3>([0, 0, 0]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState('');
@@ -51,7 +69,6 @@ export function WorldView({
   enabledRef.current = enabled;
   const modeRef = useRef(mode);
   modeRef.current = mode;
-
   useEffect(() => {
     const isEditable = (target: EventTarget | null) => {
       const element = target as HTMLElement | null;
@@ -79,11 +96,6 @@ export function WorldView({
       document.removeEventListener('visibilitychange', clear);
     };
   }, []);
-
-  // A shot change rebuilds the world graph in one frame. Give the eye a short
-  // focus settle so the new composition reads as a camera move instead of a
-  // hard cut. Travel and hall interludes already have their own movement and
-  // fade, so this is intentionally limited to story frames.
   useEffect(() => {
     if (previousSceneKey.current === sceneKey) return;
     previousSceneKey.current = sceneKey;
@@ -92,13 +104,15 @@ export function WorldView({
     const timer = window.setTimeout(() => setSettling(false), 280);
     return () => window.clearTimeout(timer);
   }, [mode, sceneKey]);
-
   useEffect(() => {
     let disposed = false,
       failed = false,
       frame = 0,
       activeWorld = world,
-      activeActionKey = actionKey;
+      activeActionKey = actionKey,
+      activeSceneKey = state.sceneKey,
+      activeMode = mode,
+      activeState = state;
     let clock = 0,
       previous = performance.now();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -128,12 +142,42 @@ export function WorldView({
             return;
           }
           if (activeWorld !== latest.current.world) {
+            const continuingGateTableau =
+              activeMode === 'story' &&
+              modeRef.current === 'story' &&
+              activeSceneKey === latest.current.state.sceneKey &&
+              scenePlace(activeState, 'story') === 'gate' &&
+              scenePlace(latest.current.state, 'story') === 'gate';
+            if (continuingGateTableau) {
+              // Consecutive arrival shots rebuild the rig so each shot can
+              // choose its own hands and gaze. Carry the last rendered root
+              // pose into the replacement rig; the renderer blends it into
+              // the next authored pose over a few frames instead of snapping
+              // every visitor back to the gate anchor.
+              const previousByName = new Map(
+                activeWorld.root.children
+                  .filter((child) => child.animate)
+                  .map((child) => [child.name, child]),
+              );
+              for (const child of latest.current.world.root.children) {
+                const previous = previousByName.get(child.name);
+                if (!previous || !child.animate) continue;
+                child.animationContinuity = {
+                  position: [...previous.position],
+                  rotationY: previous.rotation[1],
+                  time: clock,
+                };
+              }
+            }
             activeWorld = latest.current.world;
             renderer.setWorld(activeWorld);
-            if (activeActionKey !== latest.current.actionKey) clock = 0;
+            if (activeActionKey !== latest.current.actionKey && !continuingGateTableau) clock = 0;
             activeActionKey = latest.current.actionKey;
+            activeSceneKey = latest.current.state.sceneKey;
+            activeMode = modeRef.current;
+            activeState = latest.current.state;
           }
-          if (!latest.current.paused) clock += delta;
+          if (!latest.current.paused && !latest.current.motionPaused) clock += delta;
           activeWorld.speaker = latest.current.speaker;
           updatePlayerView(
             controls.current,
@@ -145,8 +189,6 @@ export function WorldView({
           try {
             const matrix = renderer.render(
               activeWorld,
-              // Essential story actions still play with reduced motion; only
-              // decorative pointer parallax is suppressed below.
               clock,
               latest.current.paused ? 0 : delta,
               reduced ? [0, 0, 0] : aim.current,
@@ -181,7 +223,6 @@ export function WorldView({
       engine.current = null;
     };
   }, []);
-
   return (
     <div
       className={settling ? `${styles.world} ${styles['world--settling']}` : styles.world}
@@ -242,42 +283,17 @@ export function WorldView({
         aria-label={(state.sceneName || state.roomName) + '，实时 3D 场景'}
         role="img"
       />
-      {mode === 'story' && (
-        <div ref={hotspots} className={styles.hotspots} aria-label="场景中的可调查道具">
-          {world.hotspots.map((prop) => (
-            <button
-              key={prop.id}
-              data-prop={prop.id}
-              className={styles.hotspot}
-              type="button"
-              disabled={!enabled}
-              aria-label={'观察' + prop.name}
-              onClick={() => {
-                if (enabled) void onAction?.(prop.command);
-              }}
-            >
-              <i aria-hidden="true" />
-              <span>{prop.name}</span>
-            </button>
-          ))}
-        </div>
-      )}
-      {status !== 'ready' && (
-        <div className={styles.feedback} role={status === 'error' ? 'alert' : 'status'}>
-          <strong>{status === 'error' ? '3D 画面暂时无法显示' : '正在走近红烛寺……'}</strong>
-          <p>{status === 'error' ? error : '正在准备场景、人物和灯光'}</p>
-          {status === 'error' && (
-            <button type="button" onClick={() => location.reload()}>
-              重新检测并载入
-            </button>
-          )}
-        </div>
-      )}
-      {mode === 'story' && interactive && status === 'ready' && (
-        <div className={styles.controlsHint} aria-hidden="true">
-          <span>WASD</span> 移动 · 按住鼠标拖动视角
-        </div>
-      )}
+      <WorldOverlay
+        mode={mode}
+        status={status}
+        error={error}
+        enabled={
+          mode === 'story' && interactive && !state.paused && !state.caught && !state.overlay
+        }
+        hotspots={world.hotspots}
+        hotspotsRef={hotspots}
+        onAction={onAction}
+      />
     </div>
   );
 }

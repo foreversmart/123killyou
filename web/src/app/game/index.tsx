@@ -35,19 +35,25 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
     selecting,
     finishOpeningVideo,
     begin,
+    togglePause,
   } = game;
   const speaker =
     voice.status === 'speaking' ? voice.caption?.speaker || state?.dialogue.speaker : '';
   if (!state) return <LoadingScreen error={error} />;
   return (
     <main className={cx(styles['app-frame'], debug && styles['app-frame--debug'])}>
-      <section className={styles['game-shell']} aria-label="红烛无声，语音密室逃脱">
+      <section
+        className={styles['game-shell']}
+        data-paused={state.paused ? 'true' : 'false'}
+        aria-label="红烛无声，语音密室逃脱"
+      >
         <PlayerStatus
           state={state}
           demo={demo}
           voiceStarted={voiceStarted}
           playbackOn={voice.playbackOn}
           connected={connected}
+          onPauseToggle={togglePause}
         />
         <Room
           state={state}
@@ -57,6 +63,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           interactive={connected && !openingFlow && game.sceneReady}
           onAvailability={game.setSceneReady}
           onTravelActive={game.setTravelActive}
+          motionPaused={openingFlow}
         >
           <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
@@ -77,6 +84,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
             ready={openingPhase === 'ready'}
             busy={selecting}
             voiceActive={voiceStarted}
+            paused={state.paused}
             onReady={finishOpeningVideo}
             onBegin={begin}
           />

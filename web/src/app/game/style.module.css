@@ -27,6 +27,9 @@
     0 0 0 4px #3b3223,
     0 25px 90px #000b;
 }
+.game-shell[data-paused='true'] * {
+  animation-play-state: paused;
+}
 .game-shell::after {
   content: '';
   position: absolute;

@@ -27,7 +27,10 @@ export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
     // person to glance toward the courtyard between lines.
     linlan: [-1.15, 0, 0.28],
     zhouyan: [1.05, 0, 0.18],
-    xuzhi: [1.55, 0, 1.05],
+    // Xu Zhi stays at the near-right corner of the desk. The small forward
+    // stagger keeps her visible beside Zhou Yan while still close enough to
+    // follow Lu Chen's writing instead of reading as a separate bystander.
+    xuzhi: [1.32, 0, 0.72],
   },
   refectory: {
     linlan: [-2.35, 0, -0.2],

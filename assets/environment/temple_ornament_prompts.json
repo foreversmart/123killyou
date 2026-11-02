@@ -1,0 +1,36 @@
+{
+  "provider": "custom",
+  "model": "gpt-image-2",
+  "use_case": "historical-scene",
+  "reference_roles": {
+    "image_1": "用户提供的古寺悬塑照片：青绿山石、朱红卷云、层叠人物和彩塑楼阁",
+    "image_2": "用户提供的古寺内檐照片：朱红青绿梁枋、鎏金木雕、层叠斗拱和莲花纹样"
+  },
+  "assets": [
+    {
+      "id": "temple_paint",
+      "output": "web/public/art/world/temple_paint_albedo.webp",
+      "size": "1536x512",
+      "quality": "high",
+      "prompt": "Use case: historical-scene. Asset type: photographic carved timber beam trim texture for a real-time 3D Chinese Buddhist temple. Input images: Image 1 is the aged mineral-pigment and red cloud-scroll reference; Image 2 is the exact architectural ornament and gilded carving reference. Create a NEW straight-on orthographic full-frame horizontal painted and carved beam fascia, not a view of a temple. Preserve the references' dense craftsmanship, aged vermilion red, malachite turquoise green, dark indigo and worn gold leaf. A dark jade recessed frieze has deeply carved gilded lotus rosettes alternating with red peonies, flowing fine gold foliage and ivory-edged red ruyi cloud scrolls. Narrow vermilion and old-gold border rails at top and bottom, repeating densely carved rectangular panels. Entire image filled edge to edge with one continuous horizontal beam; motifs can repeat horizontally. Diffuse neutral illumination, fine cracked pigment, chipped gilding exposing dark wood, readable high-frequency carving. No perspective convergence, no room, no background margins, no lettering, no text, no watermark, no modern materials, no glossy plastic. The image is the surface of a tangible historical timber beam, not a graphic pattern."
+    },
+    {
+      "id": "temple_relief",
+      "output": "web/public/art/world/temple_relief_albedo.webp",
+      "size": "1024x1536",
+      "quality": "high",
+      "prompt": "Use case: historical-scene. Asset type: a front-facing polychrome suspended sculpture relief panel texture for the wall niches of a real-time 3D ancient Chinese Buddhist temple. Input images: Image 1 is the primary reference for turquoise mineral-pigment rocks, vermilion ruyi clouds and carved human figures; Image 2 supplies the small gilded figures and dense painted architectural canopies. Create a NEW straight-on orthographic rectangular vertical panel filled edge to edge with the SAME aged historical craftsmanship and material feeling. Closely interwoven carved turquoise mountain crags, many vermilion red cloud scrolls outlined in aged cream and gold, a small red pavilion with malachite green tiled roof in the lower center, and multiple distinct finely sculpted Buddhist and traditional Chinese robed figures at several heights among the clouds, with weathered gold leaf and pale mineral-pigment faces. Deep dark recesses between projecting hand-carved forms, intricate natural folds, individually readable heads and hands. Dense composition, layered relief, subdued aged green/red/ochre/gold, accumulated soot and chipped pigment. Diffuse museum lighting from upper front with soft local relief shadows, no directional cast shadow outside the carvings. No exterior architecture frame, no modern items, no signage, no text, no watermark, no flat illustration, no cartoon, no dramatic camera tilt."
+    }
+  ],
+  "runtime_source": "reference_photograph_derivative",
+  "generation_status": "No generated output: the configured gpt-image-2 provider returned HTTP 400 / bad_response_status_code / openai_error after JSON upload adaptation. Current runtime materials are rectified supplied photographs.",
+  "source_files": [
+    "assets/environment/temple_references/suspended_sculpture.png",
+    "assets/environment/temple_references/painted_canopy.png"
+  ],
+  "processing": [
+    "uv run scripts/art_assets/extract_temple_surfaces.py",
+    "node scripts/art_assets/temple_surfaces.mjs"
+  ],
+  "maps": "Albedo from supplied photographs, approximate contrast-derived normal and AO/roughness/metalness maps, all runtime maps 512x512."
+}

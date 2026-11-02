@@ -42,26 +42,74 @@ function ribbon(
  */
 function forecourtBlend(b: Builder) {
   const g: Shape = { positions: [], normals: [], uv: [], indices: [] };
-  const startZ = roadSample(ROAD_LENGTH).position[2];
-  const endZ = -7.8;
-  const steps = 28;
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps;
-    const z = startZ + (endZ - startZ) * t;
-    const x = Math.sin(t * Math.PI) * 0.35;
-    const halfWidth = ROAD_HALF_WIDTH + 0.8 + t * 2.1;
-    const y = -0.028 + Math.sin(t * Math.PI * 2) * 0.008;
+  // Turn the road's final eastward tangent toward the south-facing gate with
+  // one broad cubic curve. The transition ends at the front edge of the gate
+  // steps; continuing it through the gate base makes the two solids intersect
+  // and causes depth-buffer shimmer while the arrival camera moves.
+  const end = roadSample(ROAD_LENGTH),
+    forward: [number, number] = [Math.sin(end.yaw), Math.cos(end.yaw)],
+    p0: [number, number] = [end.position[0], end.position[2]],
+    p1: [number, number] = [p0[0] + forward[0] * 5.4, p0[1] + forward[1] * 5.4],
+    p3: [number, number] = [0, 1.3],
+    p2: [number, number] = [0, 6.4];
+  const rows = Array.from({ length: 17 }, (_, i) => {
+    const t = i / 16,
+      u = 1 - t,
+      x = u ** 3 * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t ** 3 * p3[0],
+      z = u ** 3 * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t ** 3 * p3[1],
+      dx = 3 * u * u * (p1[0] - p0[0]) + 6 * u * t * (p2[0] - p1[0]) + 3 * t * t * (p3[0] - p2[0]),
+      dz = 3 * u * u * (p1[1] - p0[1]) + 6 * u * t * (p2[1] - p1[1]) + 3 * t * t * (p3[1] - p2[1]),
+      tangent = Math.hypot(dx, dz) || 1,
+      side = [dz / tangent, -dx / tangent] as [number, number],
+      width =
+        t < 0.55 ? ROAD_HALF_WIDTH + 0.75 + (t / 0.55) * 15.1 : 20.15 - ((t - 0.55) / 0.45) * 11.25,
+      lift = Math.min(1, t / 0.3),
+      easedLift = lift * lift * (3 - 2 * lift),
+      // Rise just above the distant compound base before the road reaches
+      // the forecourt, leaving a deliberate depth margin at the junction.
+      y = end.position[1] + easedLift * 0.12;
+    return { x, z, side, width, y };
+  });
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
     for (const side of [-1, 1]) {
-      g.positions.push(x + side * halfWidth, y, z);
+      g.positions.push(
+        row.x + side * row.side[0] * row.width,
+        row.y,
+        row.z + side * row.side[1] * row.width,
+      );
       g.normals.push(0, 1, 0);
-      g.uv.push(side * 0.5 + 0.5, t * 2.5);
+      g.uv.push(side * 0.5 + 0.5, (i / (rows.length - 1)) * 3.2);
     }
-    if (i < steps) {
+    if (i < rows.length - 1) {
       const a = i * 2;
       g.indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
     }
   }
   b.add(g, { ...M.stone, color: 0x77796e, rough: 0.98 });
+
+  // A thin gravel shoulder feathers the apron into the surrounding paving.
+  // It is deliberately below the stone surface, so the two materials overlap
+  // rather than exposing a hard side wall at each widening step.
+  const shoulder: Shape = { positions: [], normals: [], uv: [], indices: [] };
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    for (const side of [-1, 1]) {
+      const width = row.width + 1.7;
+      shoulder.positions.push(
+        row.x + side * row.side[0] * width,
+        row.y - 0.035,
+        row.z + side * row.side[1] * width,
+      );
+      shoulder.normals.push(0, 1, 0);
+      shoulder.uv.push(side * 0.5 + 0.5, i / (rows.length - 1));
+    }
+    if (i < rows.length - 1) {
+      const a = i * 2;
+      shoulder.indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+    }
+  }
+  b.add(shoulder, { ...M.stone, color: 0x62675d, rough: 1 });
 }
 
 export function roadSurface() {
@@ -86,10 +134,9 @@ export function roadSurface() {
   }
   for (let d = 0; d < ROAD_LENGTH; d += 7)
     ribbon(b, -0.07, 0.07, 0.022, d, Math.min(d + 3, ROAD_LENGTH), 0xd8c58a);
-  // A broad level turning apron joins the uphill lane to the gate forecourt.
-  // It continues all the way to the gate steps so the road does not appear to
-  // stop at a hard rectangular seam in front of the temple.
-  b.box([25, 0.12, 24], [-3.5, -0.1, 7], { ...M.stone, color: 0x666d62 });
+  // A tapered, overlapping transition now carries the road into the temple
+  // slab.  The old rectangular apron ended at a hard seam and left the plaza
+  // looking like a separate floating tile.
   forecourtBlend(b);
   return b.mesh('switchback_asphalt');
 }

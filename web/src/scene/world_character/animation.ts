@@ -16,6 +16,12 @@ import { nightAction } from '@/scene/world_character/night_actions';
 import { bend, ease } from '@/scene/world_character/joints';
 import { speechMotion } from '@/scene/world_character/speech';
 
+// Keep the gait cadence independent of the route duration. The old stride was
+// derived from eased progress, which made the feet slow down with the root and
+// read as a sliding translation on the longer gate approach. A steady cadence
+// lets the body cover a larger scene distance while the two legs alternate.
+const WALK_CYCLE_RATE = 5.8;
+
 export function animateCharacter(
   rig: CharacterRig,
   actor: SceneActor,
@@ -24,10 +30,13 @@ export function animateCharacter(
     walkDuration?: number;
     traveling?: boolean;
     alighting?: boolean;
+    /** Keep a visible alternating step while an authored tableau drifts. */
+    gaiting?: boolean;
     speaker?: () => string;
   } = {},
 ) {
   const { root, body, head, arms, legs, elbows, hands, knees } = rig;
+  const legBasePositions = legs.map((leg) => [...leg.position] as [number, number, number]);
   const action = performanceFor(actor, state, options.traveling, options.alighting);
   const duration = options.walkDuration || 0;
   const speak = speechMotion(rig, actor, options.speaker || (() => ''));
@@ -102,20 +111,44 @@ export function animateCharacter(
       arm.rotation[1] = 0;
       armPose(rig, i, -0.06, -0.09, (i ? -1 : 1) * 0.035);
     });
+    // Always settle the lower body before applying the current gait. This is
+    // important when a transition ends between frames: a final lifted foot
+    // must return to the authored standing pose before the next scene starts.
+    legs.forEach((leg, i) => {
+      leg.position = [...legBasePositions[i]];
+      leg.rotation[0] = 0;
+      bend(leg, knees[i], 0);
+    });
     if (still) return;
-    if (duration > 0) {
-      const stride = ease(t, duration) * duration * 5.2 + seed;
-      const weight = ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5));
-      body.position[1] += Math.abs(Math.sin(stride)) * 0.025 * weight;
-      body.rotation[1] = Math.sin(stride) * 0.045 * weight;
+    if (duration > 0 || (options.gaiting && root.gaitMoving)) {
+      const stride = t * WALK_CYCLE_RATE + seed;
+      const weight = duration > 0 ? ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5)) : 0.78;
+      body.position[1] += Math.abs(Math.sin(stride)) * 0.035 * weight;
+      body.rotation[1] = Math.sin(stride) * 0.055 * weight;
       legs.forEach((leg, i) => {
         const cycle = stride + i * Math.PI;
-        leg.rotation[0] = Math.sin(cycle) * 0.36 * weight;
-        bend(leg, knees[i], Math.max(0, Math.cos(cycle)) * 0.55 * weight);
+        const step = Math.sin(cycle);
+        const lift = Math.max(0, step);
+        // Opposite phase gives each foot a planted/swinging pair. Move the
+        // whole leg through a short forward arc as it leaves the ground, then
+        // bend the knee underneath it. The old pose only rotated the upper
+        // mesh by a few degrees, which was easy to miss in the wide gate shot
+        // and made the character read as a sliding root translation.
+        leg.position[1] += lift * 0.055 * weight;
+        leg.position[2] += step * 0.12 * weight;
+        leg.rotation[0] = step * 0.62 * weight;
+        bend(leg, knees[i], lift * 1.02 * weight);
         armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
       });
     }
-    dayAction(rig, currentAction, actionTime, seed);
+    dayAction(
+      rig,
+      currentAction,
+      actionTime,
+      seed,
+      state.sceneKey === 'mini_register' &&
+        ['register_desk', 'register_drag_mark'].includes(state.shotKey || ''),
+    );
     nightAction(rig, currentAction, actionTime, verse);
     speak(currentAction, delta);
     const upright = -(body.rotation[0] + arms[1].rotation[0] + elbows[1].rotation[0]);

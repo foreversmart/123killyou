@@ -18,10 +18,24 @@ export type WorldNode = {
   rotation: V3;
   scale: V3;
   children: WorldNode[];
+  /** Whether this node contributes geometry to the directional shadow pass. */
   shadow?: boolean;
+  /** Render this node only while building the directional shadow map. */
+  shadowOnly?: boolean;
+  /** Whether the visible pass applies the directional shadow to this node. */
+  receiveShadow?: boolean;
   /** Wind response in the vertex shader. Zero keeps rigid architecture stable. */
   wind?: number;
   bend?: { pivot: V3; angle: number };
+  /** Set by a root-motion wrapper before evaluating a gait animation. */
+  gaitMoving?: boolean;
+  /**
+   * A short hand-off used when a visual rebuild keeps the same physical
+   * tableau (for example, consecutive shots at the temple gate). The next
+   * animation blends from the previous frame instead of snapping to its new
+   * authored pose.
+   */
+  animationContinuity?: { position: V3; rotationY: number; time: number };
   animate?: (time: number, delta: number) => void;
 };
 export type Anchor = { node: WorldNode; offset: V3 };

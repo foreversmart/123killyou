@@ -21,12 +21,14 @@ export function PlayerStatus({
   voiceStarted,
   playbackOn,
   connected,
+  onPauseToggle,
 }: {
   state: GameState;
   demo: boolean;
   voiceStarted: boolean;
   playbackOn?: boolean;
   connected: boolean;
+  onPauseToggle: () => void | Promise<void>;
 }) {
   const devotion = Math.max(0, Math.min(100, state.devotion));
   const devotionLow = devotion <= 30;
@@ -53,6 +55,18 @@ export function PlayerStatus({
         {nightThreat && <small className={styles['devotion-warning']}>门外的东西在靠近</small>}
       </div>
       <h1>{state.sceneName || state.roomName}</h1>
+      <button
+        className={styles['pause-button']}
+        type="button"
+        onClick={() => void onPauseToggle()}
+        disabled={!connected || state.caught}
+        aria-label={state.paused ? '继续游戏' : '暂停游戏'}
+        aria-pressed={state.paused}
+        title={state.paused ? '继续游戏' : '暂停游戏'}
+      >
+        <span className={styles['pause-icon']} aria-hidden="true" data-paused={state.paused} />
+        <span>{state.paused ? '继续' : '暂停'}</span>
+      </button>
       <div className={styles['connection-status']}>
         <span>
           {demo

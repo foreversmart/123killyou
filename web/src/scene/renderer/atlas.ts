@@ -18,6 +18,8 @@ export const labels = [
   '红烛寺 · 客运',
   '只许去，不许问',
   '入住须知',
+  '大殿侧门',
+  '偏殿回廊',
 ];
 export const labelTile = (label: string) => labels.indexOf(label);
 
