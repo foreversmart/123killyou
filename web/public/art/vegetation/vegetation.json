@@ -1,0 +1,272 @@
+{
+  "binary": "vegetation.bin",
+  "encoding": {
+    "byteOrder": "little_endian",
+    "vertexType": "float32",
+    "vertexStride": 16,
+    "indexType": "uint32",
+    "offsetUnit": "byte",
+    "vertexCountUnit": "float32_element",
+    "indexCountUnit": "uint32_element",
+    "attributes": {
+      "position": [
+        0,
+        3
+      ],
+      "normal": [
+        3,
+        3
+      ],
+      "sourceMatYzw": [
+        6,
+        3
+      ],
+      "sourceVegX": [
+        9,
+        1
+      ],
+      "sourceVegY": [
+        10,
+        1
+      ],
+      "pattern": [
+        11,
+        1
+      ],
+      "sourceVegZ": [
+        12,
+        1
+      ],
+      "uv": [
+        13,
+        2
+      ],
+      "encodedPhase": [
+        15,
+        1
+      ]
+    },
+    "pattern": "canopy: 100 + aMat.x; other plants: 120 + aMat.x; grass: 140",
+    "encodedPhase": "-2 - aVeg.w",
+    "canopyVariants": "Source lobe scales and tree forms have already been applied on the CPU.",
+    "plantPositions": "Source static upright pose baked on CPU: stem y=aVeg.x*nominalHeight; crown y+=nominalHeight.",
+    "grassAttributes": "metadata=[rootX,rootZ,aBlade.z]; material=[aBlade.x,aBlade.w,140,1]; uv=[aSide.w,aBlade.x]; phase=-2-aSlot.z",
+    "grassPositions": "aSlot.xy + position.xz*1.35 + aSide.xz*1.5; position.y unchanged; one 8m source cell, kind 0 only."
+  },
+  "meshes": {
+    "tidewater_tree_0": {
+      "vertexOffset": 0,
+      "vertexCount": 28640,
+      "indexOffset": 114560,
+      "indexCount": 3822,
+      "family": "canopy",
+      "nominalHeight": 12.5,
+      "sourceGenerator": {
+        "function": "buildTreeNear",
+        "seed": 21,
+        "variant": 0
+      }
+    },
+    "tidewater_tree_1": {
+      "vertexOffset": 129848,
+      "vertexCount": 28640,
+      "indexOffset": 244408,
+      "indexCount": 3822,
+      "family": "canopy",
+      "nominalHeight": 12.5,
+      "sourceGenerator": {
+        "function": "buildTreeNear",
+        "seed": 21,
+        "variant": 1
+      }
+    },
+    "tidewater_tree_2": {
+      "vertexOffset": 259696,
+      "vertexCount": 28640,
+      "indexOffset": 374256,
+      "indexCount": 3822,
+      "family": "canopy",
+      "nominalHeight": 12.5,
+      "sourceGenerator": {
+        "function": "buildTreeNear",
+        "seed": 21,
+        "variant": 2
+      }
+    },
+    "tidewater_tree_3": {
+      "vertexOffset": 389544,
+      "vertexCount": 28640,
+      "indexOffset": 504104,
+      "indexCount": 3822,
+      "family": "canopy",
+      "nominalHeight": 12.5,
+      "sourceGenerator": {
+        "function": "buildTreeNear",
+        "seed": 21,
+        "variant": 3
+      }
+    },
+    "tidewater_shrub_0": {
+      "vertexOffset": 519392,
+      "vertexCount": 3328,
+      "indexOffset": 532704,
+      "indexCount": 330,
+      "family": "canopy",
+      "nominalHeight": 1.6,
+      "sourceGenerator": {
+        "function": "buildShrubNear",
+        "seed": 31,
+        "variant": 0
+      }
+    },
+    "tidewater_shrub_1": {
+      "vertexOffset": 534024,
+      "vertexCount": 3328,
+      "indexOffset": 547336,
+      "indexCount": 330,
+      "family": "canopy",
+      "nominalHeight": 1.6,
+      "sourceGenerator": {
+        "function": "buildShrubNear",
+        "seed": 31,
+        "variant": 1
+      }
+    },
+    "tidewater_palm": {
+      "vertexOffset": 548656,
+      "vertexCount": 19712,
+      "indexOffset": 627504,
+      "indexCount": 4806,
+      "family": "plant",
+      "nominalHeight": 10,
+      "sourceGenerator": {
+        "function": "buildPalmNear",
+        "seed": 11
+      }
+    },
+    "tidewater_young_palm": {
+      "vertexOffset": 646728,
+      "vertexCount": 3360,
+      "indexOffset": 660168,
+      "indexCount": 540,
+      "family": "plant",
+      "nominalHeight": 0.35,
+      "sourceGenerator": {
+        "function": "buildYoungPalm",
+        "seed": 5
+      }
+    },
+    "tidewater_fern": {
+      "vertexOffset": 662328,
+      "vertexCount": 2880,
+      "indexOffset": 673848,
+      "indexCount": 432,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildFern",
+        "seed": 3
+      }
+    },
+    "tidewater_banana_0": {
+      "vertexOffset": 675576,
+      "vertexCount": 9472,
+      "indexOffset": 713464,
+      "indexCount": 1560,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildBanana",
+        "seed": 9
+      }
+    },
+    "tidewater_banana_1": {
+      "vertexOffset": 719704,
+      "vertexCount": 9472,
+      "indexOffset": 757592,
+      "indexCount": 1560,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildBanana",
+        "seed": 23
+      }
+    },
+    "tidewater_monstera": {
+      "vertexOffset": 763832,
+      "vertexCount": 17152,
+      "indexOffset": 832440,
+      "indexCount": 4992,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildMonstera",
+        "seed": 41
+      }
+    },
+    "tidewater_elephant_ear": {
+      "vertexOffset": 852408,
+      "vertexCount": 14336,
+      "indexOffset": 909752,
+      "indexCount": 4032,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildElephantEar",
+        "seed": 43
+      }
+    },
+    "tidewater_heliconia": {
+      "vertexOffset": 925880,
+      "vertexCount": 19616,
+      "indexOffset": 1004344,
+      "indexCount": 4128,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildHeliconia",
+        "seed": 47
+      }
+    },
+    "tidewater_strelitzia": {
+      "vertexOffset": 1020856,
+      "vertexCount": 8704,
+      "indexOffset": 1055672,
+      "indexCount": 1812,
+      "family": "plant",
+      "nominalHeight": 0.02,
+      "sourceGenerator": {
+        "function": "buildStrelitzia",
+        "seed": 53
+      }
+    },
+    "tidewater_grass_patch": {
+      "vertexOffset": 1062920,
+      "vertexCount": 408576,
+      "indexOffset": 2697224,
+      "indexCount": 54720,
+      "family": "grass",
+      "cellSize": 8,
+      "nominalHeight": 1,
+      "sourceGenerator": {
+        "function": "buildPatch",
+        "level": 0,
+        "seed": 7,
+        "kind": 0
+      },
+      "rootPosition": "sourceMatYzw.xy contains the clump root X/Z within the 8m cell"
+    }
+  },
+  "source": {
+    "project": "Tidewater",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2026 DRG Software Solutions LLC",
+    "files": {
+      "src/world/vegetation/PlantGeometry.js": "ff36aa06205efb25b51dfb7d4efbfee4abea0d7a02252bacf80c30e2eb3e97d7",
+      "src/world/vegetation/GeoBuilder.js": "e531df08b5685b139ed15c6fdad948c3e881bc539ce49d8d117bb8388af45e76",
+      "src/world/vegetation/TreeForms.js": "33bdf6c9ba28691580cbea6d7230cce4813591695ece3f3c8ddb1c0136bdddba",
+      "src/world/vegetation/GrassField.js": "4b77ee9c1f4e294b1ab38460b0fcee198330b4bd4bc026bd688e5e4df5824444",
+      "src/util/Noise.js": "3f12e6968b085bdb4674481480b279b5110848c70999141d6116a3f22626b0b0"
+    }
+  }
+}

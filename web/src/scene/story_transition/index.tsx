@@ -164,6 +164,7 @@ export function StoryTransition({
   )
     return null;
   const currentPhase = beat.phases?.[renderPhaseIndex];
+  const finalPhase = !beat.phases || renderPhaseIndex === beat.phases.length - 1;
   const mode =
     currentPhase?.mode ?? (beat.kind === 'sleep' ? 'story' : beat.interlude ? 'hall' : 'travel');
   const title = currentPhase?.title ?? beat.title;
@@ -174,6 +175,7 @@ export function StoryTransition({
       data-transition={beat.id}
       data-kind={beat.kind}
       data-ready={renderReady}
+      data-final-phase={finalPhase}
       data-paused={state.paused}
       data-interlude-pan={beat.interlude ? 'horizontal' : undefined}
       style={

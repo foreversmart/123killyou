@@ -129,19 +129,35 @@ test('arrival story shots keep their activities while visitors continue to drift
       ),
       `${id} stands normally when the gate task has not moved yet`,
     );
-    root.animate(0.7, 0);
-    const moved = Math.hypot(...root.position.map((p, i) => p - start[i]));
+    let firstBeat;
+    let end;
+    let movingLifts = 0;
+    let laterLifts = 0;
+    for (let frame = 1; frame <= 540; frame++) {
+      const previous = [...root.position];
+      root.animate(frame / 60, 1 / 60);
+      const displacement = Math.hypot(
+        root.position[0] - previous[0],
+        root.position[2] - previous[2],
+      );
+      if (displacement > 0 && standingLegs.some((leg) => leg.bend.angle > 0)) {
+        movingLifts++;
+        if (frame > 180) laterLifts++;
+      }
+      if (frame === 42) firstBeat = [...root.position];
+      if (frame === 180) end = [...root.position];
+      assert.ok(
+        Math.hypot(...root.position.map((p, i) => p - start[i])) < 3.2,
+        `${id} stays within the gate tableau`,
+      );
+    }
+    const moved = Math.hypot(...firstBeat.map((p, i) => p - start[i]));
     assert.ok(moved > 0.01, `${id} keeps moving around the gate while performing`);
-    assert.ok(moved < 3.2, `${id} stays within the gate tableau`);
-    root.animate(3, 0);
-    const end = [...root.position];
-    root.animate(9, 0);
     const afterBeat = Math.hypot(...root.position.map((p, i) => p - end[i]));
     assert.ok(afterBeat > 0.01, `${id} continues its activity after the first beat`);
-    const legs = root.children.filter((node) => node.name === 'leg');
     assert.ok(
-      legs.some((leg) => Math.abs(leg.rotation[0]) > 0.02 || Math.abs(leg.bend.angle) > 0.02),
-      `${id} keeps an alternating footstep while drifting around the gate`,
+      movingLifts > 0 && laterLifts > 0,
+      `${id} keeps lifting a foot during actual movement, including small later adjustments`,
     );
     if (id === 'zhouyan') {
       const head = root.children

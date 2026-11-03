@@ -2,11 +2,10 @@ import type { CharacterRig } from '@/scene/world_character/model';
 import type { Performance } from '@/scene/world_character/performance';
 import { armPose, reachHand } from '@/scene/world_character/day_actions';
 import { bend, ease } from '@/scene/world_character/joints';
-import { HEAD_MOTION_RATE, LUCHEN_HAND_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 export function nightAction(rig: CharacterRig, action: Performance, t: number, verse: number) {
   const { head, body } = rig;
-  const handTime = rig.root.name === 'luchen' ? t * LUCHEN_HAND_MOTION_RATE : t;
   if (action === 'lean' || action === 'startled') {
     armPose(rig, 0, -0.65, -0.32, 0.12);
     armPose(rig, 1, -0.65, -0.32, -0.12);
@@ -23,7 +22,7 @@ export function nightAction(rig: CharacterRig, action: Performance, t: number, v
   }
   if (action === 'scratch' || action === 'frenzy') {
     const intensity = action === 'frenzy' ? 1 : Math.max(0.08, 0.8 - verse * 0.23);
-    const pulse = Math.sin(handTime * 13) * 0.065 * intensity;
+    const pulse = Math.sin(t * 13) * 0.065 * intensity;
     // Both supplied characters and the fallback rig use a two-stage rigid
     // forearm bend. Deep folds made the sleeve cross the torso and revealed
     // the shoulder/elbow seam, so keep the frantic motion within a readable

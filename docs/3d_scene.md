@@ -4,16 +4,17 @@
 
 ## 与参考项目的对应
 
-| Tidewater                      | 当前实现                                                                          | 用途                                                                        |
-| ------------------------------ | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Engine / GPU                   | scene/renderer/engine.ts                                                          | 显卡、画布、帧提交、尺寸变化与资源销毁                                      |
-| GeoKit prepare / mergePrepared | scene/geometry                                                                    | Y 轴朝上、米制几何、法线变换、统一顶点格式与合并网格                        |
-| GameMaterials / scene lighting | scene/renderer/scene.wgsl                                                         | 线性颜色、GGX / Lambert、粗糙度、金属度、木纹、布纹、石材与铜锈             |
-| SceneRenderer / Shadows        | scene/renderer                                                                    | 阴影深度 pass、3 × 3 PCF、主渲染 pass、4 倍 MSAA、雾和色调映射              |
-| Vendor                         | scene/world_character                                                             | 独立角色模型、呼吸、转头、交谈、行走、登记与用膳动作                        |
-| Buildings / Props              | scene/world_environment、world_prop                                               | 寺院建筑、房间、巴士与可调查道具                                            |
-| IslandShape / TerrainNoise     | scene/world_environment/terrain.ts、terrain_noise.ts                              | 山脊骨架、山鞍、多尺度坡面起伏与半山平台                                    |
-| Scatter / InstanceLOD          | scene/world_environment/vegetation.ts、procedural_vegetation.ts、forest_canopy.ts | 按地形分布扫描树、阔叶/针叶/垂枝/灌木树形、三种蕨类/草丛/苔石与远景分片林冠 |
+| Tidewater                                   | 当前实现                                                                         | 用途                                                                       |
+| ------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Engine / GPU                                | scene/renderer/engine.ts                                                         | 显卡、画布、帧提交、尺寸变化与资源销毁                                     |
+| GeoKit prepare / mergePrepared              | scene/geometry                                                                   | Y 轴朝上、米制几何、法线变换、统一顶点格式与合并网格                       |
+| GameMaterials / scene lighting              | scene/renderer/scene.wgsl                                                        | 线性颜色、GGX / Lambert、粗糙度、金属度、木纹、布纹、石材与铜锈            |
+| SceneRenderer / Shadows                     | scene/renderer                                                                   | 阴影深度 pass、3 × 3 PCF、主渲染 pass、4 倍 MSAA、雾和色调映射             |
+| Vendor                                      | scene/world_character                                                            | 独立角色模型、呼吸、转头、交谈、行走、登记与用膳动作                       |
+| Buildings / Props                           | scene/world_environment、world_prop                                              | 寺院建筑、房间、巴士与可调查道具                                           |
+| IslandShape / TerrainNoise                  | scene/world_environment/terrain.ts、terrain_noise.ts                             | 山脊骨架、山鞍、多尺度坡面起伏与半山平台                                   |
+| PlantGeometry / LeafTextures / VegMaterials | scene/vegetation、scene/world_environment/vegetation.ts                          | 原树冠、灌木、棕榈、蕨类、阔叶林下植物及草叶网格；叶形图集、程序材质与慢风 |
+| Scatter / InstanceLOD                       | scene/world_environment/forest_canopy.ts、meadow.ts、scene/vegetation/batches.ts | 适配山路与寺院的散布、逐株草根接地、空间分组与远景原树冠复用               |
 
 着色器噪声与材质约定按 Tidewater 改写；其 MIT 版权声明完整保留在 [tidewater_license.txt](tidewater_license.txt)。海洋模拟、船控和钓鱼玩法不属于本作场景需求。
 
@@ -33,7 +34,7 @@ scene/world/placement.ts 定义米制机位和道具锚点。微光按钮通过�
 
 窗户单独采用参考照片中的烟灰旧木与铁灰格心：`temple_window.ts` 统一构建多层凹进边框、竖向雕花扇、回纹和圆形团花，以及转折相接的菱花格。登记室、斋堂、门房、偷听偏房和东院客房使用同一三联窗比例；大殿高窗、回廊院墙及花园窗保留同一细格语言，并依窗口长宽采用横向格扇。院墙窗保持真实通透，生活房间窗在格条后保留灰蓝透光层，白天亮度来自既定日间状态，夜间保持微弱冷暗。`room_shell.ts` 与 `courtyard_rooms.ts` 将墙体绕实际窗洞构建，移除会压住窗体的简陋纸框和中柱。`temple_facade.ts` 的各栋配院、服务建筑与殿宇窗格复用同一实现，山门和山路远景只减少细小雕刻几何，保持窗框层次和深色轮廓。窗户不改变人物、门闩、道具、通路和后端剧情判定。
 
-寺院坐落在连续高度场的半山平台：前方谷地下降，后方与两翼山脊继续抬高。地形参考 Tidewater 的手工山脊骨架、平滑山鞍与多尺度坡面起伏，并按坡度混合林地与岩石贴图；岩面使用三向投影避免陡坡拉伸，林地叠加第二种纹理尺度减轻远处重复。山门与公路白天使用较轻的雾，保留群山层次。近中景混合 Poly Haven 扫描树与 procedural_vegetation.ts 的阔叶、针叶、垂枝和灌木树形，并以三种苔石、三种蕨类和三种草丛打散地表；远处以细树干和多朝向枝叶卡片构成林冠，按单片叶子的非重叠小区域采样 tree_1 透明图集，避免透明边缘重复放大成淡白色片状树冠。植被避开院落和道路，树冠、蕨类与草叶按高度响应风场，根部保持固定。昼夜共享同一空间；红烛状态同时控制烛焰和局部光源，空满碗、碎花瓶和杯面由对应旗标控制。
+寺院坐落在连续高度场的半山平台：前方谷地下降，后方与两翼山脊继续抬高。地形参考 Tidewater 的手工山脊骨架、平滑山鞍与多尺度坡面起伏，并按坡度混合林地与岩石贴图；岩面使用三向投影避免陡坡拉伸，林地叠加第二种纹理尺度减轻远处重复。山门与公路白天使用较轻的雾，保留群山层次。当前植被直接导出 Tidewater 的原始程序网格：四种细叶阔叶树冠、两种灌木、棕榈与幼棕榈、蕨类、两种芭蕉、龟背竹、海芋、赫蕉、鹤望兰和八叶草丛。近景、远山、前庭与内院复用同一套植物；远树继续使用原树冠几何，关闭远景阴影。叶片图集按原 Twig / Rosette 算法在 GPU 上生成，树皮、叶片色差、透光、羽叶切口和草叶明暗移植原着色方法。散布按本作山坡、院墙和盘山公路适配，草丛逐株采样地形并剔除铺地与车道内的完整植株，苔石仍使用原扫描资源。风使用约四分之一速度的共享时钟，保留树干摆动、枝端弯曲、叶片颤动和草浪；根部固定，主画面与阴影共用变形。具体来源、打包约定和适配范围见 [Tidewater 植被](tidewater_vegetation.md)。昼夜共享同一空间；红烛状态同时控制烛焰和局部光源，空满碗、碎花瓶和杯面由对应旗标控制。
 
 赵熙以连续网格、53 根骨骼，林岚以连续网格、51 根骨骼，陆沉以连续网格、57 根骨骼，慧普以用户提供的连续网格、60 根骨骼，周砚以当前替换的连续网格、53 根骨骼执行 GPU 蒙皮，五者都将绑定姿态对齐实际关节点。通用 `npc_rigged.zip` 动画和已有程序动作重定向到五人的躯干及四肢骨骼，站、坐、跪及观察、相机、行走、用膳仍由原分镜触发；门房睡眠段另用赵熙的真实骨骼驱动上床、躺卧与呼吸保持。慧普模型保留手掌隐藏面和袍体接缝补面；在剥皮或换皮同行人状态下，同一套慧普形体继续使用骨骼动作，并通过冷青边缘光、去阴影和低饱和材质表现鬼影。林岚扫描模型自带相机使用独立骨骼抬放，用膳时挂在胸前，不重复生成第二台相机；碗随手部骨骼移动并保持朝上，勺尖在碗面与模型实际下唇之间往返。陆沉的手部、脚部和长袍骨骼保留模型原始权重，递烛、登记书写、噤声、观察与行走动作随手肘、腕、髋、膝更新；四人的足骨独立控制脚踝，站、坐、走、跪及跪下过渡按实际下肢网格接地。其他人物的肘膝继续使用两关节混合变形，掌心锚点与网格同步；坐姿不缩短腿部，伏身围绕髋部旋转。登记动作通过手臂求解让笔尖落在簿册上，支撑手保持静止。用膳区分喝粥与素食餐具，抬手、入口和放下错开节奏；手持碗替代桌上的同一只碗。递烛、噤声、看帘、观察、碰门闩、抓挠与伏地按分镜触发，四句经文逐步压低抓挠幅度，石化和受害者停止活人呼吸。室内脚底采用随关节更新的局部环境遮蔽，补充方向光阴影。
 
@@ -47,10 +48,10 @@ scene/world/placement.ts 定义米制机位和道具锚点。微光按钮通过�
 
 山门背后的寺院与山路远景调用 `templeCompound(true)`，保留 14 个建筑节点以及五层斗拱、三层殿冠、翘角和朱绿金轮廓；远处小像和细密纹样由同一悬塑材质承载，减少不可分辨的小构件。远景寺院约 58.8 万三角形、几何约 57 MiB；近看山门和室内礼佛空间继续使用完整雕饰。这一预算只计寺院合并几何，实际画面另有地形、植被、人物与道具。
 
-外部素材已转为 `web/public/art/world/` 下的固定本地文件，运行时不访问素材网站。Poly Haven 提供 CC0 植被、岩石、PBR 表面与昼夜全景天空；Microsoft Rocketbox 提供 MIT 人物网格；Minneapolis Institute of Art 提供 CC0 观音雕塑扫描。来源、授权、重建步骤与预算见 [环境素材](../assets/environment/README.md)，原图用途见 [asset_usage.md](../assets/generation/asset_usage.md)。
+外部素材已转为 `web/public/art/world/` 与 `web/public/art/vegetation/` 下的固定本地文件，运行时不访问素材网站。Tidewater 提供 MIT 植物程序几何与着色算法；Poly Haven 提供 CC0 岩石、PBR 表面与昼夜全景天空；Microsoft Rocketbox 提供 MIT 人物网格；Minneapolis Institute of Art 提供 CC0 观音雕塑扫描。来源、授权、重建步骤与预算见 [环境素材](../assets/environment/README.md)，原图用途见 [asset_usage.md](../assets/generation/asset_usage.md)。
 
 `scripts/art_assets/pack_skinned_character.mjs` 从林岚固定 ZIP 中的 GLB 源重建本地运行时资源；`scripts/art_assets/pack_native_skinned_character.mjs` 保留陆沉、慧普与周砚 ZIP 中 GLB 的原生骨骼和权重，按运行时预算简化连续网格，输出骨骼、四项蒙皮权重与 512² 材质，并保留慧普的三种材质面。重建需要 Blender（林岚权重重绑）或 Node 离线打包（陆沉、慧普、周砚原生权重）；周砚源文件固定为 `assets/characters/zhou_yan/zhou_yan_rigged.zip`，运行时由骨骼地面接触校正足底；`neutral_bone` 专门驱动林岚模型自带相机，陆沉、慧普和周砚不生成虚拟相机。源文件都没有内嵌动作，运行时复用通用动作库及当前分镜动作；不新增规则、台词或触发条件。
 
-彩绘梁带 `temple_paint` 与悬塑壁面 `temple_relief` 的基础色由用户提供的两张照片透视校正、裁切得到，原图固定保存在 `assets/environment/temple_references/`。`extract_temple_surfaces.py` 与 `temple_surfaces.mjs` 可重建六张 512² WebP，法线与 ARM 为局部对比度及颜色派生的近似值，并非扫描 PBR 数据。材质登记在 `library.json` 的索引 23、24（顶点 pattern 39、40）；`temple_ornament_prompts.json` 保留提示词、实际来源和图像服务 HTTP 400 的失败状态，不把未成功的 `gpt-image-2` 调用记作生成素材。这些局部表面随模型进入光照、法线和阴影流程，不替代正式 3D 场景。
+彩绘梁带 `temple_paint` 与悬塑壁面 `temple_relief` 的基础色由用户提供的两张照片透视校正、裁切得到，原图固定保存在 `assets/environment/temple_references/`。`extract_temple_surfaces.py` 与 `temple_surfaces.mjs` 可重建六张 512² WebP，法线与 ARM 为局部对比度及颜色派生的近似值，并非扫描 PBR 数据。材质登记在 `library.json` 的索引 18、19（顶点 pattern 34、35）；`temple_ornament_prompts.json` 保留提示词、实际来源和图像服务 HTTP 400 的失败状态，不把未成功的 `gpt-image-2` 调用记作生成素材。这些局部表面随模型进入光照、法线和阴影流程，不替代正式 3D 场景。
 
-材质读取基础色、法线与 AO/粗糙度/金属度贴图，纹理包含 mipmap；叶片透明轮廓同时用于画面和阴影。天空随摄像机方向取样，并提供环境反射。近中景树使用不同精度的网格、共享显卡缓冲；远山的枝叶卡片与细干合并为一个网格，并与扫描树群落交错衔接，远树不投近景阴影。阴影 pass 使用独立绑定组，避免阴影图同时被写入与采样；大巴的可见车身和轮胎不把细节面板写入阴影图，改用独立低模轮廓投射接地阴影，车身关闭方向光阴影接收，避免车身自遮挡形成黑色脏影。
+材质读取基础色、法线与 AO/粗糙度/金属度贴图，纹理包含 mipmap；叶片透明轮廓同时用于画面和阴影。天空随摄像机方向取样，并提供环境反射。植被按空间区域合并，原植物根部和种子随顶点保留；近远景使用相同树冠变体，远树不投近景阴影。阴影 pass 使用独立绑定组，避免阴影图同时被写入与采样；大巴的可见车身和轮胎不把细节面板写入阴影图，改用独立低模轮廓投射接地阴影，车身关闭方向光阴影接收，避免车身自遮挡形成黑色脏影。

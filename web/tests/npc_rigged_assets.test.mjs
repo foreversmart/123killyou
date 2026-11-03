@@ -75,7 +75,7 @@ test('runtime bridge samples Blender clips onto the existing NPC rig targets', a
   const library = parseBlenderAnimations(
     file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength),
   );
-  const rig = characterModel('luchen');
+  const rig = characterModel('linlan');
   const before = [...rig.arms[0].rotation];
   assert.equal(library.size, 8);
   assert.equal(
@@ -136,11 +136,11 @@ test('Hui Pu uses the supplied 60-bone model and preserves contact primitives', 
   );
   assert.equal(
     manifest.surfaces.findIndex((surface) => surface.id === 'huipu_model_hidden_palm'),
-    35,
+    30,
   );
   assert.equal(
     manifest.surfaces.findIndex((surface) => surface.id === 'huipu_model_robe_contact_fill'),
-    36,
+    31,
   );
   assert.equal(model.skin.joints.length, 60);
   assert.ok(model.skin.nodes.some((node) => node.name === 'pelvis'));
@@ -199,10 +199,12 @@ test('Zhou Yan uses the replacement 53-bone scan and keeps the native leg axis g
     rig,
     { id: 'zhouyan', name: '周砚', visible: true },
     { sceneKey: 'mini_arrival', shotKey: 'arrival_gate_beauty', flags: {} },
-    { gaiting: true },
   );
-  rig.root.gaitMoving = true;
+  rig.root.animate?.(0, 0);
+  assert.ok(rig.legs.every((leg) => leg.rotation[0] === 0 && leg.bend.angle === 0));
+  rig.root.position[2] = 0.56;
   rig.root.animate?.(0.8, 1 / 60);
+  assert.ok(rig.legs.some((leg) => Math.abs(leg.rotation[0]) > 0.02 || leg.bend.angle > 0.02));
   pose();
   assert.ok(rig.root.skinTargets.mesh.skinMatrices.every(Number.isFinite));
   const matrices = rig.root.skinTargets.mesh.skinMatrices;

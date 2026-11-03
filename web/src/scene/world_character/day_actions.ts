@@ -3,7 +3,7 @@ import type { Performance } from '@/scene/world_character/performance';
 import { bend, ease } from '@/scene/world_character/joints';
 import { walkAction } from '@/scene/world_character/walk_action';
 import { skinnedDayAction } from '@/scene/world_character/skinned_actions';
-import { HEAD_MOTION_RATE, LUCHEN_HAND_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 export function armPose(
   rig: CharacterRig,
@@ -104,7 +104,7 @@ export function dayAction(
 ) {
   const { head, body } = rig;
   const arrive = ease(t, 0.8);
-  const handTime = t * (rig.root.name === 'luchen' ? LUCHEN_HAND_MOTION_RATE : 1);
+  const handTime = t;
   const handArrive = ease(handTime, 0.8);
   walkAction(rig, action, t, seed);
   if (skinnedDayAction(rig, action, t, mealLift(t, seed), registerDesk)) return;
@@ -224,10 +224,9 @@ export function dayAction(
   }
   if (action === 'stretch') {
     const lean = Math.sin(ease(t, 2.6) * Math.PI);
-    const armLean = rig.root.name === 'luchen' ? Math.sin(ease(handTime, 2.6) * Math.PI) : lean;
     body.rotation[0] = 0.35 * lean;
     head.rotation[0] = 0.25 * lean;
-    armPose(rig, 0, 0.1 * armLean, -0.1, 0.08);
+    armPose(rig, 0, 0.1 * lean, -0.1, 0.08);
   }
   if (action === 'luggage') {
     // A low, relaxed two-hand hold gives the luggage handler a purposeful

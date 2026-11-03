@@ -48,13 +48,18 @@ export function AuthoredScene({ composition }: { composition: SceneComposition }
 
 function Layer({ layer }: { layer: SceneLayer }) {
   const { frame, rect } = layer;
+  const actorId = layer.actorId || inferActorId(layer.id);
+  const motion =
+    ['luchen', 'lu_chen'].includes(actorId || '') && layer.id !== 'lu_chen_glance_head'
+      ? 'still'
+      : layer.motion || inferMotion(layer.id, actorId);
   const centerX = rect.x + rect.width / 2;
   const centerY = rect.y + rect.height / 2;
   return (
     <g
-      data-layer-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
-      data-motion={layer.motion || inferMotion(layer.id, layer.actorId)}
-      data-actor-id={layer.actorId || inferActorId(layer.id) || undefined}
+      data-layer-motion={motion}
+      data-motion={motion}
+      data-actor-id={actorId || undefined}
       style={
         layer.motionOrigin
           ? {

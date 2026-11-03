@@ -29,10 +29,10 @@ const entry = (id) => ({
 function validateSlots(manifest) {
   if (!Array.isArray(manifest.surfaces)) throw new Error('Library has no surface list.');
   for (const [index, id] of ['temple_paint', 'temple_relief'].entries())
-    if (manifest.surfaces[23 + index]?.id !== id)
-      throw new Error(`Expected ${id} at slot ${23 + index}; no library entries were changed.`);
+    if (manifest.surfaces[18 + index]?.id !== id)
+      throw new Error(`Expected ${id} at slot ${18 + index}; no library entries were changed.`);
   for (const [index, { id }] of definitions.entries()) {
-    const slot = index + 25;
+    const slot = index + 20;
     const current = manifest.surfaces[slot];
     if (current && current.id !== id)
       throw new Error(`Guardian slot ${slot} already belongs to ${current.id}.`);
@@ -144,9 +144,9 @@ for (const [i, material] of definitions.entries()) {
 const current = JSON.parse(await readFile(manifestPath, 'utf8'));
 validateSlots(current);
 for (const [index, { id }] of definitions.entries()) {
-  const slot = index + 25;
+  const slot = index + 20;
   if (current.surfaces.length < slot) throw new Error('Guardian surfaces must append in order.');
   current.surfaces[slot] = { ...current.surfaces[slot], ...entry(id) };
 }
 await writeFile(manifestPath, JSON.stringify(current, null, 2) + '\n');
-console.log('Registered guardian_gilding/clouds/lamellar/pigment: slots 25–28, patterns 41–44.');
+console.log('Registered guardian_gilding/clouds/lamellar/pigment: slots 20–23, patterns 36–39.');

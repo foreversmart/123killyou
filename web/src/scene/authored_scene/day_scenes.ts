@@ -55,7 +55,7 @@ function registrationScene(state: GameState): SceneComposition {
     rect: actorPreview.rect,
     zIndex: actorPreview.zIndex,
     actorId: 'luchen',
-    motion: writing ? 'still' : 'idle',
+    motion: 'still',
   };
   const dragObserver: SceneLayer | undefined =
     state.shotKey === 'register_drag_mark'
@@ -73,31 +73,9 @@ function registrationScene(state: GameState): SceneComposition {
       : undefined;
   return {
     ...composition,
-    layers: [
-      ...composition.layers,
-      actor,
-      ...(dragObserver ? [dragObserver] : []),
-      ...(writing
-        ? [
-            {
-              ...actor,
-              id: 'writing_brush',
-              zIndex: 35,
-              clipPath:
-                'M740 495H785L800 550L815 580L800 637L789 650L809 711L797 714L779 661C768 691 746 710 723 718C705 716 692 708 690 688L689 638L695 595L720 559Z',
-              motion: 'write_hand' as const,
-            },
-            {
-              ...actor,
-              id: 'writing_palm',
-              zIndex: 35,
-              clipPath:
-                'M1080 620H1228V696Q1217 704 1186 694L1181 713H1107L1100 694L1086 701L1070 697V689L1080 685L1092 670Z',
-              motion: 'still' as const,
-            },
-          ]
-        : []),
-    ].sort((a, b) => a.zIndex - b.zIndex),
+    layers: [...composition.layers, actor, ...(dragObserver ? [dragObserver] : [])].sort(
+      (a, b) => a.zIndex - b.zIndex,
+    ),
     labels: composition.labels,
   };
 }

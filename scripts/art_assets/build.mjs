@@ -4,7 +4,6 @@ import sharp from 'sharp';
 import { readGltf } from './gltf.mjs';
 import { createLibrary } from './library.mjs';
 import { bodyParts } from './pose.mjs';
-import { foliage } from './foliage.mjs';
 import { addHeads } from './heads.mjs';
 import { addStatue } from './statue.mjs';
 import { preserveSurfaces } from './preserve_surfaces.mjs';
@@ -31,26 +30,12 @@ for (const [id, asset] of [
     path.join(source, asset + '_arm.jpg'),
   );
 }
-for (const [id, asset, budget] of [
-  ['tree', 'tree_small_02', 22000],
-  ['rock', 'rock_moss_set_01', 4500],
-  ['fern', 'fern_02', 1800],
-  ['grass', 'grass_medium_02', 1800],
-]) {
+for (const [id, asset, budget] of [['rock', 'rock_moss_set_01', 4500]]) {
   const gltf = await readGltf(path.join(source, asset, asset + '.gltf'));
   const surfaces = [];
   for (const [index, mat] of gltf.json.materials.entries()) {
     const pbr = mat.pbrMetallicRoughness || {};
-    let color = gltf.texture(pbr.baseColorTexture?.index);
-    if (mat.alphaMode) {
-      const alpha = await sharp(path.join(source, asset + '_alpha.png'))
-        .resize(1024, 1024)
-        .greyscale()
-        .toBuffer();
-      const opaque = await sharp(color).resize(1024, 1024).removeAlpha().png().toBuffer();
-      // removeAlpha is a deferred Sharp operation; finish it before joining a new mask.
-      color = await sharp(opaque).joinChannel(alpha).png().toBuffer();
-    }
+    const color = gltf.texture(pbr.baseColorTexture?.index);
     surfaces.push(
       await lib.surface(
         id + '_' + index,
@@ -62,7 +47,7 @@ for (const [id, asset, budget] of [
   }
   const names = [...new Set(gltf.meshes.map((m) => m.name))];
   // Each source variation has its own origin; do not import the whole display lineup.
-  for (const [variant, name] of names.slice(0, id === 'tree' ? 1 : 3).entries()) {
+  for (const [variant, name] of names.slice(0, 3).entries()) {
     const meshes = gltf.meshes.filter((m) => m.name === name);
     const bounds = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
     for (const m of meshes)
@@ -72,28 +57,15 @@ for (const [id, asset, budget] of [
         bounds[axis + 3] = Math.max(bounds[axis + 3], m.positions[i]);
       }
     const center = [(bounds[0] + bounds[3]) / 2, bounds[1], (bounds[2] + bounds[5]) / 2];
-    const scale = id === 'tree' ? 5.8 / (bounds[4] - bounds[1]) : 1;
     lib.mesh(
       id + (variant || ''),
       meshes.map((mesh) => ({
-        mesh: id === 'tree' && mesh.material === 1 ? foliage(mesh, 0.65) : mesh,
-        preserve: id === 'tree' && mesh.material === 1,
+        mesh,
         surface: surfaces[mesh.material],
       })),
       budget,
-      (p) => p.map((v, i) => (v - center[i]) * scale),
+      (p) => p.map((v, i) => v - center[i]),
     );
-    if (id === 'tree')
-      lib.mesh(
-        'tree_far',
-        meshes.map((mesh) => ({
-          mesh: mesh.material === 1 ? foliage(mesh, 0.18) : mesh,
-          preserve: mesh.material === 1,
-          surface: surfaces[mesh.material],
-        })),
-        2600,
-        (p) => p.map((v, i) => (v - center[i]) * scale),
-      );
   }
 }
 for (const [file, identities] of [

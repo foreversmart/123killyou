@@ -57,7 +57,7 @@ test('三种身份伏到床脚时选择专用跪伏姿势，不旋转或裁断�
   }
 });
 
-test('白天接待与登记写字使用专用动作，回廊发烛使用完整群像', () => {
+test('白天接待与登记使用静态姿态，回廊领烛使用完整群像', () => {
   const actors = [{ id: 'luchen', visible: true }];
   const reception = authoredScene(state('mini_register', 'register_camera_bell', {}, actors));
   assert.ok(
@@ -92,12 +92,12 @@ test('拖痕调查停留在登记室门槛，并显示周砚观察动作', () =>
 test('场景人物使用与当前动作匹配的微动，背景和静物不会跟着人物一起晃动', () => {
   const writing = authoredScene(state('mini_register', 'register_desk'));
   assert.equal(writing.layers.find((layer) => layer.id === 'actor_lu_chen').motion, 'still');
-  assert.equal(writing.layers.find((layer) => layer.id === 'writing_palm').motion, 'still');
+  assert.ok(!writing.layers.some((layer) => /^writing_/.test(layer.id)));
   assert.deepEqual(
     writing.layers
       .filter((layer) => layer.actorId === 'luchen' && layer.motion !== 'still')
       .map((layer) => layer.id),
-    ['writing_brush'],
+    [],
   );
 
   const dining = authoredScene(state('mini_refectory'));
@@ -112,6 +112,7 @@ test('场景人物使用与当前动作匹配的微动，背景和静物不会�
 
   const gate = authoredScene(state('mini_dawn', 'dawn_gate'));
   assert.equal(gate.layers.find((layer) => layer.id === 'lin_lan').motion, 'walk');
+  assert.equal(gate.layers.find((layer) => layer.id === 'lu_chen').motion, 'still');
 });
 
 test('所有死亡来源保留所在环境并清除人物、尸体和重复鬼影图层', () => {

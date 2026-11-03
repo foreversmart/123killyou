@@ -1,72 +1,35 @@
+import { node } from '@/scene/world/types';
 import { terrainHeight, templeClearance } from '@/scene/world_environment/terrain';
-import { terrainSlope } from '@/scene/world_environment/terrain_noise';
-import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
-import { node, type Geometry } from '@/scene/world/types';
+import { roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
+import { plantAsset, vegetationRandom } from '@/scene/world_environment/procedural_vegetation';
 
-const cache = new Map<boolean, Geometry>();
+/** Original 8 m Tidewater grass cells, grounded and clipped per clump by the renderer. */
 export function meadow(road: boolean) {
-  if (!cache.has(road)) {
-    const vertices: number[] = [],
-      indices: number[] = [];
-    let seed = 771;
-    const random = () => {
-      seed = (seed * 1664525 + 1013904223) >>> 0;
-      return seed / 4294967296;
-    };
-    for (let clump = 0; clump < 14000; clump++) {
-      const side = clump % 2 ? 1 : -1;
-      const frame = roadSample(random() * ROAD_LENGTH);
-      const offset = side * (4.7 + random() * 13);
-      const x = road
-        ? frame.position[0] + Math.cos(frame.yaw) * offset
-        : side * (33 + random() * 18);
-      const z = road ? frame.position[2] - Math.sin(frame.yaw) * offset : 15 - random() * 90;
-      if (templeClearance(x, z) < 0.8 || (z > 11 && roadNearest(x, z).distance < 4.5)) continue;
-      const y = terrainHeight(x, z, road);
-      if (terrainSlope(x, z, 2) > 1.25) continue;
-      const patch = Math.sin(x * 0.7) * Math.cos(z * 0.31);
-      if (patch < -0.65) continue;
-      for (let blade = 0; blade < 4; blade++) {
-        const angle = random() * Math.PI * 2,
-          height = 0.16 + random() * 0.43;
-        const width = 0.01 + random() * 0.01,
-          lean = 0.08 + random() * 0.18;
-        const sx = Math.cos(angle),
-          sz = Math.sin(angle),
-          base = vertices.length / 16;
-        const tone = 0.75 + random() * 0.6;
-        for (let row = 0; row < 3; row++)
-          for (const edge of [-1, 1]) {
-            const t = row / 2,
-              w = width * (1 - t);
-            vertices.push(
-              x + Math.sin(blade * 2.4) * 0.09 + sx * edge * w + sz * t * t * lean,
-              y + height * t,
-              z + Math.cos(blade * 2.4) * 0.09 + sz * edge * w - sx * t * t * lean,
-              sz * 0.75,
-              0.65,
-              -sx * 0.75,
-              0.065 * tone * (0.6 + t * 0.4),
-              0.095 * tone,
-              0.022 * tone,
-              0.9,
-              0,
-              11,
-              0,
-              (edge + 1) / 2,
-              t,
-              -1,
-            );
-            if (row < 2 && edge === -1) {
-              const a = base + row * 2;
-              indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
-            }
-          }
-      }
-    }
-    cache.set(road, { vertices: new Float32Array(vertices), indices: new Uint32Array(indices) });
+  const root = node(road ? 'road_tidewater_meadow' : 'gate_tidewater_meadow');
+  const random = vegetationRandom(771);
+  const cells = new Set<string>();
+  const place = (centerX: number, centerZ: number) => {
+    const x = Math.floor(centerX / 8) * 8;
+    const z = Math.floor(centerZ / 8) * 8;
+    const key = `${x}:${z}`;
+    if (cells.has(key) || templeClearance(x + 4, z + 4) < -3) return;
+    const y = terrainHeight(x + 4, z + 4, road);
+    const grass = plantAsset('grass_patch', [x, y, z]);
+    grass.vegetationGround = true;
+    grass.vegetationRoad = road;
+    grass.wind = 1;
+    cells.add(key);
+    root.children.push(grass);
+  };
+  for (let i = 0; i < 50; i++) {
+    const frame = roadSample((i / 49) * ROAD_LENGTH);
+    const offset = (i % 2 ? 1 : -1) * (7 + random() * 5);
+    place(
+      frame.position[0] + Math.cos(frame.yaw) * offset,
+      frame.position[2] - Math.sin(frame.yaw) * offset,
+    );
   }
-  const result = node('meadow_blades', cache.get(road));
-  result.wind = 1.35;
-  return result;
+  for (const side of [-1, 1])
+    for (const z of [-4, -20, -36, -52, -68]) place(side * (36 + random() * 8), z);
+  return root;
 }

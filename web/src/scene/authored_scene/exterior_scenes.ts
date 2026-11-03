@@ -159,9 +159,11 @@ function gateScene(_state: GameState): SceneComposition {
   return {
     ...result,
     layers: result.layers.map((layer) =>
-      ['lin_lan', 'zhou_yan', 'xu_zhi', 'lu_chen'].includes(layer.id)
-        ? { ...layer, motion: 'walk' as const }
-        : layer,
+      layer.id === 'lu_chen'
+        ? { ...layer, motion: 'still' as const }
+        : ['lin_lan', 'zhou_yan', 'xu_zhi'].includes(layer.id)
+          ? { ...layer, motion: 'walk' as const }
+          : layer,
     ),
   };
 }
@@ -227,12 +229,7 @@ function actorLayer(
 }
 
 function actorMotion(state: GameState, actorId: string): NonNullable<SceneLayer['motion']> {
-  if (
-    state.sceneKey === 'mini_dawn' &&
-    actorId === 'luchen' &&
-    ['dawn_axis', 'dawn_courtyard'].includes(state.shotKey || '')
-  )
-    return 'walk';
+  if (actorId === 'luchen') return 'still';
   if (state.sceneKey === 'mini_listen' && actorId === 'huipu' && state.shotKey === 'listen_vase')
     return 'turn';
   if (state.sceneKey === 'mini_death' && ['evil', 'skin_double'].includes(actorId)) return 'run';

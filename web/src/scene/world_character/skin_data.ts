@@ -1,5 +1,6 @@
 import { mat4 } from 'wgpu-matrix';
 import type { Geometry, SkinBone, V3 } from '@/scene/world/types';
+import { fixHandSkin } from '@/scene/world_character/fixed_hand_skin';
 
 type SkinNode = {
   name?: string;
@@ -91,7 +92,7 @@ export function decodeCharacterSkin(
     metadata.camera && bones.findIndex((bone) => bone.name === metadata.camera!.bone);
   if (metadata.camera && (cameraBone! < 0 || !metadata.camera.center.every(Number.isFinite)))
     throw new Error('角色相机骨骼数据无效。');
-  return {
+  const skin = {
     joints: jointData,
     weights,
     skeleton: {
@@ -99,4 +100,6 @@ export function decodeCharacterSkin(
       camera: metadata.camera ? { bone: cameraBone!, center: metadata.camera.center } : undefined,
     },
   };
+  if (metadata.mesh === 'luchen_model_skin') fixHandSkin(skin);
+  return skin;
 }

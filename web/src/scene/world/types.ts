@@ -23,6 +23,7 @@ export type SkinSkeleton = {
 export type Geometry = {
   vertices: Float32Array;
   indices: Uint32Array;
+  vegetation?: Float32Array;
   skin?: { joints: Float32Array; weights: Float32Array; skeleton: SkinSkeleton };
 };
 export type CharacterTargets = {
@@ -61,18 +62,28 @@ export type WorldNode = {
   receiveShadow?: boolean;
   /** Wind response in the vertex shader. Zero keeps rigid architecture stable. */
   wind?: number;
+  /** Sample each grass clump root against the mountain terrain before batching. */
+  vegetationGround?: boolean;
+  vegetationRoad?: boolean;
+  /** Keep grass clump roots inside this local-space [minX, minZ, maxX, maxZ] bed. */
+  vegetationClip?: [number, number, number, number];
   /** Ghost material intensity inherited by descendant meshes. */
   ghost?: number;
   bend?: { pivot: V3; angle: number };
-  /** Set by a root-motion wrapper before evaluating a gait animation. */
-  gaitMoving?: boolean;
+  /** Actual horizontal travel owns the feet, independently of upper-body clips. */
+  gait?: import('@/scene/world_character/distance_gait').DistanceGait;
   /**
    * A short hand-off used when a visual rebuild keeps the same physical
    * tableau (for example, consecutive shots at the temple gate). The next
    * animation blends from the previous frame instead of snapping to its new
    * authored pose.
    */
-  animationContinuity?: { position: V3; rotationY: number; time: number };
+  animationContinuity?: {
+    position: V3;
+    rotationY: number;
+    time: number;
+    gait?: import('@/scene/world_character/distance_gait').DistanceGait;
+  };
   /** Blender clip selected by the character animation bridge. */
   blenderAction?: string;
   /** Set by the renderer once the GLB animation library is available. */

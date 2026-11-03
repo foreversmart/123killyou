@@ -53,6 +53,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           voiceStarted={voiceStarted}
           playbackOn={voice.playbackOn}
           connected={connected}
+          aboveOpening={openingPhase === 'alighting'}
           onPauseToggle={togglePause}
         />
         <Room

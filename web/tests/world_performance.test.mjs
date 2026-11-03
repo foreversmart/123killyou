@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { registerHooks } from 'node:module';
 import { mat4, vec3 } from 'wgpu-matrix';
@@ -20,6 +21,8 @@ const { characterModel } = await import('../src/scene/world_character/model.ts')
 const { animateCharacter } = await import('../src/scene/world_character/animation.ts');
 const { performanceFor } = await import('../src/scene/world_character/performance.ts');
 const { performanceKey } = await import('../src/scene/world/performance_key.ts');
+const { decodeCharacterSkin } = await import('../src/scene/world_character/skin_data.ts');
+const { createSkinPose } = await import('../src/scene/world_character/skin_pose.ts');
 const actor = (id, portrait = id) => ({ id, name: id, portrait, visible: true });
 const state = (sceneKey, shotKey = '', flags = {}, actors = []) => ({
   sceneKey,
@@ -33,11 +36,16 @@ function frame(root, t) {
   const nodes = new Map();
   function visit(n, parent) {
     n.animate?.(t, 0);
-    let m = mat4.translate(parent, n.position);
-    m = mat4.rotateY(m, n.rotation[1]);
-    m = mat4.rotateX(m, n.rotation[0]);
-    m = mat4.rotateZ(m, n.rotation[2]);
-    m = mat4.scale(m, n.scale);
+    n.updateSkin?.();
+    let m;
+    if (n.matrix) m = mat4.multiply(parent, n.matrix);
+    else {
+      m = mat4.translate(parent, n.position);
+      m = mat4.rotateY(m, n.rotation[1]);
+      m = mat4.rotateX(m, n.rotation[0]);
+      m = mat4.rotateZ(m, n.rotation[2]);
+      m = mat4.scale(m, n.scale);
+    }
     nodes.set(n, m);
     n.children.forEach((child) => visit(child, m));
   }
@@ -46,7 +54,37 @@ function frame(root, t) {
 }
 const find = (frame, name) => [...frame.keys()].find((n) => n.name === name);
 
-test('registration keeps the supporting hand still and the moving brush tip on the book', () => {
+async function bindSkin(rig) {
+  const root = new URL('../public/art/world/', import.meta.url);
+  const manifest = JSON.parse(await readFile(new URL('library.json', root)));
+  const metadata = manifest.characterModels[rig.root.name].skin;
+  const range = manifest.meshes[metadata.mesh];
+  const influences = await readFile(new URL(metadata.influences, root));
+  const binary = await readFile(new URL(manifest.binary, root));
+  const skin = decodeCharacterSkin(
+    metadata,
+    influences.buffer.slice(influences.byteOffset, influences.byteOffset + influences.byteLength),
+    range.vertexCount / 16,
+  );
+  const geometry = {
+    vertices: new Float32Array(
+      binary.buffer,
+      binary.byteOffset + range.vertexOffset,
+      range.vertexCount,
+    ),
+    indices: new Uint32Array(
+      binary.buffer,
+      binary.byteOffset + range.indexOffset,
+      range.indexCount,
+    ),
+    skin,
+  };
+  rig.root.updateSkin = createSkinPose(rig.root.skinTargets, skin.skeleton, geometry);
+  rig.root.updateSkin();
+  return skin;
+}
+
+test('registration keeps both Lu Chen hands still without a writing prop', () => {
   const world = createWorld({
     state: state('mini_register', 'register_desk', {}, [actor('luchen')]),
   });
@@ -55,19 +93,14 @@ test('registration keeps the supporting hand still and the moving brush tip on t
   const monk = find(end, 'luchen'),
     body = monk.children.find((n) => n.name === 'body');
   const arms = body.children.filter((n) => n.name === 'arm');
-  const support = arms[1].children[0].children[0];
-  assert.deepEqual([...start.get(support)], [...end.get(support)]);
-  const brush = find(end, 'writing_brush');
-  assert.notDeepEqual([...start.get(brush)], [...end.get(brush)]);
-  for (const f of [start, end]) {
-    const p = vec3.transformMat4([0, -0.18, 0.023], f.get(brush));
-    assert.ok(p[0] > -0.42 && p[0] < -0.08, 'brush over the book width');
-    assert.ok(Math.abs(p[1] - 0.94) < 0.006, 'brush meets the actual raised page');
-    assert.ok(p[2] > -0.5 && p[2] < -0.08, 'brush over the book depth');
+  for (const arm of arms) {
+    const hand = arm.children[0].children[0];
+    assert.deepEqual([...start.get(hand)], [...end.get(hand)]);
   }
+  assert.equal(find(end, 'writing_brush'), undefined);
 });
 
-test('meal choices retain one bowl, with hands lifting and lowering without animating the monk', () => {
+test('meal choices retain one bowl, with hands lifting and lowering without animating the monk', async () => {
   const game = state(
     'mini_refectory',
     'refectory_eating',
@@ -86,6 +119,9 @@ test('meal choices retain one bowl, with hands lifting and lowering without anim
   );
   const rig = characterModel('zhouyan', 'seated');
   animateCharacter(rig, actor('zhouyan'), game);
+  // The renderer binds the native bone lengths and prop sockets before the
+  // first animation frame. Generic control transforms are not the visible rig.
+  const skin = await bindSkin(rig);
   const low = frame(rig.root, 0),
     high = frame(rig.root, 2),
     settled = frame(rig.root, 5),
@@ -94,12 +130,18 @@ test('meal choices retain one bowl, with hands lifting and lowering without anim
   assert.ok(settled.get(rig.hands[0])[13] < high.get(rig.hands[0])[13] - 0.1);
   assert.ok(nextBite.get(rig.hands[0])[13] > settled.get(rig.hands[0])[13] + 0.1);
   const spoon = (snapshot) =>
-    vec3.transformMat4([0, 0.11, 0.13], snapshot.get(find(snapshot, 'meal_utensils')));
+    vec3.transformMat4([0, 0.13, 0.16], snapshot.get(find(snapshot, 'meal_utensils')));
   const bowl = (snapshot) =>
     vec3.transformMat4([0, 0.125, 0], snapshot.get(find(snapshot, 'zhouyan_held_bowl')));
-  const mouth = (snapshot) => vec3.transformMat4([0, -0.04, 0.16], snapshot.get(rig.head));
+  const head = skin.skeleton.bones.findIndex((bone) => bone.name === 'head');
+  frame(rig.root, 2);
+  const lip = vec3.transformMat4(
+    vec3.add(skin.skeleton.bones[head].position, [-0.004, 0.031, 0.121]),
+    rig.root.skinTargets.mesh.skinMatrices.subarray(head * 16, head * 16 + 16),
+  );
+  const mouth = vec3.transformMat4(lip, high.get(rig.root));
   assert.ok(vec3.distance(spoon(low), bowl(low)) < 0.04, 'spoon rests on the bowl rim');
-  assert.ok(vec3.distance(spoon(high), mouth(high)) < 0.04, 'spoon reaches the mouth');
+  assert.ok(vec3.distance(spoon(high), mouth) < 0.04, 'spoon reaches the skinned lower lip');
   game.flags.refectory_meal_finished = true;
   assert.notEqual(performanceFor(actor('zhouyan'), game), 'eat');
 });

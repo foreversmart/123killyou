@@ -1,3 +1,5 @@
+import { loadVegetation } from '@/scene/vegetation/assets';
+import { createLeafAtlas } from '@/scene/vegetation/leaf_atlas';
 import type { Geometry } from '@/scene/world/types';
 import {
   parseBlenderAnimations,
@@ -98,6 +100,7 @@ async function loadSource(): Promise<Source> {
       );
     }),
   );
+  for (const [id, geometry] of await loadVegetation()) meshes.set(id, geometry);
   return { manifest, meshes, images: new Map(images), animations };
 }
 
@@ -163,6 +166,8 @@ export async function createResources(device: GPUDevice) {
       512,
     );
     const sky = await array(source.manifest.skies, 2048, 1024, true);
+    const vegetation = await createLeafAtlas(device);
+    textures.push(vegetation);
     const sampler = device.createSampler({
       addressModeU: 'repeat',
       addressModeV: 'repeat',
@@ -172,6 +177,7 @@ export async function createResources(device: GPUDevice) {
       maxAnisotropy: 4,
     });
     return {
+      vegetation: vegetation.createView(),
       albedo,
       normal,
       arm,

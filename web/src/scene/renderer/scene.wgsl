@@ -20,6 +20,7 @@ struct Object { model: mat4x4f, normal: mat4x4f, effects: vec4f, joint: vec4f };
 struct Influence { joints: vec4f, weights: vec4f };
 @group(1) @binding(1) var<storage, read> boneMatrices: array<mat4x4f>;
 @group(1) @binding(2) var<storage, read> influences: array<Influence>;
+@group(1) @binding(3) var<storage, read> vegetationRoots: array<vec4f>;
 struct Vertex {
   @builtin(vertex_index) index: u32,
   @location(0) position: vec3f,
@@ -38,6 +39,7 @@ struct Surface {
   @location(4) uv: vec2f,
   @location(5) local: vec3f,
   @location(6) @interpolate(flat) tile: i32,
+  @location(7) @interpolate(flat) plantSeed: f32,
 };
 fn rotateJoint(p: vec3f, angle: f32) -> vec3f {
   let c = cos(angle); let s = sin(angle);
@@ -63,18 +65,11 @@ fn surface(v: Vertex) -> Surface {
     normal = mix(normal, rotateJoint(normal, object.joint.w), weight);
   }
   var p = object.model * vec4f(local, 1.0);
-  if (object.effects.x > 0.0) {
-    // Tidewater-style layered gusts: roots stay planted while two slow waves
-    // bend the canopy and a shorter ripple keeps grass from moving in lockstep.
-    let heightMask = select(smoothstep(0.0, 2.8, v.position.y), v.uv.y, v.material.z == 11.0);
-    let rooted = heightMask * heightMask;
-    let phase = frame.sun.w * (0.8 + object.effects.x * 0.12) + p.x * 0.33 + p.z * 0.21;
-    let gust = 0.68 + 0.32 * sin(frame.sun.w * 0.31 + p.x * 0.08 - p.z * 0.06);
-    let sway = sin(phase) * 0.022 + sin(phase * 1.73 + 1.9) * 0.012;
-    let amount = sway * gust * rooted * object.effects.x;
-    p.x += amount;
-    p.z += amount * (0.34 + 0.16 * sin(phase * 0.7));
-    p.y += sin(phase * 0.82 + p.x * 0.11) * 0.004 * rooted * object.effects.x;
+  o.plantSeed = 0.0;
+  if (v.material.z >= 100.0) {
+    let root = vegetationRoots[v.index];
+    o.plantSeed = root.w;
+    p = vec4f(tidewaterWind(p.xyz, normal, root, v.material, v.material.z, select(-v.tile - 2.0, v.color.z, v.material.z == 140.0)), 1.0);
   }
   o.clip = frame.view * p; o.position = p.xyz;
   o.normal = normalize((object.normal * vec4f(normal, 0.0)).xyz);
@@ -118,14 +113,14 @@ fn shadeShadow(p: vec3f, n: vec3f) -> f32 {
   return select(mix(1.0, sum / 9.0, coverage), 1.0, z <= 0.0 || z >= 1.0);
 }
 // GGX + Lambert, the same roughness/metalness model as Tidewater's scene lighting.
-fn brdf(n: vec3f, v: vec3f, l: vec3f, albedo: vec3f, rough: f32, metal: f32) -> vec3f {
+fn brdf(n: vec3f, v: vec3f, l: vec3f, albedo: vec3f, rough: f32, metal: f32, specular: f32) -> vec3f {
   let h = normalize(l + v); let nl = max(dot(n,l), 0.0); let nv = max(dot(n,v), 0.001);
   let nh = max(dot(n,h), 0.0); let vh = max(dot(v,h), 0.0);
   let a = max(rough * rough, 0.025); let a2 = a * a;
   let d = a2 / max(3.14159 * pow(nh * nh * (a2 - 1.0) + 1.0, 2.0), 0.0001);
   let k = pow(rough + 1.0, 2.0) / 8.0;
   let g = (nv / (nv * (1.0 - k) + k)) * (nl / (nl * (1.0 - k) + k));
-  let f0 = mix(vec3f(0.04), albedo, metal); let f = f0 + (1.0 - f0) * pow(1.0 - vh, 5.0);
+  let f0 = mix(vec3f(0.04 * specular), albedo, metal); let f = f0 + (1.0 - f0) * pow(1.0 - vh, 5.0);
   return (albedo * (1.0 - metal) / 3.14159 + f * d * g / max(4.0 * nv * nl, 0.001)) * nl;
 }
 fn film(color: vec3f) -> vec3f {
@@ -147,6 +142,8 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   return 1.0 - min(0.78, occlusion) * smoothstep(0.3, 0.85, n.y);
 }
 @fragment fn fragment(i: Surface, @builtin(front_facing) front: bool) -> @location(0) vec4f {
+  let view = normalize(frame.eye.xyz - i.position);
+  let vegetation = tidewaterMaterial(i.material.z, i.color, i.uv, i.position, normalize(i.normal), view, i.material.x, i.plantSeed);
   let p = i.local; var col = i.color; let pat = i.material.z;
   var rough = i.material.x; var metal = i.material.y;
   var n = normalize(i.normal) * select(-1.0, 1.0, front);
@@ -196,11 +193,7 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
       coverage = smoothstep(0.5, 0.68, sharpAlpha);
       if (sharpAlpha < 0.42 || coverage <= 0.0) { discard; }
       sample.rgb = mix(vec3f(0.045, 0.085, 0.038), sample.rgb, smoothstep(0.42, 0.78, sharpAlpha));
-      // tree_1 contains a trunk/branch island in the lower-right of its leaf
-      // atlas. Imported tree meshes can reach that island even though their
-      // leaf material is alpha-tested; exclude it while keeping the smaller
-      // leaf regions used by procedural crowns.
-      if (pat == 23.0 && (uv.x > 0.76 || (uv.x > 0.55 && uv.y > 0.73))) { discard; }
+
     }
     let arm = textureSampleGrad(surfaceArm, surfaceSampler, uv, slot, ux, uy).rgb;
     let detail = textureSampleGrad(surfaceNormal, surfaceSampler, uv, slot, ux, uy).xyz * 2.0 - 1.0;
@@ -209,20 +202,18 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
     rough = clamp(rough * arm.g, 0.19, 1.0);
     metal *= arm.b;
     if (pat >= 16.0) {
-      // Foliage is broad, fibrous and wet-looking rather than polished. The
-      // scanned ARM maps are useful for variation, but their lower roughness
-      // can turn backlit leaves into pale white flashes in the opening shot.
+      // Keep scanned hair and fabric from flashing in the low afternoon sun.
       rough = max(rough, 0.82);
       metal = 0.0;
-      if (pat == 26.0) {
-        col *= vec3f(0.76, 0.86, 0.56);
-      } else if (pat == 27.0) {
-        col *= vec3f(0.7, 0.8, 0.46);
-      } else if (pat == 23.0) {
-        col *= vec3f(0.72, 0.84, 0.52);
-      }
+
     }
     occlusion = mix(0.55, 1.0, arm.r);
+  }
+  if (pat >= 100.0) {
+    if (vegetation.coverage <= 0.0) { discard; }
+    col = vegetation.color; n = vegetation.normal;
+    rough = vegetation.rough; metal = 0.0;
+    occlusion = vegetation.ao; coverage = vegetation.coverage;
   }
   if (i.tile >= 0) {
     let cell = vec2f(f32(i.tile % 8), f32(i.tile / 8));
@@ -236,19 +227,25 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
   if (pat == 11.0) {
     lit += col * frame.sun.rgb * pow(max(0.0,dot(-n, normalize(frame.direction.xyz))),2.0) * 0.16;
   }
-  let fresnel = mix(vec3f(0.04), col, metal);
+  let fresnel = mix(vec3f(select(0.04, 0.006, pat >= 100.0)), col, metal);
   lit += environmentLight(reflect(-v, n), rough) * fresnel * occlusion * (1.0 - rough * 0.45);
   if (pat == 3.0) {
     lit += col * vec3f(0.1,0.036,0.018) * pow(max(0.0,dot(-n,normalize(frame.direction.xyz))),2.0);
   }
+  let specular = select(1.0, select(0.15, 0.4, pat >= 120.0), pat >= 100.0);
   let directionalShadow = select(1.0, shadeShadow(i.position, n), object.effects.y > 0.5);
-  lit += brdf(n, v, normalize(frame.direction.xyz), col, rough, metal) * frame.sun.rgb * directionalShadow;
+  lit += brdf(n, v, normalize(frame.direction.xyz), col, rough, metal, specular) * frame.sun.rgb * directionalShadow;
   for (var j = 0; j < 12; j++) {
     let source = frame.lamps[j * 2]; let color = frame.lamps[j * 2 + 1];
     let d = source.xyz - i.position; let distance = max(dot(d, d), 0.05);
-    lit += brdf(n, v, normalize(d), col, rough, metal) * color.rgb * source.w / (1.0 + distance);
+    lit += brdf(n, v, normalize(d), col, rough, metal, specular) * color.rgb * source.w / (1.0 + distance);
   }
-  lit += col * i.material.w;
+  if (pat >= 100.0) {
+    let back = max(0.0, dot(-normalize(i.normal), normalize(frame.direction.xyz)));
+    let forward = pow(max(0.0, dot(-v, normalize(frame.direction.xyz))), 3.0) * 0.7 + 0.3;
+    lit += (col * vec3f(1.25, 1.45, 0.55) + vec3f(0.012, 0.018, 0.0))
+      * back * forward * vegetation.translucency * frame.sun.rgb * directionalShadow;
+  } else { lit += col * i.material.w; }
   if (object.effects.w > 0.0) {
     let ghost = clamp(object.effects.w, 0.0, 1.0);
     let rim = pow(1.0 - max(dot(n, v), 0.0), 2.0);

@@ -36,7 +36,13 @@
     {
       "source": "Poly Haven",
       "license": "CC0-1.0",
-      "assets": ["tree_small_02", "rock_moss_set_01", "fern_02", "grass_medium_02"]
+      "assets": ["rock_moss_set_01"]
+    },
+    {
+      "source": "Tidewater",
+      "license": "MIT",
+      "assets": "web/public/art/vegetation/vegetation.json",
+      "manifest": "docs/tidewater_vegetation.md"
     },
     {
       "source": "Microsoft Rocketbox",
@@ -54,7 +60,7 @@
     "terrain": "连续高度场，院落与道路平整",
     "surfaces": "基础色、法线、ARM 纹理数组",
     "sky": "摄像机方向取样的昼夜全景，假报晓保持夜景",
-    "foliage": "近远树、叶片透明阴影、固定根部的树冠/蕨类/草叶风动",
+    "foliage": "Tidewater 原树冠、棕榈、灌木、蕨类、阔叶与八叶草丛，原叶片图集和程序材质，约四分之一速度的分层风，草根贴合地形并避开铺地",
     "doors": "真实洞口、分板门叶与铰链；摸门闩时关闭，狂躁镜头抽闩开启"
   },
   "animationClock": "仅演出状态改变时重置；保存、暂停、重听确认保持动作进度"

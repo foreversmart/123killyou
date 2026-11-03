@@ -13,21 +13,14 @@ import {
   mealUtensilRotation,
 } from '@/scene/world_character/day_actions';
 import { nightAction } from '@/scene/world_character/night_actions';
-import { bend, ease } from '@/scene/world_character/joints';
+import { bend } from '@/scene/world_character/joints';
 import { speechMotion } from '@/scene/world_character/speech';
 import { blenderActionFor } from '@/scene/world_character/blender_action_library';
 import { skinMealUtensilRotation } from '@/scene/world_character/skinned_actions';
 import { sleepAction } from '@/scene/world_character/sleep_action';
 import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import { createDistanceGait } from '@/scene/world_character/distance_gait';
 
-// Keep the gait cadence independent of the route duration. The old stride was
-// derived from eased progress, which made the feet slow down with the root and
-// read as a sliding translation on the longer gate approach. A steady cadence
-// lets the body cover a larger scene distance while the two legs alternate.
-// Route durations are 1.5x longer now; keep the feet cadence in the same
-// proportion so the lifted leg does not outrun the root translation.
-const WALK_CYCLE_RATE = 3.87;
-const REGISTER_WALK_CYCLE_RATE = 3.07;
 const WALK_PERFORMANCES = new Set([
   'walk',
   'walk_lead',
@@ -44,8 +37,6 @@ export function animateCharacter(
     walkDuration?: number;
     traveling?: boolean;
     alighting?: boolean;
-    /** Keep a visible alternating step while an authored tableau drifts. */
-    gaiting?: boolean;
     speaker?: () => string;
   } = {},
 ) {
@@ -53,12 +44,14 @@ export function animateCharacter(
   const legBasePositions = legs.map((leg) => [...leg.position] as [number, number, number]);
   const legBaseAngles = legs.map((leg) => leg.rotation[0]);
   const kneeBaseAngles = knees.map((knee) => knee.rotation[0]);
+  let sampleGait = createDistanceGait(root.position);
+  let continuity: typeof root.animationContinuity;
+  if (rig.pose === 'standing') root.gait = sampleGait(root.position, 0);
   const action = performanceFor(actor, state, options.traveling, options.alighting);
-  const luchenWalking = root.name === 'luchen' && WALK_PERFORMANCES.has(action);
+  const luchen = root.name === 'luchen';
   // Reaching must use this model's bone lengths and prop targets. The shared
   // clips contain relative motion without the camera/meal's initial grip.
   const clipAction = (performance: string) =>
-    luchenWalking ||
     WALK_PERFORMANCES.has(performance) ||
     (rig.root.skinTargets && ['eat', 'walk_camera'].includes(performance))
       ? undefined
@@ -98,7 +91,7 @@ export function animateCharacter(
     mesh.position[1] = -0.82;
     body.children.push(mesh);
   }
-  if (action === 'write') {
+  if (action === 'write' && !luchen) {
     const brush = new Builder()
       .rod([0, 0.09, 0], [0, -0.15, 0.02], 0.005, M.wood)
       .rod([0, -0.15, 0.02], [0, -0.18, 0.023], 0.006, M.black, 0.001)
@@ -144,7 +137,13 @@ export function animateCharacter(
     (blenderActionFor(action) ? hands[0] : hands[1]).children.push(held);
   }
   root.animate = (t, delta) => {
-    const moving = duration > 0 && t < duration;
+    if (root.animationContinuity && root.animationContinuity !== continuity) {
+      continuity = root.animationContinuity;
+      sampleGait = createDistanceGait(continuity.position, continuity.time, continuity.gait);
+    }
+    const gait = sampleGait(root.position, t);
+    if (rig.pose === 'standing') root.gait = gait;
+    const moving = gait.moving;
     const currentAction = moving ? action : WALK_PERFORMANCES.has(action) ? 'idle' : action;
     root.blenderAction = clipAction(currentAction);
     const blenderDriven = root.blenderEnabled === true && Boolean(root.blenderAction);
@@ -169,29 +168,25 @@ export function animateCharacter(
       bend(leg, knees[i], kneeBaseAngles[i]);
     });
     if (still) return;
-    if (!blenderDriven && (duration > 0 || (options.gaiting && root.gaitMoving))) {
-      const walkCycleRate =
-        state.sceneKey === 'mini_register' && options.traveling
-          ? REGISTER_WALK_CYCLE_RATE
-          : WALK_CYCLE_RATE;
-      const stride = t * walkCycleRate + seed;
-      const weight = duration > 0 ? ease(t, 0.25) * (1 - ease(t - duration + 0.5, 0.5)) : 0.78;
+    if (rig.pose === 'standing' && moving) {
+      const { phase: stride, weight } = gait;
       body.position[1] += Math.abs(Math.sin(stride)) * 0.035 * weight;
       body.rotation[1] = Math.sin(stride) * 0.055 * weight;
       legs.forEach((leg, i) => {
         const cycle = stride + i * Math.PI;
         const step = Math.sin(cycle);
         const lift = Math.max(0, step);
-        // Opposite phase gives each foot a planted/swinging pair. Move the
-        // whole leg through a short forward arc as it leaves the ground, then
-        // bend the knee underneath it. The old pose only rotated the upper
-        // mesh by a few degrees, which was easy to miss in the wide gate shot
-        // and made the character read as a sliding root translation.
-        leg.position[1] += lift * 0.055 * weight;
-        leg.position[2] += step * 0.12 * weight;
-        leg.rotation[0] = step * 0.62 * weight;
-        bend(leg, knees[i], lift * 1.02 * weight);
-        if (!luchenWalking) armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
+        // Negative thigh pitch swings toward local +Z; the knee folds back
+        // underneath it. Using positive angles for both kicked the lifted
+        // shoe behind the character and raised both feet off the ground.
+        leg.position[1] += lift * 0.025 * weight;
+        leg.position[2] += step * 0.1 * weight;
+        leg.rotation[0] = -step * 0.35 * weight;
+        bend(leg, knees[i], lift * 0.65 * weight);
+        if (!root.skinTargets && step <= 0)
+          leg.position[1] -=
+            0.76 * (1 - Math.cos(leg.rotation[0])) - 0.07 * Math.sin(leg.rotation[0]);
+        if (!luchen && !blenderDriven) armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
       });
     }
     if (!blenderDriven) {
@@ -206,6 +201,19 @@ export function animateCharacter(
       nightAction(rig, currentAction, actionTime, verse);
       speak(currentAction, delta);
       if (currentAction === 'sleep_enter') sleepAction(rig, actionTime);
+    }
+    // Lu Chen keeps the same resting arms in every story action. Lock their
+    // parent too: breathing, gait bounce and torso turns would otherwise move
+    // the hands even when their own joints have no animation.
+    if (luchen) {
+      body.position[1] = bodyY;
+      body.rotation = [bodyPitch, 0, 0];
+      body.scale[1] = 1;
+      arms.forEach((arm, i) => {
+        arm.rotation = [0, 0, 0];
+        armPose(rig, i, -0.06, -0.09, (i ? -1 : 1) * 0.035);
+        hands[i].rotation = [0, 0, 0];
+      });
     }
     const heldSide = blenderActionFor(currentAction) ? 0 : 1;
     const upright = -(body.rotation[0] + arms[heldSide].rotation[0] + elbows[heldSide].rotation[0]);

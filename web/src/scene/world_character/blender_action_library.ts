@@ -1,4 +1,4 @@
-import { HEAD_MOTION_RATE, LUCHEN_HAND_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 /** Blender-authored NPC clips and the small runtime bridge used by WebGPU. */
 export const BLENDER_ACTIONS = {
@@ -246,8 +246,7 @@ export function applyBlenderPose(
         ? seconds % clip.duration
         : Math.min(seconds, clip.duration)
       : 0;
-  // Keep body travel on the authored clock, while making incidental head
-  // motion and Lu Chen's repeated hand tracks settle into a much quieter beat.
+  // Keep body travel on the authored clock and incidental head motion slow.
   const slowedTime = (rate: number) =>
     clip.duration > 0
       ? contract?.loop
@@ -255,9 +254,7 @@ export function applyBlenderPose(
         : Math.min(seconds * rate, clip.duration)
       : 0;
   const headTime = slowedTime(HEAD_MOTION_RATE);
-  const handTime = slowedTime(
-    targets.root.name === 'luchen' && action.startsWith('walk') ? 0 : LUCHEN_HAND_MOTION_RATE,
-  );
+  const fixedHands = targets.root.name === 'luchen';
   const track = (bone: string, path: AnimationPath) => clip.tracks.get(bone)?.[path];
   const addRotation = (node: BlenderTargets['body'], rotation: [number, number, number]) => {
     node.rotation[0] += rotation[0];
@@ -269,28 +266,31 @@ export function applyBlenderPose(
   const chest = deltaRotation(track('chest', 'rotation'), time);
   const root = deltaRotation(track('root', 'rotation'), time);
   const rootMove = deltaTranslation(track('root', 'translation'), time);
-  addRotation(targets.body, [
-    pelvis[0] + spine[0] + chest[0],
-    root[1],
-    pelvis[2] + spine[2] + chest[2],
-  ]);
-  targets.body.position[1] += rootMove[1];
+  if (!fixedHands) {
+    addRotation(targets.body, [
+      pelvis[0] + spine[0] + chest[0],
+      root[1],
+      pelvis[2] + spine[2] + chest[2],
+    ]);
+    targets.body.position[1] += rootMove[1];
+  }
   addRotation(targets.head, deltaRotation(track('head', 'rotation'), headTime));
   for (const [side, suffix] of [
     [0, 'r'],
     [1, 'l'],
   ] as const) {
-    const armTime = targets.root.name === 'luchen' ? handTime : time;
-    addRotation(
-      targets.arms[side],
-      deltaRotation(track('upper_arm_' + suffix, 'rotation'), armTime),
-    );
-    addRotation(
-      targets.elbows[side],
-      deltaRotation(track('forearm_' + suffix, 'rotation'), armTime),
-    );
-    addRotation(targets.hands[side], deltaRotation(track('hand_' + suffix, 'rotation'), armTime));
-    if (targets.pose === 'standing') {
+    if (!fixedHands) {
+      addRotation(
+        targets.arms[side],
+        deltaRotation(track('upper_arm_' + suffix, 'rotation'), time),
+      );
+      addRotation(
+        targets.elbows[side],
+        deltaRotation(track('forearm_' + suffix, 'rotation'), time),
+      );
+      addRotation(targets.hands[side], deltaRotation(track('hand_' + suffix, 'rotation'), time));
+    }
+    if (targets.pose === 'standing' && !targets.root.gait) {
       addRotation(targets.legs[side], deltaRotation(track('thigh_' + suffix, 'rotation'), time));
       addRotation(targets.knees[side], deltaRotation(track('shin_' + suffix, 'rotation'), time));
     }

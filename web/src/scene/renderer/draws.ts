@@ -25,6 +25,7 @@ export function createDraws(
   const allocated = new Set<GPUBuffer>();
   const influences = new Map<Geometry, GPUBuffer>();
   let dummy: [GPUBuffer, GPUBuffer] | undefined;
+  let emptyVegetation: GPUBuffer | undefined;
   function storageBuffer(data: Float32Array, writable = false) {
     const buffer = device.createBuffer({
       size: data.byteLength,
@@ -61,6 +62,7 @@ export function createDraws(
     return { entries: [bones, influence], bones, influences: influence };
   }
   function visit(node: WorldNode) {
+    if (node.asset?.startsWith('tidewater_')) return;
     let geometry = node.asset ? assets.get(node.asset) : node.geometry;
     if (node.asset && !geometry) throw new Error('缺少场景模型：' + node.asset + '，请重新载入。');
     if (geometry && node.surface) {
@@ -106,12 +108,16 @@ export function createDraws(
       });
       allocated.add(uniform);
       const skin = skinBindings(geometry, node);
+      const vegetation = geometry.vegetation
+        ? storageBuffer(geometry.vegetation)
+        : (emptyVegetation ??= storageBuffer(new Float32Array(4)));
       const group = device.createBindGroup({
         layout,
         entries: [
           { binding: 0, resource: { buffer: uniform } },
           { binding: 1, resource: { buffer: skin.entries[0] } },
           { binding: 2, resource: { buffer: skin.entries[1] } },
+          { binding: 3, resource: { buffer: vegetation } },
         ],
       });
       draws.set(node, {
@@ -122,7 +128,7 @@ export function createDraws(
         count: geometry.indices.length,
         bones: skin.bones,
         influences: skin.influences,
-        storage: skin.entries,
+        storage: [...skin.entries, vegetation],
       });
     }
     node.children.forEach(visit);

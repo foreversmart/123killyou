@@ -84,14 +84,12 @@ export function ScenePerson({
   );
 }
 
-type CharacterMotion = 'idle' | 'walk' | 'run' | 'write' | 'eat' | 'turn';
+type CharacterMotion = 'still' | 'idle' | 'walk' | 'run' | 'write' | 'eat' | 'turn';
 
 /** Keep the full-body staging alive while preserving the authored pose. */
 function characterMotion(actor: SceneActor, sceneKey?: string, shotKey?: string): CharacterMotion {
+  if (actor.id === 'luchen') return 'still';
   if (sceneKey === 'mini_refectory' && actor.id !== 'huipu') return 'eat';
-  if (sceneKey === 'mini_register' && shotKey === 'register_desk' && actor.id === 'luchen')
-    return 'write';
-  if (sceneKey === 'mini_corridor_candle' && actor.id === 'luchen') return 'walk';
   if (sceneKey === 'mini_dawn' && ['dawn_axis', 'dawn_courtyard'].includes(shotKey || ''))
     return 'walk';
   if (sceneKey === 'mini_death' && ['evil', 'skin_double'].includes(actor.id)) return 'run';
@@ -129,11 +127,6 @@ function getCharacterAsset(
     return poseMap.seated;
   }
   if (id === 'luchen') {
-    if (sceneKey === 'mini_register') return poseMap.reception;
-    if (sceneKey === 'mini_corridor_candle')
-      return shotKey === 'corridor_warning' || shotKey === 'corridor_two_gongs'
-        ? poseMap.hush
-        : poseMap.lantern;
     return poseMap.reception;
   }
   if (sceneKey === 'mini_refectory') return poseMap.seatedDining;

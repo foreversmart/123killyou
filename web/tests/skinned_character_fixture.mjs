@@ -98,6 +98,8 @@ function setup(pose, shotKey, flags = {}, options = {}, actorID = 'linlan') {
     rig,
     animation,
     frame(time) {
+      if (options.traveling)
+        rig.root.position[2] = 0.7 * Math.max(0, Math.min(time, options.walkDuration || 0));
       rig.root.animate(time, 1 / 60);
       if (rig.root.blenderEnabled && rig.root.blenderAction)
         applyBlenderPose(rig.root.blenderAction, time, animations, rig.root.blenderTargets);

@@ -1,5 +1,5 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
-import { cylinder, plane } from '@/scene/geometry/primitives';
+import { cylinder } from '@/scene/geometry/primitives';
 import { compoundRoof } from '@/scene/world_environment/compound_roof';
 import { bracket, templeStone, templeTimber } from '@/scene/world_environment/temple_facade';
 import type { V3 } from '@/scene/world/types';
@@ -97,35 +97,15 @@ export function compoundPaving(b: Builder, center: V3, width: number, depth: num
       );
 }
 
-function grassBed(
-  b: Builder,
-  x: number,
-  z: number,
-  width: number,
-  depth: number,
-  distant: boolean,
-) {
+function grassBed(b: Builder, x: number, z: number, width: number, depth: number) {
   b.box([width + 0.22, 0.12, depth + 0.22], [x, 0.03, z], templeStone);
   b.box([width, 0.08, depth], [x, 0.08, z], { ...M.courtGrass, color: 0x3b492f });
-  if (distant) return;
-  const blade = plane(0.035, 0.22);
-  for (let i = 0; i < Math.floor(width * depth * 12); i++) {
-    const px = x + (((i * 0.618033) % 1) - 0.5) * width;
-    const pz = z + (((i * 0.754877) % 1) - 0.5) * depth;
-    b.add(
-      blade,
-      { color: i % 3 ? 0x4b5940 : 0x66714e, rough: 1 },
-      [px, 0.11, pz],
-      [1, 0.6 + (i % 5) * 0.15, 1],
-      [0, i * 2.4, ((i % 3) - 1) * 0.24],
-    );
-  }
 }
 
-export function compoundGardens(b: Builder, distant = false) {
+export function compoundGardens(b: Builder) {
   for (const side of [-1, 1]) {
-    grassBed(b, side * 6.5, -20.4, 5.3, 3.8, distant);
-    grassBed(b, side * 6.5, -39, 5.3, 3, distant);
+    grassBed(b, side * 6.5, -20.4, 5.3, 3.8);
+    grassBed(b, side * 6.5, -39, 5.3, 3);
     for (const z of [-18.8, -21.8, -37.9, -40.1]) compoundLantern(b, side * 5.2, z);
   }
   b.box([8.5, 0.16, 5.2], [17.2, -0.02, -8.8], { ...M.stone, color: 0x717e76 });

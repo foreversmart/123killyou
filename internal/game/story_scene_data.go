@@ -24,7 +24,7 @@ var miniScenes = map[string]storyScene{
 	"mini_register": {
 		key:      "mini_register",
 		name:     "登记室·登记桌",
-		text:     "东院长廊尽头的登记室里，桌前只放一本小型登记簿。陆沉研墨提笔，准备写下四人的名字并分配房间。",
+		text:     "东院长廊尽头的登记室里，桌前只放一本小型登记簿。陆沉双手保持静止，以对白核对四人的姓名并分配房间。",
 		props:    []string{"小型登记簿", "毛笔", "砚台", "铜钥匙", "四块房牌", "四只旅行包", "念珠", "相机盖", "折叠修缮图", "蓝色发圈"},
 		room:     "register",
 		roomName: "登记室",
@@ -40,7 +40,7 @@ var miniScenes = map[string]storyScene{
 	"mini_corridor_candle": {
 		key:      "mini_corridor_candle",
 		name:     "东院回廊·二更",
-		text:     "天色从金黄转成靛蓝，陆沉在四扇偏房门前逐人发放红烛。",
+		text:     "天色从金黄转成靛蓝，红烛已在四扇偏房门前备好。陆沉双手保持静止，提醒众人领取红烛。",
 		props:    []string{"四间偏房", "四本大念处经", "红烛", "檐灯", "封闭钟楼门", "回廊拖痕"},
 		room:     "corridor",
 		roomName: "东院回廊",

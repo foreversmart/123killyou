@@ -11,6 +11,7 @@ import {
   enclosureWall,
 } from '@/scene/world_environment/compound_site';
 import { templeStone } from '@/scene/world_environment/temple_facade';
+import { gardenGrass } from '@/scene/world_environment/courtyard_planting';
 
 export function templeCompound(distant = false): WorldNode {
   const b = new Builder();
@@ -34,7 +35,7 @@ export function templeCompound(distant = false): WorldNode {
     const wing = (width - 4.8) / 2;
     for (const side of [-1, 1]) compoundPaving(b, [side * (2.4 + wing / 2), -0.02, z], wing, depth);
   }
-  compoundGardens(b, distant);
+  compoundGardens(b);
   for (const side of [-1, 1]) {
     enclosureWall(b, [side * 7.05, 0, -2.4], [side * 32, 0, -2.4], 3.2, distant);
     enclosureWall(b, [side * 32, 0, -2.4], [side * 32, 0, -62], 3.2, distant);
@@ -64,6 +65,11 @@ export function templeCompound(distant = false): WorldNode {
   ])
     compoundLantern(b, x, z);
   const root = b.mesh('temple_compound');
+  if (!distant)
+    for (const side of [-1, 1]) {
+      gardenGrass(root, side * 6.5, -20.4, 5.3, 3.8, 0.12);
+      gardenGrass(root, side * 6.5, -39, 5.3, 3, 0.12);
+    }
   // Keep semantic anchors without fragmenting the static scene into draws.
   for (const building of templeLayout) {
     const marker = node(building.id);

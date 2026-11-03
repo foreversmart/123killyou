@@ -10,6 +10,7 @@ import {
   blenderClipFor,
   type BlenderAnimationLibrary,
 } from '@/scene/world_character/blender_action_library';
+import { batchVegetation } from '@/scene/vegetation/batches';
 import { createSkinPose } from '@/scene/world_character/skin_pose';
 
 type Pipelines = Awaited<ReturnType<typeof createPipelines>>;
@@ -88,6 +89,7 @@ export class TempleRenderer {
         { binding: 0, resource: { buffer: this.frame } },
         { binding: 5, resource: this.resources.albedo },
         { binding: 8, resource: this.resources.sampler },
+        { binding: 10, resource: this.resources.vegetation },
       ],
     });
     this.frameGroup = d.createBindGroup({
@@ -109,6 +111,7 @@ export class TempleRenderer {
         { binding: 6, resource: this.resources.normal },
         { binding: 7, resource: this.resources.arm },
         { binding: 8, resource: this.resources.sampler },
+        { binding: 10, resource: this.resources.vegetation },
         { binding: 9, resource: this.resources.sky },
       ],
     });
@@ -116,6 +119,7 @@ export class TempleRenderer {
 
   setWorld(world: World) {
     this.clearWorld();
+    batchVegetation(world.root, this.resources!.meshes);
     this.enableBlenderAnimations(world.root, this.resources?.animations);
     this.draws = createDraws(
       this.device,

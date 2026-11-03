@@ -74,7 +74,7 @@ test('every manifest texture is local, decodable and current with no orphan revi
       assert.equal(image.height, manifest.skies.includes(file) ? 1024 : 512, file);
     }),
   );
-  for (const id of ['tree_1', 'fern_0', 'grass_0', 'linlan_hair']) {
+  for (const id of ['linlan_hair', 'xuzhi_hair', 'zhouyan_hair']) {
     const surface = manifest.surfaces.find((s) => s.id === id);
     const { data, info } = await sharp(await readFile(new URL(surface.albedo, root)))
       .raw()
@@ -87,6 +87,34 @@ test('every manifest texture is local, decodable and current with no orphan revi
       opaque ||= data[i] > 200;
     }
     assert.ok(transparent && opaque, id);
+  }
+});
+
+test('current material slots resolve packed characters and sculpted architecture without retired flora', async () => {
+  for (const id of Object.keys(manifest.meshes))
+    assert.doesNotMatch(id, /^(tree|tree_far|fern\d*|grass\d*)$/);
+  for (const surface of manifest.surfaces)
+    assert.doesNotMatch(surface.id, /^(tree_\d+|fern_\d+|grass_\d+)$/);
+  const { templePaint, templeRelief } =
+    await import('../src/scene/world_environment/temple_palette.ts');
+  const { gilt, shadowGold, guardianPalette } =
+    await import('../src/scene/world_environment/guardian_materials.ts');
+  for (const [material, id] of [
+    [templePaint, 'temple_paint'],
+    [templeRelief, 'temple_relief'],
+    [gilt, 'guardian_gilding'],
+    [shadowGold, 'guardian_clouds'],
+    [guardianPalette('sword').skin, 'guardian_pigment'],
+  ])
+    assert.equal(manifest.surfaces[material.pattern - 16].id, id);
+  for (const [id, model] of Object.entries(manifest.characterModels)) {
+    assert.equal(manifest.surfaces[model.surface].id, id + '_model');
+    for (const part of model.parts) {
+      const range = manifest.meshes[part];
+      const vertices = new Float32Array(binary, range.vertexOffset, range.vertexCount);
+      for (let i = 11; i < vertices.length; i += 16)
+        assert.ok(manifest.surfaces[vertices[i] - 16].id.startsWith(id + '_model'), part);
+    }
   }
 });
 

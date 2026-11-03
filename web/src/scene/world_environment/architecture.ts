@@ -36,7 +36,7 @@ export function plaque(
     color: weathered ? 0xa08459 : 0xd0a85c,
     rough: 0.48,
     metal: 0.58,
-    pattern: weathered ? 5 : 41,
+    pattern: weathered ? 5 : 36,
   };
   const outerWidth = width + (ornate ? width * 0.24 : 0.12);
   const outerHeight = height + (ornate ? height * 0.28 : 0.12);

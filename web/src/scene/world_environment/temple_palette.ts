@@ -19,5 +19,5 @@ export const gateStone: Material = { color: 0xa3a5a3, rough: 0.92, pattern: 4 };
 export const gateStoneShadow: Material = { color: 0x747878, rough: 0.96, pattern: 4 };
 
 // Slots append to the existing local material library; packed mesh indices stay fixed.
-export const templePaint: Material = { color: 0xffffff, rough: 0.85, metal: 0.25, pattern: 39 };
-export const templeRelief: Material = { color: 0xffffff, rough: 0.91, metal: 0.15, pattern: 40 };
+export const templePaint: Material = { color: 0xffffff, rough: 0.85, metal: 0.25, pattern: 34 };
+export const templeRelief: Material = { color: 0xffffff, rough: 0.91, metal: 0.15, pattern: 35 };

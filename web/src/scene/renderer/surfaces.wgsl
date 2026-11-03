@@ -15,7 +15,7 @@ fn surfaceSlot(pattern: f32) -> i32 {
   return 0;
 }
 fn usesTexture(p: f32) -> bool {
-  return p >= 16.0 || p == 1.0 || p == 4.0 || p == 7.0 || p == 8.0 || p == 9.0 || p == 10.0;
+  return (p >= 16.0 && p < 100.0) || p == 1.0 || p == 4.0 || p == 7.0 || p == 8.0 || p == 9.0 || p == 10.0;
 }
 fn surfaceUv(i: Surface) -> vec2f {
   if (i.material.z >= 16.0) { return i.uv; }
@@ -58,11 +58,13 @@ fn terrainSurface(p: vec3f, n: vec3f, dx: vec3f, dy: vec3f) -> vec3f {
 }
 @fragment fn shadowFragment(i: Surface) {
   let dx = dpdx(i.uv); let dy = dpdy(i.uv);
-  if (i.material.z >= 16.0) {
+  let mask = tidewaterMask(i.material.z, i.color, i.uv, i.position, normalize(i.normal), normalize(frame.eye.xyz - i.position), i.plantSeed);
+  if (i.material.z >= 100.0) {
+    if (mask <= 0.0) { discard; }
+  } else if (i.material.z >= 16.0) {
     // Use the authored cutout for foliage shadows as well. Sampling a filtered
     // alpha mask lets transparent gutters become a solid pale card at distance.
     let alpha = textureSampleLevel(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), 0.0).a;
     if (alpha < 0.52) { discard; }
-    if (i.material.z == 23.0 && (i.uv.x > 0.76 || (i.uv.x > 0.55 && i.uv.y > 0.73))) { discard; }
   }
 }

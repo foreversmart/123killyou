@@ -1,3 +1,5 @@
+import { vegetationShader } from '@/scene/vegetation/materials';
+import wind from '@/scene/vegetation/wind.wgsl?raw';
 import shader from '@/scene/renderer/scene.wgsl?raw';
 import skyShader from '@/scene/renderer/sky.wgsl?raw';
 import surfaces from '@/scene/renderer/surfaces.wgsl?raw';
@@ -21,6 +23,7 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
         texture: { viewDimension: '2d-array' as const },
       })),
       { binding: 8, visibility: GPUShaderStage.FRAGMENT, sampler: {} },
+      { binding: 10, visibility: GPUShaderStage.FRAGMENT, texture: {} },
     ],
   });
   const objectLayout = device.createBindGroupLayout({
@@ -32,18 +35,24 @@ export async function createPipelines(device: GPUDevice, format: GPUTextureForma
       },
       { binding: 1, visibility: GPUShaderStage.VERTEX, buffer: { type: 'read-only-storage' } },
       { binding: 2, visibility: GPUShaderStage.VERTEX, buffer: { type: 'read-only-storage' } },
+      { binding: 3, visibility: GPUShaderStage.VERTEX, buffer: { type: 'read-only-storage' } },
     ],
   });
   const shadowLayout = device.createBindGroupLayout({
     entries: [
-      { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: { type: 'uniform' } },
+      {
+        binding: 0,
+        visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT,
+        buffer: { type: 'uniform' },
+      },
       { binding: 5, visibility: GPUShaderStage.FRAGMENT, texture: { viewDimension: '2d-array' } },
       { binding: 8, visibility: GPUShaderStage.FRAGMENT, sampler: {} },
+      { binding: 10, visibility: GPUShaderStage.FRAGMENT, texture: {} },
     ],
   });
   const module = device.createShaderModule({
     label: 'Tidewater-style temple materials',
-    code: shader + surfaces,
+    code: shader + surfaces + vegetationShader + wind,
   });
   const info = await module.getCompilationInfo();
   const errors = info.messages.filter((m) => m.type === 'error');

@@ -30,9 +30,7 @@ export function speechMotion(rig: CharacterRig, actor: SceneActor, speaker: () =
     if (!weight || !['idle', 'admire', 'look_up', 'welcome'].includes(action)) return;
     rig.head.rotation[0] += Math.sin(time * 3.4 * HEAD_MOTION_RATE) * 0.045 * weight;
     rig.head.rotation[1] += Math.sin(time * 1.6 * HEAD_MOTION_RATE) * 0.07 * weight;
-    // A welcome is an active hand gesture as well as a head turn; let the
-    // audible line carry a small forearm beat without overriding the monk's
-    // broader invitation pose from dayAction.
+    // Visitors add a small forearm beat while Lu Chen keeps his hands still.
     if (!['idle', 'welcome'].includes(action)) return;
     const gesture = (0.5 + Math.sin(time * 2.1) * 0.5) * weight;
     if (actor.id !== 'luchen') {

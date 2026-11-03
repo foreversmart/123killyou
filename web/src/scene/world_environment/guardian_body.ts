@@ -97,7 +97,7 @@ export function guardianBody(b: Builder, c: GuardianPalette) {
     const skirt = new Builder();
     skirt.add(
       leafPlate,
-      { color: 0xd3bc96, rough: 0.82, metal: 0.3, pattern: 43 },
+      { color: 0xd3bc96, rough: 0.82, metal: 0.3, pattern: 38 },
       [0, 0, 0],
       [0.47, 0.64, 1],
       [0, 0, Math.PI],

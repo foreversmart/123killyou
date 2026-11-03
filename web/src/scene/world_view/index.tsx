@@ -9,6 +9,7 @@ import { TempleRenderer } from '@/scene/renderer/engine';
 import { project } from '@/scene/renderer/frame';
 import styles from '@/scene/world_view/style.module.css';
 import { WorldOverlay } from '@/scene/world_view/world_overlay';
+import { carryCharacterContinuity } from '@/scene/world_view/continuity';
 import {
   createPlayerControls,
   updateMouseLook,
@@ -149,25 +150,7 @@ export function WorldView({
               scenePlace(activeState, 'story') === 'gate' &&
               scenePlace(latest.current.state, 'story') === 'gate';
             if (continuingGateTableau) {
-              // Consecutive arrival shots rebuild the rig so each shot can
-              // choose its own hands and gaze. Carry the last rendered root
-              // pose into the replacement rig; the renderer blends it into
-              // the next authored pose over a few frames instead of snapping
-              // every visitor back to the gate anchor.
-              const previousByName = new Map(
-                activeWorld.root.children
-                  .filter((child) => child.animate)
-                  .map((child) => [child.name, child]),
-              );
-              for (const child of latest.current.world.root.children) {
-                const previous = previousByName.get(child.name);
-                if (!previous || !child.animate) continue;
-                child.animationContinuity = {
-                  position: [...previous.position],
-                  rotationY: previous.rotation[1],
-                  time: clock,
-                };
-              }
+              carryCharacterContinuity(activeWorld, latest.current.world, clock);
             }
             activeWorld = latest.current.world;
             renderer.setWorld(activeWorld);

@@ -6,10 +6,10 @@ export function skinGroundContact(geometry?: Geometry) {
   if (geometry?.skin)
     for (let vertex = 0; vertex < geometry.vertices.length / 16; vertex++)
       if (geometry.vertices[vertex * 16 + 1] < 0.65) contacts.push(vertex);
-  return (matrices: Float32Array) => {
+  return (matrices: Float32Array, planted = false) => {
     if (!geometry?.skin) return 0;
     const { vertices, skin } = geometry;
-    let lowest = 0;
+    let lowest = planted && contacts.length ? Infinity : 0;
     for (const vertex of contacts) {
       const p = vertex * 16;
       let y = 0;

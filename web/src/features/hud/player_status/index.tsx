@@ -21,6 +21,7 @@ export function PlayerStatus({
   voiceStarted,
   playbackOn,
   connected,
+  aboveOpening,
   onPauseToggle,
 }: {
   state: GameState;
@@ -28,13 +29,20 @@ export function PlayerStatus({
   voiceStarted: boolean;
   playbackOn?: boolean;
   connected: boolean;
+  aboveOpening: boolean;
   onPauseToggle: () => void | Promise<void>;
 }) {
   const devotion = Math.max(0, Math.min(100, state.devotion));
   const devotionLow = devotion <= 30;
   const nightThreat = devotionLow && nightScenes.includes(state.sceneKey || '');
   return (
-    <header className={cx(surface.framed, styles['topbar'])}>
+    <header
+      className={cx(
+        surface.framed,
+        styles['topbar'],
+        aboveOpening && styles['topbar--above-opening'],
+      )}
+    >
       <div
         className={cx(styles.devotion, devotionLow && styles['devotion--low'])}
         aria-label={`虔诚度 ${devotion}%`}

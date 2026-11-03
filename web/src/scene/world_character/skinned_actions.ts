@@ -147,7 +147,7 @@ function camera(
       inverse,
     );
     const finger = vec3.transformMat4(
-      vec3.transformMat4([sign * 0.035, -0.012, 0.005], cameraMatrix),
+      vec3.transformMat4([sign * 0.035, -0.012, 0.003], cameraMatrix),
       inverse,
     );
     reach(rig, side, wrist, skeleton);

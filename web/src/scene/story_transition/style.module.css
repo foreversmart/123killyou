@@ -7,7 +7,8 @@
   color: #ead8ad;
   background: #080b0b;
 }
-.transition[data-ready='true'] {
+/* Only the last travel phase may reveal the destination below the overlay. */
+.transition[data-ready='true']:where([data-final-phase='true']) {
   animation: transition_fade var(--travel-duration, 2200ms) ease-in-out both;
 }
 .transition[data-paused='true'],
@@ -88,7 +89,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .transition[data-ready='true'],
+  .transition[data-ready='true']:where([data-final-phase='true']),
   .transition[data-kind='sleep'][data-ready='true'] .shade,
   .transition[data-ready='true'] .copy {
     animation: none;

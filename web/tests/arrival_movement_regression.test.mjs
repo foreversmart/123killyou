@@ -52,18 +52,19 @@ test('opening gate walk animates both legs and covers the wider entrance distanc
     assert.equal(legs.length, 2, `${person.id} has two legs in the gate rig`);
     root.animate(0, 0);
     const start = [...root.position];
-    const startLegs = legs.map((leg) => [leg.rotation[0], leg.bend?.angle || 0]);
-    root.animate(1.5, 0);
-    const midLegs = legs.map((leg) => [leg.rotation[0], leg.bend?.angle || 0]);
+    const lifted = [false, false];
+    let alternating = false;
+    for (let frame = 1; frame <= 180; frame++) {
+      root.animate(frame / 60, 1 / 60);
+      const bends = legs.map((leg) => leg.bend?.angle || 0);
+      bends.forEach((bend, side) => {
+        lifted[side] ||= bend > 0.02;
+      });
+      alternating ||= Math.abs(bends[0] - bends[1]) > 0.02;
+    }
+    assert.ok(lifted.every(Boolean), `${person.id} lifts both legs while crossing the gate`);
     assert.ok(
-      midLegs.some(
-        ([rotation, bend]) => Math.abs(rotation - startLegs[0][0]) > 0.02 || Math.abs(bend) > 0.02,
-      ),
-      `${person.id} moves its legs while crossing the gate`,
-    );
-    assert.ok(
-      Math.abs(midLegs[0][0] - midLegs[1][0]) > 0.02 ||
-        Math.abs(midLegs[0][1] - midLegs[1][1]) > 0.02,
+      alternating,
       `${person.id} alternates the two legs instead of translating as one piece`,
     );
     const duration = [4.65, 5.55, 6.225, 5.1][actors.findIndex(({ id }) => id === person.id)];
@@ -117,9 +118,8 @@ test('arrival shot changes keep everyone at the gate and preserve active compani
 test('gate drift only lifts feet while the authored position is actually changing', () => {
   const game = state('arrival_weather');
   const rig = characterModel('linlan');
-  animateCharacter(rig, actor('linlan'), game, { gaiting: true });
+  animateCharacter(rig, actor('linlan'), game);
   const root = rig.root;
-  root.gaitMoving = false;
   root.animate(2, 0);
   const standing = root.children
     .filter((node) => node.name === 'leg')
@@ -128,13 +128,18 @@ test('gate drift only lifts feet while the authored position is actually changin
     standing.every(([rotation, bend]) => Math.abs(rotation) < 0.001 && Math.abs(bend) < 0.001),
   );
 
-  root.gaitMoving = true;
+  root.position[0] += 0.04;
   root.animate(2.1, 0);
   const stepping = root.children
     .filter((node) => node.name === 'leg')
     .map((leg) => [leg.rotation[0], leg.bend?.angle || 0]);
   assert.ok(
     stepping.some(([rotation, bend]) => Math.abs(rotation) > 0.02 || Math.abs(bend) > 0.02),
+  );
+  root.animate(2.2, 0);
+  assert.ok(
+    rig.legs.every((leg) => Math.abs(leg.rotation[0]) < 0.001 && Math.abs(leg.bend.angle) < 0.001),
+    'feet settle when time advances without another displacement',
   );
 });
 

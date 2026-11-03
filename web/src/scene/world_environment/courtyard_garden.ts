@@ -1,13 +1,10 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import { stoneSlab } from '@/scene/geometry/stone_slab';
 import { node, type WorldNode } from '@/scene/world/types';
-import {
-  gardenBamboo,
-  gardenGrass,
-  gardenShrub,
-} from '@/scene/world_environment/courtyard_planting';
+import { gardenPalm, gardenGrass, gardenShrub } from '@/scene/world_environment/courtyard_planting';
 import { gardenLantern, gardenLightPositions } from '@/scene/world_environment/courtyard_lights';
 import { modelAsset } from '@/scene/world_environment/vegetation';
+import { plantAsset, treeAsset } from '@/scene/world_environment/procedural_vegetation';
 import { courtyardWall } from '@/scene/world_environment/courtyard_walls';
 
 const bedding = { ...M.stone, color: 0x434a43, rough: 0.98 };
@@ -69,8 +66,7 @@ function curvedWalk(b: Builder, side: number) {
 
 export function courtyardGarden(daylight: boolean): WorldNode {
   const root = node('courtyard_garden');
-  const hardscape = new Builder(),
-    plants = new Builder();
+  const hardscape = new Builder();
   for (const side of [-1, 1]) {
     for (const [z, depth] of [
       [3.15, 3.7],
@@ -82,26 +78,26 @@ export function courtyardGarden(daylight: boolean): WorldNode {
         ...M.courtGrass,
         color: 0x3f4b30,
       });
-      gardenGrass(plants, side * 3.57, z, 1.4, depth - 0.08, (px, pz) => {
-        const t = (4.75 - pz) / 3.8;
-        return (
-          t >= 0 && t <= 1 && Math.abs(px - side * (3.5 + Math.sin(t * Math.PI * 2) * 0.28)) < 0.4
-        );
-      });
+      if (z < 0) gardenGrass(root, side * 3.57, z, 1.4, depth - 0.08);
+      else {
+        // The S-shaped walk keeps its full stone width; grass occupies the outer rim.
+        gardenGrass(root, side * 4.23, z, 0.12, depth - 0.08);
+        root.children.push(plantAsset('fern', [side * 4.13, 0.06, 2.6], 0.31, side));
+      }
     }
     curvedWalk(hardscape, side);
-    gardenShrub(plants, [side * 4.05, 0.06, 1.65], 0.57, true);
-    gardenShrub(plants, [side * 3.87, 0.06, 4.37], 0.42);
-    gardenShrub(plants, [side * 3.7, 0.06, -4.16], 0.62, side > 0);
-    gardenBamboo(plants, [side * 4.66, 0.02, -6.95], side > 0 ? 2.8 : 2.5);
-    gardenBamboo(plants, [side * 5.05, 0.02, 5.8], 2.7);
+    gardenShrub(root, [side * 4.05, 0.06, 1.65], 0.57, true);
+    gardenShrub(root, [side * 3.87, 0.06, 4.37], 0.42);
+    gardenShrub(root, [side * 3.7, 0.06, -4.16], 0.62, side > 0);
+    gardenPalm(root, [side * 4.66, 0.02, -6.95], side > 0 ? 2.8 : 2.5);
+    gardenPalm(root, [side * 5.05, 0.02, 5.8], 2.7);
     for (const [x, z, size] of [
       [3.08, -4.56, 0.4],
       [4.03, -3.62, 0.5],
       [3.18, 4.62, 0.31],
     ])
       root.children.push(modelAsset('rock', [side * x, 0.015, z], size, side * z));
-    root.children.push(modelAsset('fern', [side * 4.28, 0.04, -3.45], 0.46, side));
+    root.children.push(plantAsset('fern', [side * 4.28, 0.04, -3.45], 0.46, side));
     gardenLantern(hardscape, [side * 4.45, 0.02, 4.05], !daylight, true);
   }
   gardenLightPositions.forEach(([x, y, z], i) =>
@@ -123,14 +119,11 @@ export function courtyardGarden(daylight: boolean): WorldNode {
       [5.9 + i * 0.43, 0.005, 3.1 + Math.sin(i * 0.55) * 0.32],
       paleStone,
     );
-  gardenBamboo(plants, [8.4, 0, 4.8], 3.1);
-  gardenShrub(plants, [7.75, 0.02, 1.65], 0.65, true);
+  gardenPalm(root, [8.4, 0, 4.8], 3.1);
+  gardenShrub(root, [7.75, 0.02, 1.65], 0.65, true);
   root.children.push(modelAsset('rock1', [8.4, 0, 2.1], 0.55, 0.3));
-  root.children.push(modelAsset('tree_far', [-4.6, -0.1, -10.8], 0.85, 0.8));
-  root.children.push(modelAsset('tree_far', [5.3, -0.1, -11.5], 0.9, 1.7));
+  root.children.push(treeAsset(2, [-4.6, -0.1, -10.8], 0.46, 0.8));
+  root.children.push(treeAsset(0, [5.3, -0.1, -11.5], 0.48, 1.7));
   root.children.push(hardscape.mesh('courtyard_paths_and_lights'));
-  const greenery = plants.mesh('courtyard_bamboo_and_azaleas');
-  greenery.wind = 0.35;
-  root.children.push(greenery);
   return root;
 }

@@ -112,11 +112,11 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       mode === 'story' &&
       state.sceneKey === 'mini_arrival' &&
       state.shotKey?.startsWith('arrival_');
+    if (movement) rig.root.position = [...movement.from];
     const { held, heldBowl } = animateCharacter(rig, actor, state, {
       walkDuration: movement?.duration,
       traveling: walking,
       alighting: mode === 'alighting',
-      gaiting: gateDrift,
       speaker: () => world.speaker || '',
     });
     const ghost =
@@ -149,78 +149,59 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     const authoredFacing = actorFacing(
       actor,
       state,
-      rig.root.position,
+      activityBase,
       actor.id === 'skin_double' ? Math.PI : rig.root.rotation[1],
     );
     const candleGuest = state.sceneKey === 'mini_corridor_candle' && actor.id !== 'luchen';
     if (candleGuest) rig.root.rotation[1] = authoredFacing;
-    if (movement) {
-      const perform = rig.root.animate!;
-      const heading = Math.atan2(
-        movement.to[0] - movement.from[0],
-        movement.to[2] - movement.from[2],
-      );
-      // A corridor travel ends at a side doorway. Keep the walking heading
-      // while moving, then turn toward that doorway during the short settle
-      // window. This makes the stop readable and keeps the rig from facing
-      // through the corridor's end wall.
-      const endFacing = movement.endFacing ?? authoredFacing;
-      const turn = Math.atan2(Math.sin(endFacing - heading), Math.cos(endFacing - heading));
-      rig.root.position = [...movement.from];
-      rig.root.animate = (t, dt) => {
+    const perform = rig.root.animate!;
+    const originFacing = rig.root.rotation[1];
+    let placementTime: number | undefined;
+    const angleDelta = (from: number, to: number) =>
+      Math.atan2(Math.sin(to - from), Math.cos(to - from));
+    rig.root.animate = (t, dt) => {
+      if (t === placementTime) {
         perform(t, dt);
+        return;
+      }
+      placementTime = t;
+      if (movement) {
+        const heading = Math.atan2(
+          movement.to[0] - movement.from[0],
+          movement.to[2] - movement.from[2],
+        );
         rig.root.position = movementPosition(movement, t);
         const settle = ease(t - movement.duration + 0.675, 0.675);
-        const facing = heading + turn * settle;
-        rig.root.rotation[1] = Math.atan2(Math.sin(facing), Math.cos(facing));
-      };
-    } else if (authoredFacing !== rig.root.rotation[1] && !candleGuest) {
-      const perform = rig.root.animate!;
-      const origin = rig.root.rotation[1];
-      const turn = Math.atan2(Math.sin(authoredFacing - origin), Math.cos(authoredFacing - origin));
-      rig.root.animate = (t, dt) => {
-        perform(t, dt);
-        rig.root.rotation[1] = origin + turn * ease(t, 1.65);
-      };
-    }
-    if (gateDrift) {
-      const perform = rig.root.animate!;
-      rig.root.animate = (t, dt) => {
+        const turn = angleDelta(heading, movement.endFacing ?? authoredFacing);
+        rig.root.rotation[1] = angleDelta(0, heading + turn * settle);
+      } else if (!candleGuest) {
+        rig.root.rotation[1] =
+          originFacing + angleDelta(originFacing, authoredFacing) * ease(t, 1.65);
+      }
+      if (gateDrift) {
         const next = gateActivityPosition(actor, state, activity, t, activityBase);
         const previous = [...rig.root.position] as V3;
-        rig.root.gaitMoving = Math.hypot(next[0] - previous[0], next[2] - previous[2]) > 0.0002;
-        perform(t, dt);
         rig.root.position = next;
         if (next[0] !== previous[0] || next[2] !== previous[2]) {
           const drift = Math.atan2(next[0] - previous[0], next[2] - previous[2]);
-          const driftTurn = Math.atan2(
-            Math.sin(drift - authoredFacing),
-            Math.cos(drift - authoredFacing),
-          );
-          rig.root.rotation[1] = authoredFacing + driftTurn * 0.12;
+          rig.root.rotation[1] = authoredFacing + angleDelta(authoredFacing, drift) * 0.12;
         }
-      };
-    }
-    const continuity = rig.root.animationContinuity;
-    if (continuity) {
-      const perform = rig.root.animate!;
-      const fromPosition = [...continuity.position] as V3;
-      const fromRotation = continuity.rotationY;
-      rig.root.animate = (t, dt) => {
-        perform(t, dt);
+      }
+      // WorldView supplies continuity after constructing the new world. Read
+      // it each frame, then sample gait from the final, blended position.
+      const continuity = rig.root.animationContinuity;
+      if (continuity) {
         const progress = ease(t - continuity.time, 0.42);
-        const turn = Math.atan2(
-          Math.sin(rig.root.rotation[1] - fromRotation),
-          Math.cos(rig.root.rotation[1] - fromRotation),
-        );
+        const turn = angleDelta(continuity.rotationY, rig.root.rotation[1]);
         const targetPosition = [...rig.root.position] as V3;
-        rig.root.position = fromPosition.map(
+        rig.root.position = continuity.position.map(
           (value, index) => value + (targetPosition[index] - value) * progress,
         ) as V3;
-        rig.root.rotation[1] = fromRotation + turn * progress;
-        if (progress >= 1) rig.root.animationContinuity = undefined;
-      };
-    }
+        rig.root.rotation[1] = continuity.rotationY + turn * progress;
+      }
+      perform(t, dt);
+      if (continuity && t >= continuity.time + 0.42) rig.root.animationContinuity = undefined;
+    };
     if (held) {
       const hotspot = world.hotspots.find((prop) => prop.id === 'candle');
       if (hotspot) hotspot.anchor = { node: held, offset: [0, 0.3, 0] };

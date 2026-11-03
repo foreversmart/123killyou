@@ -50,7 +50,7 @@ for (const [index, id] of ids.entries()) {
   // Reload before each write so additions by the parallel sculpture workflow
   // stay intact. Existing packed material indices must never be shifted.
   const manifest = JSON.parse(await readFile(root + 'library.json', 'utf8'));
-  const slot = 23 + index;
+  const slot = 18 + index;
   if (manifest.surfaces[slot] && manifest.surfaces[slot].id !== id)
     throw new Error(
       `Reserved temple surface ${slot} already belongs to ${manifest.surfaces[slot].id}`,
