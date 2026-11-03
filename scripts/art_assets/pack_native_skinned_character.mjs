@@ -2,8 +2,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
-import { MeshoptSimplifier } from 'meshoptimizer';
 import { readGltf } from './gltf.mjs';
+import { simplifyCharacterMesh } from './simplify_character.mjs';
 
 /** Pack a supplied skinned GLB without rebinding its native skeleton. */
 const repository = fileURLToPath(new URL('../../', import.meta.url));
@@ -114,7 +114,6 @@ const firstMesh = gltf.meshes[0];
 const skin = gltf.json.skins[firstMesh.skin];
 if (!firstMesh.joints || !firstMesh.weights || !skin?.inverseBindMatrices)
   throw new Error(`${source}: missing joints, weights, or inverse bind matrices`);
-await MeshoptSimplifier.ready;
 const used = new Map();
 const vertices = [];
 const influences = [];
@@ -142,26 +141,7 @@ for (const mesh of gltf.meshes) {
     );
     materialSurfaces.set(materialIndex, surface);
   }
-  const attributes = new Float32Array((mesh.positions.length / 3) * 5);
-  for (let vertex = 0; vertex < mesh.positions.length / 3; vertex++) {
-    attributes.set(mesh.normals.subarray(vertex * 3, vertex * 3 + 3), vertex * 5);
-    attributes.set(mesh.uv.subarray(vertex * 2, vertex * 2 + 2), vertex * 5 + 3);
-  }
-  const indices =
-    mesh.indices.length <= 40000 * 3
-      ? mesh.indices
-      : MeshoptSimplifier.simplifyWithAttributes(
-          mesh.indices,
-          mesh.positions,
-          3,
-          attributes,
-          5,
-          [0.01, 0.01, 0.01, 0.025, 0.025],
-          null,
-          40000 * 3,
-          0.005,
-          ['Permissive'],
-        )[0];
+  const [indices] = await simplifyCharacterMesh(mesh);
   for (const index of indices) {
     const key = `${materialIndex}:${index}`;
     let target = used.get(key);

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { vec3 } from 'wgpu-matrix';
 import { skin, vertices, vertexCount, setup, skinPosition } from './skinned_character_fixture.mjs';
 
 test('both source shoes retain strong foot weights so ankle corrections move the rendered shoes', () => {
@@ -26,6 +27,27 @@ test('both source shoes retain strong foot weights so ankle corrections move the
     assert.ok(count > 500, 'each shoe has a substantial visible surface');
     assert.ok(total / count > 0.7, 'shoe vertices follow their ankle instead of the shin');
     assert.ok(dominant / count > 0.8, 'the foot remains the main influence across the shoe');
+  }
+});
+
+test('the photo gesture leaves both lower legs planted instead of lifting them with the hands', () => {
+  const item = setup('standing', 'arrival_weather');
+  const lowerLegs = Array.from({ length: vertexCount }, (_, vertex) => vertex).filter(
+    (vertex) => vertices[vertex * 16 + 1] < 0.45,
+  );
+  item.frame(0);
+  const rest = lowerLegs.map((vertex) =>
+    skinPosition(vertex, item.rig.root.skinTargets.mesh.skinMatrices),
+  );
+  for (const time of [1.5, 3, 6]) {
+    item.frame(time);
+    lowerLegs.forEach((vertex, index) => {
+      const position = skinPosition(vertex, item.rig.root.skinTargets.mesh.skinMatrices);
+      assert.ok(
+        vec3.distance(rest[index], position) < 0.06,
+        `camera t=${time}: lower leg vertex ${vertex} follows a raised hand`,
+      );
+    });
   }
 });
 

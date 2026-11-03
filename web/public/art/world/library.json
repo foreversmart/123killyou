@@ -428,41 +428,41 @@
       "indexOffset": 16318280,
       "indexCount": 164979
     },
-    "luchen_model_skin": {
+    "huipu_model_skin": {
       "vertexOffset": 16978196,
-      "vertexCount": 473632,
-      "indexOffset": 18872724,
-      "indexCount": 119994
+      "vertexCount": 599712,
+      "indexOffset": 19377044,
+      "indexCount": 121041
+    },
+    "luchen_model_skin": {
+      "vertexOffset": 19861208,
+      "vertexCount": 1282096,
+      "indexOffset": 24989592,
+      "indexCount": 179535
     },
     "xuzhi_model_skin": {
-      "vertexOffset": 19352700,
-      "vertexCount": 478064,
-      "indexOffset": 21264956,
-      "indexCount": 119994
-    },
-    "huipu_model_skin": {
-      "vertexOffset": 21744932,
-      "vertexCount": 530848,
-      "indexOffset": 23868324,
-      "indexCount": 121038
-    },
-    "zhouyan_model_skin": {
-      "vertexOffset": 24352476,
-      "vertexCount": 470752,
-      "indexOffset": 26235484,
-      "indexCount": 119997
-    },
-    "linlan_model_skin": {
-      "vertexOffset": 26715472,
-      "vertexCount": 481568,
-      "indexOffset": 28641744,
-      "indexCount": 120000
+      "vertexOffset": 25707732,
+      "vertexCount": 1127088,
+      "indexOffset": 30216084,
+      "indexCount": 148830
     },
     "zhaoxi_model_skin": {
-      "vertexOffset": 29121744,
-      "vertexCount": 432720,
-      "indexOffset": 30852624,
+      "vertexOffset": 30811404,
+      "vertexCount": 693664,
+      "indexOffset": 33586060,
       "indexCount": 120000
+    },
+    "zhouyan_model_skin": {
+      "vertexOffset": 34066060,
+      "vertexCount": 1414384,
+      "indexOffset": 39723596,
+      "indexCount": 189558
+    },
+    "linlan_model_skin": {
+      "vertexOffset": 40481828,
+      "vertexCount": 1146960,
+      "indexOffset": 45069668,
+      "indexCount": 162312
     }
   },
   "binary": "library.bin",
@@ -4669,9 +4669,9 @@
         "camera": {
           "bone": "neutral_bone",
           "center": [
-            -0.08121326100081205,
-            1.0999263525009155,
-            0.15288014337420464
+            -0.07991105318069458,
+            1.0994418859481812,
+            0.15360010415315628
           ]
         },
         "influences": "linlan_skin.bin",

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="utf-8" />
+  <title>角色画面验证</title>
+  <body style="margin:0;background:#161916;color:#eee;font:16px sans-serif">
+    <div id="status" style="position:absolute;z-index:2;padding:12px">正在执行实际能力检查</div>
+    <div id="probe"></div>
+    <canvas id="view" style="width:100vw;height:100vh;display:block"></canvas>
+    <script type="module">
+      import { probeHtmlCanvasSupport } from '/src/shared/lib/htmlCanvasProbe.ts';
+      import { probeWebGpuSupport } from '/src/shared/lib/webgpuProbe.ts';
+      const status = document.querySelector('#status');
+      try {
+        const html = await probeHtmlCanvasSupport(document.querySelector('#probe'));
+        if (!html.supported) throw new Error(JSON.stringify(html));
+        const gpu = await probeWebGpuSupport();
+        if (!gpu.supported) throw new Error(JSON.stringify(gpu));
+        const [{ TempleRenderer }, { createWorld }] = await Promise.all([
+          import('/src/scene/renderer/engine.ts'),
+          import('/src/scene/world/create_world.ts'),
+        ]);
+        const engine = await TempleRenderer.create(document.querySelector('#view'), (error) => {
+          status.textContent = error;
+        });
+        const world = createWorld({ state: {
+          sceneKey: 'mini_arrival', shotKey: 'arrival_weather', flags: {},
+          actors: ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => ({
+            id, name: id, visible: true, portrait: id, position: '', status: '',
+          })),
+          dialogue: { speaker: '', text: '' }, inventory: [],
+        }});
+        engine.setWorld(world);
+        let time = 8;
+        const render = () => engine.render(world, time, 1 / 60, [0, 0, 0]);
+        const wide = { ...world.camera };
+        document.addEventListener('keydown', (event) => {
+          if (event.key === '4') {
+            const toggle = (node) => { node.receiveShadow = node.receiveShadow === false; node.children.forEach(toggle); };
+            world.root.children.filter((node) => ['linlan', 'zhouyan', 'xuzhi', 'luchen'].includes(node.name)).forEach(toggle);
+          }
+          if (event.key === '5') {
+            world.root.children = world.root.children.filter((node) => !['zhouyan', 'xuzhi', 'luchen'].includes(node.name));
+            engine.setWorld(world);
+            const actor = world.root.children.find((node) => node.name === 'linlan');
+            actor.animate = (t, dt) => {};
+            actor.position = [-2.1, 0, 2.2];
+            actor.rotation[1] = 0;
+            const [x, y, z] = actor.position;
+            world.camera = { eye: [x + 0.4, y + 1.3, z + 4], target: [x, y + 0.9, z], fov: 35 };
+          }
+          if (event.key === '1') world.camera = { ...wide };
+          if (event.key === '2' || event.key === '3') {
+            const actor = world.root.children.find((node) => node.name === (event.key === '2' ? 'linlan' : 'zhouyan'));
+            const [x, y, z] = actor.position;
+            world.camera = { eye: [x + 1.4, y + 1.3, z + 4], target: [x, y + 0.9, z], fov: 35 };
+          }
+          if (event.key === 'ArrowRight') time += 1;
+          render();
+        });
+        status.textContent = '实际能力检查通过 · 山门角色 · 1 全景 / 2 近景 / → 下一秒';
+        render();
+      } catch (error) { status.textContent = '验证停止：' + error.message; }
+    </script>
+  </body>
+</html>

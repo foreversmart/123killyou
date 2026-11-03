@@ -99,9 +99,21 @@ export function StoryTransition({
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    onActive?.(Boolean(active));
+    // Include the first render of a scene change in the active window. The
+    // pending beat is painted before the scene-tracking effect promotes it to
+    // `active`; reporting false here would let auto-play submit the next
+    // command while the travel overlay is still starting.
+    const pending =
+      previousScene.current !== null && previousScene.current !== sceneKey
+        ? travelBeats[sceneKey]
+        : null;
+    const beat = active || pending;
+    const suppressed =
+      state.flags.debug_scene_skipped ||
+      (beat?.id === 'companion_walk_listen' && !state.flags.companion_present);
+    onActive?.(Boolean(beat && !suppressed));
     return () => onActive?.(false);
-  }, [active, onActive]);
+  }, [active, onActive, sceneKey, state.flags.companion_present, state.flags.debug_scene_skipped]);
   useEffect(() => {
     const previous = previousScene.current;
     previousScene.current = sceneKey;
@@ -134,14 +146,24 @@ export function StoryTransition({
     return () => window.clearTimeout(timer);
   }, [active, phaseIndex, ready, state.paused]);
 
-  const beat = active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
+  // Scene state and effects are committed in separate render phases. Without
+  // staging the changed scene here, the destination scene (the refectory) can
+  // paint for one frame before the effect below installs its travel beat. That
+  // makes the route look like “arrive, then flash back to the hall”. Keep the
+  // first frame of a scene change on the travel overlay and let the effect
+  // promote it to `active` after the commit.
+  const sceneChanged = previousScene.current !== null && previousScene.current !== sceneKey;
+  const pending = sceneChanged ? travelBeats[sceneKey] : null;
+  const beat = pending || active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
+  const renderPhaseIndex = pending ? 0 : phaseIndex;
+  const renderReady = pending ? false : ready;
   if (
     !beat ||
     state.flags.debug_scene_skipped ||
     (beat.id === 'companion_walk_listen' && !state.flags.companion_present)
   )
     return null;
-  const currentPhase = beat.phases?.[phaseIndex];
+  const currentPhase = beat.phases?.[renderPhaseIndex];
   const mode =
     currentPhase?.mode ?? (beat.kind === 'sleep' ? 'story' : beat.interlude ? 'hall' : 'travel');
   const title = currentPhase?.title ?? beat.title;
@@ -151,7 +173,7 @@ export function StoryTransition({
       className={styles.transition}
       data-transition={beat.id}
       data-kind={beat.kind}
-      data-ready={ready}
+      data-ready={renderReady}
       data-paused={state.paused}
       data-interlude-pan={beat.interlude ? 'horizontal' : undefined}
       style={
@@ -164,7 +186,7 @@ export function StoryTransition({
       aria-live="polite"
     >
       <WorldView
-        key={`${beat.id}-${phaseIndex}`}
+        key={`${beat.id}-${renderPhaseIndex}`}
         state={state}
         mode={mode}
         onAvailability={setReady}

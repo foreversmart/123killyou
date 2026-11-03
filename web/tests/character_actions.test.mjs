@@ -199,6 +199,30 @@ test('actual speech starts late while Lu Chen keeps his hands still and freezes 
   assert.equal(rig.head.children[0].bend.angle, 0, 'mouth closes when playback ends');
 });
 
+test('Lu Chen idle keeps both hands and arm joints fixed across frames', () => {
+  const rig = characterModel('luchen');
+  animateCharacter(rig, actor('luchen', '陆沉'), state('quiet_room'));
+  rig.root.animate(0, 0);
+  const pose = {
+    arms: rig.arms.map((arm) => [...arm.rotation]),
+    elbows: rig.elbows.map((elbow) => [...elbow.rotation]),
+    hands: rig.hands.map((hand) => [...hand.rotation]),
+  };
+  rig.root.animate(8, 0.05);
+  assert.deepEqual(
+    rig.arms.map((arm) => [...arm.rotation]),
+    pose.arms,
+  );
+  assert.deepEqual(
+    rig.elbows.map((elbow) => [...elbow.rotation]),
+    pose.elbows,
+  );
+  assert.deepEqual(
+    rig.hands.map((hand) => [...hand.rotation]),
+    pose.hands,
+  );
+});
+
 test('speech leaves writing, eating and hidden voices under story control', () => {
   const monk = actor('luchen', '陆沉');
   for (const speaker of ['系统', '陆沉（心声）', '陆沉（门外）', '陆沉的影子', ''])

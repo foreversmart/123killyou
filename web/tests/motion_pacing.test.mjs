@@ -58,11 +58,25 @@ test('head clips run at one tenth speed for every character', () => {
   assert.ok(rig.head.rotation[1] > 0.05 && rig.head.rotation[1] < 0.11);
 });
 
-test('Lu Chen hand clips run at one tenth speed while body actions keep their clock', () => {
+test('Lu Chen walk clips keep hands, arms and elbows still while body actions keep their clock', () => {
   const luchen = targets('luchen');
   const visitor = targets('linlan');
+  const initialArms = luchen.arms.map((arm) => [...arm.rotation]);
+  const initialElbows = luchen.elbows.map((elbow) => [...elbow.rotation]);
+  const initialHands = luchen.hands.map((hand) => [...hand.rotation]);
   applyBlenderPose('walk', 5, library(), luchen);
   applyBlenderPose('walk', 5, library(), visitor);
-  assert.ok(luchen.arms[0].rotation[1] > 0.05 && luchen.arms[0].rotation[1] < 0.11);
+  assert.deepEqual(
+    luchen.arms.map((arm) => [...arm.rotation]),
+    initialArms,
+  );
+  assert.deepEqual(
+    luchen.elbows.map((elbow) => [...elbow.rotation]),
+    initialElbows,
+  );
+  assert.deepEqual(
+    luchen.hands.map((hand) => [...hand.rotation]),
+    initialHands,
+  );
   assert.ok(visitor.arms[0].rotation[1] > 0.7);
 });

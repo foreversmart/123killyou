@@ -218,7 +218,6 @@ function deltaTranslation(track: Track | undefined, time: number) {
   const current = sampleTrack(track, time);
   return current.map((value, i) => value - rest[i]) as [number, number, number];
 }
-
 export type BlenderTargets = {
   pose: 'standing' | 'seated' | 'kneeling';
   root: import('@/scene/world/types').WorldNode;
@@ -256,7 +255,9 @@ export function applyBlenderPose(
         : Math.min(seconds * rate, clip.duration)
       : 0;
   const headTime = slowedTime(HEAD_MOTION_RATE);
-  const handTime = slowedTime(LUCHEN_HAND_MOTION_RATE);
+  const handTime = slowedTime(
+    targets.root.name === 'luchen' && action.startsWith('walk') ? 0 : LUCHEN_HAND_MOTION_RATE,
+  );
   const track = (bone: string, path: AnimationPath) => clip.tracks.get(bone)?.[path];
   const addRotation = (node: BlenderTargets['body'], rotation: [number, number, number]) => {
     node.rotation[0] += rotation[0];

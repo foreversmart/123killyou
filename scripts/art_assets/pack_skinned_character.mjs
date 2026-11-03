@@ -1,8 +1,8 @@
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { MeshoptSimplifier } from 'meshoptimizer';
 import { readGltf } from './gltf.mjs';
+import { simplifyCharacterMesh } from './simplify_character.mjs';
 import { normalizeLinLanSkeleton, nativeLinLanSkin } from './lin_lan_skeleton.mjs';
 import { rebindScan } from './skinned_rebind.mjs';
 import { splitScanRegions } from './skinned_regions.mjs';
@@ -28,24 +28,7 @@ const mesh = gltf.meshes[0];
 const skin = gltf.json.skins[mesh.skin];
 if (!mesh.joints || !mesh.weights || !skin?.inverseBindMatrices)
   throw new Error('Lin Lan requires joints, weights and inverse bind matrices.');
-const attributes = new Float32Array((mesh.positions.length / 3) * 5);
-for (let vertex = 0; vertex < mesh.positions.length / 3; vertex++) {
-  attributes.set(mesh.normals.subarray(vertex * 3, vertex * 3 + 3), vertex * 5);
-  attributes.set(mesh.uv.subarray(vertex * 2, vertex * 2 + 2), vertex * 5 + 3);
-}
-await MeshoptSimplifier.ready;
-const [indices, error] = MeshoptSimplifier.simplifyWithAttributes(
-  mesh.indices,
-  mesh.positions,
-  3,
-  attributes,
-  5,
-  [0.01, 0.01, 0.01, 0.025, 0.025],
-  null,
-  40000 * 3,
-  0.005,
-  ['Permissive'],
-);
+const [indices, error] = await simplifyCharacterMesh(mesh);
 const surface = await writeSkinnedSurface(manifest, gltf, output);
 const used = new Map();
 const vertices = [];
