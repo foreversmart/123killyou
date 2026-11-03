@@ -63,7 +63,11 @@ export function visibleActors(state: GameState, mode: WorldMode = 'story'): Scen
   )
     return [];
   return (state.actors || []).filter((actor) => {
-    if (!canShowScenePerson(actor) || actor.id === 'evil') return false;
+    const sleepingPlayer =
+      mode === 'story' &&
+      actor.id === 'player' &&
+      ['room_sleep_wait', 'escape_sleep_wait'].includes(state.shotKey || '');
+    if ((!sleepingPlayer && !canShowScenePerson(actor)) || actor.id === 'evil') return false;
     // No hidden character is revealed by camera movement or transition shots.
     if (mode === 'travel' || mode === 'hall')
       return !['huipu', 'victim', 'skin_double'].includes(actor.id);

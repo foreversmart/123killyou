@@ -49,6 +49,7 @@ export function templeCompound(distant = false): WorldNode {
         building.x,
         building.z,
         building.id === 'bell_tower' ? 'bell' : 'drum',
+        building.label,
         distant,
       );
     else compoundHall(b, building, distant);

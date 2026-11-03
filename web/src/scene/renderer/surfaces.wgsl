@@ -59,7 +59,10 @@ fn terrainSurface(p: vec3f, n: vec3f, dx: vec3f, dy: vec3f) -> vec3f {
 @fragment fn shadowFragment(i: Surface) {
   let dx = dpdx(i.uv); let dy = dpdy(i.uv);
   if (i.material.z >= 16.0) {
-    let alpha = textureSampleGrad(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), dx, dy).a;
-    if (alpha < 0.42) { discard; }
+    // Use the authored cutout for foliage shadows as well. Sampling a filtered
+    // alpha mask lets transparent gutters become a solid pale card at distance.
+    let alpha = textureSampleLevel(surfaceColor, surfaceSampler, i.uv, surfaceSlot(i.material.z), 0.0).a;
+    if (alpha < 0.52) { discard; }
+    if (i.material.z == 23.0 && (i.uv.x > 0.76 || (i.uv.x > 0.55 && i.uv.y > 0.73))) { discard; }
   }
 }

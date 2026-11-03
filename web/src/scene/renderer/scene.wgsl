@@ -17,7 +17,11 @@ struct Object { model: mat4x4f, normal: mat4x4f, effects: vec4f, joint: vec4f };
 @group(0) @binding(3) var atlas: texture_2d<f32>;
 @group(0) @binding(4) var atlasSampler: sampler;
 @group(1) @binding(0) var<uniform> object: Object;
+struct Influence { joints: vec4f, weights: vec4f };
+@group(1) @binding(1) var<storage, read> boneMatrices: array<mat4x4f>;
+@group(1) @binding(2) var<storage, read> influences: array<Influence>;
 struct Vertex {
+  @builtin(vertex_index) index: u32,
   @location(0) position: vec3f,
   @location(1) normal: vec3f,
   @location(2) color: vec3f,
@@ -41,11 +45,23 @@ fn rotateJoint(p: vec3f, angle: f32) -> vec3f {
 }
 fn surface(v: Vertex) -> Surface {
   var o: Surface;
-  // A two-bone blend deforms the intact elbow/knee mesh. Attachments use the
-  // same pivot on the CPU, so sleeves, hands, utensils and their shadows agree.
-  let weight = 1.0 - smoothstep(object.joint.y - 0.055, object.joint.y + 0.055, v.position.y);
-  let local = mix(v.position, object.joint.xyz + rotateJoint(v.position - object.joint.xyz, object.joint.w), weight);
-  let normal = mix(v.normal, rotateJoint(v.normal, object.joint.w), weight);
+  var local = v.position;
+  var normal = v.normal;
+  if (object.effects.z > 0.5) {
+    let influence = influences[v.index];
+    let skin = boneMatrices[u32(influence.joints.x)] * influence.weights.x
+      + boneMatrices[u32(influence.joints.y)] * influence.weights.y
+      + boneMatrices[u32(influence.joints.z)] * influence.weights.z
+      + boneMatrices[u32(influence.joints.w)] * influence.weights.w;
+    local = (skin * vec4f(local, 1.0)).xyz;
+    normal = normalize((skin * vec4f(normal, 0.0)).xyz);
+  } else {
+    // Rigid characters retain their continuous elbow/knee blend. Their
+    // attachments use the same pivot on the CPU in both visible and shadow passes.
+    let weight = 1.0 - smoothstep(object.joint.y - 0.055, object.joint.y + 0.055, v.position.y);
+    local = mix(local, object.joint.xyz + rotateJoint(local - object.joint.xyz, object.joint.w), weight);
+    normal = mix(normal, rotateJoint(normal, object.joint.w), weight);
+  }
   var p = object.model * vec4f(local, 1.0);
   if (object.effects.x > 0.0) {
     // Tidewater-style layered gusts: roots stay planted while two slow waves
@@ -161,10 +177,30 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
     rough = 0.96;
   } else if (usesTexture(pat)) {
     let slot = surfaceSlot(pat);
-    let sample = textureSampleGrad(surfaceColor, surfaceSampler, uv, slot, ux, uy);
+    var sample = textureSampleGrad(surfaceColor, surfaceSampler, uv, slot, ux, uy);
     if (pat >= 16.0) {
-      coverage = smoothstep(0.32, 0.52, sample.a);
-      if (coverage <= 0.0) { discard; }
+      // Alpha-tested foliage needs a coverage lookup that does not cross the
+      // atlas' neighbouring leaves when the card is minified. Mip filtering
+      // averages the transparent gutters with opaque pixels and turns a leaf
+      // cluster into a pale rectangular sheet. Keep the colour lookup smooth,
+      // but use the authored level-0 mask for the actual cutout.
+      // Keep RGB on the filtered path so distant cards retain stable colour
+      // instead of shimmering at mip level 0. The authored level-0 alpha is
+      // still used for the cutout, so transparent gutters cannot become cards.
+      let sharp = textureSampleLevel(surfaceColor, surfaceSampler, uv, slot, 0.0);
+      let sharpAlpha = sharp.a;
+      // Transparent texels in the source atlas still carry bright RGB. If
+      // those values reach the lighting path, minified crowns become pale
+      // rectangular sheets. Tighten the cutout and darken the fringe before
+      // it is lit so only authored leaf colour contributes.
+      coverage = smoothstep(0.5, 0.68, sharpAlpha);
+      if (sharpAlpha < 0.42 || coverage <= 0.0) { discard; }
+      sample.rgb = mix(vec3f(0.045, 0.085, 0.038), sample.rgb, smoothstep(0.42, 0.78, sharpAlpha));
+      // tree_1 contains a trunk/branch island in the lower-right of its leaf
+      // atlas. Imported tree meshes can reach that island even though their
+      // leaf material is alpha-tested; exclude it while keeping the smaller
+      // leaf regions used by procedural crowns.
+      if (pat == 23.0 && (uv.x > 0.76 || (uv.x > 0.55 && uv.y > 0.73))) { discard; }
     }
     let arm = textureSampleGrad(surfaceArm, surfaceSampler, uv, slot, ux, uy).rgb;
     let detail = textureSampleGrad(surfaceNormal, surfaceSampler, uv, slot, ux, uy).xyz * 2.0 - 1.0;
@@ -172,6 +208,20 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
     col = select(mix(col, sample.rgb * (0.55 + col * 1.8), 0.72), col * sample.rgb, pat >= 8.0);
     rough = clamp(rough * arm.g, 0.19, 1.0);
     metal *= arm.b;
+    if (pat >= 16.0) {
+      // Foliage is broad, fibrous and wet-looking rather than polished. The
+      // scanned ARM maps are useful for variation, but their lower roughness
+      // can turn backlit leaves into pale white flashes in the opening shot.
+      rough = max(rough, 0.82);
+      metal = 0.0;
+      if (pat == 26.0) {
+        col *= vec3f(0.76, 0.86, 0.56);
+      } else if (pat == 27.0) {
+        col *= vec3f(0.7, 0.8, 0.46);
+      } else if (pat == 23.0) {
+        col *= vec3f(0.72, 0.84, 0.52);
+      }
+    }
     occlusion = mix(0.55, 1.0, arm.r);
   }
   if (i.tile >= 0) {
@@ -199,6 +249,13 @@ fn contactVisibility(p: vec3f, n: vec3f) -> f32 {
     lit += brdf(n, v, normalize(d), col, rough, metal) * color.rgb * source.w / (1.0 + distance);
   }
   lit += col * i.material.w;
+  if (object.effects.w > 0.0) {
+    let ghost = clamp(object.effects.w, 0.0, 1.0);
+    let rim = pow(1.0 - max(dot(n, v), 0.0), 2.0);
+    let spectral = vec3f(0.16, 0.42, 0.38);
+    lit = mix(lit, lit * spectral + spectral * (0.12 + rim * 0.42), ghost * 0.78);
+    lit += spectral * rim * ghost * 0.22;
+  }
   let fog = 1.0 - exp(-distance(frame.eye.xyz, i.position) * frame.sky.w);
   lit = mix(lit, frame.sky.rgb * 0.7, fog);
   return vec4f(film(lit), coverage);

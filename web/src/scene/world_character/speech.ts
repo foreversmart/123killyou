@@ -2,6 +2,7 @@ import type { SceneActor } from '@/shared/types/game';
 import type { CharacterRig } from '@/scene/world_character/model';
 import type { Performance } from '@/scene/world_character/performance';
 import { armPose } from '@/scene/world_character/day_actions';
+import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 export function isActorSpeaking(actor: SceneActor, speaker: string) {
   return Boolean(
@@ -27,14 +28,16 @@ export function speechMotion(rig: CharacterRig, actor: SceneActor, speaker: () =
     const jaw = rig.head.children[0].bend;
     if (jaw) jaw.angle = (0.018 + Math.abs(Math.sin(time * 8.3)) * 0.075) * weight;
     if (!weight || !['idle', 'admire', 'look_up', 'welcome'].includes(action)) return;
-    rig.head.rotation[0] += Math.sin(time * 3.4) * 0.045 * weight;
-    rig.head.rotation[1] += Math.sin(time * 1.6) * 0.07 * weight;
+    rig.head.rotation[0] += Math.sin(time * 3.4 * HEAD_MOTION_RATE) * 0.045 * weight;
+    rig.head.rotation[1] += Math.sin(time * 1.6 * HEAD_MOTION_RATE) * 0.07 * weight;
     // A welcome is an active hand gesture as well as a head turn; let the
     // audible line carry a small forearm beat without overriding the monk's
     // broader invitation pose from dayAction.
     if (!['idle', 'welcome'].includes(action)) return;
     const gesture = (0.5 + Math.sin(time * 2.1) * 0.5) * weight;
-    armPose(rig, 0, -0.06 - 0.18 * weight, -0.09 - 0.55 * weight - 0.3 * gesture, 0.12 * weight);
-    rig.hands[0].rotation[2] = -0.18 * gesture;
+    if (actor.id !== 'luchen') {
+      armPose(rig, 0, -0.06 - 0.18 * weight, -0.09 - 0.55 * weight - 0.3 * gesture, 0.12 * weight);
+      rig.hands[0].rotation[2] = -0.18 * gesture;
+    }
   };
 }

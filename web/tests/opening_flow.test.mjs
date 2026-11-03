@@ -21,7 +21,7 @@ async function fixture() {
   };
 }
 
-test('片头结束停在标题等待开始，随后山路36秒、门口停留6秒，最后交给正片', async () => {
+test('片头结束停在标题等待开始，随后山路36秒、门口停留9秒，最后交给正片', async () => {
   const f = await fixture();
   let flow = f.render();
   assert.equal(flow.openingPhase, 'reel');
@@ -41,7 +41,7 @@ test('片头结束停在标题等待开始，随后山路36秒、门口停留6�
   f.runtime.flushTimers();
   flow = f.render();
   assert.equal(flow.openingPhase, 'alighting');
-  assert.deepEqual(f.runtime.pendingDelays, [6000]);
+  assert.deepEqual(f.runtime.pendingDelays, [9000]);
   f.runtime.flushTimers();
   assert.equal(f.render().openingPhase, 'done');
   assert.equal(f.runtime.pendingTimers, 0);
@@ -84,7 +84,7 @@ test('点击和语音重复开始、延迟到达的片尾事件均不重启或�
   flow.startOpening();
   flow.finishOpeningVideo();
   assert.equal(f.render().openingPhase, 'alighting');
-  assert.deepEqual(f.runtime.pendingDelays, [6000]);
+  assert.deepEqual(f.runtime.pendingDelays, [9000]);
   f.runtime.flushTimers();
   flow.startOpening();
   flow.finishOpeningVideo();

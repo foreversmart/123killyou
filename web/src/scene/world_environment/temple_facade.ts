@@ -1,8 +1,13 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import { cylinder, plane, torus } from '@/scene/geometry/primitives';
 import type { V3 } from '@/scene/world/types';
+import { templeWindow } from '@/scene/world_environment/temple_window';
 import { lotusBoss, paintedBeam, reliefSurface } from '@/scene/world_environment/temple_ornament';
 import {
+  gateIron,
+  gateWood,
+  gateWoodInset,
+  gateWoodRail,
   templeRed,
   templeJade,
   templeGold,
@@ -75,7 +80,7 @@ function facadePanel(b: Builder, p: V3, width: number, height: number) {
   b.merge(local.build(), p);
 }
 
-/** Framed vermilion bays carry jade lattice, inset narrative relief and gold moldings. */
+/** Painted bays frame dark carved window joinery above the inset wall relief. */
 export function timberBay(
   b: Builder,
   p: V3,
@@ -83,6 +88,7 @@ export function timberBay(
   height: number,
   yaw = 0,
   lattice = false,
+  distant = false,
 ) {
   const local = new Builder();
   local.box([width, height, 0.12], [0, height / 2, 0], templeInk);
@@ -97,18 +103,17 @@ export function timberBay(
   if (lattice) {
     const top = height * 0.68;
     const latticeHeight = height * 0.29;
-    local.box([inner, latticeHeight + 0.08, 0.06], [0, top, 0.16], templeInk);
-    const columns = Math.max(2, Math.round(inner / 0.22));
-    for (let i = 0; i <= columns; i++) {
-      const x = -inner / 2 + (i * inner) / columns;
-      local.box([0.035, latticeHeight, 0.075], [x, top, 0.22], templeJade);
-    }
-    for (const level of [-0.5, 0, 0.5])
-      local.box([inner, 0.04, 0.075], [0, top + level * latticeHeight, 0.22], templeGold);
-    for (let i = 0; i < columns; i++) {
-      const x = -inner / 2 + ((i + 0.5) * inner) / columns;
-      local.box([0.08, 0.08, 0.06], [x, top, 0.27], templeRed, [0, 0, Math.PI / 4]);
-    }
+    templeWindow(
+      local,
+      [0, top, 0.22],
+      inner,
+      latticeHeight,
+      false,
+      0,
+      latticeHeight < 1.1 ? 'lattice' : 'triptych',
+      false,
+      distant,
+    );
   } else facadePanel(local, [0, height * 0.52, 0.13], inner, Math.max(0.2, height * 0.38));
   b.merge(local.build(), p, [0, yaw, 0]);
 }
@@ -159,6 +164,85 @@ export function ceremonialDoor(
     [Math.PI / 2, 0, 0],
   );
   b.merge(leaf.build(), p, [0, yaw, 0]);
+}
+
+/**
+ * Secondary temple doors use the quieter timber language from the reference:
+ * deep brown boards, narrow recessed panels, oxidised red jamb trim and a
+ * small bronze ring. The main gate keeps its larger ceremonialDoor treatment;
+ * these leaves are used on the worship halls and interior thresholds.
+ */
+export function sideDoor(
+  b: Builder,
+  p: V3,
+  width: number,
+  height: number,
+  yaw = 0,
+  distant = false,
+) {
+  const local = new Builder();
+  const wood = gateWood;
+  const inset = gateWoodInset;
+  const rail = gateWoodRail;
+  local.box([width, height, 0.18], [0, height / 2, 0], wood);
+  // Slightly proud side stiles and a centre rail keep the leaf readable at
+  // oblique corridor and hall camera angles.
+  for (const side of [-1, 1]) {
+    local.box([0.075, height - 0.08, 0.06], [side * (width / 2 - 0.075), height / 2, 0.115], rail);
+    local.box(
+      [0.018, height - 0.14, 0.025],
+      [side * (width / 2 - 0.145), height / 2, 0.15],
+      templeRed,
+    );
+  }
+  const panelWidth = Math.max(0.18, width - 0.24);
+  for (const [bottom, panelHeight] of [
+    [height * 0.08, height * 0.34],
+    [height * 0.53, height * 0.34],
+  ] as const) {
+    local.box([panelWidth, panelHeight, 0.035], [0, bottom + panelHeight / 2, 0.105], inset);
+    for (const edge of [-1, 1]) {
+      local.box(
+        [panelWidth, 0.025, 0.028],
+        [0, bottom + (edge < 0 ? 0.01 : panelHeight - 0.01), 0.135],
+        rail,
+      );
+      local.box(
+        [0.025, panelHeight, 0.028],
+        [edge * panelWidth * 0.5, bottom + panelHeight / 2, 0.135],
+        rail,
+      );
+    }
+  }
+  for (const y of [0.05, height * 0.49, height - 0.05])
+    local.box([width - 0.04, 0.06, 0.05], [0, y, 0.13], rail);
+  if (!distant) {
+    const handleX = width * 0.31;
+    local.add(
+      cylinder(0.046, 0.046, 0.022, 20),
+      gateIron,
+      [handleX, height * 0.48, 0.18],
+      [1, 1, 1],
+      [Math.PI / 2, 0, 0],
+    );
+    local.add(
+      torus(0.043, 0.009, 18),
+      gateIron,
+      [handleX, height * 0.48 - 0.035, 0.2],
+      [1, 1, 1],
+      [Math.PI / 2, 0, 0],
+    );
+    for (const x of [-panelWidth * 0.43, panelWidth * 0.43])
+      for (const y of [height * 0.2, height * 0.84])
+        local.add(
+          cylinder(0.014, 0.014, 0.02, 12),
+          gateIron,
+          [x, y, 0.18],
+          [1, 1, 1],
+          [Math.PI / 2, 0, 0],
+        );
+  }
+  b.merge(local.build(), p, [0, yaw, 0]);
 }
 
 export function balustrade(b: Builder, from: V3, to: V3, distant = false) {

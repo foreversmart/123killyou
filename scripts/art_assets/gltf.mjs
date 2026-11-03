@@ -1,12 +1,88 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { inflateRawSync } from 'node:zlib';
 import { mat4, vec3 } from 'wgpu-matrix';
 
-// Offline, uncompressed glTF reader. Production only loads the packed local mesh.
-export async function readGltf(file) {
+function zipEntry(bytes, requestedName) {
+  const eocdSignature = 0x06054b50;
+  const centralSignature = 0x02014b50;
+  const localSignature = 0x04034b50;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const start = Math.max(0, bytes.byteLength - 0xffff - 22);
+  let eocd = -1;
+  for (let offset = bytes.byteLength - 22; offset >= start; offset--) {
+    if (view.getUint32(offset, true) === eocdSignature) {
+      eocd = offset;
+      break;
+    }
+  }
+  if (eocd < 0) throw new Error('ZIP archive is missing its end record');
+  const count = view.getUint16(eocd + 10, true);
+  const centralOffset = view.getUint32(eocd + 16, true);
+  let offset = centralOffset;
+  for (let entry = 0; entry < count; entry++) {
+    if (view.getUint32(offset, true) !== centralSignature)
+      throw new Error('ZIP central directory is invalid');
+    const method = view.getUint16(offset + 10, true);
+    const compressedSize = view.getUint32(offset + 20, true);
+    const nameLength = view.getUint16(offset + 28, true);
+    const extraLength = view.getUint16(offset + 30, true);
+    const commentLength = view.getUint16(offset + 32, true);
+    const localOffset = view.getUint32(offset + 42, true);
+    const name = new TextDecoder().decode(bytes.subarray(offset + 46, offset + 46 + nameLength));
+    offset += 46 + nameLength + extraLength + commentLength;
+    if (name !== requestedName) continue;
+    if (view.getUint32(localOffset, true) !== localSignature)
+      throw new Error('ZIP local file header is invalid');
+    const localNameLength = view.getUint16(localOffset + 26, true);
+    const localExtraLength = view.getUint16(localOffset + 28, true);
+    const dataStart = localOffset + 30 + localNameLength + localExtraLength;
+    const compressed = bytes.subarray(dataStart, dataStart + compressedSize);
+    if (method === 0) return Buffer.from(compressed);
+    if (method === 8) return inflateRawSync(compressed);
+    throw new Error(`Unsupported ZIP compression method: ${method}`);
+  }
+  throw new Error(`ZIP entry not found: ${requestedName}`);
+}
+
+async function readSourceBytes(file) {
   const bytes = await readFile(file);
+  if (!file.endsWith('.zip')) return bytes;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  const eocdSignature = 0x06054b50;
+  const start = Math.max(0, bytes.byteLength - 0xffff - 22);
+  let eocd = -1;
+  for (let offset = bytes.byteLength - 22; offset >= start; offset--) {
+    if (view.getUint32(offset, true) === eocdSignature) {
+      eocd = offset;
+      break;
+    }
+  }
+  if (eocd < 0) throw new Error(`${file}: invalid ZIP archive`);
+  const count = view.getUint16(eocd + 10, true);
+  const centralOffset = view.getUint32(eocd + 16, true);
+  let offset = centralOffset;
+  let candidate;
+  for (let entry = 0; entry < count; entry++) {
+    if (view.getUint32(offset, true) !== 0x02014b50)
+      throw new Error(`${file}: invalid ZIP directory`);
+    const nameLength = view.getUint16(offset + 28, true);
+    const extraLength = view.getUint16(offset + 30, true);
+    const commentLength = view.getUint16(offset + 32, true);
+    const name = new TextDecoder().decode(bytes.subarray(offset + 46, offset + 46 + nameLength));
+    if (name.endsWith('.glb')) candidate = name;
+    offset += 46 + nameLength + extraLength + commentLength;
+  }
+  if (!candidate) throw new Error(`${file}: ZIP archive does not contain a GLB`);
+  return zipEntry(bytes, candidate);
+}
+
+// Offline glTF reader. Source assets may be shipped as ZIP archives; the
+// packed runtime library remains the browser-facing representation.
+export async function readGltf(file) {
+  const bytes = await readSourceBytes(file);
   let json, buffers;
-  if (file.endsWith('.glb')) {
+  if (file.endsWith('.glb') || file.endsWith('.zip')) {
     const length = bytes.readUInt32LE(12);
     json = JSON.parse(bytes.subarray(20, 20 + length));
     buffers = [bytes.subarray(28 + length)];

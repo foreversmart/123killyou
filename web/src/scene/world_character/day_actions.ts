@@ -2,6 +2,8 @@ import type { CharacterRig } from '@/scene/world_character/model';
 import type { Performance } from '@/scene/world_character/performance';
 import { bend, ease } from '@/scene/world_character/joints';
 import { walkAction } from '@/scene/world_character/walk_action';
+import { skinnedDayAction } from '@/scene/world_character/skinned_actions';
+import { HEAD_MOTION_RATE, LUCHEN_HAND_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 export function armPose(
   rig: CharacterRig,
@@ -102,12 +104,17 @@ export function dayAction(
 ) {
   const { head, body } = rig;
   const arrive = ease(t, 0.8);
+  const handTime = t * (rig.root.name === 'luchen' ? LUCHEN_HAND_MOTION_RATE : 1);
+  const handArrive = ease(handTime, 0.8);
   walkAction(rig, action, t, seed);
+  if (skinnedDayAction(rig, action, t, mealLift(t, seed), registerDesk)) return;
   if (action === 'write') {
     // The supporting hand stays fixed; the brush hand makes short strokes.
     const seat = body.position[1] - 0.46;
     reachHand(rig, 1, -0.07 - seat, 0.38);
-    reachHand(rig, 0, 0.15 - seat + Math.sin(t * 4.1) * 0.002, 0.49 + Math.sin(t * 3.1) * 0.025);
+    const brushY = 0.15 - seat + Math.sin(handTime * 4.1) * 0.002;
+    const brushZ = 0.49 + Math.sin(handTime * 3.1) * 0.025;
+    reachHand(rig, 0, brushY, brushZ);
     rig.hands[0].rotation[0] = -(rig.arms[0].rotation[0] + rig.elbows[0].rotation[0]);
     head.rotation[0] = 0.25;
     body.rotation[0] = 0;
@@ -122,17 +129,20 @@ export function dayAction(
     rig.arms[0].rotation[2] = 0.3;
     rig.arms[1].rotation[2] = -0.24;
     head.rotation[0] = 0.12 + (1 - lift) * 0.1;
-    head.rotation[2] = Math.sin(time * 2.2) * 0.008 * lift;
+    head.rotation[2] = Math.sin(time * 2.2 * HEAD_MOTION_RATE) * 0.008 * lift;
     body.rotation[0] = 0.04;
   }
   if (action === 'offer' || action === 'rescue') {
     armPose(rig, 0, -0.12, -0.3);
-    armPose(rig, 1, -0.25 - arrive * 0.22, -0.85, -0.09);
+    armPose(rig, 1, -0.25 - handArrive * 0.22, -0.85, -0.09);
     head.rotation[0] = action === 'rescue' ? 0.15 * (1 - arrive) : 0.025;
   }
   if (action === 'hush') {
     armPose(rig, 1, -0.47, -0.85, -0.09);
-    armPose(rig, 0, -0.32, -1.9 * arrive, 0.12);
+    // The imported character is a single static shell with a soft elbow bend.
+    // Keep the hush gesture below a deep fold so the forearm does not tunnel
+    // through the chest or expose the cut line at the elbow.
+    armPose(rig, 0, -0.32, -1.42 * handArrive, 0.12);
     head.rotation[0] = 0.045;
   }
   if (action === 'glance') {
@@ -140,8 +150,8 @@ export function dayAction(
     // back to the camera after one beat. The slow sweep pauses at either side
     // while a smaller nod and shoulder shift keep the body occupied between
     // lines of dialogue (useful around the registration desk and windows).
-    const sweep = Math.sin(t * 0.7 + seed * 0.11);
-    const pause = 0.72 + 0.28 * Math.cos(t * 0.35 + seed * 0.07);
+    const sweep = Math.sin(t * 0.7 * HEAD_MOTION_RATE + seed * 0.11);
+    const pause = 0.72 + 0.28 * Math.cos(t * 0.35 * HEAD_MOTION_RATE + seed * 0.07);
     if (registerDesk) {
       // Keep the registration group oriented toward Lu Chen. Xu Zhi gets one
       // visible look toward the courtyard, then eases her attention back to
@@ -149,15 +159,16 @@ export function dayAction(
       const cycle = t % 7.2;
       const towardWindow = ease(cycle - 0.8, 0.9) * (1 - ease(cycle - 2.8, 1.3));
       const windowLook = Math.max(0, Math.min(1, towardWindow));
-      head.rotation[1] = 0.055 + 0.52 * windowLook + Math.sin(t * 0.55 + seed) * 0.018;
+      head.rotation[1] =
+        0.055 + 0.52 * windowLook + Math.sin(t * 0.55 * HEAD_MOTION_RATE + seed) * 0.018;
       body.rotation[1] = 0.035 * windowLook + Math.sin(t * 0.3 + seed) * 0.018;
     } else {
       head.rotation[1] = -0.62 * sweep * pause;
       body.rotation[1] = Math.sin(t * 0.34 + seed * 0.17) * 0.045;
     }
-    head.rotation[0] = 0.035 + Math.sin(t * 0.92 + seed) * 0.018;
-    armPose(rig, 0, -0.055, -0.1, 0.045 + Math.sin(t * 0.63 + seed) * 0.018);
-    armPose(rig, 1, -0.06, -0.1, -0.045 - Math.sin(t * 0.63 + seed) * 0.018);
+    head.rotation[0] = 0.035 + Math.sin(t * 0.92 * HEAD_MOTION_RATE + seed) * 0.018;
+    armPose(rig, 0, -0.055, -0.1, 0.045 + Math.sin(handTime * 0.63 + seed) * 0.018);
+    armPose(rig, 1, -0.06, -0.1, -0.045 - Math.sin(handTime * 0.63 + seed) * 0.018);
   }
   if (action === 'point_floor') {
     // During the drag-mark question Zhou Yan stays in the registration
@@ -169,7 +180,7 @@ export function dayAction(
     const trace = Math.sin(t * 0.72 + seed * 0.08) * 0.025;
     body.rotation[0] = (0.38 + trace) * settle;
     head.rotation[0] = 0.46 * settle;
-    head.rotation[1] = 0.08 + Math.sin(t * 0.46 + seed) * 0.018;
+    head.rotation[1] = 0.08 + Math.sin(t * 0.46 * HEAD_MOTION_RATE + seed) * 0.018;
     armPose(rig, 0, -0.62 - 0.025 * trace, -1.36, 0.12);
     armPose(rig, 1, -0.06, -0.1, -0.045);
   }
@@ -183,16 +194,16 @@ export function dayAction(
     body.rotation[1] = registerDesk
       ? 0.028 + Math.sin(t * 0.38 + seed) * 0.018
       : Math.sin(t * 0.38 + seed) * 0.028;
-    head.rotation[0] = (0.3 + 0.035 * Math.sin(t * 0.7 + seed)) * settle;
+    head.rotation[0] = (0.3 + 0.035 * Math.sin(t * 0.7 * HEAD_MOTION_RATE + seed)) * settle;
     head.rotation[1] = registerDesk
-      ? 0.1 + 0.035 * Math.sin(t * 0.56 + seed * 0.13)
-      : 0.09 * Math.sin(t * 0.56 + seed * 0.13);
+      ? 0.1 + 0.035 * Math.sin(t * 0.56 * HEAD_MOTION_RATE + seed * 0.13)
+      : 0.09 * Math.sin(t * 0.56 * HEAD_MOTION_RATE + seed * 0.13);
     armPose(
       rig,
       0,
       -0.3 - 0.035 * trace,
-      -0.7 - 0.06 * Math.sin(t * 0.82 + seed * 0.08 + 0.45),
-      0.08 + 0.018 * Math.sin(t * 0.63 + seed),
+      -0.7 - 0.06 * Math.sin(handTime * 0.82 + seed * 0.08 + 0.45),
+      0.08 + 0.018 * Math.sin(handTime * 0.63 + seed),
     );
   }
   if (action === 'admire' || action === 'look_up') {
@@ -202,20 +213,21 @@ export function dayAction(
     const scan = ease(t, 4.2);
     const settle = ease(t - 4.2, 1.2);
     const scanned = 0.28 + Math.sin(scan * Math.PI * 2) * 0.24;
-    const settled = 0.34 + Math.sin(Math.max(0, t - 4.2) * 0.62) * 0.035;
+    const settled = 0.34 + Math.sin(Math.max(0, t - 4.2) * 0.62 * HEAD_MOTION_RATE) * 0.035;
     head.rotation[0] = -0.3 * arrive;
     head.rotation[1] = (scanned * (1 - settle) + settled * settle) * arrive;
     body.rotation[1] = 0.12 * arrive * (1 - 0.18 * settle);
     if (action === 'look_up') {
-      const arm = arrive * (1 - 0.18 * settle);
+      const arm = handArrive * (1 - 0.18 * settle);
       armPose(rig, 0, -0.4 * arm, -0.9 * arm, 0.14 * arm);
     }
   }
   if (action === 'stretch') {
     const lean = Math.sin(ease(t, 2.6) * Math.PI);
+    const armLean = rig.root.name === 'luchen' ? Math.sin(ease(handTime, 2.6) * Math.PI) : lean;
     body.rotation[0] = 0.35 * lean;
     head.rotation[0] = 0.25 * lean;
-    armPose(rig, 0, 0.1 * lean, -0.1, 0.08);
+    armPose(rig, 0, 0.1 * armLean, -0.1, 0.08);
   }
   if (action === 'luggage') {
     // A low, relaxed two-hand hold gives the luggage handler a purposeful
@@ -229,7 +241,8 @@ export function dayAction(
   }
   if (action === 'welcome') {
     const invite = Math.sin(ease(t, 3.4) * Math.PI);
-    armPose(rig, 0, -0.4 * invite, -0.65 * invite, 0.3 * invite);
+    const handInvite = Math.sin(ease(handTime, 3.4) * Math.PI);
+    armPose(rig, 0, -0.4 * handInvite, -0.65 * handInvite, 0.3 * handInvite);
     head.rotation[0] = 0.1 * invite;
   }
   if (action === 'camera' || action === 'review_camera') {
@@ -244,31 +257,34 @@ export function dayAction(
           ? 1 - 0.035 * ease(cycle - 1.2, 1.2)
           : cycle < 4.3
             ? 0.965 - 0.72 * ease(cycle - 2.4, 1.9)
-            : 0.245 + 0.7 * ease(cycle - 4.3, 2.1);
+            : 0.245 * (1 - ease(cycle - 4.3, 2.1));
     const height = action === 'camera' ? 0.18 : -0.12;
+    const centerX = rig.root.skinTargets ? rig.camera?.position[0] || 0 : 0;
     for (const side of [0, 1]) {
       reachAcross(
         rig,
         side,
-        (side ? 1 : -1) * (0.215 - 0.13 * lift),
+        centerX + (side ? 1 : -1) * (0.215 - 0.13 * lift),
         -0.27 + (height + 0.27) * lift,
         0.22,
       );
     }
     if (rig.camera) {
-      rig.camera.position = [0, 0.21 + (height + 0.27) * lift, 0.23];
+      rig.camera.position = [centerX, 0.21 + (height + 0.27) * lift, 0.23];
       const check = ease(t - 1.6, 1.4);
       rig.camera.rotation[0] =
         (action === 'camera' ? -0.1 : 0.35) * lift +
-        Math.sin(Math.max(0, t - 1.6) * 0.7) * 0.025 * check;
+        Math.sin(Math.max(0, t - 1.6) * 0.7 * HEAD_MOTION_RATE) * 0.025 * check;
     }
     head.rotation[0] = (action === 'camera' ? -0.08 : 0.26) * lift;
     const lookBack = registerDesk ? 0.16 * (1 - lift) : 0.11 * (1 - lift);
-    head.rotation[1] = lookBack + Math.sin(t * 0.7) * 0.035;
+    head.rotation[1] = lookBack + Math.sin(t * 0.7 * HEAD_MOTION_RATE) * 0.035;
     body.rotation[1] = (registerDesk ? 0.035 : 0) + Math.sin(t * 0.34) * 0.022 * (1 - 0.25 * lift);
   }
   if (action === 'ribbon') {
-    armPose(rig, 1, -0.3, -2.1 * arrive, -0.32);
+    // A lower forearm angle keeps the ribbon hand in front of the torso while
+    // preserving the small wrist spread that sells the gesture.
+    armPose(rig, 1, -0.3, -1.48 * arrive, -0.26);
     head.rotation[2] = 0.1 * arrive;
   }
   if (action === 'ritual') {

@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   padding: 1cqw 0.9cqw 0.7cqw;
-  z-index: 7;
+  /* Keep the inventory visible while the opening journey owns the full stage. */
+  z-index: 22;
   border-left: 2px solid #5b482e;
   min-height: 0;
 }

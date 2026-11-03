@@ -79,7 +79,7 @@ features/dialogue/dialogue_panel/
 
 正式场景的画面来源由 `web/src/scene/authored_scene/` 负责。各场景的 `assets/scenes/*/layout.json` 是坐标、源图裁切、图层顺序、状态条件和遮挡区域的来源；`composeLayout()` 将相对 layout 的 PNG 路径转换为 `web/public/art/story` 下的 WebP，`AuthoredScene` 再按 `sourceFrame → rect → zIndex` 组合 SVG 图片层。`story_art` 只在没有 authored composition 的场景提供 SVG 或单张背景后备，`story_stage` 在 authored composition 生效时隐藏旧的百分比人物和道具层，避免同一角色或道具绘制两次。调整真实贴图位置优先修改 layout JSON，再检查 `story_stage` 的交互热点；不要直接把布局坐标复制回旧 SVG。
 
-场景音频由 `features/story_audio/` 管理。`cues.ts` 根据场景、镜头和状态生成一次性更锣、敲门、脚步、撕裂、鸟叫等程序化音效，`synthesis.ts` 通过 Web Audio 调度并清理音源；`music.ts` 与 `useStorySound.ts` 在夜间场景中延迟启动并循环播放背景音乐，暂停、换局和离开夜间场景时停止并重置。音效和背景音乐只表达当前已提交状态，不参与规则结算。
+场景音频由 `features/story_audio/` 管理。`cues.ts` 根据场景、镜头和状态生成一次性更锣、敲门、脚步、撕裂、鸟叫等程序化音效，`synthesis.ts` 通过 Web Audio 调度并清理音源；`music.ts` 与 `useStorySound.ts` 管理夜间循环背景音乐以及开场大巴行车音乐：开场行车段播放 `opening_bus_horror.mp3`，进入停门阶段渐弱，开场结束、暂停或卸载时停止并重置。音效和背景音乐只表达当前已提交状态，不参与规则结算。
 
 ## 后端：规则、编排与基础设施分开
 

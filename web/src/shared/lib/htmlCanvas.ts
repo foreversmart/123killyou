@@ -1,6 +1,7 @@
 export type CanvasEnvironment = {
   HTMLCanvasElement?: { prototype: { requestPaint?: unknown } };
   CanvasRenderingContext2D?: { prototype: { drawElementImage?: unknown } };
+  DecompressionStream?: unknown;
 };
 
 export type HtmlCanvasSupport = {
@@ -19,6 +20,7 @@ export function checkHtmlCanvasSupport(
       'CanvasRenderingContext2D.drawElementImage',
       environment.CanvasRenderingContext2D?.prototype?.drawElementImage,
     ],
+    ['DecompressionStream', environment.DecompressionStream],
   ] as const;
   const missing = checks.filter(([, method]) => typeof method !== 'function').map(([name]) => name);
   return { supported: missing.length === 0, missing };

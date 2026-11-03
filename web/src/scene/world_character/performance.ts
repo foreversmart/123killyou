@@ -7,6 +7,8 @@ export function performanceFor(
   alighting = false,
 ) {
   const shot = state.shotKey || '';
+  if (actor.id === 'player' && ['room_sleep_wait', 'escape_sleep_wait'].includes(shot))
+    return 'sleep_enter';
   if (actor.id === 'victim') return 'still';
   if (actor.id === 'shangong' && state.flags.cup_failed) return 'stone';
   if (walking) {

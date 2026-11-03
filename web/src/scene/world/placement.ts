@@ -53,7 +53,42 @@ export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
     xuzhi: [1.7, 0, 2.7],
   },
   oracle: { shangong: [0.65, 0, -0.7] },
-  bedroom: { skin_double: [1.3, 0, -0.5] },
+  bedroom: {
+    // The player is normally represented only by the first-person camera.
+    // During the sleep interlude the camera settles beside the mattress and
+    // this placement gives the rig room to fold onto the bed.
+    player: [-3, 0.63, -0.25],
+    skin_double: [1.3, 0, -0.5],
+  },
+};
+
+/**
+ * A repeatable loose cluster for the fourth-act candle handoff. The small
+ * seeded perturbation keeps the group from reading as a perfect ring while
+ * ensuring every shot rebuild restores the same positions.
+ */
+const candleScatter: Record<string, { angle: number; radius: number; seed: number }> = {
+  linlan: { angle: -1.08, radius: 1.35, seed: 1.7 },
+  zhouyan: { angle: 2.08, radius: 1.08, seed: 3.4 },
+  xuzhi: { angle: -0.2, radius: 1.88, seed: 5.1 },
+};
+
+export const corridorCandlePositions: Record<string, V3> = {
+  luchen: [0, 0, -0.7],
+  ...Object.fromEntries(
+    Object.entries(candleScatter).map(([id, { angle, radius, seed }]) => {
+      const jitter = Math.sin(seed * 12.9898) * 0.5;
+      const depthJitter = Math.cos(seed * 78.233) * 0.5;
+      return [
+        id,
+        [
+          Math.sin(angle) * (radius + jitter * 0.12),
+          0,
+          -0.7 + Math.cos(angle) * (radius + depthJitter * 0.12),
+        ] as V3,
+      ];
+    }),
+  ),
 };
 
 export const propPositions: Partial<Record<Place, Record<string, V3>>> = {

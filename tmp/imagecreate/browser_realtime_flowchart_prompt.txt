@@ -1,0 +1,23 @@
+Use case: productivity-visual
+Asset type: 16:9 PowerPoint presentation slide, professional technical explainer
+Primary request: Create a clean horizontal process flowchart explaining how a browser carries a complex real-time 3D scene. The slide must be extremely legible at presentation distance.
+Scene/backdrop: pure white background with generous margins.
+Subject: a five-step left-to-right technical pipeline connected by thin black arrows.
+Style/medium: minimalist editorial infographic, crisp vector-like geometry, black ink only, no color.
+Composition/framing: landscape 16:9. A large centered title at the top, then five evenly spaced rounded-rectangle modules in one horizontal row below. Each module has a clear black outline, a short bold heading, and a smaller explanatory line. Use consistent spacing and alignment. Keep all text horizontal and unobstructed.
+Lighting/mood: flat, neutral, high-contrast, presentation-ready.
+Color palette: white background; pure black text, outlines, and arrows only.
+Text (verbatim, preserve every Chinese character and punctuation exactly):
+Title: “浏览器如何承载复杂实时场景？”
+Step 1 heading: “WebGPU／WGSL”
+Step 1 detail: “材质、光照和阴影”
+Step 2 heading: “几何合并”
+Step 2 detail: “减少绘制调用”
+Step 3 heading: “模型精度分级”
+Step 3 detail: “按距离调整细节”
+Step 4 heading: “共享缓冲”
+Step 4 detail: “降低数据搬运”
+Step 5 heading: “分辨率控制”
+Step 5 detail: “管理渲染开销”
+Constraints: White background; black text only; exact verbatim text; large readable Chinese typography; no extra text; no icons; no illustrations; no decorative elements; no gradients; no shadows; no logos; no watermark; no cropped modules; no overlapping arrows.
+Avoid: color, gray fills, 3D perspective, tiny text, illegible or misspelled Chinese, English substitutions, extra labels.

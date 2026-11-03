@@ -1,0 +1,95 @@
+{
+  "generator": "imagecreate",
+  "provider": "custom",
+  "model": "gpt-image-2",
+  "purpose": "七名角色的正面全身 T-pose 造型与建模参考；沿用当前人物身份和服装，独立于剧情演出姿态。",
+  "size": "2048x2048",
+  "quality": "high",
+  "outputFormat": "png",
+  "sharedPrompt": "Use case: illustration-story.\nAsset type: one full-body front-view T-pose character modeling reference for the Chinese narrative game 《红烛无声》.\nSource guidance: the existing game character images were visually inspected to derive the identity, costume and style description below. No input images are attached to this text-to-image request. Create precisely the character described below.\nPrimary request: draw the described game character in a precise neutral T-pose. Change the body pose and camera orientation only, with natural garment deformation.\nPose: the head, face, shoulders, chest, pelvis, knees and shoes all face directly forward. Head upright, level gaze, neutral closed mouth. Both upper arms extend straight sideways at shoulder height, exactly horizontal; both elbows fully straight, wrists level, palms face downward, fingers extended naturally together, thumbs visible. The silhouette forms a clear capital T. Spine upright, pelvis level, legs straight and uncrossed, feet flat and parallel with a small natural hip-width gap. Do not use a three-quarter view, A-pose, bent elbows, raised hands, tilted head or contrapposto.\nComposition: ONE character, square 2048x2048 canvas, orthographic front view with no perspective foreshortening. Full head, fingertips and soles visible. Centered body, symmetrical arm placement, comfortable clear margin on every side, figure height about 88% of canvas. One view only.\nStyle/medium: realistic adult proportions and two-dimensional hand-drawn narrative-game illustration: fine dark contours, broad matte low-saturation color planes, sparse folds, grouped hair masses and restrained warm-gray shading. Neutral even soft lighting. Preserve all recognizable facial features, age, hair, skin tone, garment colors, collars, layers, hems, shoes and attached clothing accessories.\nBackdrop: perfectly uniform flat solid MAGENTA #ff00ff, for local chroma-key removal. The entire character is fully opaque. No magenta reflected on the character, no gradient, floor, cast shadow, haze or checkerboard.\nConstraints: empty hands. Remove any handheld prop so both hands can extend freely; preserve costume and worn accessories described below. No extra people, extra limbs, missing fingers, costume additions, text, labels, diagrams, frame, watermark, photorealism, glossy 3D, anime anatomy or heroic proportions.",
+  "assets": [
+    {
+      "id": "zhao_xi_t_pose",
+      "characterId": "zhao_xi",
+      "name": "赵熙·T-pose",
+      "path": "assets/characters/zhao_xi/t_pose.png",
+      "reference": "assets/characters/zhao_xi/standing.png",
+      "characterPrompt": "Subject: Zhao Xi / 赵熙, the same lean Chinese young adult man around 27 in the existing game art. Preserve angular oval face, straight brows and short textured dark crop with uneven diagonal fringe. Same deep olive-gray MODERN casual windbreaker with a short stand collar, straight simple front edges, a concealed central ZIPPER and two discreet lower slit pockets. The jacket is worn slightly open over a warm ivory-beige plain CREW-NECK knit shirt. This is contemporary civilian outdoor clothing: absolutely NO frog closures, knot buttons, toggle fasteners, decorative buttons, patch pockets, Chinese traditional jacket, Tang suit, mandarin suit or monk clothing. Charcoal straight trousers and plain dark walking shoes. No bag, straps, camera, jewelry or held props.",
+      "promptSuffix": "Do not add background haze or a surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "lin_lan_t_pose",
+      "characterId": "lin_lan",
+      "name": "林岚·T-pose",
+      "path": "assets/characters/lin_lan/t_pose.png",
+      "reference": "assets/characters/lin_lan/standing.png",
+      "characterPrompt": "Subject: Lin Lan / 林岚, the same Chinese woman around 27 in the existing game art, narrow oval face, subtly tapered chin, arched brows and side-parted dark bob tucked behind one ear. Same sand-beige casual field jacket with rolled cuffs, worn open over a plain off-white ROUND CREW-NECK T-SHIRT. The inner T-shirt has a simple curved neck opening, NO collar, NO lapels, NO buttons and NO placket. Dark charcoal straight trousers and brown-gray walking shoes. Keep the black camera neck strap and small black camera with a capped lens resting centered at the upper abdomen, hanging freely without either hand holding it. Both arms and hands are free in the T-pose. No new bags, jewelry or hair accessories.",
+      "promptSuffix": "Do not add background haze or a surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "zhou_yan_t_pose",
+      "characterId": "zhou_yan",
+      "name": "周砚·T-pose",
+      "path": "assets/characters/zhou_yan/t_pose.png",
+      "reference": "assets/characters/zhou_yan/standing.png",
+      "characterPrompt": "Subject: Zhou Yan / 周砚, the same lean Chinese man around 30 in the existing game art. Preserve his longer rectangular face, narrow focused eyes, straight nose, clean-shaven jaw and neatly side-parted short dark hair. Same dark navy collared field jacket over cool gray button shirt, charcoal trousers and dark shoes. Keep the taupe diagonal satchel strap and dark rectangular satchel at the hip in the same side relationship as described; neither hand touches the strap or bag. No glasses, beard or additional accessories.",
+      "promptSuffix": "Rendering precision: clean flat hand-drawn color planes with fine clear outlines and sparse simplified shadow shapes, matching a reusable narrative-game cast; do not render photographic skin pores, dense realistic cloth texture, glossy 3D volume, or painterly grain. Keep the entire background exactly solid #ff00ff including all gaps around the fingers and between the legs. No background haze or surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "xu_zhi_t_pose",
+      "characterId": "xu_zhi",
+      "name": "许栀·T-pose",
+      "path": "assets/characters/xu_zhi/t_pose.png",
+      "reference": "assets/characters/xu_zhi/standing.png",
+      "characterPrompt": "Subject: Xu Zhi / 许栀, the same Chinese woman around 27 in the existing game art. Preserve the notably short round face, fuller cheeks, rounded chin, straight brows, quiet horizontal eyes, natural straight fringe and collarbone-length dark hair. Same gray-green cardigan over off-white round-neck shirt, charcoal trousers and light gray-beige sneakers. Keep the ivory shoulder tote hanging freely at the same hip as described; neither hand touches the strap or tote. No blue hair tie, hair ornament, glasses or jewelry.",
+      "promptSuffix": "Rendering precision: clean flat hand-drawn color planes with fine clear outlines and sparse simplified shadow shapes, matching a reusable narrative-game cast; do not render photographic skin pores, dense realistic cloth texture, glossy 3D volume, or painterly grain. Keep the entire background exactly solid #ff00ff including all gaps around the fingers and between the legs. No background haze or surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "lu_chen_t_pose",
+      "characterId": "lu_chen",
+      "name": "陆沉·T-pose",
+      "path": "assets/characters/lu_chen/t_pose.png",
+      "reference": "assets/characters/lu_chen/standing_reception.png",
+      "characterPrompt": "Subject: Lu Chen / 陆沉, the same middle-aged Chinese watch monk around 45 in the existing game art. Preserve shaved scalp with short stubble, lean hollow cheeks, watchful tired eyes and understated upper-lip stubble. Same gray-brown crossed working monk robe with light inner collar, tied dark cloth sash, dark under-trousers, pale ankle wraps and brown cloth shoes. Preserve the existing small copper key ring attached at the waist, hanging freely; no handheld keys, lantern or candle. Sleeves hang naturally below the horizontal arms; wrists and complete hands remain readable. Ordinary human appearance.",
+      "promptSuffix": "Rendering precision: clean flat hand-drawn color planes with fine clear outlines and sparse simplified shadow shapes, matching a reusable narrative-game cast; do not render photographic skin pores, dense realistic cloth texture, glossy 3D volume, or painterly grain. Keep the entire background exactly solid #ff00ff including all gaps around the fingers and between the legs. No background haze or surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "hui_pu_t_pose",
+      "characterId": "hui_pu",
+      "name": "慧普·T-pose",
+      "path": "assets/characters/hui_pu/t_pose.png",
+      "reference": "assets/characters/hui_pu/standing.png",
+      "characterPrompt": "Subject: Hui Pu / 慧普, the same outwardly normal Chinese abbot around 65 in the existing game art. Preserve broad fuller oval face, heavy calm eyelids, specific forehead lines, shaved scalp and clean-shaven jaw. Same muted ochre inner monk robe, brown outer kasaya with sparse rectangular cloth-panel seams, off-white inner collar, pale lower wraps and brown monk shoes. Keep the exact layered drape and shoulder coverage from the existing costume while extending both arms horizontally; cloth hangs under the arms, hands remain visible. No ritual objects, beads, halo, monster features, wounds, exposed back or sinister grin.",
+      "promptSuffix": "Do not add background haze or a surrounding halo.",
+      "status": "verified"
+    },
+    {
+      "id": "shen_gong_t_pose",
+      "characterId": "shen_gong",
+      "name": "神公·T-pose",
+      "path": "assets/characters/shen_gong/t_pose.png",
+      "reference": "assets/characters/shen_gong/standing_jiaobei.png",
+      "characterPrompt": "Subject: Shen Gong / 神公, the same living elderly Chinese guardian monk around 73 in the existing game art. Preserve narrow gaunt face, pronounced cheekbones, tired attentive eyes, forehead and mouth creases, shaved scalp and clean-shaven jaw. Same plain charcoal-gray crossed robe with dull off-white inner collar, dark under-trousers, pale ankle wraps and worn brown cloth shoes. Keep his lean elderly build while bringing him into an upright neutral T-pose. Sleeves hang under horizontal arms; full wrists and hands visible. Remove the handheld divination blocks. No candle, stone skin, cracks, supernatural effects or rejuvenation.",
+      "promptSuffix": "Do not add background haze or a surrounding halo.",
+      "status": "verified"
+    }
+  ],
+  "operation": "generate",
+  "inputImages": [],
+  "referenceUse": "现有角色全身图经逐张查看，用于文字身份、服装、画风约束；实际生成请求不包含输入图。",
+  "transparency": {
+    "method": "local_chroma_key",
+    "keyColor": "#ff00ff",
+    "nativeTransparentGeneration": false,
+    "softMatte": true,
+    "spillCleanup": true,
+    "transparentThreshold": 96,
+    "opaqueThreshold": 160,
+    "postprocess": "使用 imagecreate remove_chroma_key.py，以固定 #ff00ff、soft-matte、spill-cleanup、transparent-threshold 96、opaque-threshold 160 抠图。完全透明像素 RGB 清零，保留自然抗锯齿 alpha。逐张在浅色与深色背景检查头发、手指、衣袖、配件和鞋边。"
+  }
+}

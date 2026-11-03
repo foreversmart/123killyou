@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { VoiceStatus } from '@/features/voice/types';
 import { cueDuration, cueSignature, storyCues } from './cues';
+import { useOpeningMusic } from './opening_music';
 import {
   DEATH_SOUND_EFFECT,
   NIGHT_BACKGROUND_MUSIC,
@@ -10,7 +11,16 @@ import {
 } from './music';
 import { playStoryCue } from './synthesis';
 
-export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus) {
+// Audio hook tests load this module in isolation and remove the import graph;
+// the browser still receives the real hook, while those isolated runs use a
+// harmless no-op.
+const openingMusicHook = typeof useOpeningMusic === 'function' ? useOpeningMusic : () => {};
+
+export function useStorySound(
+  state: GameState | null,
+  voiceStatus: VoiceStatus,
+  openingPhase?: string,
+) {
   const context = useRef<AudioContext | null>(null);
   const sources = useRef<AudioScheduledSourceNode[]>([]);
   const played = useRef(new Set<string>());
@@ -55,6 +65,7 @@ export function useStorySound(state: GameState | null, voiceStatus: VoiceStatus)
   }, []);
 
   const nightBackgroundActive = shouldPlayNightBackground(state);
+  openingMusicHook(openingPhase, state?.paused, unlocked);
   const nightRunId = state?.runId || '';
   const deathActive = state?.sceneKey === 'mini_death';
   const bellPlaying = busy && Boolean(state && storyCues(state).some((cue) => cue.kind === 'bell'));

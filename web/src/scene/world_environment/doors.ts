@@ -1,18 +1,82 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import { cylinder, torus } from '@/scene/geometry/primitives';
 import { node, type V3 } from '@/scene/world/types';
-import { cloudScroll, lotusBoss, paintedBeam } from '@/scene/world_environment/temple_ornament';
-import { templeGold, templeJade, templeRed } from '@/scene/world_environment/temple_palette';
+import { cloudScroll, lotusBoss } from '@/scene/world_environment/temple_ornament';
+import {
+  gateIron,
+  gateWood,
+  gateWoodInset,
+  gateWoodRail,
+  templeGold,
+  templeJade,
+  templeRed,
+} from '@/scene/world_environment/temple_palette';
 
 export type DoorState = 'closed' | 'ajar' | 'opening' | 'open';
 
 export function doorLeaf(width: number, height: number, direction: number) {
   const b = new Builder();
-  const wood = templeRed;
+  const wood = gateWood;
+  const inset = gateWoodInset;
+  const rail = gateWoodRail;
+  const center = (direction * width) / 2;
+  b.box([width, height, 0.16], [center, height / 2, 0], wood);
+  const panelWidth = Math.max(0.18, width - 0.17);
+  for (const [bottom, panelHeight] of [
+    [height * 0.08, height * 0.34],
+    [height * 0.53, height * 0.34],
+  ] as const) {
+    b.box([panelWidth, panelHeight, 0.032], [center, bottom + panelHeight / 2, 0.1], inset);
+    for (const edge of [-1, 1]) {
+      b.box(
+        [panelWidth, 0.022, 0.026],
+        [center, bottom + (edge < 0 ? 0.01 : panelHeight - 0.01), 0.13],
+        rail,
+      );
+      b.box(
+        [0.022, panelHeight, 0.026],
+        [center + (edge * panelWidth) / 2, bottom + panelHeight / 2, 0.13],
+        rail,
+      );
+    }
+  }
+  for (const y of [0.05, height * 0.49, height - 0.05])
+    b.box([width - 0.04, 0.055, 0.045], [center, y, 0.13], rail);
+  for (const edge of [-1, 1])
+    b.box(
+      [0.07, height - 0.06, 0.055],
+      [direction * (edge < 0 ? 0.06 : width - 0.06), height / 2, 0.11],
+      edge < 0 ? rail : templeRed,
+    );
+  const hx = direction * (width - 0.12),
+    hy = height * 0.48;
+  b.add(
+    cylinder(0.052, 0.052, 0.018, 24),
+    gateIron,
+    [hx, hy, 0.16],
+    [1, 1, 1],
+    [Math.PI / 2, 0, 0],
+  );
+  b.add(torus(0.048, 0.009, 32), gateIron, [hx, hy - 0.04, 0.18], [1, 1, 1], [Math.PI / 2, 0, 0]);
+  for (const x of [0.11, width - 0.11])
+    for (const y of [0.28, height * 0.88])
+      b.add(
+        cylinder(0.014, 0.014, 0.02, 12),
+        gateIron,
+        [direction * x, y, 0.16],
+        [1, 1, 1],
+        [Math.PI / 2, 0, 0],
+      );
+  return b.build();
+}
+
+/** Legacy gate leaf retained for the unused gateCarpentry assembly. */
+function gateDoorLeaf(width: number, height: number, direction: number) {
+  const b = new Builder();
   for (let i = 0; i < 5; i++) {
     const x = (direction * (i + 0.5) * width) / 5;
-    b.box([width / 5 - 0.004, height, 0.08], [x, height / 2, 0], wood);
-    for (const y of [0.19, height * 0.49, height - 0.2]) {
+    b.box([width / 5 - 0.004, height, 0.08], [x, height / 2, 0], templeRed);
+    for (const y of [0.19, height * 0.49, height - 0.2])
       b.add(
         cylinder(0.01, 0.012, 0.012, 12),
         M.brass,
@@ -20,7 +84,6 @@ export function doorLeaf(width: number, height: number, direction: number) {
         [1, 1, 1],
         [Math.PI / 2, 0, 0],
       );
-    }
   }
   for (const y of [0.13, height * 0.49, height - 0.14])
     b.box([width, 0.09, 0.055], [(direction * width) / 2, y, 0.055], templeJade);
@@ -59,11 +122,11 @@ export function doorLeaf(width: number, height: number, direction: number) {
 
 export function doorFrame(b: Builder, p: V3) {
   for (const side of [-1, 1]) {
-    b.box([0.16, 2.55, 0.2], [p[0] + side * 0.7, p[1] + 1.27, p[2]], templeRed);
-    b.box([0.025, 2.4, 0.025], [p[0] + side * 0.7, p[1] + 1.27, p[2] + 0.112], templeGold);
+    b.box([0.16, 2.55, 0.2], [p[0] + side * 0.7, p[1] + 1.27, p[2]], gateWood);
+    b.box([0.025, 2.4, 0.025], [p[0] + side * 0.7, p[1] + 1.27, p[2] + 0.112], gateWoodRail);
     lotusBoss(b, [p[0] + side * 0.7, p[1] + 2.22, p[2] + 0.12], 0.07);
   }
-  paintedBeam(b, [p[0], p[1] + 2.5, p[2]], 1.56, 0.18);
+  b.box([1.56, 0.18, 0.22], [p[0], p[1] + 2.5, p[2]], gateWoodRail);
   b.box([1.5, 0.11, 0.28], [p[0], p[1] + 0.03, p[2]], M.stone);
 }
 
@@ -112,7 +175,7 @@ export function movingDoor(p: V3, state: DoorState, latched: boolean) {
 
 export function gateCarpentry(b: Builder) {
   for (const side of [-1, 1]) {
-    b.merge(doorLeaf(2.9, 2.8, -side), [side * 3.0, 0.36, -2.7], [0, side * 1.3, 0]);
+    b.merge(gateDoorLeaf(2.9, 2.8, -side), [side * 3.0, 0.36, -2.7], [0, side * 1.3, 0]);
     for (let tier = 0; tier < 3; tier++) {
       const y = 3.35 + tier * 0.17,
         width = 0.45 + tier * 0.35;

@@ -90,6 +90,9 @@ export function sceneLighting(state: GameState, place: Place, day: boolean): Lig
             : 0.0035
         : 0.013,
     exposure: lateAfternoon ? (indoor ? 1.18 : 1.12) : day ? (indoor ? 1.16 : 1.1) : 1.34,
+    // The road camera looks down across the valley, so a broad low mist
+    // volume gives the distant ridges the layered air of the reference image.
+    atmosphere: day && place === 'road' ? [0.075, 7.5, 8.5, 180] : [0, 0, 0, 0],
     // The moving mountain view needs the road, coach and nearby trees in one
     // stable volume. Interior scenes retain their finer local shadow detail.
     shadowRadius: place === 'road' ? 96 : 16,

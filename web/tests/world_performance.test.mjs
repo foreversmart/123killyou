@@ -138,7 +138,7 @@ test('travel changes world position, stops at the destination, and leaves Lu Che
   const traveler = find(initial, 'linlan'),
     monk = find(initial, 'luchen');
   const moved = frame(world.root, 2),
-    arrived = frame(world.root, 3),
+    arrived = frame(world.root, 4.5),
     later = frame(world.root, 9);
   assert.ok(moved.get(traveler)[14] < initial.get(traveler)[14] - 0.5);
   assert.deepEqual([...arrived.get(traveler)], [...later.get(traveler)]);

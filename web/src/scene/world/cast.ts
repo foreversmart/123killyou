@@ -2,7 +2,7 @@ import type { GameState } from '@/shared/types/game';
 import type { World, WorldMode, V3 } from '@/scene/world/types';
 import type { Place } from '@/scene/world/scene_state';
 import { visibleActors } from '@/scene/world/scene_state';
-import { actorPositions } from '@/scene/world/placement';
+import { actorPositions, corridorCandlePositions } from '@/scene/world/placement';
 import { identityOf } from '@/scene/world_character/identity';
 import { characterModel } from '@/scene/world_character/model';
 import { animateCharacter } from '@/scene/world_character/animation';
@@ -37,7 +37,10 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
           : 'standing',
       actor.id === 'shangong' && Boolean(state.flags.cup_failed),
     );
+    if (actor.id === 'player') rig.root.name = actor.id;
     let position: V3 = actorPositions[place]?.[actor.id] || [index - 1.5, 0, -1 - index * 0.5];
+    if (state.sceneKey === 'mini_corridor_candle' && place === 'corridor')
+      position = corridorCandlePositions[actor.id] || position;
     if (walking) {
       if (mode === 'hall') {
         const hallLine: Record<string, V3> = {
@@ -116,6 +119,18 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       gaiting: gateDrift,
       speaker: () => world.speaker || '',
     });
+    const ghost =
+      actor.id === 'skin_double' ||
+      (actor.id === 'huipu' && (actor.status.includes('剥') || actor.status.includes('空洞')));
+    if (ghost) {
+      const markGhost = (node: typeof rig.root) => {
+        node.ghost = 0.88;
+        node.shadow = false;
+        node.receiveShadow = false;
+        node.children.forEach(markGhost);
+      };
+      markGhost(rig.root);
+    }
     if (actor.id !== 'victim') {
       world.lighting.contacts ||= [];
       for (const knee of rig.knees)
@@ -125,7 +140,10 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
           anchor:
             rig.pose === 'kneeling'
               ? { node: knee, offset: [0, -0.025, 0] }
-              : { node: knee.children[0], offset: [0, -0.045, 0.015] },
+              : {
+                  node: knee.children[0],
+                  offset: rig.root.skinTargets ? [0, 0, 0] : [0, -0.045, 0.015],
+                },
         });
     }
     const authoredFacing = actorFacing(
@@ -134,6 +152,8 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.position,
       actor.id === 'skin_double' ? Math.PI : rig.root.rotation[1],
     );
+    const candleGuest = state.sceneKey === 'mini_corridor_candle' && actor.id !== 'luchen';
+    if (candleGuest) rig.root.rotation[1] = authoredFacing;
     if (movement) {
       const perform = rig.root.animate!;
       const heading = Math.atan2(
@@ -150,17 +170,17 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       rig.root.animate = (t, dt) => {
         perform(t, dt);
         rig.root.position = movementPosition(movement, t);
-        const settle = ease(t - movement.duration + 0.45, 0.45);
+        const settle = ease(t - movement.duration + 0.675, 0.675);
         const facing = heading + turn * settle;
         rig.root.rotation[1] = Math.atan2(Math.sin(facing), Math.cos(facing));
       };
-    } else if (authoredFacing !== rig.root.rotation[1]) {
+    } else if (authoredFacing !== rig.root.rotation[1] && !candleGuest) {
       const perform = rig.root.animate!;
       const origin = rig.root.rotation[1];
       const turn = Math.atan2(Math.sin(authoredFacing - origin), Math.cos(authoredFacing - origin));
       rig.root.animate = (t, dt) => {
         perform(t, dt);
-        rig.root.rotation[1] = origin + turn * ease(t, 1.1);
+        rig.root.rotation[1] = origin + turn * ease(t, 1.65);
       };
     }
     if (gateDrift) {

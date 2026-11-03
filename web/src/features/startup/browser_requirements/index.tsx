@@ -36,8 +36,9 @@ export function BrowserRequirements({ support }: { support: HtmlCanvasSupport })
           <p className={styles['eyebrow']}>进入之前 · 浏览器检查</p>
           <h1 id="requirements-title">暂时无法进入游戏</h1>
           <p className={styles['intro']}>
-            本作使用 WebGPU 呈现 3D 场景，并使用 HTML-in-Canvas
-            呈现文字特效。启动时会实际绘制并核对两种画面的像素，检测通过后才能进入。
+            本作使用 WebGPU 呈现 3D 场景、HTML-in-Canvas 呈现文字特效，并使用浏览器原生 ZIP
+            解压读取角色动作。启动时会实际绘制并核对画面，同时检查 ZIP
+            解压能力，检测通过后才能进入。
           </p>
           {support.error && (
             <p className={styles['failure-reason']} role="alert">

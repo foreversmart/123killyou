@@ -23,6 +23,7 @@ const { terrainHeight } = await import('../src/scene/world_environment/terrain.t
 const { roadSample, roadNearest, ROAD_HALF_WIDTH, ROAD_LENGTH } =
   await import('../src/scene/world_environment/road_path.ts');
 const { bodhisattva } = await import('../src/scene/world_environment/statue.ts');
+const { visibleActors } = await import('../src/scene/world/scene_state.ts');
 
 test('packed models contain bounded finite geometry, valid normals, local texture slots and indices', () => {
   const ranges = [];
@@ -59,7 +60,10 @@ test('every manifest texture is local, decodable and current with no orphan revi
     ...manifest.skies,
     ...manifest.surfaces.flatMap((s) => [s.albedo, s.normal, s.arm]),
   ];
-  const files = ['library.json', manifest.binary, ...textures];
+  const characterFiles = Object.values(manifest.characterModels || {}).flatMap((model) =>
+    [model.animationSource, model.skin?.influences].filter(Boolean),
+  );
+  const files = ['library.json', manifest.binary, ...new Set(characterFiles), ...textures];
   assert.equal(files.length, new Set(files).size);
   assert.deepEqual((await readdir(root)).sort(), files.sort());
   await Promise.all(
@@ -110,20 +114,58 @@ test('all character poses and the statue resolve current meshes with head and ne
   }
 });
 
-test('user supplied character models are packed as six current static rig parts', () => {
+test('current character models expose one packed skin mesh or six static parts', () => {
   const expected = ['huipu', 'linlan', 'luchen', 'xuzhi', 'zhaoxi', 'zhouyan'];
   assert.deepEqual(Object.keys(manifest.characterModels || {}).sort(), expected);
   for (const [id, model] of Object.entries(manifest.characterModels)) {
-    assert.equal(model.static, true, id);
-    assert.equal(model.parts.length, 6, id);
+    const skinned = Boolean(model.skin);
+    assert.equal(model.static, !skinned, id);
+    assert.equal(model.parts.length, skinned ? 1 : 6, id);
+    if (skinned) {
+      assert.equal(model.skin.mesh, model.parts[0]);
+      assert.ok(model.skin.influences.endsWith('_skin.bin'), id);
+      assert.deepEqual(
+        Object.keys(manifest.meshes).filter((part) => part.startsWith(id + '_model_')),
+        model.parts,
+      );
+    } else assert.equal(model.skin, undefined, id);
     for (const part of model.parts) {
       assert.ok(manifest.meshes[part], part);
       const range = manifest.meshes[part];
       const vertices = new Float32Array(binary, range.vertexOffset, range.vertexCount);
       assert.ok(vertices.every(Number.isFinite), part);
-      assert.ok(vertices.every((value, index) => index % 16 < 3 ? Math.abs(value) < 3 : true), part);
+      assert.ok(
+        vertices.every((value, index) => (index % 16 < 3 ? Math.abs(value) < 3 : true)),
+        part,
+      );
     }
   }
+});
+
+test('the first-person player is rendered only during the bed sleep interlude', () => {
+  const player = {
+    id: 'player',
+    name: '赵熙',
+    role: '游客·主角',
+    position: '门房床上',
+    portrait: 'player',
+    status: '躺下休息',
+    visible: true,
+  };
+  const sleeping = {
+    sceneKey: 'mini_wake_three_gongs',
+    shotKey: 'room_sleep_wait',
+    flags: {},
+    actors: [player],
+  };
+  assert.deepEqual(
+    visibleActors(sleeping).map((actor) => actor.id),
+    ['player'],
+  );
+  assert.deepEqual(
+    visibleActors({ ...sleeping, shotKey: 'wake_candle' }).map((actor) => actor.id),
+    [],
+  );
 });
 
 test('半山寺院平台平整，盘山路基随高程变化且留足通车宽度', () => {

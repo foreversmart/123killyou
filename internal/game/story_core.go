@@ -132,7 +132,7 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 		miniSetFlag(state, "luggage_placed")
 		miniShot(state, "register_luggage")
 		state.DialogueNext = "自动去斋堂"
-		return "story", miniDialogue(state, "许栀", "行李先放到门边吧。念珠留在桌上，红烛等晚膳后再领。"), true
+		return "story", miniDialogue(state, "许栀", "行李已经放好啦，去吃晚膳吧"), true
 	}
 	if miniHasAny(text, "看登记簿", "看看登记", "看房牌", "查看通行凭") {
 		miniSetFlag(state, "registration_seen")
@@ -145,7 +145,7 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 		return "move", miniDialogue(state, "陆沉", "请各位随我去斋堂用晚膳。"), true
 	}
 	if miniHasAny(text, "谁是守夜人", "你是谁", "为什么不能出门") {
-		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘，只替这里看门、记名。夜里要出门，先叫我；没有必要，就留在房里。"), true
+		return "dialogue", miniDialogue(state, "陆沉", "我叫陆沉，法号照尘。夜里要出门，可以先叫我；没有必要，就留在房里。"), true
 	}
 	return e.storyConversation(state, text)
 }

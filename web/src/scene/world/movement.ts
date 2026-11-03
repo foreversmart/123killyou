@@ -35,19 +35,27 @@ type GateActivityProfile = {
   phase: number;
 };
 
+// Gate activity spans five times the old distance while every walk is 1.5x
+// slower. Scale its wave rate by 2/15 so the resulting movement speed stays
+// at two thirds of the previous speed.
+const GATE_WALK_RATE_SCALE = 2 / 15;
+
 // Gate visitors keep sampling nearby viewpoints while their hands continue
 // the authored activity. The two incommensurate waves avoid a visibly
 // mechanical back-and-forth loop, while the small amplitudes keep each person
 // inside the camera's established gate tableau.
 const gateActivityProfiles: Partial<Record<Performance, GateActivityProfile>> = {
-  camera: { side: 0.48, depth: 0.4, pace: 0.56, phase: 0.4 },
-  review_camera: { side: 0.34, depth: 0.31, pace: 0.48, phase: 1.2 },
-  admire: { side: 0.29, depth: 0.23, pace: 0.42, phase: 2.1 },
-  look_up: { side: 0.23, depth: 0.17, pace: 0.38, phase: 2.7 },
-  luggage: { side: 0.21, depth: 0.35, pace: 0.34, phase: 0.9 },
-  welcome: { side: 0.26, depth: 0.2, pace: 0.36, phase: 1.8 },
-  glance: { side: 0.18, depth: 0.15, pace: 0.32, phase: 2.8 },
-  stretch: { side: 0.23, depth: 0.26, pace: 0.4, phase: 1.5 },
+  // Give the opening gate tableau five times the original side-to-side and
+  // depth range while keeping the same wave cadence. The larger range reads
+  // as a longer walk instead of a faster jitter.
+  camera: { side: 2.4, depth: 2, pace: 0.56 * GATE_WALK_RATE_SCALE, phase: 0.4 },
+  review_camera: { side: 1.7, depth: 1.55, pace: 0.48 * GATE_WALK_RATE_SCALE, phase: 1.2 },
+  admire: { side: 1.45, depth: 1.15, pace: 0.42 * GATE_WALK_RATE_SCALE, phase: 2.1 },
+  look_up: { side: 1.15, depth: 0.85, pace: 0.38 * GATE_WALK_RATE_SCALE, phase: 2.7 },
+  luggage: { side: 1.05, depth: 1.75, pace: 0.34 * GATE_WALK_RATE_SCALE, phase: 0.9 },
+  welcome: { side: 1.3, depth: 1, pace: 0.36 * GATE_WALK_RATE_SCALE, phase: 1.8 },
+  glance: { side: 0.9, depth: 0.75, pace: 0.32 * GATE_WALK_RATE_SCALE, phase: 2.8 },
+  stretch: { side: 1.15, depth: 1.3, pace: 0.4 * GATE_WALK_RATE_SCALE, phase: 1.5 },
 };
 
 const gateActivitySeeds: Record<string, number> = {
@@ -149,6 +157,12 @@ export function actorFacing(actor: SceneActor, state: GameState, position: V3, f
     // broke the shared moment around the desk.
     if (['linlan', 'zhouyan', 'xuzhi'].includes(actor.id)) target = [0, 1.1, -0.7];
   }
+  if (state.sceneKey === 'mini_corridor_candle' && actor.id !== 'luchen') {
+    // The fourth-act handoff is staged as a loose gathering around Lu Chen.
+    // The guests keep their individual distances, but their bodies all turn
+    // toward the keeper so the candle exchange remains a shared moment.
+    target = [0, 1.1, -0.7];
+  }
   return target ? Math.atan2(target[0] - position[0], target[2] - position[2]) : fallback;
 }
 
@@ -167,10 +181,10 @@ export function actorMovement(
       // Give the walk enough screen space to establish the gate's scale. The
       // slightly longer offsets also leave room for two clear alternating
       // steps before each person settles into the shared tableau.
-      linlan: { offset: [-2.25, 0, 1.45], duration: 3.1 },
-      zhouyan: { offset: [2.15, 0, 1.8], duration: 3.7 },
-      xuzhi: { offset: [1.55, 0, 2.55], duration: 4.15 },
-      luchen: { offset: [0, 0, -2.45], duration: 3.4 },
+      linlan: { offset: [-2.25, 0, 1.45], duration: 4.65 },
+      zhouyan: { offset: [2.15, 0, 1.8], duration: 5.55 },
+      xuzhi: { offset: [1.55, 0, 2.55], duration: 6.225 },
+      luchen: { offset: [0, 0, -2.45], duration: 5.1 },
     };
     const path = paths[actor.id];
     if (path)
@@ -241,7 +255,7 @@ export function actorMovement(
     (mode === 'travel' || mode === 'hall') &&
     !(state.sceneKey === 'mini_ending' && actor.id === 'luchen')
   ) {
-    const duration = mode === 'hall' ? 7 : state.sceneKey === 'mini_corridor_candle' ? 4 : 3;
+    const duration = mode === 'hall' ? 10.5 : state.sceneKey === 'mini_corridor_candle' ? 6 : 4.5;
     return {
       from: position,
       // The main-hall tableau is viewed from the adjoining passage. Keep the

@@ -1,0 +1,135 @@
+《红烛无声》首夜十二幕核心事件分支图
+最终尺寸：3840×2160 PNG
+绘图来源：imagecreate；Codex 配置的 custom provider；gpt-image-2；quality=high
+生成命令：uv run /Users/hong/.codex/skills/imagecreate/scripts/image_gen.py generate --prompt-file [下方底图提示词] --no-augment --size 3840x2160 --quality high
+合成方式：生成纸张与边缘寺檐红烛图案，中文节点和连线以SVG精确排版；SVG内嵌生成底图。
+剧情依据：story/mini_script.md；story/mini_script_coverage.md；internal/game/story_escape.go、story_oracle.go、story_double.go、story_dawn.go。
+范围：当前已实现的首夜十二幕，不包含后续完整调查与破愿剧本。
+
+【模型实际使用的底图提示词】
+Use case: infographic-diagram
+Asset type: Illustrated paper background for a Chinese folk-horror game's branching-story flowchart.
+Primary request: Create ONLY an elegant landscape background plate, without text or diagram nodes, for the game's first-night plot map. It should look like an art-directed Chinese temple case dossier, quietly ominous, refined and readable.
+Scene/backdrop: Flat scanned matte aged ivory xuan paper, subtle large-scale fiber texture. A delicate old Chinese temple roofline and mountain silhouette at the extreme upper-right margin, fading into mist. One small realistic-but-illustrated red candle with warm amber flame at the extreme upper-right corner. A small ink-brush cat and tiny bird only near the far lower-right outer margin, tiny and subdued. Restrained dark teal ink wash only at outer corners, a few muted cinnabar seal-like blank geometric accents.
+Style/medium: Fine dark outlines, matte graphic color blocks, delicate paper grain, cinematic Chinese folk-horror archival infographic design. No photographic textures or modern UI.
+Composition/framing: 3840x2160 landscape. Reserve the entire central 94% of the canvas as very light quiet almost-uniform ivory paper for a dense diagram to be typeset later. All decoration stays inside the outermost 110px edge strip or top-right 400x180px area. Keep paper evenly lit and high contrast for future dark text. No large central artwork.
+Color palette: parchment #f2e8d4, charcoal teal #263e3d, faded cinnabar #9b4038, candle amber #a97939. Avoid black backgrounds.
+Text: NONE. No letters, numbers, labels, symbols resembling words, logos, watermark, cards, boxes, arrows, diagram shapes, gridlines.
+Constraints: Blank center, minimal outer marginalia, highly finished tasteful art plate, crisp 4K image. Do not add people, faces, skeletons, blood, corpses, weapons, collage panels, western gothic elements, Japanese shrine elements or large paper stains.
+
+
+【图中文字与节点排版清单】
+红烛无声
+首夜十二幕 · 核心事件分支图
+从晴日下午入住，到午夜辨声求生，再守到真正的五更。
+主线
+生还路径
+D
+统一死亡结算
+壹
+入
+寺
+准
+备
+01—06
+01—02｜抵达与入住
+四人乘大巴抵寺
+陆沉登记、分房、交钥匙
+03｜斋堂晚膳
+粥中发现肉丝，可吃／拒绝／暂缓
+可逐一劝林岚、周砚、许栀吃素
+04｜回廊领烛 · 二更
+陆沉嘱咐：夜间慎出、红烛勿灭
+玩家主动领烛，回“门”房
+05｜门房点烛、读经、入睡
+寺史缺失“验身”记录
+读《大念处经》可解锁安抚
+06｜三更惊醒 · 红烛已熄
+三声更锣后醒来，必须续燃红烛
+续燃后湿重呼吸与拖行退远
+晚膳决定后续处境
+三位同伴全吃 → 无可靠同伴，不能直接跑回房
+本人吃粥，或三位同伴全吃 → 回房出现换皮同行人
+未点烛就睡下 → 
+D
+明确不续燃 → 
+D
+经文四句：观身如身 · 观受如受
+观心如心 · 观法如法
+A
+续燃
+贰
+午
+夜
+求
+生
+07—09
+A
+07｜四敲空门
+门眼外空廊，喊话没有回应
+不开门，等四敲过去
+08｜三敲 · 核验同行人
+三敲后才有人声，自称同伴
+先核对房牌、私物等身份细节
+08｜偷听剥皮 · 碰倒花瓶
+慧普伏在暗处，撕裂与低念传出
+鞋跟碰碎花瓶，慧普停下回头
+09｜跑向大殿，求神公引路
+说清只求回房，再掷一次杯筊
+诚意、虔诚参与判定；本人吃粥降低成功率
+跑向大殿
+喊话：每句扣 2 点虔诚度，仍留此处
+四敲时开门 → 
+D
+三敲不等于安全，声音不能单独证明身份
+模仿已听过的猫／鸟叫
+慧普被引开 → 撤回门房
+真同伴在场 ＋ 红烛亮
+立刻跑回“门”房并关门
+圣筊
+神公持烛带回房
+笑筊／阴筊
+神公石化 → 死亡 D
+B
+成功回房 → 按晚膳状态判断是否进入第10幕
+跑向后山／钟楼／陌生偏房 → 
+D
+未模仿时：无同伴直接跑回／回房烛灭 → 失败 D
+叁
+守
+到
+真
+晓
+10—12
+B
+回房后：是否触发换皮者？
+本人吃粥，或三位同伴全吃 → 是
+否则跳过第10幕
+10｜换皮同伴：守住红烛与房门
+拒绝“吹灭红烛”与“跟我出去”两次诱导
+已读经 → 连续四句《大念处经》 → 安抚成功
+未读／中断 → 它狂躁冲出 → 不跟、立即关门守烛
+吹灭红烛，或跟着冲出房间 → 
+D
+是
+否：保持房内烛火，跳过换皮事件
+11｜四锣一钟 · 假报晓
+窗纸仍黑，低长钟不是第五锣
+继续辨声，不开门
+误判天亮 → 门外三敲
+熟悉的声音劝开门做早课
+仍可拒绝开门，继续等待
+假报晓时开门 → 
+D
+不开门，等真正五更
+五锣 ＋ 鸡鸣 ＋ 檐鸟 ＋ 晨光
+12｜平安离寺 · 余悸
+四人重聚，归还通行凭、主动上车
+首夜生还；慧普恶愿尚未解除
+D
+统一失败结局：红烛熄灭
+鬼影冲入；由玩家决定重试或重新开始。
+从最近安全节点重试
+保留本局进食、学经和道具调查；杯筊失败回到08，不重放整段偷听。
+阅读方式：阶段从左到右
+A／B为跨阶段连接；D汇总死亡。

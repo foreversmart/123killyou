@@ -68,7 +68,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
         </Room>
-        <Inventory state={state} />
+        {(openingPhase === 'alighting' || openingPhase === 'done') && <Inventory state={state} />}
         {(!openingFlow || openingPhase === 'alighting') && (
           <DialoguePanel
             state={state}

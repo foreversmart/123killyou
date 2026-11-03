@@ -13,20 +13,32 @@ export function roomShell(b: Builder, daylight: boolean, surface: 'wood' | 'ston
   const plaster = { ...M.plaster, color: 0xb4aa90, rough: 0.96 };
   // Wall openings are real gaps, including the space behind swinging doors.
   for (const [left, right] of [
-    [-5, -3.5],
-    [-1.3, 1.62],
+    [-5, -3.45],
+    [-1.35, 1.62],
     [3.18, 5],
   ])
     b.box([right - left, 3.7, 0.25], [(left + right) / 2, 1.85, -4], plaster);
-  b.box([2.2, 1.05, 0.25], [-2.4, 0.525, -4], plaster);
-  b.box([2.2, 0.95, 0.25], [-2.4, 3.225, -4], plaster);
+  b.box([2.1, 1.05, 0.25], [-2.4, 0.525, -4], plaster);
+  b.box([2.1, 0.95, 0.25], [-2.4, 3.225, -4], plaster);
   b.box([1.56, 1.15, 0.25], [2.4, 3.125, -4], plaster);
   // Enclose the eye at every authored angle, including the starting position
   // behind the old side-wall ends. Overlap the corners and ceiling joints.
   b.box([halfWidth * 2 + thickness, height, thickness], [0, height / 2, back], plaster);
   b.box([halfWidth * 2 + thickness, 0.2, thickness], [0, height - 0.09, front], plaster);
   for (const x of [-halfWidth, halfWidth]) {
-    b.box([thickness, height, depth], [x, height / 2, centerZ], plaster);
+    const windowZ = x < 0 ? 0.95 : -0.15;
+    const windowWidth = 1.65;
+    const bottom = 1.325;
+    const top = 2.775;
+    const nearEdge = windowZ - windowWidth / 2;
+    const farEdge = windowZ + windowWidth / 2;
+    for (const [start, end] of [
+      [front - thickness / 2, nearEdge],
+      [farEdge, back + thickness / 2],
+    ])
+      b.box([thickness, height, end - start], [x, height / 2, (start + end) / 2], plaster);
+    b.box([thickness, bottom, windowWidth], [x, bottom / 2, windowZ], plaster);
+    b.box([thickness, height - top, windowWidth], [x, (height + top) / 2, windowZ], plaster);
     for (const z of [-4, -1, 2, back - 0.18]) {
       b.add(cylinder(0.11, 0.14, 3.7), templeRed, [x * 0.98, 1.85, z]);
       b.add(cylinder(0.145, 0.145, 0.055, 12), templeGold, [x * 0.98, 0.45, z]);
@@ -47,7 +59,7 @@ export function roomShell(b: Builder, daylight: boolean, surface: 'wood' | 'ston
   b.box([0.14, 0.34, depth], [4.82, 0.3, centerZ], M.darkWood);
   b.box([9.8, 0.34, 0.14], [0, 0.3, back - 0.18], M.darkWood);
   for (const x of [-4.72, -2.4, 0, 2.4, 4.72]) {
-    b.box([0.1, 3.35, 0.12], [x, 1.72, -3.78], M.darkWood);
+    if (x !== -2.4) b.box([0.1, 3.35, 0.12], [x, 1.72, -3.78], M.darkWood);
     b.box([0.1, 3.35, 0.12], [x, 1.72, back - 0.19], M.darkWood);
   }
   for (const z of [-3.7, -0.5, 2.5, back - 0.18]) {

@@ -1,12 +1,12 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import { plaque } from '@/scene/world_environment/architecture';
 import { doorLeaf } from '@/scene/world_environment/doors';
-import { octagonalLattice } from '@/scene/world_environment/courtyard_lattice';
+import { templeWindow } from '@/scene/world_environment/temple_window';
 import { cloudScroll, paintedBeam, lotusBoss } from '@/scene/world_environment/temple_ornament';
 import { templeGold, templeRed } from '@/scene/world_environment/temple_palette';
 
 /** Guest rooms retain their four authored coordinates and open toward the passage. */
-export function courtyardRoom(b: Builder, side: -1 | 1, z: number) {
+export function courtyardRoom(b: Builder, side: -1 | 1, z: number, daylight = false) {
   const local = new Builder();
   const wood = templeRed;
   for (const x of [-0.75, 0.75]) local.box([0.16, 2.64, 0.22], [x, 1.32, 0], wood);
@@ -26,12 +26,15 @@ export function courtyardRoom(b: Builder, side: -1 | 1, z: number) {
 
   const plaster = { ...M.plaster, color: 0xbcb298, rough: 0.96 };
   b.box([2.94, 0.12, 2.5], [side * 7.05, -0.03, z], M.wood);
-  b.box([0.2, 3.16, 2.5], [side * 8.55, 1.58, z], plaster);
+  // Build the rear wall around the window, so the recessed sash never sits on plaster.
+  for (const offset of [-0.9875, 0.9875])
+    b.box([0.2, 3.16, 0.525], [side * 8.55, 1.58, z + offset], plaster);
+  b.box([0.2, 1.35, 1.45], [side * 8.55, 0.675, z], plaster);
+  b.box([0.2, 0.71, 1.45], [side * 8.55, 2.805, z], plaster);
   for (const offset of [-1.25, 1.25]) {
     b.box([2.95, 3.16, 0.16], [side * 7.02, 1.58, z + offset], plaster);
     b.box([0.17, 3.16, 0.18], [side * 5.65, 1.58, z + offset], wood);
   }
   b.box([2.94, 0.13, 2.5], [side * 7.05, 3.11, z], wood);
-  b.box([0.04, 1.1, 1.45], [side * 8.42, 1.9, z], { color: 0x969987, rough: 1, glow: 0.03 });
-  octagonalLattice(b, [side * 8.38, 1.9, z], 1.45, 1.1, (-side * Math.PI) / 2);
+  templeWindow(b, [side * 8.42, 1.9, z], 1.45, 1.1, daylight, (-side * Math.PI) / 2);
 }

@@ -1,11 +1,18 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
-import { cylinder } from '@/scene/geometry/primitives';
 import { plaque, roof } from '@/scene/world_environment/architecture';
 import type { WorldNode } from '@/scene/world/types';
 import { lantern } from '@/scene/world_prop/ritual';
 import { corridorSideHall } from '@/scene/world_environment/corridor_side_hall';
 import { cloudScroll, paintedBeam, shrineCrown } from '@/scene/world_environment/temple_ornament';
-import { templeGold, templeJade, templeRed } from '@/scene/world_environment/temple_palette';
+import {
+  gateIron,
+  gateWood,
+  gateWoodInset,
+  gateWoodRail,
+  templeGold,
+  templeJade,
+  templeRed,
+} from '@/scene/world_environment/temple_palette';
 
 /**
  * The guest corridor is the playable threshold between the east-side rooms and
@@ -34,19 +41,17 @@ function mahaViraPortal(daylight: boolean): WorldNode {
   for (const side of [-1, 1]) {
     const leaf = new Builder();
     const cx = -side * 0.42;
-    leaf.box([0.84, 2.68, 0.11], [cx, 1.34, 0], templeRed);
-    for (const edge of [-0.38, 0.38])
-      leaf.box([0.035, 2.65, 0.025], [cx + edge, 1.34, 0.065], M.brass);
+    const wood = gateWood;
+    const inset = gateWoodInset;
+    leaf.box([0.84, 2.68, 0.11], [cx, 1.34, 0], wood);
+    for (const edge of [-0.38, 0.38]) {
+      leaf.box([0.035, 2.65, 0.025], [cx + edge, 1.34, 0.065], gateWoodRail);
+      leaf.box([0.018, 2.56, 0.027], [cx + edge * 0.79, 1.34, 0.084], templeRed);
+    }
     for (const y of [0.3, 1.34, 2.38]) {
-      leaf.box([0.68, 0.045, 0.026], [cx, y, 0.065], M.brass);
-      leaf.box([0.055, 0.3, 0.026], [cx, y, 0.07], M.brass);
-      leaf.add(
-        cylinder(0.055, 0.055, 0.025, 12),
-        M.brass,
-        [cx, y + 0.3, 0.075],
-        [1, 1, 1],
-        [Math.PI / 2, 0, 0],
-      );
+      leaf.box([0.68, 0.045, 0.026], [cx, y, 0.065], gateWoodRail);
+      leaf.box([0.055, 0.3, 0.026], [cx, y, 0.07], gateIron);
+      leaf.box([0.64, 0.62, 0.026], [cx, y + 0.22, 0.067], inset);
     }
     b.merge(leaf.build(), [side * 1.48, 0.08, -7.85], [0, side * 0.85, 0]);
   }

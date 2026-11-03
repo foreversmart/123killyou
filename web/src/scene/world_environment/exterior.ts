@@ -50,7 +50,7 @@ export function corridor(daylight: boolean): WorldNode {
     else openings.push({ x: 3.3 - wallCenter, width: 3.44, bottom: 0, top: 3.22 });
     courtyardWall(b, [side * 5.5, 0, wallCenter], 16, 3.55, openings, (-side * Math.PI) / 2);
     if (side === 1) moonGate(b, [5.5, 0, 3.3], -Math.PI / 2);
-    for (const z of [-2, -6]) courtyardRoom(b, side, z);
+    for (const z of [-2, -6]) courtyardRoom(b, side, z, daylight);
     for (const z of [6.5, 0.35, -4.1, -7.35]) {
       b.box([0.29, 3.58, 0.29], [side * 4.65, 1.89, z], timber);
       b.box([0.45, 0.34, 0.45], [side * 4.65, 0.17, z], { ...M.stone, color: 0x8d9289 });

@@ -15,13 +15,19 @@ import {
 import { nightAction } from '@/scene/world_character/night_actions';
 import { bend, ease } from '@/scene/world_character/joints';
 import { speechMotion } from '@/scene/world_character/speech';
+import { blenderActionFor } from '@/scene/world_character/blender_action_library';
+import { skinMealUtensilRotation } from '@/scene/world_character/skinned_actions';
+import { sleepAction } from '@/scene/world_character/sleep_action';
+import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 
 // Keep the gait cadence independent of the route duration. The old stride was
 // derived from eased progress, which made the feet slow down with the root and
 // read as a sliding translation on the longer gate approach. A steady cadence
 // lets the body cover a larger scene distance while the two legs alternate.
-const WALK_CYCLE_RATE = 5.8;
-const REGISTER_WALK_CYCLE_RATE = 4.6;
+// Route durations are 1.5x longer now; keep the feet cadence in the same
+// proportion so the lifted leg does not outrun the root translation.
+const WALK_CYCLE_RATE = 3.87;
+const REGISTER_WALK_CYCLE_RATE = 3.07;
 const WALK_PERFORMANCES = new Set([
   'walk',
   'walk_lead',
@@ -45,7 +51,34 @@ export function animateCharacter(
 ) {
   const { root, body, head, arms, legs, elbows, hands, knees } = rig;
   const legBasePositions = legs.map((leg) => [...leg.position] as [number, number, number]);
+  const legBaseAngles = legs.map((leg) => leg.rotation[0]);
+  const kneeBaseAngles = knees.map((knee) => knee.rotation[0]);
   const action = performanceFor(actor, state, options.traveling, options.alighting);
+  const luchenWalking = root.name === 'luchen' && WALK_PERFORMANCES.has(action);
+  // Reaching must use this model's bone lengths and prop targets. The shared
+  // clips contain relative motion without the camera/meal's initial grip.
+  const clipAction = (performance: string) =>
+    luchenWalking ||
+    WALK_PERFORMANCES.has(performance) ||
+    (rig.root.skinTargets && ['eat', 'walk_camera'].includes(performance))
+      ? undefined
+      : blenderActionFor(performance)
+        ? performance
+        : undefined;
+  // Keep the semantic action name on the node so aliases such as `rescue`
+  // retain their non-loop contract when the renderer samples the GLB clip.
+  root.blenderAction = clipAction(action);
+  root.blenderTargets = {
+    pose: rig.pose,
+    root,
+    body,
+    head,
+    arms,
+    elbows,
+    hands,
+    legs,
+    knees,
+  };
   const duration = options.walkDuration || 0;
   const speak = speechMotion(rig, actor, options.speaker || (() => ''));
   const seed = [...actor.id].reduce((n, letter) => n + letter.charCodeAt(0), 0) * 0.13;
@@ -83,15 +116,18 @@ export function animateCharacter(
       bowl(b);
       heldBowl = b.mesh(actor.id + '_held_bowl');
       heldBowl.scale = [0.72, 0.72, 0.72];
-      heldBowl.position = [0, 0.008, 0.04];
+      heldBowl.position = root.skinTargets ? [0, 0, 0] : [0, 0.008, 0.04];
+      heldBowl.upright = Boolean(root.skinTargets);
       hands[1].children.push(heldBowl);
     } else {
       heldBread = new Builder()
         .ball([0.055, 0.04, 0.05], [0, 0.045, 0.03], { color: 0xeadcbc, rough: 0.95 })
         .mesh('held_bread');
       hands[1].children.push(heldBread);
+      heldBread.upright = Boolean(root.skinTargets);
     }
     utensilsGrip = node('utensil_grip');
+    utensilsGrip.upright = Boolean(root.skinTargets);
     utensilsGrip.children.push(utensils.mesh('meal_utensils'));
     hands[0].children.push(utensilsGrip);
   }
@@ -102,16 +138,21 @@ export function animateCharacter(
     held = candle(action === 'rescue');
     held.scale = [0.75, 0.75, 0.75];
     held.position = [0, 0.02, 0.03];
-    hands[1].children.push(held);
+    // Blender's offer clip uses the physical right hand (the negative-X
+    // side, rig index 0). Keep the old left-hand fallback for scenes that do
+    // not have the GLB library yet.
+    (blenderActionFor(action) ? hands[0] : hands[1]).children.push(held);
   }
   root.animate = (t, delta) => {
     const moving = duration > 0 && t < duration;
     const currentAction = moving ? action : WALK_PERFORMANCES.has(action) ? 'idle' : action;
+    root.blenderAction = clipAction(currentAction);
+    const blenderDriven = root.blenderEnabled === true && Boolean(root.blenderAction);
     const actionTime = Math.max(0, t - duration);
     body.scale[1] = 1 + (still || action === 'write' ? 0 : Math.sin(t * 1.6 + seed) * 0.002);
     body.position[1] = bodyY;
     body.rotation = [bodyPitch, 0, 0];
-    head.rotation = [0, still ? 0 : Math.sin(t * 0.47 + seed) * 0.025, 0];
+    head.rotation = [0, still ? 0 : Math.sin(t * 0.47 * HEAD_MOTION_RATE + seed) * 0.025, 0];
     hands.forEach((hand) => {
       hand.rotation = [0, 0, 0];
     });
@@ -124,11 +165,11 @@ export function animateCharacter(
     // must return to the authored standing pose before the next scene starts.
     legs.forEach((leg, i) => {
       leg.position = [...legBasePositions[i]];
-      leg.rotation[0] = 0;
-      bend(leg, knees[i], 0);
+      leg.rotation[0] = legBaseAngles[i];
+      bend(leg, knees[i], kneeBaseAngles[i]);
     });
     if (still) return;
-    if (duration > 0 || (options.gaiting && root.gaitMoving)) {
+    if (!blenderDriven && (duration > 0 || (options.gaiting && root.gaitMoving))) {
       const walkCycleRate =
         state.sceneKey === 'mini_register' && options.traveling
           ? REGISTER_WALK_CYCLE_RATE
@@ -150,26 +191,30 @@ export function animateCharacter(
         leg.position[2] += step * 0.12 * weight;
         leg.rotation[0] = step * 0.62 * weight;
         bend(leg, knees[i], lift * 1.02 * weight);
-        armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
+        if (!luchenWalking) armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
       });
     }
-    dayAction(
-      rig,
-      currentAction,
-      actionTime,
-      seed,
-      state.sceneKey === 'mini_register' &&
-        ['register_desk', 'register_drag_mark'].includes(state.shotKey || ''),
-    );
-    nightAction(rig, currentAction, actionTime, verse);
-    speak(currentAction, delta);
-    const upright = -(body.rotation[0] + arms[1].rotation[0] + elbows[1].rotation[0]);
-    if (held) held.rotation = [upright, 0, -arms[1].rotation[2]];
+    if (!blenderDriven) {
+      dayAction(
+        rig,
+        currentAction,
+        actionTime,
+        seed,
+        state.sceneKey === 'mini_register' &&
+          ['register_desk', 'register_drag_mark'].includes(state.shotKey || ''),
+      );
+      nightAction(rig, currentAction, actionTime, verse);
+      speak(currentAction, delta);
+      if (currentAction === 'sleep_enter') sleepAction(rig, actionTime);
+    }
+    const heldSide = blenderActionFor(currentAction) ? 0 : 1;
+    const upright = -(body.rotation[0] + arms[heldSide].rotation[0] + elbows[heldSide].rotation[0]);
+    if (held) held.rotation = [upright, 0, -arms[heldSide].rotation[2]];
     if (heldBowl) heldBowl.rotation = [upright, 0, -arms[1].rotation[2]];
     if (heldBread) heldBread.rotation = [upright, 0, -arms[1].rotation[2]];
     if (utensilsGrip) {
       const lift = mealLift(actionTime, seed);
-      utensilsGrip.position = mealUtensilOffset(lift, actionTime);
+      utensilsGrip.position = root.skinTargets ? [0, 0, 0] : mealUtensilOffset(lift, actionTime);
       utensilsGrip.rotation = [
         -(body.rotation[0] + arms[0].rotation[0] + elbows[0].rotation[0]),
         0,
@@ -177,7 +222,9 @@ export function animateCharacter(
       ];
       // Keep the spoon angled toward the bowl and lift it only through the
       // forearm, instead of spinning it around the wrist.
-      utensilsGrip.children[0].rotation = mealUtensilRotation(lift, actionTime);
+      utensilsGrip.children[0].rotation = root.skinTargets
+        ? skinMealUtensilRotation(lift)
+        : mealUtensilRotation(lift, actionTime);
     }
   };
   return { held, heldBowl, action };

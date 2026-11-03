@@ -10,10 +10,10 @@
 
 | 原素材 | 当前用途 |
 | --- | --- |
-| [tree_small_02](https://polyhaven.com/a/tree_small_02) | 近景与中景树，按独立叶片减面以保留树冠覆盖；远山复用 tree_1 透明叶片贴图，以枝叶卡片和细干组成程序化合并林冠 |
+| [tree_small_02](https://polyhaven.com/a/tree_small_02) | 扫描近景与中景树；运行时另以 procedural_vegetation.ts 补充阔叶、针叶、垂枝和灌木树形，远山复用 tree_1 透明叶片贴图，以单片叶子区域、枝叶卡片和细干组成分片林冠 |
 | [rock_moss_set_01](https://polyhaven.com/a/rock_moss_set_01) | 三种苔石 |
-| [fern_02](https://polyhaven.com/a/fern_02) | 三种蕨类 |
-| [grass_medium_02](https://polyhaven.com/a/grass_medium_02) | 三种草丛，配合程序化随风草叶 |
+| [fern_02](https://polyhaven.com/a/fern_02) | 三种蕨类，按地形和道路边缘错峰散布 |
+| [grass_medium_02](https://polyhaven.com/a/grass_medium_02) | 三种草丛，配合程序化随风草叶并打散苔石间距 |
 | [brown_mud_leaves_01](https://polyhaven.com/a/brown_mud_leaves_01) | 泥土表面 |
 | [aerial_grass_rock](https://polyhaven.com/a/aerial_grass_rock) | 山坡草地与碎石表面 |
 | [weathered_brown_planks](https://polyhaven.com/a/weathered_brown_planks) | 木门、梁柱与家具 |
@@ -56,7 +56,7 @@
 
 | 材质 ID | 固定运行文件 | 用途 |
 | --- | --- | --- |
-| `temple_paint` | `temple_paint_albedo.webp`、`temple_paint_normal.webp`、`temple_paint_arm.webp` | 门额、横梁、梁枋和龛饰的朱漆、青绿、花叶与磨损金箔 |
+| `temple_paint` | `temple_paint_albedo.webp`、`temple_paint_normal.webp`、`temple_paint_arm.webp` | 门额、牌匾背板、横梁、梁枋和龛饰的朱漆、青绿、花叶与磨损金箔 |
 | `temple_relief` | `temple_relief_albedo.webp`、`temple_relief_normal.webp`、`temple_relief_arm.webp` | 大殿、偏殿与门楼墙面中的层叠彩塑、山石、云纹与楼阁 |
 
 运行贴图均为 `web/public/art/world/` 中的 512² WebP，追加至 `library.json` 的表面索引 23、24，顶点材质 pattern 为 39、40。基础色保留照片中的矿物颜料、金箔与细密雕刻；法线和 ARM 根据局部对比度及颜色近似派生，不是扫描得到的真实凹凸或 PBR 数据。实际出挑、斗拱、边框与悬塑层次仍由本作几何构件呈现。`temple_palette.ts` 保持烟暗朱漆、矿物青绿、靛色和旧金的统一材质，`temple_ornament.ts` 复用同一装饰构件。山门与道路远景共享建筑，生活房间按用途保留更多木墙和灰泥，礼佛空间采用较密的龛饰。处理和更新覆盖固定文件，不保留同状态修订副本。

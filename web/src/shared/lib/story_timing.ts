@@ -10,7 +10,7 @@
 // The camera uses this same clock, so its elevated pull-in also reads more
 // slowly instead of racing toward the gate at the end of the opening.
 export const OPENING_ROAD_DURATION_MS = 36_000;
-export const OPENING_ALIGHTING_DURATION_MS = 6_000;
+export const OPENING_ALIGHTING_DURATION_MS = 9_000;
 export const DEPARTURE_ROAD_DURATION_MS = 10_000;
 
 // Authored first-person travel shots. Keep the scene transition clock and the
@@ -18,8 +18,8 @@ export const DEPARTURE_ROAD_DURATION_MS = 10_000;
 // has finished walking and the camera has had time to show the route.
 // The gate-to-registration procession is deliberately unhurried so the
 // followers have time to settle into a loose group around Lu Chen.
-export const CORRIDOR_TRAVEL_REGISTER_SECONDS = 9.6;
-export const CORRIDOR_TRAVEL_REFECTORY_SECONDS = 6.2;
-export const CORRIDOR_TRAVEL_RETURN_SECONDS = 6.0;
-export const CORRIDOR_TRAVEL_LISTEN_SECONDS = 6.0;
-export const HALL_TRAVEL_SECONDS = 7.6;
+export const CORRIDOR_TRAVEL_REGISTER_SECONDS = 14.4;
+export const CORRIDOR_TRAVEL_REFECTORY_SECONDS = 9.3;
+export const CORRIDOR_TRAVEL_RETURN_SECONDS = 9.0;
+export const CORRIDOR_TRAVEL_LISTEN_SECONDS = 9.0;
+export const HALL_TRAVEL_SECONDS = 11.4;

@@ -19,7 +19,7 @@ test('接口缺失时拦截，不能用像素自检绕过前置检查', async ()
   fixture.document.defaultView = {};
   const result = await probeHtmlCanvasSupport(fixture.host);
   assert.equal(result.supported, false);
-  assert.equal(result.missing.length, 2);
+  assert.equal(result.missing.length, 3);
   assert.equal(fixture.canvas, undefined);
   assert.equal(fixture.calls.requests, 0);
 });

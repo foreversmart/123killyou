@@ -21,7 +21,7 @@
   animation: authored-idle 5.8s ease-in-out infinite;
 }
 .scene [data-layer-motion='walk'] {
-  animation: authored-walk 1.9s ease-in-out infinite;
+  animation: authored-walk 2.85s ease-in-out infinite;
 }
 .scene [data-layer-motion='run'] {
   animation: authored-run 0.62s ease-in-out infinite;
@@ -37,7 +37,7 @@
   animation: authored-eat 3.1s ease-in-out infinite;
 }
 .scene [data-layer-motion='turn'] {
-  animation: authored-turn 3.8s ease-in-out infinite;
+  animation: authored-turn 5.7s ease-in-out infinite;
 }
 .scene [data-actor-id='lin_lan'][data-layer-motion],
 .scene [data-actor-id='linlan'][data-layer-motion] {

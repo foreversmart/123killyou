@@ -1,7 +1,7 @@
 import { Builder, materials as M } from '@/scene/geometry/builder';
 import type { Shape } from '@/scene/geometry/primitives';
 import type { V3 } from '@/scene/world/types';
-import { octagonalLattice } from '@/scene/world_environment/courtyard_lattice';
+import { templeWindow } from '@/scene/world_environment/temple_window';
 import { lotusBoss, paintedBeam } from '@/scene/world_environment/temple_ornament';
 import { templeGold, templeJade, templeRed } from '@/scene/world_environment/temple_palette';
 
@@ -47,11 +47,15 @@ export function courtyardWall(
     }
     paintedBeam(local, [opening.x, opening.top + 0.09, 0.12], opening.width + 0.3, 0.18);
     if (opening.lattice) {
-      octagonalLattice(
+      templeWindow(
         local,
         [opening.x, (opening.top + opening.bottom) / 2, 0.015],
-        opening.width - 0.16,
-        opening.top - opening.bottom - 0.16,
+        opening.width,
+        opening.top - opening.bottom,
+        false,
+        0,
+        'lattice',
+        true,
       );
       local.box(
         [opening.width + 0.16, 0.1, 0.38],

@@ -66,7 +66,7 @@ test('opening gate walk animates both legs and covers the wider entrance distanc
         Math.abs(midLegs[0][1] - midLegs[1][1]) > 0.02,
       `${person.id} alternates the two legs instead of translating as one piece`,
     );
-    const duration = [3.1, 3.7, 4.15, 3.4][actors.findIndex(({ id }) => id === person.id)];
+    const duration = [4.65, 5.55, 6.225, 5.1][actors.findIndex(({ id }) => id === person.id)];
     root.animate(duration, 0);
     distances.push(Math.hypot(...root.position.map((value, index) => value - start[index])));
     root.animate(duration + 0.2, 0);
@@ -149,7 +149,7 @@ test('gate activity uses a wider but bounded walking radius', () => {
   }
   assert.ok(maxDistance > 0.5, `gate movement radius should exceed 0.5m, got ${maxDistance}`);
   assert.ok(
-    maxDistance < 1.2,
+    maxDistance < 3.2,
     `gate movement stays inside the authored tableau, got ${maxDistance}`,
   );
 });

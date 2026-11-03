@@ -62,7 +62,11 @@ export function canvasFixture(mode = 'success') {
   }
   let canvas;
   const document = {
-    defaultView: { HTMLCanvasElement: Canvas, CanvasRenderingContext2D: Context },
+    defaultView: {
+      HTMLCanvasElement: Canvas,
+      CanvasRenderingContext2D: Context,
+      DecompressionStream: class DecompressionStream {},
+    },
     createElement(tag) {
       const element = tag === 'canvas' ? new Canvas(this) : new Element(this);
       if (tag === 'canvas') canvas = element;

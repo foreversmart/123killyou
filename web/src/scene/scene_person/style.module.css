@@ -16,7 +16,7 @@
   animation: person-idle 5.8s ease-in-out infinite;
 }
 .person[data-motion='walk'] {
-  animation: person-walk 1.9s ease-in-out infinite;
+  animation: person-walk 2.85s ease-in-out infinite;
 }
 .person[data-motion='run'] {
   animation: person-run 0.62s ease-in-out infinite;
@@ -28,7 +28,7 @@
   animation: person-eat 3.1s ease-in-out infinite;
 }
 .person[data-motion='turn'] {
-  animation: person-turn 3.8s ease-in-out infinite;
+  animation: person-turn 5.7s ease-in-out infinite;
 }
 .person[data-actor='linlan'] {
   animation-delay: -1.1s;

@@ -1,6 +1,7 @@
 import type { GameState } from '@/shared/types/game';
 
 export type V3 = [number, number, number];
+export type V4 = [number, number, number, number];
 export type Material = {
   color: number;
   rough?: number;
@@ -8,7 +9,34 @@ export type Material = {
   pattern?: number;
   glow?: number;
 };
-export type Geometry = { vertices: Float32Array; indices: Uint32Array };
+export type SkinBone = {
+  name: string;
+  parent: number;
+  bind: Float32Array;
+  inverseBind: Float32Array;
+  position: V3;
+};
+export type SkinSkeleton = {
+  bones: SkinBone[];
+  camera?: { bone: number; center: V3 };
+};
+export type Geometry = {
+  vertices: Float32Array;
+  indices: Uint32Array;
+  skin?: { joints: Float32Array; weights: Float32Array; skeleton: SkinSkeleton };
+};
+export type CharacterTargets = {
+  pose: 'standing' | 'seated' | 'kneeling';
+  root: WorldNode;
+  body: WorldNode;
+  head: WorldNode;
+  arms: WorldNode[];
+  elbows: WorldNode[];
+  hands: WorldNode[];
+  legs: WorldNode[];
+  knees: WorldNode[];
+  camera?: WorldNode;
+};
 export type WorldNode = {
   name: string;
   geometry?: Geometry;
@@ -17,6 +45,13 @@ export type WorldNode = {
   position: V3;
   rotation: V3;
   scale: V3;
+  /** Bone sockets override their local transform while retaining animation controls. */
+  matrix?: Float32Array;
+  skinMatrices?: Float32Array;
+  /** Keep a hand-held prop upright while its bone socket moves. */
+  upright?: boolean;
+  skinTargets?: CharacterTargets & { mesh: WorldNode; skeleton?: SkinSkeleton };
+  updateSkin?: () => void;
   children: WorldNode[];
   /** Whether this node contributes geometry to the directional shadow pass. */
   shadow?: boolean;
@@ -26,6 +61,8 @@ export type WorldNode = {
   receiveShadow?: boolean;
   /** Wind response in the vertex shader. Zero keeps rigid architecture stable. */
   wind?: number;
+  /** Ghost material intensity inherited by descendant meshes. */
+  ghost?: number;
   bend?: { pivot: V3; angle: number };
   /** Set by a root-motion wrapper before evaluating a gait animation. */
   gaitMoving?: boolean;
@@ -36,6 +73,12 @@ export type WorldNode = {
    * authored pose.
    */
   animationContinuity?: { position: V3; rotationY: number; time: number };
+  /** Blender clip selected by the character animation bridge. */
+  blenderAction?: string;
+  /** Set by the renderer once the GLB animation library is available. */
+  blenderEnabled?: boolean;
+  /** Existing rigid character nodes driven by a Blender clip. */
+  blenderTargets?: CharacterTargets;
   animate?: (time: number, delta: number) => void;
 };
 export type Anchor = { node: WorldNode; offset: V3 };
@@ -49,6 +92,8 @@ export type Lighting = {
   fog: number;
   exposure: number;
   daylight: boolean;
+  /** Camera-independent low cloud volume used by exterior mountain shots. */
+  atmosphere: V4;
   /** Half-width of the directional shadow volume, in world metres. */
   shadowRadius?: number;
   lamps: { position: V3; color: V3; power: number; anchor?: Anchor }[];

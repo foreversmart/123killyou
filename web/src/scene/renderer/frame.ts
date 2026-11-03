@@ -40,7 +40,7 @@ export function shadowMatrix(lighting: Lighting, target: V3) {
 }
 
 export function frameData(camera: CameraShot, lighting: Lighting, aspect: number, offset: V3) {
-  const data = new Float32Array(196);
+  const data = new Float32Array(200);
   const vp = cameraMatrix(camera, aspect, offset);
   data.set(vp);
   data.set(shadowMatrix(lighting, camera.target), 16);
@@ -57,6 +57,7 @@ export function frameData(camera: CameraShot, lighting: Lighting, aspect: number
   lighting.contacts?.slice(0, 8).forEach((contact, i) => {
     data.set([...contact.position, contact.radius], 164 + i * 4);
   });
+  data.set(lighting.atmosphere, 196);
   return { data, vp };
 }
 

@@ -6,6 +6,7 @@ import { noise, rockExposure } from '@/scene/world_environment/terrain_noise';
 import { roadNearest, roadSample, ROAD_LENGTH } from '@/scene/world_environment/road_path';
 import { wildflowers } from '@/scene/world_environment/wildflowers';
 import { Builder, materials as M } from '@/scene/geometry/builder';
+import { proceduralTree, type TreeVariant } from '@/scene/world_environment/procedural_vegetation';
 
 export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0) {
   const result = node(asset);
@@ -21,6 +22,18 @@ export function modelAsset(asset: string, position: V3, scale = 1, rotation = 0)
         ? 0.65
         : 0;
   return result;
+}
+
+function placeProceduralTree(
+  root: WorldNode,
+  variant: TreeVariant,
+  position: V3,
+  scale: number,
+  rotation: number,
+) {
+  const tree = proceduralTree(variant, scale, rotation);
+  tree.position = position;
+  root.children.push(tree);
 }
 
 export function vegetationClearance(x: number, z: number, radius = 8) {
@@ -39,7 +52,7 @@ export function addVegetation(root: WorldNode, road = false) {
   // spacing, size and gaps. Their roots use the same graded terrain as the road.
   let detailed = 0,
     trees = 0;
-  for (let attempt = 0; attempt < 2200 && trees < 260; attempt++) {
+  for (let attempt = 0; attempt < 2500 && trees < 300; attempt++) {
     const x = (random() - 0.5) * 250,
       z = -135 + random() * 280;
     if (!vegetationClearance(x, z, 9)) continue;
@@ -48,21 +61,62 @@ export function addVegetation(root: WorldNode, road = false) {
     const y = terrainHeight(x, z, road);
     const slope = Math.hypot(terrainHeight(x + 2, z) - y, terrainHeight(x, z + 2) - y) / 2;
     if (slope > 1.35) continue;
+    // Keep the authored crowns in the camera's readable band. The scanned
+    // tree mesh is useful as a distant silhouette, but repeating it through
+    // the near verge makes the forest look like one species.
     const near =
-      detailed < 28 &&
-      (Math.hypot(x, z) < 64 || (road && z > 15 && roadNearest(x, z).distance < 17));
-    const tree = modelAsset(
-      near ? 'tree' : 'tree_far',
-      [x, y - 0.12, z],
-      1.2 + random() * 1.05,
-      random() * Math.PI * 2,
-    );
-    tree.shadow = near;
-    root.children.push(tree);
-    if (near) detailed++;
+      detailed < (road ? 136 : 140) &&
+      (Math.hypot(x, z) < 126 || (road && z > 15 && roadNearest(x, z).distance < 34));
+    // Keep the opening's near verge varied without making the species pattern
+    // repeat in a visible row: broadleaf, conifer, willow, columnar, rain tree
+    // and low shrub each occupy a different ecological niche.
+    const kind = (((attempt * 7 + Math.floor(x * 0.4) + Math.floor(z * 0.17)) % 17) + 17) % 17;
+    const variant: TreeVariant =
+      kind < 4
+        ? 'broadleaf'
+        : kind < 7
+          ? 'conifer'
+          : kind < 9
+            ? 'willow'
+            : kind < 12
+              ? 'columnar'
+              : kind < 15
+                ? 'rain_tree'
+                : 'shrub';
+    if (near) {
+      placeProceduralTree(
+        root,
+        variant,
+        [x, y - 0.12, z],
+        variant === 'shrub'
+          ? 0.72 + random() * 0.48
+          : variant === 'columnar' || variant === 'conifer'
+            ? 0.88 + random() * 0.58
+            : 0.92 + random() * 0.68,
+        random() * Math.PI * 2,
+      );
+      detailed++;
+    } else {
+      const asset =
+        attempt % 5 === 0
+          ? 'tree'
+          : attempt % 3 === 0
+            ? 'tree_far'
+            : attempt % 2
+              ? 'tree_far'
+              : 'tree';
+      const tree = modelAsset(
+        asset,
+        [x, y - 0.12, z],
+        1.0 + random() * 0.95,
+        random() * Math.PI * 2,
+      );
+      tree.shadow = false;
+      root.children.push(tree);
+    }
     trees++;
   }
-  for (let i = 0; i < 160; i++) {
+  for (let i = 0; i < 230; i++) {
     const frame = roadSample(random() * ROAD_LENGTH);
     const offset = (i % 2 ? 1 : -1) * (6 + random() * 8);
     const x = road
@@ -70,16 +124,21 @@ export function addVegetation(root: WorldNode, road = false) {
       : (i % 2 ? 1 : -1) * (34 + random() * 12);
     const z = road ? frame.position[2] - Math.sin(frame.yaw) * offset : 9 - random() * 80;
     if (!vegetationClearance(x, z, 4.8)) continue;
-    const y = terrainHeight(x, z);
-    const asset = i % 5 === 0 ? 'rock' : i % 3 === 0 ? 'fern' : 'grass';
-    if (asset === 'rock' && rockExposure(x, z) < 0.3) continue;
+    const y = terrainHeight(x, z, road);
+    const asset =
+      i % 11 === 0
+        ? 'rock' + (i % 3 || '')
+        : i % 4 === 0
+          ? 'fern' + (i % 3 || '')
+          : 'grass' + (i % 3 || '');
+    if (asset.startsWith('rock') && rockExposure(x, z) < 0.3) continue;
     const plant = modelAsset(
-      asset + (i % 3 || ''),
+      asset,
       [x, y - 0.04, z],
-      asset === 'rock' ? 0.8 + random() * 1.25 : 0.75 + random() * 0.8,
+      asset.startsWith('rock') ? 0.8 + random() * 1.25 : 0.72 + random() * 0.92,
       random() * Math.PI * 2,
     );
-    plant.shadow = asset === 'rock';
+    plant.shadow = asset.startsWith('rock');
     root.children.push(plant);
   }
 }

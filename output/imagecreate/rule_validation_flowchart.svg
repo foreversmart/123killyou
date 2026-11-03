@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <marker id="arrow" markerWidth="11" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#808080"/>
+    </marker>
+    <style>
+      text { font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #333333; }
+      .title { font-size: 43px; font-weight: 700; }
+      .body { font-size: 27px; font-weight: 600; }
+      .sub { font-size: 20px; fill: #555555; }
+      .caption { font-size: 20px; fill: #555555; }
+      .box { fill: #FFFFFF; stroke: #808080; stroke-width: 1.8; }
+      .connector { fill: none; stroke: #808080; stroke-width: 2; marker-end: url(#arrow); }
+      .optional { fill: none; stroke: #808080; stroke-width: 2; stroke-dasharray: 9 7; marker-end: url(#arrow); }
+      .stem { fill: none; stroke: #808080; stroke-width: 1.8; }
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#FFFFFF"/>
+  <text x="85" y="103" class="title">动作识别、语义判断与规则结算</text>
+  <text x="85" y="150" class="caption">明确动作规则识别 ＋ 可选 JEV 语义判断 ＋ Go 规则校验</text>
+
+  <!-- Main path -->
+  <path d="M315 507 H385" class="connector"/>
+  <path d="M615 507 H685" class="connector"/>
+  <path d="M915 507 H985" class="connector"/>
+  <path d="M1215 507 H1285" class="connector"/>
+
+  <!-- Optional semantic path -->
+  <path d="M500 430 V282 H535" class="optional"/>
+  <path d="M765 282 H800 V430" class="optional"/>
+
+  <g>
+    <rect x="85" y="430" width="230" height="155" rx="5" class="box"/>
+    <text x="200" y="495" text-anchor="middle" class="body">玩家输入</text>
+    <text x="200" y="537" text-anchor="middle" class="sub">行动意图</text>
+  </g>
+  <g>
+    <rect x="385" y="430" width="230" height="155" rx="5" class="box"/>
+    <text x="500" y="495" text-anchor="middle" class="body">明确动作</text>
+    <text x="500" y="536" text-anchor="middle" class="body">规则识别</text>
+  </g>
+  <g>
+    <rect x="535" y="205" width="230" height="155" rx="5" class="box"/>
+    <text x="650" y="253" text-anchor="middle" class="body">可选 JEV</text>
+    <text x="650" y="290" text-anchor="middle" class="body">语义判断</text>
+    <text x="650" y="333" text-anchor="middle" class="sub">模型提供受限判定</text>
+  </g>
+  <g>
+    <rect x="685" y="430" width="230" height="155" rx="5" class="box"/>
+    <text x="800" y="518" text-anchor="middle" class="body">Go 规则校验</text>
+  </g>
+  <g>
+    <rect x="985" y="430" width="230" height="155" rx="5" class="box"/>
+    <text x="1100" y="518" text-anchor="middle" class="body">统一结算</text>
+  </g>
+  <g>
+    <rect x="1285" y="430" width="230" height="155" rx="5" class="box"/>
+    <text x="1400" y="495" text-anchor="middle" class="body">角色 / 系统</text>
+    <text x="1400" y="536" text-anchor="middle" class="body">反馈</text>
+  </g>
+
+  <!-- Validation checks -->
+  <path d="M800 585 V630" class="stem"/>
+  <path d="M800 685 V710" class="stem"/>
+  <rect x="685" y="630" width="230" height="55" rx="5" class="box"/>
+  <text x="800" y="665" text-anchor="middle" class="sub">可用选项</text>
+  <rect x="685" y="710" width="230" height="55" rx="5" class="box"/>
+  <text x="800" y="745" text-anchor="middle" class="sub">前置条件</text>
+
+  <!-- Unified settlement results -->
+  <path d="M1100 585 V630" class="stem"/>
+  <path d="M1100 685 V710" class="stem"/>
+  <path d="M1100 765 V790" class="stem"/>
+  <rect x="985" y="630" width="230" height="55" rx="5" class="box"/>
+  <text x="1100" y="665" text-anchor="middle" class="sub">道具</text>
+  <rect x="985" y="710" width="230" height="55" rx="5" class="box"/>
+  <text x="1100" y="745" text-anchor="middle" class="sub">剧情</text>
+  <rect x="985" y="790" width="230" height="55" rx="5" class="box"/>
+  <text x="1100" y="825" text-anchor="middle" class="sub">生存结果</text>
+</svg>

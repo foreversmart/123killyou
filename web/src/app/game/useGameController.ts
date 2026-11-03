@@ -155,7 +155,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     });
   }, [connectVoice, openingFlow, voiceReady, voiceSession.microphoneOn]);
   const renderedState = state ? { ...state, paused: pauseActive } : state;
-  const soundBusy = useStorySound(renderedState, voice.status);
+  const soundBusy = useStorySound(renderedState, voice.status, openingPhase);
   useStoryPlayback(
     incomingState ? { ...incomingState, paused: pauseActive } : incomingState,
     voice,

@@ -53,12 +53,12 @@
 
 @keyframes transition_fade {
   0%,
-  100% {
-    opacity: 0;
-  }
   16%,
   82% {
     opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 

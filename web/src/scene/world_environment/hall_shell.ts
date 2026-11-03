@@ -4,7 +4,7 @@ import { floor, windowLattice } from '@/scene/world_environment/architecture';
 import { roof } from '@/scene/world_environment/tiled_roof';
 import {
   bracket,
-  ceremonialDoor,
+  sideDoor,
   templePatina,
   templeTimber,
   templeVermilion,
@@ -80,7 +80,7 @@ export function hallShell(b: Builder, daylight: boolean) {
   // Open ceremonial leaves frame the sightline into the hall, as in reference 3.
   for (const side of [-1, 1]) {
     b.box([0.3, 5.4, 0.36], [side * 3.85, 2.7, 3.65], templeTimber);
-    ceremonialDoor(b, [side * 3.38, 0.02, 3.72], 1.37, 4.65, side * 0.84);
+    sideDoor(b, [side * 3.38, 0.02, 3.72], 1.37, 4.65, side * 0.84);
     timberBay(b, [side * 4.76, 0, 3.67], 1.55, 5.35);
     bracket(b, [side * 3.85, 5.1, 3.65], 0, 1.35);
     cloudScroll(b, [side * 3.78, 4.55, 3.95], 0.6);

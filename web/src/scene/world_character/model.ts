@@ -6,9 +6,9 @@ import { characterHead } from '@/scene/world_character/head';
 import { accessories } from '@/scene/world_character/accessories';
 import { characterDetails } from '@/scene/world_character/details';
 import { bendingJoint, bend } from '@/scene/world_character/joints';
-import { camera as cameraModel } from '@/scene/world_prop/household';
 import { node, type Material, type WorldNode } from '@/scene/world/types';
 import { characterModelAssets } from '@/scene/world_character/model_assets';
+import { skinnedCharacterModel } from '@/scene/world_character/skinned_model';
 
 export type CharacterRig = {
   root: WorldNode;
@@ -28,6 +28,15 @@ export function characterModel(
   pose: 'standing' | 'seated' | 'kneeling' = 'standing',
   stone = false,
 ): CharacterRig {
+  if (
+    id === 'linlan' ||
+    id === 'luchen' ||
+    id === 'xuzhi' ||
+    id === 'huipu' ||
+    id === 'zhaoxi' ||
+    id === 'zhouyan'
+  )
+    return skinnedCharacterModel(id, pose);
   const look = identities[id],
     monk = ['luchen', 'huipu', 'shangong'].includes(id);
   const suppliedModel = characterModelAssets(id);
@@ -77,8 +86,6 @@ export function characterModel(
       { ...cloth, color: 0x3c3831 },
     );
     b.box([0.055, 0.26, 0.025], [0.13, 0.82, 0.145], { ...cloth, color: 0x423c34 });
-    if (id === 'huipu')
-      b.box([0.17, 0.92, 0.04], [0.14, 0.93, 0.145], { ...cloth, color: 0x574638 }, [0, 0, 0.08]);
   }
   if (suppliedModel) {
     const torso = node('torso');
@@ -93,14 +100,6 @@ export function characterModel(
   body.children.push(characterDetails(id, monk, cloth, shirt));
   const head = characterHead(id, stone);
   body.children.push(head);
-  let camera: WorldNode | undefined;
-  if (id === 'linlan') {
-    const b = new Builder();
-    cameraModel(b);
-    camera = b.mesh('held_camera');
-    camera.position = [0, 1.03, 0.23];
-    body.children.push(camera);
-  }
   const arms: WorldNode[] = [],
     legs: WorldNode[] = [],
     elbows: WorldNode[] = [],
@@ -133,13 +132,7 @@ export function characterModel(
     a.position = [side * 0.215, 1.32, 0];
     body.children.push(a);
     arms.push(a);
-    const female = id === 'linlan' || id === 'xuzhi';
-    const elbow = bendingJoint(
-      a,
-      'elbow',
-      [0, -0.26, 0.035],
-      female ? [side * 0.002, -0.28, -0.005] : [side * 0.035, -0.29, 0.01],
-    );
+    const elbow = bendingJoint(a, 'elbow', [0, -0.26, 0.035], [side * 0.035, -0.29, 0.01]);
     elbows.push(elbow.joint);
     hands.push(elbow.socket);
     if (monk && !suppliedModel) {
@@ -164,7 +157,7 @@ export function characterModel(
       pants,
     );
     leg.ball([0.065, 0.045, 0.12], [0, -0.76, 0.07], {
-      color: id === 'xuzhi' ? 0xb8b7a6 : 0x3e3b31,
+      color: 0x3e3b31,
       rough: 0.84,
     });
     const l = leg.mesh(pose === 'kneeling' ? 'kneeling_leg' : 'leg');
@@ -201,5 +194,5 @@ export function characterModel(
       bend(l, knees[i], 1.25);
     });
   }
-  return { root, body, head, arms, legs, elbows, hands, knees, camera, pose };
+  return { root, body, head, arms, legs, elbows, hands, knees, pose };
 }

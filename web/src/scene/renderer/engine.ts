@@ -5,6 +5,12 @@ import { frameData, SHADOW_MAP_SIZE } from '@/scene/renderer/frame';
 import type { World, WorldNode, V3 } from '@/scene/world/types';
 import { createResources } from '@/scene/renderer/resources';
 import { createDraws, destroyDraws, type Draw } from '@/scene/renderer/draws';
+import {
+  applyBlenderPose,
+  blenderClipFor,
+  type BlenderAnimationLibrary,
+} from '@/scene/world_character/blender_action_library';
+import { createSkinPose } from '@/scene/world_character/skin_pose';
 
 type Pipelines = Awaited<ReturnType<typeof createPipelines>>;
 
@@ -66,7 +72,7 @@ export class TempleRenderer {
     this.pipelines = await createPipelines(d, this.format);
     this.context.configure({ device: d, format: this.format, alphaMode: 'opaque' });
     this.frame = d.createBuffer({
-      size: 784,
+      size: 800,
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
     this.shadow = d.createTexture({
@@ -110,12 +116,26 @@ export class TempleRenderer {
 
   setWorld(world: World) {
     this.clearWorld();
+    this.enableBlenderAnimations(world.root, this.resources?.animations);
     this.draws = createDraws(
       this.device,
       world.root,
       this.resources!.meshes,
       this.pipelines.objectLayout,
     );
+  }
+
+  private enableBlenderAnimations(node: WorldNode, library?: BlenderAnimationLibrary) {
+    node.blenderEnabled = Boolean(
+      node.blenderAction && blenderClipFor(node.blenderAction, library),
+    );
+    if (node.skinTargets) {
+      const geometry = this.resources?.meshes.get(node.skinTargets.mesh.asset!);
+      if (!geometry?.skin) throw new Error('角色骨骼数据未加载，请重新载入。');
+      node.updateSkin = createSkinPose(node.skinTargets, geometry.skin.skeleton, geometry);
+      node.updateSkin();
+    }
+    node.children.forEach((child) => this.enableBlenderAnimations(child, library));
   }
 
   private resize() {
@@ -149,27 +169,38 @@ export class TempleRenderer {
       ...world.lighting.lamps,
       ...(world.lighting.contacts || []),
     ].filter((item) => item.anchor);
-    const update = (n: WorldNode, parent: Float32Array) => {
+    const update = (n: WorldNode, parent: Float32Array, inheritedGhost = 0) => {
       n.animate?.(time, delta);
-      let m = mat4.translate(parent, n.position);
-      m = mat4.rotateY(m, n.rotation[1]);
-      m = mat4.rotateX(m, n.rotation[0]);
-      m = mat4.rotateZ(m, n.rotation[2]);
-      m = mat4.scale(m, n.scale);
+      if (n.blenderEnabled && n.blenderAction && n.blenderTargets && this.resources?.animations)
+        applyBlenderPose(n.blenderAction, time, this.resources.animations, n.blenderTargets);
+      n.updateSkin?.();
+      let m: Float32Array;
+      if (n.matrix) m = mat4.multiply(parent, n.matrix);
+      else {
+        m = mat4.translate(parent, n.position);
+        m = mat4.rotateY(m, n.rotation[1]);
+        m = mat4.rotateX(m, n.rotation[0]);
+        m = mat4.rotateZ(m, n.rotation[2]);
+        m = mat4.scale(m, n.scale);
+      }
       for (const item of attachments)
         if (item.anchor?.node === n)
           item.position = [...vec3.transformMat4(item.anchor.offset, m)] as V3;
       const draw = this.draws.get(n);
+      const ghost = Math.max(inheritedGhost, n.ghost || 0);
       if (draw) {
         const transforms = new Float32Array(40);
         transforms.set(m);
         transforms.set(mat4.transpose(mat4.inverse(m)), 16);
         transforms[32] = n.wind ?? 0;
-        transforms[33] = n.receiveShadow === false ? 0 : 1;
+        transforms[33] = n.receiveShadow === false || ghost > 0 ? 0 : 1;
+        transforms[34] = n.skinMatrices ? 1 : 0;
+        transforms[35] = ghost;
         if (n.bend) transforms.set([...n.bend.pivot, n.bend.angle], 36);
         d.queue.writeBuffer(draw.uniform, 0, transforms);
+        if (draw.bones && n.skinMatrices) d.queue.writeBuffer(draw.bones, 0, n.skinMatrices);
       }
-      n.children.forEach((child) => update(child, m));
+      n.children.forEach((child) => update(child, m, ghost));
     };
     update(world.root, mat4.identity());
     const { data, vp } = frameData(world.camera, world.lighting, this.width / this.height, offset);
@@ -213,12 +244,12 @@ export class TempleRenderer {
     pass.setPipeline(this.pipelines.main);
     pass.setBindGroup(0, this.frameGroup);
     this.draw(pass, false);
-    // A small camera-relative layer of dust and pollen catches the low sun.
-    // It stays depth-tested against the scene, so it reads as air in the
-    // courtyard rather than a screen-space overlay.
+    // Camera-relative dust plus the road's broad low mist catch the low sun.
+    // Both stay depth-tested against the scene, so they read as air in the
+    // world rather than a screen-space overlay.
     pass.setPipeline(this.pipelines.particles);
     pass.setBindGroup(0, this.frameGroup);
-    pass.draw(4, 160);
+    pass.draw(4, world.lighting.atmosphere[0] > 0 ? 288 : 160);
     pass.end();
     d.queue.submit([encoder.finish()]);
     return vp;
@@ -227,7 +258,7 @@ export class TempleRenderer {
   private draw(pass: GPURenderPassEncoder, shadows: boolean) {
     for (const draw of this.draws.values()) {
       if (draw.node.shadowOnly && !shadows) continue;
-      if (shadows && draw.node.shadow === false) continue;
+      if (shadows && (draw.node.shadow === false || (draw.node.ghost || 0) > 0)) continue;
       pass.setBindGroup(1, draw.group);
       pass.setVertexBuffer(0, draw.vertex);
       pass.setIndexBuffer(draw.index, 'uint32');

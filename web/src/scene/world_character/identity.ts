@@ -66,8 +66,15 @@ export const identities = {
     face: 29,
   },
   zhaoxi: {
-    name: '赵熙', skin: 0xbe9b76, coat: 0x897047, shirt: 0xbca27a,
-    trousers: 0x6a5b43, hair: 0x514a39, hairLength: 0, height: 1, face: 30,
+    name: '赵熙',
+    skin: 0xbe9b76,
+    coat: 0x897047,
+    shirt: 0xbca27a,
+    trousers: 0x6a5b43,
+    hair: 0x514a39,
+    hairLength: 0,
+    height: 1,
+    face: 30,
   },
 };
 export type Identity = keyof typeof identities;
@@ -75,5 +82,7 @@ export type Identity = keyof typeof identities;
 export function identityOf(id: string, portrait?: string): Identity | null {
   const candidate = id === 'skin_double' || id === 'victim' ? portrait : id;
   if (candidate === 'keeper') return 'luchen';
+  if (candidate === 'player' || portrait === 'player') return 'zhaoxi';
+  if (!candidate && id === 'skin_double') return 'huipu';
   return candidate && candidate in identities ? (candidate as Identity) : null;
 }

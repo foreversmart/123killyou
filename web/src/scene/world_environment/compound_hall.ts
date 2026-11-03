@@ -6,11 +6,12 @@ import { distantCrown } from '@/scene/world_environment/compound_crown';
 import {
   balustrade,
   bracket,
-  ceremonialDoor,
+  sideDoor,
   templeStone,
   templeTimber,
   timberBay,
 } from '@/scene/world_environment/temple_facade';
+import { plaque } from '@/scene/world_environment/architecture';
 import type { TempleBuilding } from '@/scene/world_environment/temple_layout';
 import { cloudScroll, paintedBeam, shrineCrown } from '@/scene/world_environment/temple_ornament';
 import { templeGold, templeJade } from '@/scene/world_environment/temple_palette';
@@ -33,10 +34,10 @@ function storey(
     const mid = x - width / 2 + (i + 0.5) * bayWidth;
     timberBay(b, [mid, base, z - depth / 2], bayWidth, height, Math.PI);
     if (!open || Math.abs(mid - x) > width * 0.23)
-      timberBay(b, [mid, base, front - 0.12], bayWidth, height, 0, open);
+      timberBay(b, [mid, base, front - 0.12], bayWidth, height, 0, open, !detailed);
     else {
       paintedBeam(b, [mid, base + height * 0.9, front + 0.05], bayWidth, height * 0.19);
-      ceremonialDoor(
+      sideDoor(
         b,
         [mid - bayWidth * 0.31, base + 0.08, front + 0.14],
         bayWidth * 0.43,
@@ -44,7 +45,7 @@ function storey(
         -0.53,
         !detailed,
       );
-      ceremonialDoor(
+      sideDoor(
         b,
         [mid + bayWidth * 0.31, base + 0.08, front + 0.14],
         bayWidth * 0.43,
@@ -64,6 +65,7 @@ function storey(
         height,
         (side * Math.PI) / 2,
         true,
+        !detailed,
       );
   for (const face of [-1, 1]) {
     for (let i = 0; i <= bays; i++) {
@@ -172,6 +174,21 @@ export function compoundHall(b: Builder, hall: TempleBuilding, distant = false) 
     );
   if (hall.id === 'maha_vira_hall')
     compoundPediment(b, [x, base + height + 0.27, front + 1.58], 4.6, 1.55, distant);
+  // Every compound building carries a readable name plaque. The same
+  // proportions are reused across halls and service wings, while distant
+  // architecture keeps the moulding compact to protect the road reveal.
+  const plaqueWidth = Math.min(3.7, Math.max(1.45, width * 0.42));
+  const plaqueHeight = Math.min(0.52, Math.max(0.3, plaqueWidth * 0.18));
+  plaque(
+    b,
+    hall.label,
+    [x, base + height * 0.67, front + 0.68],
+    plaqueWidth,
+    plaqueHeight,
+    0,
+    distant,
+    distant,
+  );
   const stairsWidth = main ? width * 0.55 : Math.min(4, width * 0.6);
   const steps = Math.max(3, Math.ceil(base / 0.14));
   const run = steps * 0.36;
@@ -204,6 +221,7 @@ export function compoundTower(
   x: number,
   z: number,
   artifact: 'bell' | 'drum',
+  label = artifact === 'bell' ? '钟楼' : '鼓楼',
   distant = false,
 ) {
   b.box([6, 0.72, 6], [x, 0.25, z], templeStone);
@@ -257,4 +275,5 @@ export function compoundTower(
       );
     b.box([1.6, 0.12, 0.9], [x, 1.22, z], templeTimber);
   }
+  plaque(b, label, [x, 2.28, z + 3.12], 1.8, 0.38, 0, distant, distant);
 }

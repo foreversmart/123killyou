@@ -105,15 +105,6 @@ function addInteriorJoinery(
 ) {
   const paper = { color: daylight ? 0xc4c1ad : 0x8f8b77, rough: 1, glow: daylight ? 0.04 : 0.01 };
   const trim = templeRed;
-  // Side-wall paper panels echo the courtyard's geometric lattice and catch a
-  // soft amber edge when the room lamps come on.
-  for (const side of [-1, 1] as const) {
-    const x = side * 4.86;
-    b.box([0.05, 1.42, 1.28], [x, 1.9, 1.3], paper);
-    b.box([0.08, 1.58, 0.09], [x + side * 0.035, 1.9, 0.62], trim);
-    b.box([0.08, 1.58, 0.09], [x + side * 0.035, 1.9, 1.98], trim);
-    for (const y of [1.22, 1.9, 2.58]) b.box([0.08, 0.07, 1.28], [x + side * 0.035, y, 1.3], trim);
-  }
   // A slim red lintel and dark beam establish the strong horizontal rhythm of
   // a southern Chinese hall without competing with the story props.
   paintedBeam(b, [0, 3.34, -3.72], 9.5, 0.28);

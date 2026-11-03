@@ -28,6 +28,7 @@ const { performanceFor } = await import('../src/scene/world_character/performanc
 const { box, sphere, cylinder, torus } = await import('../src/scene/geometry/primitives.ts');
 const { roofTile } = await import('../src/scene/geometry/roof_tile.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
+const { skin, bonePoint, createSkinPose } = await import('./skinned_character_fixture.mjs');
 
 const actor = (id, extra = {}) => ({
   id,
@@ -131,7 +132,7 @@ test('山门参观会沿当前活动持续换位，并保持在既有构图范�
       ),
     );
     assert.ok(moved > 0.02, `${id} keeps moving while performing its activity`);
-    assert.ok(moved < 0.5, `${id} stays inside the gate tableau`);
+    assert.ok(moved < 3.2, `${id} stays inside the gate tableau`);
     assert.ok(
       positions.some(
         (position, sampleIndex) =>
@@ -178,13 +179,13 @@ test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行�
   const corridor = actorMovement(guest, state('mini_refectory'), 'travel', [0.8, 0, -1]);
   const returnWalk = actorMovement(guest, state('mini_corridor_candle'), 'travel', [0.8, 0, 5.7]);
   const hall = actorMovement(guest, state('mini_refectory'), 'hall', [2, 0, 1.5]);
-  assert.equal(corridor?.duration, 6.2);
+  assert.equal(corridor?.duration, 9.3);
   assert.ok((corridor?.to[2] ?? 0) < (corridor?.from[2] ?? 0), '偏房去大殿向外走');
   assert.ok((corridor?.to[2] ?? 0) < CORRIDOR_TRAVEL_END_Z + 0.5);
-  assert.equal(returnWalk?.duration, 6);
+  assert.equal(returnWalk?.duration, 9);
   assert.ok((returnWalk?.to[2] ?? 0) > (returnWalk?.from[2] ?? 0), '回程沿原路返回');
   assert.ok((returnWalk?.to[2] ?? 0) > CORRIDOR_TRAVEL_START_Z - 0.5);
-  assert.equal(hall?.duration, 7.6);
+  assert.equal(hall?.duration, 11.4);
   assert.ok((hall?.to[0] ?? 0) < (hall?.from[0] ?? 0));
   assert.equal(hall?.to[2], hall?.from[2]);
 });
@@ -195,7 +196,7 @@ test('登记转场用慢速鸟群跟随陆沉，并让每个人保留自己的�
   const movements = Object.fromEntries(
     actors.map((person) => [person.id, actorMovement(person, game, 'travel', [0, 0, 0])]),
   );
-  assert.equal(movements.luchen?.duration, 9.6);
+  assert.equal(movements.luchen?.duration, 14.4);
   assert.ok(movements.linlan?.flock, '登记队伍共享鸟群运动状态');
   assert.deepEqual(
     movementPosition(movements.luchen, 0),
@@ -234,7 +235,7 @@ test('人物移动时镜头固定为远景监控机位，不随队伍推进或�
   assert.ok(
     Math.hypot(...inward.camera.eye.map((value, index) => value - inward.camera.target[index])) > 8,
   );
-  for (const time of [0, 3.1, 6.2]) {
+  for (const time of [0, 4.65, 9.3]) {
     outward.root.animate?.(time, 0);
     inward.root.animate?.(time, 0);
     assert.deepEqual(outward.camera.eye, outwardShot.eye);
@@ -245,7 +246,7 @@ test('人物移动时镜头固定为远景监控机位，不随队伍推进或�
   const hall = createWorld({ state: state('mini_refectory'), mode: 'hall' });
   const hallShot = { eye: [...hall.camera.eye], target: [...hall.camera.target] };
   assert.equal(hall.root.animate, undefined, '大殿横移也保持固定机位');
-  hall.root.animate?.(7.6, 0);
+  hall.root.animate?.(11.4, 0);
   assert.deepEqual(hall.camera.eye, hallShot.eye);
   assert.deepEqual(hall.camera.target, hallShot.target);
   const ending = createWorld({ state: state('mini_ending'), mode: 'travel' });
@@ -260,7 +261,7 @@ test('回廊队伍在侧门前停步并转向，镜头目标留在尽头墙前',
   });
   const linlan = world.root.children.find((node) => node.name === 'linlan');
   assert.ok(linlan?.animate);
-  linlan.animate(9.6, 0);
+  linlan.animate(14.4, 0);
   assert.ok(linlan.position[2] > -7.8, '角色停在尽头墙前');
   assert.ok(Math.abs(linlan.rotation[1] + Math.PI / 2) < 0.08, '角色转向侧门');
   const cameraAtStart = { eye: [...world.camera.eye], target: [...world.camera.target] };
@@ -298,7 +299,7 @@ test('登记时三位游客围桌看和尚，许栀朝院景并保持动作', ()
   // the window or back toward the player.
   for (const id of ['linlan', 'zhouyan', 'xuzhi']) {
     const root = roots[id];
-    root.animate(1.2, 0);
+    root.animate(2, 0);
     const [x, , z] = root.position;
     const expected = Math.atan2(-x, -0.7 - z);
     const delta = Math.atan2(
@@ -321,16 +322,23 @@ test('登记时三位游客围桌看和尚，许栀朝院景并保持动作', ()
   );
   const zhouyanBody = roots.zhouyan.children.find((node) => node.name === 'body');
   const zhouyanBefore = [...zhouyanBody.rotation];
-  roots.zhouyan.animate(2, 0);
+  roots.zhouyan.animate(2.6, 0);
   assert.notDeepEqual(zhouyanBody.rotation, zhouyanBefore, '周砚会随笔尖持续换重心');
-  const linlanCamera = roots.linlan.children
-    .find((node) => node.name === 'body')
-    .children.find((node) => node.name === 'held_camera');
-  const cameraBefore = [...linlanCamera.position];
+  const linlan = { root: roots.linlan };
+  const updateSkin = createSkinPose(roots.linlan.skinTargets, skin.skeleton);
+  updateSkin();
+  const handBefore = Array.from(bonePoint(linlan, 'hand.R'));
   roots.linlan.animate(4, 0);
-  assert.notDeepEqual(linlanCamera.position, cameraBefore, '林岚会抬放相机检查取景');
+  updateSkin();
+  assert.notDeepEqual(
+    Array.from(bonePoint(linlan, 'hand.R')),
+    handBefore,
+    '林岚会抬放源模型中的相机',
+  );
+  assert.equal(roots.linlan.skinTargets.mesh.asset, 'linlan_model_skin');
+  assert.ok(!roots.linlan.skinTargets.body.children.some((node) => node.name === 'held_camera'));
   const before = roots.xuzhi.children.find((node) => node.name === 'body').rotation.slice();
-  roots.xuzhi.animate(2, 0);
+  roots.xuzhi.animate(2.6, 0);
   const after = roots.xuzhi.children.find((node) => node.name === 'body').rotation;
   assert.notDeepEqual(after, before, '许栀持续观察院景时身体会有轻微回看');
 });
@@ -345,7 +353,7 @@ test('质疑拖痕时登记队伍仍面向陆沉并留在桌边', () => {
   );
   for (const id of ['linlan', 'zhouyan', 'xuzhi']) {
     const root = roots[id];
-    root.animate(1.2, 0);
+    root.animate(2, 0);
     const [x, , z] = root.position;
     const expected = Math.atan2(-x, -0.7 - z);
     const delta = Math.atan2(
@@ -356,6 +364,45 @@ test('质疑拖痕时登记队伍仍面向陆沉并留在桌边', () => {
   }
   assert.deepEqual(roots.zhouyan.position, [1.05, 0, 0.18]);
   assert.deepEqual(roots.luchen.position, [0, 0, -0.85]);
+});
+
+test('发烛镜头让三位同伴以错落距离围着陆沉并朝向他', () => {
+  const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
+  const game = state('mini_corridor_candle', { shotKey: 'corridor_candles', actors });
+  const world = createWorld({ state: game });
+  const rebuilt = createWorld({ state: game });
+  const roots = Object.fromEntries(
+    actors.map(({ id }) => [id, world.root.children.find((node) => node.name === id)]),
+  );
+  const rebuiltRoots = Object.fromEntries(
+    actors.map(({ id }) => [id, rebuilt.root.children.find((node) => node.name === id)]),
+  );
+  assert.deepEqual(
+    actors.map(({ id }) => roots[id].position),
+    actors.map(({ id }) => rebuiltRoots[id].position),
+    '站位在重建镜头时保持可复现',
+  );
+  const keeper = roots.luchen;
+  const distances = ['linlan', 'zhouyan', 'xuzhi'].map((id) => {
+    const guest = roots[id];
+    const distance = Math.hypot(
+      guest.position[0] - keeper.position[0],
+      guest.position[2] - keeper.position[2],
+    );
+    assert.ok(distance > 0.9 && distance < 2.8, `${id} stays near Lu Chen`);
+    guest.animate(1.2, 0);
+    const expected = Math.atan2(
+      keeper.position[0] - guest.position[0],
+      keeper.position[2] - guest.position[2],
+    );
+    const delta = Math.atan2(
+      Math.sin(guest.rotation[1] - expected),
+      Math.cos(guest.rotation[1] - expected),
+    );
+    assert.ok(Math.abs(delta) < 0.08, `${id} faces Lu Chen during the candle handoff`);
+    return distance;
+  });
+  assert.ok(new Set(distances.map((distance) => distance.toFixed(2))).size >= 2);
 });
 
 test('大殿保留两尊主像并新增四大天王与四幅壁画', () => {
@@ -417,7 +464,9 @@ test('a calmed double kneels at the bed while deaths retain their original room 
     }),
   });
   const rig = world.root.children.find((n) => n.name === 'linlan');
-  assert.equal(rig.children.filter((n) => n.name === 'kneeling_leg').length, 2);
+  assert.equal(rig.skinTargets.pose, 'kneeling');
+  assert.equal(rig.skinTargets.legs.length, 2);
+  assert.equal(rig.skinTargets.mesh.asset, 'linlan_model_skin');
   assert.equal(rig.rotation[0], 0);
   const scripture = createWorld({
     state: state('mini_double', {
@@ -427,7 +476,9 @@ test('a calmed double kneels at the bed while deaths retain their original room 
     }),
   });
   const calmed = scripture.root.children.find((n) => n.name === 'linlan');
-  assert.equal(calmed.children.filter((n) => n.name === 'kneeling_leg').length, 2);
+  assert.equal(calmed.skinTargets.pose, 'kneeling');
+  assert.equal(calmed.skinTargets.legs.length, 2);
+  assert.equal(calmed.skinTargets.mesh.asset, 'linlan_model_skin');
   const death = createWorld({
     state: state('mini_death', {
       retryScene: 'mini_oracle',
