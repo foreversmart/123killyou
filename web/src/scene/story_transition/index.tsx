@@ -2,13 +2,17 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { RoomPhase } from '@/scene/room/useRoomTransition';
 import {
+  BOARDING_TRAVEL_SECONDS,
   CORRIDOR_TRAVEL_LISTEN_SECONDS,
   CORRIDOR_TRAVEL_REFECTORY_SECONDS,
   CORRIDOR_TRAVEL_REGISTER_SECONDS,
   CORRIDOR_TRAVEL_RETURN_SECONDS,
   HALL_TRAVEL_SECONDS,
+  ROOM_SLEEP_ACTION_SECONDS,
+  ROOM_SLEEP_WAIT_SECONDS,
 } from '@/shared/lib/story_timing';
 import { WorldView } from '@/scene/world_view';
+import { useTravelClock } from '@/scene/story_transition/useTravelClock';
 import styles from './style.module.css';
 
 type TravelPhase = {
@@ -20,7 +24,7 @@ type TravelPhase = {
 type TravelBeat = {
   id: string;
   title: string;
-  kind: 'walk' | 'sleep';
+  kind: 'walk';
   interlude?: string;
   durationMs?: number;
   interludeDurationMs?: number;
@@ -68,19 +72,15 @@ const travelBeats: Record<string, TravelBeat> = {
   },
   mini_listen: {
     id: 'companion_walk_listen',
-    title: '沿回廊走向半掩的偏房',
+    title: '与同伴走到半掩的房门前',
     kind: 'walk',
     durationMs: CORRIDOR_TRAVEL_LISTEN_SECONDS * 1000,
   },
-  mini_wake_three_gongs: {
-    id: 'room_sleep_blackout',
-    title: '红烛压低，三更入梦',
-    kind: 'sleep',
-  },
   mini_ending: {
     id: 'dawn_walk_bus',
-    title: '晨光下走回大巴',
+    title: '一起走到大巴旁，依次上车',
     kind: 'walk',
+    durationMs: BOARDING_TRAVEL_SECONDS * 1000,
   },
 };
 
@@ -94,6 +94,7 @@ export function StoryTransition({
   onActive?: (active: boolean) => void;
 }) {
   const sceneKey = state.sceneKey || '';
+  const sleeping = sceneKey === 'mini_wake_three_gongs' && state.shotKey === 'room_sleep_wait';
   const previousScene = useRef<string | null>(null);
   const [active, setActive] = useState<TravelBeat | null>(null);
   const [phaseIndex, setPhaseIndex] = useState(0);
@@ -111,9 +112,16 @@ export function StoryTransition({
     const suppressed =
       state.flags.debug_scene_skipped ||
       (beat?.id === 'companion_walk_listen' && !state.flags.companion_present);
-    onActive?.(Boolean(beat && !suppressed));
+    onActive?.(Boolean(beat && !suppressed && !sleeping));
     return () => onActive?.(false);
-  }, [active, onActive, sceneKey, state.flags.companion_present, state.flags.debug_scene_skipped]);
+  }, [
+    active,
+    onActive,
+    sceneKey,
+    sleeping,
+    state.flags.companion_present,
+    state.flags.debug_scene_skipped,
+  ]);
   useEffect(() => {
     const previous = previousScene.current;
     previousScene.current = sceneKey;
@@ -131,21 +139,6 @@ export function StoryTransition({
     setReady(false);
     setActive(next);
   }, [sceneKey, state.flags.companion_present, state.flags.debug_scene_skipped]);
-  useEffect(() => {
-    if (!active || !ready || state.paused) return;
-    const phases = active.phases;
-    const duration = phases?.[phaseIndex]?.durationMs ?? active.durationMs ?? 2200;
-    const timer = window.setTimeout(() => {
-      if (phases && phaseIndex < phases.length - 1) {
-        setReady(false);
-        setPhaseIndex((index) => index + 1);
-      } else {
-        setActive(null);
-      }
-    }, duration);
-    return () => window.clearTimeout(timer);
-  }, [active, phaseIndex, ready, state.paused]);
-
   // Scene state and effects are committed in separate render phases. Without
   // staging the changed scene here, the destination scene (the refectory) can
   // paint for one frame before the effect below installs its travel beat. That
@@ -157,20 +150,55 @@ export function StoryTransition({
   const beat = pending || active || (phase !== 'idle' ? travelBeats[sceneKey] : null);
   const renderPhaseIndex = pending ? 0 : phaseIndex;
   const renderReady = pending ? false : ready;
+  const currentPhase = beat?.phases?.[renderPhaseIndex];
+  const finalPhase = !beat?.phases || renderPhaseIndex === beat.phases.length - 1;
+  const durationMs = currentPhase?.durationMs ?? beat?.durationMs ?? 2200;
+  const phaseKey = `${sceneKey}:${beat?.id || ''}:${renderPhaseIndex}`;
+  const { overlay, onElapsed } = useTravelClock({
+    phaseKey,
+    durationMs,
+    ready: renderReady,
+    paused: state.paused,
+    onComplete: () => {
+      if (finalPhase) setActive(null);
+      else {
+        setReady(false);
+        setPhaseIndex((index) => index + 1);
+      }
+    },
+  });
+  // Keep the room's existing renderer and animation clock visible while the
+  // player walks to bed. Only the final quiet tail fades to black; treating
+  // sleep as travel created another WorldView and hid the action too early.
+  if (sleeping) {
+    const darkenAt = Math.round((ROOM_SLEEP_ACTION_SECONDS + 0.2) * 1000);
+    return (
+      <div
+        className={styles.sleep_blackout}
+        data-transition="room_sleep_blackout"
+        data-paused={state.paused}
+        style={
+          {
+            '--sleep-darken-delay': `${darkenAt}ms`,
+            '--sleep-darken-duration': `${ROOM_SLEEP_WAIT_SECONDS * 1000 - darkenAt}ms`,
+          } as CSSProperties
+        }
+        aria-hidden="true"
+      />
+    );
+  }
   if (
     !beat ||
     state.flags.debug_scene_skipped ||
     (beat.id === 'companion_walk_listen' && !state.flags.companion_present)
   )
     return null;
-  const currentPhase = beat.phases?.[renderPhaseIndex];
-  const finalPhase = !beat.phases || renderPhaseIndex === beat.phases.length - 1;
-  const mode =
-    currentPhase?.mode ?? (beat.kind === 'sleep' ? 'story' : beat.interlude ? 'hall' : 'travel');
+  const mode = currentPhase?.mode ?? (beat.interlude ? 'hall' : 'travel');
   const title = currentPhase?.title ?? beat.title;
   return (
     <div
-      key={beat.id}
+      key={phaseKey}
+      ref={overlay}
       className={styles.transition}
       data-transition={beat.id}
       data-kind={beat.kind}
@@ -180,7 +208,8 @@ export function StoryTransition({
       data-interlude-pan={beat.interlude ? 'horizontal' : undefined}
       style={
         {
-          '--travel-duration': `${currentPhase?.durationMs ?? beat.durationMs ?? 2200}ms`,
+          '--travel-duration': `${durationMs}ms`,
+          '--travel-elapsed': '0ms',
           '--interlude-duration': `${currentPhase?.durationMs ?? beat.interludeDurationMs ?? beat.durationMs ?? 2200}ms`,
         } as CSSProperties
       }
@@ -192,6 +221,7 @@ export function StoryTransition({
         state={state}
         mode={mode}
         onAvailability={setReady}
+        onElapsed={onElapsed}
       />
       <div className={styles.shade} aria-hidden="true" />
       <div className={styles.copy}>

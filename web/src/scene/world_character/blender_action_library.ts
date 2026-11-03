@@ -1,4 +1,5 @@
 import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import type { CharacterTargets } from '@/scene/world/types';
 
 /** Blender-authored NPC clips and the small runtime bridge used by WebGPU. */
 export const BLENDER_ACTIONS = {
@@ -218,17 +219,7 @@ function deltaTranslation(track: Track | undefined, time: number) {
   const current = sampleTrack(track, time);
   return current.map((value, i) => value - rest[i]) as [number, number, number];
 }
-export type BlenderTargets = {
-  pose: 'standing' | 'seated' | 'kneeling';
-  root: import('@/scene/world/types').WorldNode;
-  body: import('@/scene/world/types').WorldNode;
-  head: import('@/scene/world/types').WorldNode;
-  arms: import('@/scene/world/types').WorldNode[];
-  elbows: import('@/scene/world/types').WorldNode[];
-  hands: import('@/scene/world/types').WorldNode[];
-  legs: import('@/scene/world/types').WorldNode[];
-  knees: import('@/scene/world/types').WorldNode[];
-};
+export type BlenderTargets = CharacterTargets;
 
 /** Apply a GLB clip to the existing character shell, keeping each identity's materials and props. */
 export function applyBlenderPose(
@@ -239,6 +230,7 @@ export function applyBlenderPose(
 ) {
   const clip = blenderClipFor(action, library);
   if (!clip) return false;
+  seconds = Math.max(0, seconds + (targets.root.animationTimeOffset || 0));
   const contract = blenderActionFor(action);
   const time =
     clip.duration > 0

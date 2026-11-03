@@ -52,19 +52,20 @@ type State struct {
 	OracleSincerityScore int          `json:"oracleSincerityScore,omitempty"`
 	// CandleUnlitTurns counts accepted actions while the red candle remains out.
 	// It is persisted so repeated turns continue to lower devotion across saves.
-	CandleUnlitTurns   int             `json:"candleUnlitTurns,omitempty"`
-	GhostDialogueTurns int             `json:"ghostDialogueTurns,omitempty"`
-	Inventory          []Item          `json:"inventory"`
-	Clues              []string        `json:"clues"`
-	Flags              map[string]bool `json:"flags"`
-	Overlay            string          `json:"overlay"`
-	FocusItem          string          `json:"focusItem"`
-	Paused             bool            `json:"paused"`
-	Caught             bool            `json:"caught"`
-	Dialogue           Dialogue        `json:"dialogue"`
-	LastHeard          string          `json:"lastHeard"`
-	LastAction         string          `json:"lastAction"`
-	Effect             Effect          `json:"effect"`
+	CandleUnlitTurns   int                               `json:"candleUnlitTurns,omitempty"`
+	GhostDialogueTurns int                               `json:"ghostDialogueTurns,omitempty"`
+	MealPersuasion     map[string]MealPersuasionProgress `json:"mealPersuasion,omitempty"`
+	Inventory          []Item                            `json:"inventory"`
+	Clues              []string                          `json:"clues"`
+	Flags              map[string]bool                   `json:"flags"`
+	Overlay            string                            `json:"overlay"`
+	FocusItem          string                            `json:"focusItem"`
+	Paused             bool                              `json:"paused"`
+	Caught             bool                              `json:"caught"`
+	Dialogue           Dialogue                          `json:"dialogue"`
+	LastHeard          string                            `json:"lastHeard"`
+	LastAction         string                            `json:"lastAction"`
+	Effect             Effect                            `json:"effect"`
 }
 
 type Result struct {
@@ -80,6 +81,13 @@ type Result struct {
 }
 
 func Clone(state State) State {
+	if state.MealPersuasion != nil {
+		progress := make(map[string]MealPersuasionProgress, len(state.MealPersuasion))
+		for id, value := range state.MealPersuasion {
+			progress[id] = value
+		}
+		state.MealPersuasion = progress
+	}
 	state.Inventory = append([]Item{}, state.Inventory...)
 	state.Clues = append([]string{}, state.Clues...)
 	state.SceneProps = append([]string{}, state.SceneProps...)

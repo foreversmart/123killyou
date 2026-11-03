@@ -123,24 +123,18 @@ func (e *Engine) storyRegister(state *State, text string) (string, string, bool)
 		e.completeMiniRegistration(state)
 		speak := miniSequence(state, "register_intro", registerLines)
 		if state.Flags["register_intro_done"] {
-			state.DialogueNext = "自动放好行李"
+			state.DialogueNext = "自动去斋堂"
 		}
 		return "story", speak, true
-	}
-	if miniHasAny(text, "放好行李", "整理行李", "去各自房间") {
-		e.completeMiniRegistration(state)
-		miniSetFlag(state, "luggage_placed")
-		miniShot(state, "register_luggage")
-		state.DialogueNext = "自动去斋堂"
-		return "story", miniDialogue(state, "许栀", "行李已经放好啦，去吃晚膳吧"), true
 	}
 	if miniHasAny(text, "看登记簿", "看看登记", "看房牌", "查看通行凭") {
 		miniSetFlag(state, "registration_seen")
 		miniClue(state, "东院四间偏房分别标为听、灯、纸、门；登记簿边角有被反复划掉的旧名字")
 		return "inspect", miniDialogue(state, "周砚", "四把房牌是‘听、灯、纸、门’。这道拖痕从偏殿过来，先看就好，别用手摸。"), true
 	}
-	if miniHasAny(text, "去斋堂", "去斋房", "去吃饭", "晚膳", "晚饭", "吃晚饭", "自动去斋堂") {
+	if miniHasAny(text, "放好行李", "整理行李", "去各自房间", "去斋堂", "去斋房", "去吃饭", "晚膳", "晚饭", "吃晚饭", "自动去斋堂") {
 		e.completeMiniRegistration(state)
+		miniSetFlag(state, "luggage_placed")
 		e.setMiniScene(state, "mini_refectory")
 		return "move", miniDialogue(state, "陆沉", "请各位随我去斋堂用晚膳。"), true
 	}

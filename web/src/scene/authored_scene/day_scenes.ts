@@ -18,7 +18,6 @@ export function dayScene(state: GameState): SceneComposition | undefined {
       'register_rooms',
       'register_camera_bell',
       'register_ribbon',
-      'register_luggage',
     ];
     return courtyardShot.includes(state.shotKey || '') ? undefined : registrationScene(state);
   }
@@ -32,7 +31,7 @@ function registrationScene(state: GameState): SceneComposition {
   const selection: Selection = {
     ledger: state.shotKey === 'register_rooms' ? 'closed' : 'open',
     keyVisible: !hasItem(state, 'key'),
-    permit: state.shotKey === 'register_luggage' ? 'single' : 'stack',
+    permit: 'stack',
     // Room identities belong to the east courtyard. The registration desk
     // only handles the ledger, keys and permit, so never layer the four
     // guest-room tags into this room.

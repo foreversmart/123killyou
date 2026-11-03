@@ -64,7 +64,7 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
           interactive={connected && !openingFlow && game.sceneReady}
           onAvailability={game.setSceneReady}
           onTravelActive={game.setTravelActive}
-          motionPaused={openingFlow}
+          motionPaused={(openingFlow && openingPhase !== 'alighting') || game.travelActive}
         >
           <Overlays state={state} />
           {showNotice && <ActionNotice text={notice} />}
@@ -90,13 +90,8 @@ export default function Game({ voiceReady }: { voiceReady?: boolean }) {
             onBegin={begin}
           />
         )}
-        {(openingPhase === 'road' || openingPhase === 'alighting') && (
-          <OpeningJourney
-            phase={openingPhase}
-            state={state}
-            speaker={speaker}
-            onAvailability={game.setJourneyReady}
-          />
+        {openingPhase === 'road' && (
+          <OpeningJourney state={state} speaker={speaker} onAvailability={game.setJourneyReady} />
         )}
       </section>
       <div className={styles['outside-caption']}>

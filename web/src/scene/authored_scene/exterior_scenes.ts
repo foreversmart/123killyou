@@ -23,13 +23,9 @@ export function exteriorScene(state: GameState): SceneComposition | undefined {
   switch (state.sceneKey) {
     case 'mini_register':
       if (
-        [
-          'register_key_tags',
-          'register_rooms',
-          'register_camera_bell',
-          'register_ribbon',
-          'register_luggage',
-        ].includes(state.shotKey || '')
+        ['register_key_tags', 'register_rooms', 'register_camera_bell', 'register_ribbon'].includes(
+          state.shotKey || '',
+        )
       )
         return courtyardScene(state);
       return undefined;

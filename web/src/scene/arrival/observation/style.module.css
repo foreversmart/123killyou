@@ -1,0 +1,32 @@
+.observation {
+  position: absolute;
+  left: 3.7%;
+  bottom: calc(7% + 4cqw);
+  width: min(64%, 44cqw);
+  margin: 0;
+  padding: 0.65cqw 0.9cqw;
+  border-left: 2px solid #d3bd80;
+  background: #25342de8;
+  color: #f2ead4;
+  font-size: clamp(12px, 0.95cqw, 16px);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+.observation:empty {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+@media (max-width: 600px) {
+  .observation {
+    left: 12px;
+    right: 12px;
+    bottom: 74px;
+    width: auto;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

@@ -52,7 +52,20 @@ test('rendered swing shoes lift forward with a restrained step while the support
     assert.ok(lowest >= -0.005, `the full rendered mesh stays above the floor: ${lowest}`);
   }
   item.frame(5);
-  item.frame(5.1);
+  const stoppedPhase = item.rig.root.gait.phase;
+  let previousWeight = item.rig.root.gait.weight;
+  for (const time of [5.04, 5.08, 5.12, 5.2]) {
+    item.frame(time);
+    assert.equal(
+      item.rig.root.gait.phase,
+      stoppedPhase,
+      'a planted actor cannot start another step',
+    );
+    assert.equal(item.rig.root.gait.moving, false);
+    assert.ok(item.rig.root.gait.weight <= previousWeight, 'only the foot already raised settles');
+    previousWeight = item.rig.root.gait.weight;
+  }
+  assert.equal(previousWeight, 0, 'the short landing finishes in a standing pose');
   shoeBounds(item.rig.root.skinTargets.mesh.skinMatrices).forEach((foot, side) => {
     for (const key of ['minY', 'meanY', 'meanZ'])
       assert.ok(

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { storyCues, cueSignature, cueDuration } from '../src/features/story_audio/cues.ts';
+import { ROOM_SLEEP_ACTION_SECONDS } from '../src/shared/lib/story_timing.ts';
 import {
   DEATH_SOUND_EFFECT,
   NIGHT_BACKGROUND_MUSIC,
@@ -74,7 +75,13 @@ test('二更锣在发烛镜头播放，未点烛等待镜头使用两次重撞�
     ['impact', 'impact'],
   );
   const impacts = storyCues(state('room_ghost_wait'));
+  assert.ok(impacts[0].at > ROOM_SLEEP_ACTION_SECONDS, 'lie down before the first impact');
   assert.ok(impacts[1].at > impacts[0].at + cueDuration(impacts[0]) + 0.5);
+  assert.equal(
+    storyCues(state('wake_ghost_wait'))[0].at,
+    0.25,
+    'refusing to relight has no lie-down',
+  );
 });
 
 test('未点烛死亡先开门，半秒后鬼影冲入', () => {

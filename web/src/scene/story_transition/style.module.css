@@ -10,6 +10,11 @@
 /* Only the last travel phase may reveal the destination below the overlay. */
 .transition[data-ready='true']:where([data-final-phase='true']) {
   animation: transition_fade var(--travel-duration, 2200ms) ease-in-out both;
+  animation-delay: var(--travel-elapsed, 0ms);
+  animation-play-state: paused;
+}
+.transition[data-ready='true'][data-transition='dawn_walk_bus'] {
+  animation-name: boarding_fade;
 }
 .transition[data-paused='true'],
 .transition[data-paused='true'] .shade {
@@ -23,9 +28,17 @@
   background: linear-gradient(180deg, #06090b00 35%, #06090b88);
 }
 
-.transition[data-kind='sleep'][data-ready='true'] .shade {
+.sleep_blackout {
+  position: absolute;
+  z-index: 12;
+  inset: 0;
+  pointer-events: none;
   background: #040609;
-  animation: sleep_darken var(--travel-duration, 2200ms) ease-in both;
+  animation: sleep_darken var(--sleep-darken-duration) ease-in var(--sleep-darken-delay) both;
+}
+
+.sleep_blackout[data-paused='true'] {
+  animation-play-state: paused;
 }
 
 .copy {
@@ -42,6 +55,8 @@
 
 .transition[data-ready='true'] .copy {
   animation: travel_copy var(--travel-duration, 2200ms) ease-out both;
+  animation-delay: var(--travel-elapsed, 0ms);
+  animation-play-state: paused;
 }
 
 .copy strong {
@@ -72,6 +87,16 @@
   }
 }
 
+@keyframes boarding_fade {
+  0%,
+  94% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes travel_copy {
   0%,
   12% {
@@ -90,7 +115,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .transition[data-ready='true']:where([data-final-phase='true']),
-  .transition[data-kind='sleep'][data-ready='true'] .shade,
   .transition[data-ready='true'] .copy {
     animation: none;
   }

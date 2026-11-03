@@ -25,7 +25,11 @@ const { mealLift, mealHandTarget, mealUtensilRotation } =
 const { setup: setupSkinned, bonePoint } = await import('./skinned_character_fixture.mjs');
 const actor = (id, name = id) => ({ id, name, portrait: id, visible: true });
 const state = (shotKey, actors = []) => ({
-  sceneKey: 'mini_arrival',
+  sceneKey: shotKey.startsWith('register_')
+    ? 'mini_register'
+    : shotKey.startsWith('refectory_')
+      ? 'mini_refectory'
+      : 'mini_arrival',
   shotKey,
   actors,
   flags: {},
@@ -33,7 +37,7 @@ const state = (shotKey, actors = []) => ({
   dialogue: { speaker: '', text: '' },
 });
 
-test('dialogue, save, inventory and pause updates keep rigs; visible changes rebuild them', () => {
+test('opening dialogue and investigation keep rigs; cast and place changes rebuild them', () => {
   const game = state('arrival_gate', [actor('linlan')]);
   const key = visualKey(game, 'story');
   assert.equal(
@@ -49,9 +53,9 @@ test('dialogue, save, inventory and pause updates keep rigs; visible changes reb
       'story',
     ),
   );
+  assert.equal(key, visualKey({ ...game, shotKey: 'arrival_weather' }, 'story'));
+  assert.equal(key, visualKey({ ...game, flags: { gate_seen: true } }, 'story'));
   for (const update of [
-    { shotKey: 'arrival_weather' },
-    { flags: { red_candle_lit: true } },
     { actors: [{ ...game.actors[0], visible: false }] },
     { actors: [{ ...game.actors[0], portrait: 'xuzhi' }] },
   ])
@@ -60,8 +64,8 @@ test('dialogue, save, inventory and pause updates keep rigs; visible changes reb
 });
 
 test('admiring the gate tilts and scans the head; the camera rises with both arms', () => {
-  const admirer = characterModel('xuzhi');
-  animateCharacter(admirer, actor('xuzhi'), state('arrival_gate_beauty'));
+  const admirer = characterModel('zhouyan');
+  animateCharacter(admirer, actor('zhouyan'), state('arrival_gate_beauty'));
   admirer.root.animate(0, 0);
   const first = [...admirer.head.rotation];
   admirer.root.animate(1.5, 0);
@@ -77,7 +81,10 @@ test('admiring the gate tilts and scans the head; the camera rises with both arm
     frame(2);
     for (const [index, side] of ['R', 'L'].entries())
       assert.ok(bonePoint(rig, 'hand.' + side)[1] > heights[index] + (raised ? 0.35 : 0.1));
-    assert.ok(rig.elbows.every((joint) => joint.rotation[0] < -0.6));
+    assert.ok(
+      rig.elbows.every((joint) => joint.rotation[0] < 0),
+      'elbows fold toward the camera grip',
+    );
     assert.equal(Math.sign(rig.head.rotation[0]), raised ? -1 : 1);
     assert.equal(rig.root.skinTargets.mesh.asset, 'linlan_model_skin');
     assert.equal(rig.body.children.filter((node) => node.name === 'held_camera').length, 0);
@@ -85,8 +92,8 @@ test('admiring the gate tilts and scans the head; the camera rises with both arm
 });
 
 test('arrival gestures settle into a follow-up observation instead of looping the same pose', () => {
-  const admirer = characterModel('xuzhi');
-  animateCharacter(admirer, actor('xuzhi'), state('arrival_gate_beauty'));
+  const admirer = characterModel('zhouyan');
+  animateCharacter(admirer, actor('zhouyan'), state('arrival_gate_beauty'));
   admirer.root.animate(1.5, 0);
   const scan = admirer.head.rotation[1];
   admirer.root.animate(6.5, 0);
@@ -108,10 +115,11 @@ test('arrival gestures settle into a follow-up observation instead of looping th
   );
 });
 
-test('arrival story shots keep their activities while visitors continue to drift', () => {
+test('arrival visitors pause to observe, walk to a new viewpoint, and plant their feet again', () => {
   for (const [id, shot] of [
     ['linlan', 'arrival_unload'],
     ['zhouyan', 'arrival_zhouyan'],
+    ['xuzhi', 'arrival_gate_beauty'],
     ['luchen', 'arrival_luchen'],
   ]) {
     const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((name) => actor(name));
@@ -129,11 +137,9 @@ test('arrival story shots keep their activities while visitors continue to drift
       ),
       `${id} stands normally when the gate task has not moved yet`,
     );
-    let firstBeat;
-    let end;
+    let midWalk;
     let movingLifts = 0;
-    let laterLifts = 0;
-    for (let frame = 1; frame <= 540; frame++) {
+    for (let frame = 1; frame <= 960; frame++) {
       const previous = [...root.position];
       root.animate(frame / 60, 1 / 60);
       const displacement = Math.hypot(
@@ -142,28 +148,34 @@ test('arrival story shots keep their activities while visitors continue to drift
       );
       if (displacement > 0 && standingLegs.some((leg) => leg.bend.angle > 0)) {
         movingLifts++;
-        if (frame > 180) laterLifts++;
       }
-      if (frame === 42) firstBeat = [...root.position];
-      if (frame === 180) end = [...root.position];
+      if (frame <= 540) {
+        assert.deepEqual(root.position, start, `${id} starts by looking around at the gate`);
+        assert.ok(
+          standingLegs.every((leg) => leg.bend.angle === 0),
+          'standing never starts a step',
+        );
+      }
+      if (frame === 780) midWalk = [...root.position];
       assert.ok(
         Math.hypot(...root.position.map((p, i) => p - start[i])) < 3.2,
         `${id} stays within the gate tableau`,
       );
     }
-    const moved = Math.hypot(...firstBeat.map((p, i) => p - start[i]));
-    assert.ok(moved > 0.01, `${id} keeps moving around the gate while performing`);
-    const afterBeat = Math.hypot(...root.position.map((p, i) => p - end[i]));
-    assert.ok(afterBeat > 0.01, `${id} continues its activity after the first beat`);
+    const moved = Math.hypot(...midWalk.map((p, i) => p - start[i]));
+    assert.ok(moved > 0.01, `${id} walks after the initial observation`);
+    const arrived = Math.hypot(...root.position.map((p, i) => p - start[i]));
+    assert.ok(arrived > moved, `${id} reaches a new viewpoint continuously`);
+    assert.ok(movingLifts > 0, `${id} lifts a foot during the actual walk`);
     assert.ok(
-      movingLifts > 0 && laterLifts > 0,
-      `${id} keeps lifting a foot during actual movement, including small later adjustments`,
+      standingLegs.every((leg) => leg.bend.angle === 0),
+      'feet stay planted at the new viewpoint',
     );
     if (id === 'zhouyan') {
       const head = root.children
         .find((node) => node.name === 'body')
         .children.find((node) => node.name.endsWith('_head'));
-      assert.ok(head.rotation[0] < -0.2, 'looks up only after reaching the plaque');
+      assert.ok(head.rotation[0] < -0.2, 'continues observing the eaves at the new viewpoint');
     }
   }
 });
@@ -182,7 +194,7 @@ test('opening alighting moves the whole group while each guest keeps a distinct 
   }
   assert.equal(performanceFor(actor('linlan'), opening, false, true), 'camera');
   assert.equal(performanceFor(actor('zhouyan'), opening, false, true), 'admire');
-  assert.equal(performanceFor(actor('xuzhi'), opening, false, true), 'luggage');
+  assert.equal(performanceFor(actor('xuzhi'), opening, false, true), 'glance');
   assert.equal(performanceFor(actor('luchen'), opening, false, true), 'welcome');
 });
 
@@ -265,13 +277,12 @@ test("arrival and registration beats carry each companion's established activity
   const expected = [
     ['arrival_gate_beauty', 'linlan', 'camera'],
     ['arrival_gate_beauty', 'zhouyan', 'admire'],
-    ['arrival_gate_beauty', 'xuzhi', 'admire'],
-    ['arrival_weather', 'xuzhi', 'admire'],
-    ['arrival_zhouyan', 'zhouyan', 'look_up'],
+    ['arrival_gate_beauty', 'xuzhi', 'glance'],
+    ['arrival_weather', 'xuzhi', 'glance'],
+    ['arrival_zhouyan', 'zhouyan', 'admire'],
     ['register_camera_bell', 'linlan', 'camera'],
     ['register_drag_mark', 'zhouyan', 'point_floor'],
     ['register_ribbon', 'xuzhi', 'ribbon'],
-    ['register_luggage', 'zhouyan', 'inspect'],
   ];
   for (const [shot, id, action] of expected)
     assert.equal(

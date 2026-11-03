@@ -2,14 +2,17 @@ import { Builder } from '@/scene/geometry/builder';
 import { plaque } from '@/scene/world_environment/architecture';
 import { finish, panel } from '@/scene/world_vehicle/body';
 
-export function coachDetails(b: Builder) {
+export function coachDetails(b: Builder, doorOpen = false) {
   // Passenger door is on the coach's right (-X when local +Z is forward).
-  panel(b, [0.04, 2.19, 0.91], [-1.267, 1.69, 3.91], finish.rubber, 0.019);
-  panel(b, [0.045, 1.42, 0.79], [-1.29, 2.02, 3.91], finish.glass, 0.02);
-  panel(b, [0.05, 0.64, 0.79], [-1.295, 0.93, 3.91], finish.teal, 0.024);
-  b.box([0.018, 2.11, 0.027], [-1.324, 1.69, 3.91], finish.chrome);
-  b.box([0.06, 0.22, 0.037], [-1.33, 1.4, 3.68], finish.chrome);
-  for (const y of [0.68, 0.83, 0.98]) b.box([0.055, 0.018, 0.7], [-1.325, y, 3.91], finish.chrome);
+  if (!doorOpen) {
+    panel(b, [0.04, 2.19, 0.91], [-1.267, 1.69, 3.91], finish.rubber, 0.019);
+    panel(b, [0.045, 1.42, 0.79], [-1.29, 2.02, 3.91], finish.glass, 0.02);
+    panel(b, [0.05, 0.64, 0.79], [-1.295, 0.93, 3.91], finish.teal, 0.024);
+    b.box([0.018, 2.11, 0.027], [-1.324, 1.69, 3.91], finish.chrome);
+    b.box([0.06, 0.22, 0.037], [-1.33, 1.4, 3.68], finish.chrome);
+    for (const y of [0.68, 0.83, 0.98])
+      b.box([0.055, 0.018, 0.7], [-1.325, y, 3.91], finish.chrome);
+  }
   for (const side of [-1, 1]) {
     b.rod([side * 1.12, 2.79, 4.51], [side * 1.56, 2.79, 4.72], 0.045, finish.trim);
     b.rod([side * 1.56, 2.79, 4.72], [side * 1.6, 2.45, 4.78], 0.037, finish.trim);

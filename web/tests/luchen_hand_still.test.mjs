@@ -170,3 +170,59 @@ test('fixed Lu Chen hands preserve a moving gait and head turn', () => {
   greeter.root.animate(1.4, 0);
   assert.notDeepEqual(greeter.head.rotation, head);
 });
+
+for (const blender of [false, true]) {
+  test(`Lu Chen's corridor speech nod reaches the skin and settles after interruption (${blender ? 'Blender' : 'procedural'})`, () => {
+    const headIndex = skin.skeleton.bones.findIndex((bone) => bone.name === 'head');
+    for (const shotKey of ['corridor_candles', 'corridor_warning', 'corridor_two_gongs']) {
+      let speaker = '';
+      const speaking = characterModel('luchen');
+      const silent = characterModel('luchen');
+      const updates = [speaking, silent].map((rig) => {
+        animateCharacter(
+          rig,
+          actor,
+          { sceneKey: 'mini_corridor_candle', shotKey, flags: {} },
+          { speaker: () => (rig === speaking ? speaker : '') },
+        );
+        rig.root.blenderEnabled = blender;
+        return createSkinPose(rig.root.skinTargets, skin.skeleton, geometry);
+      });
+      const frame = (time, delta) => {
+        [speaking, silent].forEach((rig, index) => {
+          rig.root.animate(time, delta);
+          if (blender && rig.root.blenderAction)
+            applyBlenderPose(rig.root.blenderAction, time, animations, rig.root.blenderTargets);
+          updates[index]();
+        });
+      };
+      const headMatrix = (rig) =>
+        Array.from(
+          rig.root.skinTargets.mesh.skinMatrices.subarray(headIndex * 16, headIndex * 16 + 16),
+        );
+      frame(0, 0);
+      assert.deepEqual(headMatrix(speaking), headMatrix(silent));
+      speaker = '陆沉';
+      const pitches = [];
+      for (let i = 1; i <= 120; i++) {
+        frame(i / 60, 1 / 60);
+        const pitch = speaking.head.rotation[0] - silent.head.rotation[0];
+        pitches.push(pitch);
+        assert.ok(Math.abs(pitch) <= 0.0361, 'the speech beat stays within about two degrees');
+      }
+      assert.ok(Math.min(...pitches) < -0.02 && Math.max(...pitches) > 0.02);
+      assert.notDeepEqual(headMatrix(speaking), headMatrix(silent), 'the rendered head moves');
+      const paused = headMatrix(speaking);
+      frame(2, 0);
+      assert.deepEqual(headMatrix(speaking), paused, 'pause freezes the speech pose');
+      speaker = '林岚';
+      for (let i = 1; i <= 18; i++) frame(2 + i / 60, 1 / 60);
+      assert.deepEqual(headMatrix(speaking), headMatrix(silent), 'another speaker lets it settle');
+      for (const excluded of ['系统', '陆沉（心声）', '陆沉（门外）', '']) {
+        speaker = excluded;
+        frame(3, 1 / 60);
+        assert.deepEqual(headMatrix(speaking), headMatrix(silent));
+      }
+    }
+  });
+}

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { GameState } from '@/shared/types/game';
 import type { useVoice } from '@/features/voice/useVoice';
+import { ROOM_SLEEP_WAIT_SECONDS } from '@/shared/lib/story_timing';
 
 // Leave a visible breath after a voiced line. The next shot may need to settle
 // on a prop or sound source before the following character speaks.
@@ -20,20 +21,15 @@ const DAWN_KNOCKS_DIALOGUE_ADVANCE_DELAY_MS = 3200;
 const ESCAPE_DIALOGUE_ADVANCE = '自动显示逃脱对白';
 const ESCAPE_DIALOGUE_ADVANCE_DELAY_MS = 1800;
 const DAWN_SLEEP_ADVANCE = '自动进入四声更锣';
-const DAWN_SLEEP_ADVANCE_DELAY_MS = 5000;
+const DAWN_SLEEP_ADVANCE_DELAY_MS = ROOM_SLEEP_WAIT_SECONDS * 1000;
 const MEAL_GROUP_ADVANCE_DELAY_MS = 1400;
 const DELAYED_DEATH_ADVANCE = '自动进入死亡结算';
 // The wait hook starts after the two heavy impacts finish. Leave only the
 // requested half-second gap before the door opens and the ghost enters.
 const DELAYED_DEATH_ADVANCE_DELAY_MS = 500;
 const SLEEP_ADVANCE = '自动进入三更';
-const SLEEP_ADVANCE_DELAY_MS = 5000;
-const AUTOMATIC_SAFE_ACTIONS = new Set([
-  '自动登记入住',
-  '自动放好行李',
-  '自动去斋堂',
-  '自动结束晚膳',
-]);
+const SLEEP_ADVANCE_DELAY_MS = ROOM_SLEEP_WAIT_SECONDS * 1000;
+const AUTOMATIC_SAFE_ACTIONS = new Set(['自动登记入住', '自动去斋堂', '自动结束晚膳']);
 
 export function useStoryPlayback(
   state: GameState | null,

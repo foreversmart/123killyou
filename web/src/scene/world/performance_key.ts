@@ -7,9 +7,12 @@ import { performanceFor } from '@/scene/world_character/performance';
 export function performanceKey(state: GameState, mode: WorldMode) {
   return JSON.stringify([
     state.sceneKey,
-    state.flags.double_calm && ['double_scripture_4', 'double_calm'].includes(state.shotKey || '')
-      ? 'double_calm'
-      : state.shotKey,
+    state.sceneKey === 'mini_arrival' && mode === 'story'
+      ? 'gate_visit'
+      : state.flags.double_calm &&
+          ['double_scripture_4', 'double_calm'].includes(state.shotKey || '')
+        ? 'double_calm'
+        : state.shotKey,
     state.retryScene,
     mode,
     visibleActors(state, mode).map((actor) => {

@@ -13,7 +13,20 @@ export type PlayerControls = {
   lastPointer: [number, number];
   world?: World;
   baseCamera?: CameraShot;
+  cameraBlend?: { from: CameraShot; elapsed: number };
 };
+
+const copyCamera = (camera: CameraShot): CameraShot => ({
+  eye: [...camera.eye],
+  target: [...camera.target],
+  fov: camera.fov,
+});
+
+function sameCamera(a: CameraShot, b: CameraShot) {
+  return [...a.eye, ...a.target, a.fov ?? 48].every(
+    (value, index) => Math.abs(value - [...b.eye, ...b.target, b.fov ?? 48][index]) < 0.000001,
+  );
+}
 
 export function createPlayerControls(): PlayerControls {
   return {
@@ -29,11 +42,8 @@ export function createPlayerControls(): PlayerControls {
 
 export function resetPlayerControls(controls: PlayerControls, world: World) {
   controls.world = world;
-  controls.baseCamera = {
-    eye: [...world.camera.eye] as V3,
-    target: [...world.camera.target] as V3,
-    fov: world.camera.fov,
-  };
+  controls.baseCamera = copyCamera(world.camera);
+  controls.cameraBlend = undefined;
   controls.lookYaw = 0;
   controls.lookPitch = 0;
   controls.offset = [0, 0];
@@ -42,6 +52,39 @@ export function resetPlayerControls(controls: PlayerControls, world: World) {
   // keyup/blur listeners still clear them when input actually ends.
   controls.dragging = false;
   controls.pointerId = undefined;
+}
+
+/** Rebind a physical scene without discarding the player's view or an ongoing camera move. */
+export function carryPlayerView(controls: PlayerControls, previous: World, next: World) {
+  if (controls.world !== previous || !controls.baseCamera) resetPlayerControls(controls, previous);
+  const from = copyCamera(previous.camera);
+  if (!sameCamera(controls.baseCamera!, next.camera)) {
+    controls.baseCamera = copyCamera(next.camera);
+    controls.lookYaw = 0;
+    controls.lookPitch = 0;
+    controls.offset = [0, 0];
+    controls.velocity = [0, 0];
+    controls.cameraBlend = { from, elapsed: 0 };
+  }
+  controls.world = next;
+  // Road animation owns a closure over this camera. Preserve the object so
+  // the next rendered vehicle frame can keep driving its tracking shot.
+  Object.assign(next.camera, copyCamera(from));
+}
+
+function blendCamera(controls: PlayerControls, world: World, delta: number) {
+  const blend = controls.cameraBlend;
+  if (!blend) return;
+  blend.elapsed += delta;
+  const progress = Math.min(blend.elapsed / 0.42, 1);
+  const weight = progress * progress * (3 - 2 * progress);
+  const lerp = (from: number, to: number) => from + (to - from) * weight;
+  Object.assign(world.camera, {
+    eye: blend.from.eye.map((value, axis) => lerp(value, world.camera.eye[axis])) as V3,
+    target: blend.from.target.map((value, axis) => lerp(value, world.camera.target[axis])) as V3,
+    fov: lerp(blend.from.fov ?? 48, world.camera.fov ?? 48),
+  });
+  if (progress === 1) controls.cameraBlend = undefined;
 }
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
@@ -86,6 +129,7 @@ function applyCamera(controls: PlayerControls, world: World, base: CameraShot) {
   ];
   world.camera.eye = eye;
   world.camera.target = target;
+  world.camera.fov = base.fov;
 }
 
 /** Apply first-person walking and mouse look to the authored camera shot. */
@@ -98,11 +142,13 @@ export function updatePlayerView(
 ) {
   if (controls.world !== world || !controls.baseCamera) resetPlayerControls(controls, world);
   const base = controls.baseCamera!;
-  if (!enabled) {
+  const frame = Math.min(Math.max(state.paused ? 0 : delta, 0), 0.05);
+  if (!enabled || state.paused || controls.cameraBlend) {
     // Keep the last player position and heading during dialogue, inventory and
     // transitions. The controls are frozen, then resume without a camera snap.
     controls.velocity = [0, 0];
     applyCamera(controls, world, base);
+    blendCamera(controls, world, frame);
     return;
   }
 
@@ -119,7 +165,6 @@ export function updatePlayerView(
         (forward[1] * axisZ + right[1] * axisX) / inputLength,
       ]
     : [0, 0];
-  const frame = Math.min(Math.max(delta, 0), 0.05);
   const acceleration = 10.5;
   const maxSpeed = 2.25;
   if (inputLength) {

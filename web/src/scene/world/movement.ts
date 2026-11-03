@@ -2,6 +2,10 @@ import type { GameState, SceneActor } from '@/shared/types/game';
 import type { V3, WorldMode } from '@/scene/world/types';
 import type { Performance } from '@/scene/world_character/performance';
 import { ease } from '@/scene/world_character/joints';
+import { gateVisitPose } from '@/scene/world/gate_visit';
+import { isSleepInterlude } from '@/scene/world/sleep';
+import { listenMovement, listenRoutePosition } from '@/scene/world/listen_route';
+import { boardingMovement, timedPathPosition } from '@/scene/world/boarding_route';
 import {
   createRegisterFlockMotion,
   flockMemberPosition,
@@ -15,6 +19,7 @@ import {
   CORRIDOR_TRAVEL_REGISTER_SECONDS,
   CORRIDOR_TRAVEL_RETURN_SECONDS,
   HALL_TRAVEL_SECONDS,
+  ROOM_SLEEP_WALK_SECONDS,
 } from '@/shared/lib/story_timing';
 
 export type Movement = {
@@ -26,75 +31,19 @@ export type Movement = {
   flock?: FlockMotion;
   /** Facing to settle on once the group reaches a side doorway. */
   endFacing?: number;
+  path?: V3[];
+  pathTimes?: number[];
 };
 
-type GateActivityProfile = {
-  side: number;
-  depth: number;
-  pace: number;
-  phase: number;
-};
-
-// Gate activity spans five times the old distance while every walk is 1.5x
-// slower. Scale its wave rate by 2/15 so the resulting movement speed stays
-// at two thirds of the previous speed.
-const GATE_WALK_RATE_SCALE = 2 / 15;
-
-// Gate visitors keep sampling nearby viewpoints while their hands continue
-// the authored activity. The two incommensurate waves avoid a visibly
-// mechanical back-and-forth loop, while the small amplitudes keep each person
-// inside the camera's established gate tableau.
-const gateActivityProfiles: Partial<Record<Performance, GateActivityProfile>> = {
-  // Give the opening gate tableau five times the original side-to-side and
-  // depth range while keeping the same wave cadence. The larger range reads
-  // as a longer walk instead of a faster jitter.
-  camera: { side: 2.4, depth: 2, pace: 0.56 * GATE_WALK_RATE_SCALE, phase: 0.4 },
-  review_camera: { side: 1.7, depth: 1.55, pace: 0.48 * GATE_WALK_RATE_SCALE, phase: 1.2 },
-  admire: { side: 1.45, depth: 1.15, pace: 0.42 * GATE_WALK_RATE_SCALE, phase: 2.1 },
-  look_up: { side: 1.15, depth: 0.85, pace: 0.38 * GATE_WALK_RATE_SCALE, phase: 2.7 },
-  luggage: { side: 1.05, depth: 1.75, pace: 0.34 * GATE_WALK_RATE_SCALE, phase: 0.9 },
-  welcome: { side: 1.3, depth: 1, pace: 0.36 * GATE_WALK_RATE_SCALE, phase: 1.8 },
-  glance: { side: 0.9, depth: 0.75, pace: 0.32 * GATE_WALK_RATE_SCALE, phase: 2.8 },
-  stretch: { side: 1.15, depth: 1.3, pace: 0.4 * GATE_WALK_RATE_SCALE, phase: 1.5 },
-};
-
-const gateActivitySeeds: Record<string, number> = {
-  linlan: 0.15,
-  zhouyan: 1.8,
-  xuzhi: 3.35,
-  luchen: 4.7,
-};
-
-/**
- * Return a small, activity-specific walk around the authored gate position.
- * This is deliberately a pure function so paused frames and visual rebuilds
- * produce the same placement for the same shot and elapsed time.
- */
+/** Sample the same visit route regardless of the current line or hand action. */
 export function gateActivityPosition(
   actor: SceneActor,
   state: GameState,
-  action: Performance,
+  _action: Performance,
   time: number,
   base: V3,
 ): V3 {
-  if (state.sceneKey !== 'mini_arrival' || !state.shotKey?.startsWith('arrival_')) return base;
-  const profile = gateActivityProfiles[action];
-  if (!profile) return base;
-  const seed = (gateActivitySeeds[actor.id] ?? 0.7) + profile.phase;
-  // Combining separate frequencies gives an irregular path without random
-  // jumps, so a camera check can drift to a new spot and ease back naturally.
-  const side =
-    Math.sin(time * profile.pace + seed) * 0.62 +
-    Math.sin(time * profile.pace * 1.71 + seed * 1.9) * 0.38;
-  const depth =
-    Math.sin(time * profile.pace * 0.83 + seed * 1.37) * 0.58 +
-    Math.sin(time * profile.pace * 1.43 + seed * 0.61) * 0.42;
-  const settle = ease(time, 1.1);
-  return [
-    base[0] + side * profile.side * settle,
-    base[1],
-    base[2] + depth * profile.depth * settle,
-  ];
+  return state.sceneKey === 'mini_arrival' ? gateVisitPose(actor.id, time, base).position : base;
 }
 
 // The corridor's end wall is at z=-7.8. Keep the procession on the near side
@@ -130,18 +79,6 @@ const corridorEndFacing: Record<string, number> = {
 
 export function actorFacing(actor: SceneActor, state: GameState, position: V3, fallback: number) {
   let target: V3 | undefined;
-  if (state.sceneKey === 'mini_arrival') {
-    if (actor.id === 'xuzhi' && state.shotKey === 'arrival_gate_beauty') target = [0, 3, -1];
-    if (actor.id === 'linlan' && state.shotKey === 'arrival_weather') target = [0, 3, -1];
-    if (actor.id === 'zhouyan' && state.shotKey === 'arrival_zhouyan') target = [-3.9, 2.7, -1.9];
-    // The first gate tableau is concurrent: Zhou Yan keeps studying the old
-    // plaque while Xu Zhi works the bags and Lu Chen approaches the guests.
-    // Give those tasks a real visual target so a line of dialogue cannot turn
-    // the group back toward the camera between beats.
-    if (actor.id === 'zhouyan' && state.shotKey === 'arrival_unload') target = [-3.9, 1.8, -1.9];
-    if (actor.id === 'xuzhi' && state.shotKey === 'arrival_unload') target = [3.9, 0.7, -0.8];
-    if (actor.id === 'luchen' && state.shotKey === 'arrival_unload') target = [0, 1.25, 1.3];
-  }
   if (
     state.sceneKey === 'mini_register' &&
     ['register_desk', 'register_drag_mark'].includes(state.shotKey || '')
@@ -173,6 +110,15 @@ export function actorMovement(
   position: V3,
 ): Movement | undefined {
   const [x, y, z] = position;
+  if (mode === 'travel' && state.sceneKey === 'mini_listen') return listenMovement(actor, state);
+  if (mode === 'travel' && state.sceneKey === 'mini_ending') return boardingMovement(actor);
+  if (mode === 'story' && actor.id === 'player' && isSleepInterlude(state))
+    return {
+      from: [-2.05, 0, 0.8],
+      to: [-2.05, 0, -1.55],
+      duration: ROOM_SLEEP_WALK_SECONDS,
+      endFacing: 0,
+    };
   if (mode === 'alighting' && state.sceneKey === 'mini_arrival') {
     // The alighting tableau is a six-second group beat. Start each visible
     // actor just outside the coach's door and bring them to their authored
@@ -194,11 +140,7 @@ export function actorMovement(
         duration: path.duration,
       };
   }
-  if (
-    mode === 'travel' &&
-    state.sceneKey !== 'mini_ending' &&
-    !(state.sceneKey === 'mini_ending' && actor.id === 'luchen')
-  ) {
+  if (mode === 'travel') {
     if (state.sceneKey === 'mini_register') {
       const flock = createRegisterFlockMotion(CORRIDOR_TRAVEL_END_Z);
       const from = registerFlockStartPosition(flock, actor.id);
@@ -223,16 +165,23 @@ export function actorMovement(
     const lane = laneOffsets[actor.id] ?? 0;
     const reversed = corridorTravelReversed(state);
     const duration = corridorTravelDuration(state);
+    const to: V3 = reversed
+      ? [x + lane, y, CORRIDOR_TRAVEL_START_Z - lane * 0.35]
+      : [x + lane, y, CORRIDOR_TRAVEL_END_Z + lane * 0.35];
     return {
       from: position,
       // The east courtyard has two readable ends. Going from the side rooms
       // to the main hall runs toward the sealed end wall; returning after
       // dinner reverses the same path toward the open courtyard end.
-      to: reversed
-        ? [x + lane, y, CORRIDOR_TRAVEL_START_Z - lane * 0.35]
-        : [x + lane, y, CORRIDOR_TRAVEL_END_Z + lane * 0.35],
+      to,
       duration,
-      endFacing: reversed ? undefined : corridorEndFacing[actor.id],
+      // Dinner cuts straight into the hall; keep facing along the route.
+      endFacing:
+        state.sceneKey === 'mini_refectory'
+          ? Math.atan2(to[0] - x, to[2] - z)
+          : reversed
+            ? undefined
+            : corridorEndFacing[actor.id],
     };
   }
   if (mode === 'hall' && state.sceneKey !== 'mini_ending') {
@@ -251,20 +200,6 @@ export function actorMovement(
       duration: HALL_TRAVEL_SECONDS,
     };
   }
-  if (
-    (mode === 'travel' || mode === 'hall') &&
-    !(state.sceneKey === 'mini_ending' && actor.id === 'luchen')
-  ) {
-    const duration = mode === 'hall' ? 10.5 : state.sceneKey === 'mini_corridor_candle' ? 6 : 4.5;
-    return {
-      from: position,
-      // The main-hall tableau is viewed from the adjoining passage. Keep the
-      // procession on the far side of the frame and move it right-to-left so
-      // the group enters from the right and clears toward the refectory side.
-      to: mode === 'hall' ? [x - duration * 0.43, y, z] : [x, y, z - duration * 0.43],
-      duration,
-    };
-  }
   if (actor.id === 'skin_double' && state.shotKey === 'double_exit' && !state.flags.double_calm)
     return { from: position, to: [2.55, 0, -3.2], duration: 1.6 };
   // The opening alighting phase already carries the group from the coach to
@@ -275,6 +210,9 @@ export function actorMovement(
 }
 
 export function movementPosition(movement: Movement, time: number): V3 {
+  if (movement.path && movement.pathTimes)
+    return timedPathPosition(movement.path, movement.pathTimes, time);
+  if (movement.path) return listenRoutePosition(movement.path, time, movement.duration);
   if (movement.flock && movement.actorId)
     return flockMemberPosition(movement.flock, movement.actorId, time, movement.duration);
   const progress = ease(time, movement.duration);

@@ -1,5 +1,9 @@
 import type { CameraShot, V3 } from '@/scene/world/types';
-import { OPENING_ROAD_DURATION_MS, DEPARTURE_ROAD_DURATION_MS } from '@/shared/lib/story_timing';
+import {
+  OPENING_ROAD_DURATION_MS,
+  DEPARTURE_CAMERA_DURATION_MS,
+  DEPARTURE_ROAD_DURATION_MS,
+} from '@/shared/lib/story_timing';
 import { ROAD_LENGTH, roadSample } from '@/scene/world_environment/road_path';
 import { roadContact } from '@/scene/world_vehicle/road_contact';
 
@@ -53,16 +57,17 @@ function timedDistance(timing: JourneyTiming, progress: number) {
   const local = segment > 0 ? (target - timing.elapsed[low]) / segment : 0;
   return mix(timing.distances[low], timing.distances[high], local);
 }
-// Distance is measured from the lower road controls toward the temple. Start
-// at the first surveyed point so the arrival shot visibly climbs from the
-// mountain foot instead of appearing halfway up the final bend.
-export const JOURNEY_START = ROAD_LENGTH - 66;
+// The departure continues through the next downhill bend after the camera
+// settles, leaving the entire coach outside the final wide/portrait frame.
+export const JOURNEY_START = ROAD_LENGTH - 172;
+const DEPARTURE_CAMERA_END = ROAD_LENGTH - 66;
 // Begin around the middle of the surveyed climb so the opening starts from
 // the half-mountain approach instead of replaying the lower foothill section.
 export const ARRIVAL_START = 180;
 export const JOURNEY_END = ROAD_LENGTH - 7;
 const arrivalTiming = createJourneyTiming(ARRIVAL_START, JOURNEY_END);
 const departureTiming = createJourneyTiming(JOURNEY_END, JOURNEY_START);
+const departureCameraTiming = createJourneyTiming(JOURNEY_END, DEPARTURE_CAMERA_END);
 
 function routePosition(distance: number, lane: number): V3 {
   const surveyed = roadSample(clamp(distance, 0, ROAD_LENGTH), lane);
@@ -102,7 +107,6 @@ export function journeyFrame(time: number, departing: boolean) {
     // buffer between the outer bodywork and the road edge.
     lane = direction * 1.5;
   const start = departing ? JOURNEY_END : ARRIVAL_START,
-    end = departing ? JOURNEY_START : JOURNEY_END,
     // Ease the shot in/out, then apply the curvature timing map. The latter
     // spends more clock time in bends while preserving the authored endpoints.
     along = timedDistance(departing ? departureTiming : arrivalTiming, progress);
@@ -137,29 +141,33 @@ export function journeyFrame(time: number, departing: boolean) {
       fov: 72,
     };
   })();
-  // Departure keeps the established vehicle-relative pull-away. Arrival uses
-  // the independent pan above so the coach crosses the frame at its own speed.
-  const departureCameraProgress = progress;
+  // Finish the pull-away on its own clock, then keep the exact same eye,
+  // target and lens while the coach continues downhill. The vehicle clock
+  // never restarts at this handoff, so it does not stop before leaving frame.
+  const departureCameraProgress = smooth(clamp(time / (DEPARTURE_CAMERA_DURATION_MS / 1000), 0, 1));
+  const cameraAlong = timedDistance(departureCameraTiming, departureCameraProgress);
+  const cameraRoad = roadSample(cameraAlong, -1.5);
+  const [cx, cy, cz] = roadContact(cameraRoad.position, cameraRoad.yaw + Math.PI).position;
   const nearOffset: V3 = [17, 9, 23];
   const farOffset: V3 = [73, 53, 94];
   const departureEye = [
-    x + mix(nearOffset[0], farOffset[0], departureCameraProgress),
-    y + mix(nearOffset[1], farOffset[1], departureCameraProgress),
-    z + mix(nearOffset[2], farOffset[2], departureCameraProgress),
+    cx + mix(nearOffset[0], farOffset[0], departureCameraProgress),
+    cy + mix(nearOffset[1], farOffset[1], departureCameraProgress),
+    cz + mix(nearOffset[2], farOffset[2], departureCameraProgress),
   ] as V3;
-  const departureTarget = mixVector([x, y + 1.5, z], [0, 45, -55], progress * 0.6);
+  const departureTarget = mixVector(
+    [cx, cy + 1.5, cz],
+    [0, 45, -55],
+    departureCameraProgress * 0.6,
+  );
   const departureFollowCamera: CameraShot = {
     eye: departureEye,
     target: departureTarget,
-    fov: mix(56, 60, progress),
+    fov: mix(56, 60, departureCameraProgress),
   };
-  const intro = 1 - smooth(clamp(progress / 0.16, 0, 1));
-  const outro = smooth(clamp((progress - 0.94) / 0.06, 0, 1));
+  const intro = 1 - smooth(clamp(departureCameraProgress / 0.16, 0, 1));
   const entryCamera = routeCamera(start + direction * 24, lane, direction);
-  const exitCamera = routeCamera(end + direction * 24, lane, direction);
-  const camera = departing
-    ? mixCamera(mixCamera(departureFollowCamera, entryCamera, intro), exitCamera, outro)
-    : arrivalCamera;
+  const camera = departing ? mixCamera(departureFollowCamera, entryCamera, intro) : arrivalCamera;
   return {
     ...contact,
     yaw,

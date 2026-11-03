@@ -9,12 +9,13 @@ import (
 // story evaluator. Keeping this type in game prevents the HTTP client from
 // deciding game rules or importing content files directly.
 type MealParticipant struct {
-	ID         string   `json:"id"`
-	Name       string   `json:"name"`
-	Traits     []string `json:"traits"`
-	Voice      string   `json:"voice,omitempty"`
-	LastReply  string   `json:"lastReply,omitempty"`
-	MealChoice string   `json:"mealChoice,omitempty"`
+	ID                 string   `json:"id"`
+	Name               string   `json:"name"`
+	Traits             []string `json:"traits"`
+	Voice              string   `json:"voice,omitempty"`
+	LastReply          string   `json:"lastReply,omitempty"`
+	MealChoice         string   `json:"mealChoice,omitempty"`
+	PersuasionAttempts int      `json:"persuasionAttempts,omitempty"`
 }
 
 type MealJudgeRequest struct {
@@ -29,9 +30,11 @@ type MealJudgeRequest struct {
 // means that the NPC has accepted the player's persuasion and will not eat
 // meat porridge.
 type MealDecision struct {
-	Choice     string  `json:"choice"`
-	Reply      string  `json:"reply,omitempty"`
-	Confidence float64 `json:"confidence,omitempty"`
+	Choice      string  `json:"choice"`
+	Reply       string  `json:"reply,omitempty"`
+	Confidence  float64 `json:"confidence,omitempty"`
+	Sincere     bool    `json:"sincere,omitempty"`
+	ReasonCount int     `json:"reasonCount,omitempty"`
 }
 
 type MealJudgeResult struct {
@@ -256,28 +259,32 @@ func mealChoiceName(state State, person string) string {
 }
 
 func (e *Engine) mealJudgeParticipants(state State, text string) []MealParticipant {
-	if !mealSpeechLooksLikeChoice(text) {
-		return nil
-	}
-	all := miniVegetarianGroupRequest(text)
-	participants := make([]MealParticipant, 0, 3)
-	for _, id := range []string{"linlan", "zhouyan", "xuzhi"} {
+	participants := make([]MealParticipant, 0, 2)
+	for _, id := range mealPersuasionTargets(Normalize(text)) {
+		if id == "linlan" || state.Flags["meal_"+id+"_refused"] {
+			continue
+		}
 		npc, ok := e.content.NPC(id)
 		if !ok {
 			continue
 		}
-		if all || miniHasAny(text, npc.Name) {
-			participants = append(participants, MealParticipant{
-				ID: id, Name: npc.Name, Traits: append([]string(nil), npc.Traits...),
-				Voice:     npc.Voice.Profile,
-				LastReply: state.Dialogue.Text, MealChoice: mealChoiceName(state, id),
-			})
-		}
+		participants = append(participants, MealParticipant{
+			ID: id, Name: npc.Name, Traits: append([]string(nil), npc.Traits...),
+			Voice: npc.Voice.Profile, LastReply: state.Dialogue.Text,
+			MealChoice:         mealChoiceName(state, id),
+			PersuasionAttempts: state.MealPersuasion[id].Attempts + 1,
+		})
 	}
 	return participants
 }
 
 func mealSpeechLooksLikeChoice(text string) bool {
+	if mealReportedSpeech(text) {
+		return false
+	}
+	if mealExplicitVegetarianAppeal(text) {
+		return true
+	}
 	if miniHasAny(text, "吗", "什么", "为什么", "怎么", "昨天", "刚才", "觉得", "喜欢", "能不能", "要不要", "是否", "如果", "假如", "听说") {
 		return false
 	}

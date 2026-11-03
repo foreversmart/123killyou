@@ -116,50 +116,6 @@ func (c *Client) call(ctx context.Context, body request) (response, error) {
 	return out, nil
 }
 
-func (c *Client) JudgeMeal(ctx context.Context, input game.MealJudgeRequest) (game.MealJudgeResult, error) {
-	questions := make(map[string]question, len(input.Participants))
-	for _, participant := range input.Participants {
-		questions["meal_"+participant.ID] = question{
-			Type:         "choice",
-			Instructions: fmt.Sprintf("判断%s是否被玩家说服而决定不吃肉粥。结合玩家原话、NPC性格、性别/声音线索、此前回应和当前场景；只在明确接受不吃时选择 refused，明确要吃时选择 ate，犹豫或信息不足时选择 deferred。玩家原话：%s；NPC性格：%s；声音线索：%s；NPC此前回应：%s。", participant.Name, input.PlayerText, strings.Join(participant.Traits, "、"), participant.Voice, participant.LastReply),
-			Criteria: map[string]string{
-				"refused":  "NPC明确接受劝说，表示不吃肉粥或改吃素食。",
-				"ate":      "NPC明确表示要吃、尝试或继续吃肉粥。",
-				"deferred": "NPC没有作出明确决定，或玩家只是提问、信息不足。",
-			},
-		}
-	}
-	state := fmt.Sprintf("场景：%s\n当前对白：%s\n玩家发言：%s\n此前问答：%s\n参与者：%s", input.Scene, input.Dialogue, input.PlayerText, input.History, participantSummary(input.Participants))
-	out, err := c.call(ctx, request{Model: "jev-latest", State: state, Questions: questions})
-	if err != nil {
-		return game.MealJudgeResult{}, err
-	}
-	result := game.MealJudgeResult{Decisions: map[string]game.MealDecision{}}
-	for _, participant := range input.Participants {
-		item, ok := out.Answers["meal_"+participant.ID]
-		if !ok || strings.TrimSpace(item.Choice) == "" {
-			continue
-		}
-		reply := strings.TrimSpace(item.Reply)
-		if reply == "" {
-			reply = strings.TrimSpace(item.Text)
-		}
-		result.Decisions[participant.ID] = game.MealDecision{Choice: item.Choice, Reply: reply, Confidence: item.Confidence}
-	}
-	if len(result.Decisions) == 0 {
-		return game.MealJudgeResult{}, fmt.Errorf("jev meal response contains no participant decisions")
-	}
-	return result, nil
-}
-
-func participantSummary(participants []game.MealParticipant) string {
-	items := make([]string, 0, len(participants))
-	for _, participant := range participants {
-		items = append(items, participant.Name+"（"+strings.Join(participant.Traits, "、")+"；声音："+participant.Voice+"）")
-	}
-	return strings.Join(items, "、")
-}
-
 func (c *Client) JudgeOracle(ctx context.Context, input game.OracleJudgeRequest) (game.OracleJudgeResult, error) {
 	state := fmt.Sprintf("场景：%s\n玩家当前虔诚度：%d\n玩家晚膳选择：%s\n玩家回答：%s\n此前问答：%s", input.Scene, input.Devotion, input.MealChoice, input.PlayerText, input.History)
 	questions := map[string]question{

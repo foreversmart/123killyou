@@ -28,8 +28,17 @@ export function walkAction(rig: CharacterRig, action: Performance, t: number, se
   head.rotation[0] = Math.sin(t * 0.54 * headRate + seed * 0.7) * 0.025;
   body.rotation[0] = Math.sin(t * 0.9 + seed) * 0.018;
   if (!luchen) {
-    armPose(rig, 0, -0.08, -0.12, 0.035 + Math.sin(t * 1.8 + seed) * 0.02);
-    armPose(rig, 1, -0.08, -0.12, -0.035 - Math.sin(t * 1.8 + seed) * 0.02);
+    const gait = rig.root.gait;
+    for (const side of [0, 1]) {
+      const swing = Math.sin((gait?.phase || 0) + side * Math.PI) * (gait?.weight || 0);
+      armPose(
+        rig,
+        side,
+        -0.08 + swing * 0.3,
+        -0.12 - Math.max(0, swing) * 0.08,
+        (side ? -1 : 1) * 0.035,
+      );
+    }
   }
   if (action === 'walk_lead') {
     // Lu Chen keeps the key hand close and gives a restrained half-turn to

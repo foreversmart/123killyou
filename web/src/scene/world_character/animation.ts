@@ -13,13 +13,14 @@ import {
   mealUtensilRotation,
 } from '@/scene/world_character/day_actions';
 import { nightAction } from '@/scene/world_character/night_actions';
-import { bend } from '@/scene/world_character/joints';
+import { bend, ease } from '@/scene/world_character/joints';
 import { speechMotion } from '@/scene/world_character/speech';
 import { blenderActionFor } from '@/scene/world_character/blender_action_library';
 import { skinMealUtensilRotation } from '@/scene/world_character/skinned_actions';
 import { sleepAction } from '@/scene/world_character/sleep_action';
 import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
 import { createDistanceGait } from '@/scene/world_character/distance_gait';
+import { applyPlacementContinuity } from '@/scene/world_character/continuity';
 
 const WALK_PERFORMANCES = new Set([
   'walk',
@@ -49,9 +50,13 @@ export function animateCharacter(
   if (rig.pose === 'standing') root.gait = sampleGait(root.position, 0);
   const action = performanceFor(actor, state, options.traveling, options.alighting);
   const luchen = root.name === 'luchen';
+  const corridorBriefing =
+    luchen && state.sceneKey === 'mini_corridor_candle' && !options.traveling;
+  const gateVisit = state.sceneKey === 'mini_arrival';
   // Reaching must use this model's bone lengths and prop targets. The shared
   // clips contain relative motion without the camera/meal's initial grip.
   const clipAction = (performance: string) =>
+    gateVisit ||
     WALK_PERFORMANCES.has(performance) ||
     (rig.root.skinTargets && ['eat', 'walk_camera'].includes(performance))
       ? undefined
@@ -73,11 +78,23 @@ export function animateCharacter(
     knees,
   };
   const duration = options.walkDuration || 0;
-  const speak = speechMotion(rig, actor, options.speaker || (() => ''));
+  root.animationState = {};
+  const speak = speechMotion(rig, actor, options.speaker || (() => ''), corridorBriefing);
   const seed = [...actor.id].reduce((n, letter) => n + letter.charCodeAt(0), 0) * 0.13;
   const bodyY = body.position[1],
     bodyPitch = body.rotation[0];
   const verse = Number(state.shotKey?.match(/double_scripture_(\d)/)?.[1] || 0);
+  root.characterKey = JSON.stringify([actor.id, actor.portrait || root.name]);
+  root.animationKey = JSON.stringify([
+    action,
+    rig.pose,
+    duration,
+    Boolean(options.traveling),
+    Boolean(options.alighting),
+    action === 'scratch' ? verse : 0,
+    action === 'eat' && Boolean(state.flags['meal_' + actor.id + '_ate']),
+    actor.id === 'skin_double' && Boolean(state.flags.double_refused_candle),
+  ]);
   const still = action === 'stone' || action === 'still';
   let held: WorldNode | undefined;
   let heldBowl: WorldNode | undefined;
@@ -137,14 +154,30 @@ export function animateCharacter(
     (blenderActionFor(action) ? hands[0] : hands[1]).children.push(held);
   }
   root.animate = (t, delta) => {
+    applyPlacementContinuity(root, t);
     if (root.animationContinuity && root.animationContinuity !== continuity) {
       continuity = root.animationContinuity;
       sampleGait = createDistanceGait(continuity.position, continuity.time, continuity.gait);
     }
-    const gait = sampleGait(root.position, t);
-    if (rig.pose === 'standing') root.gait = gait;
-    const moving = gait.moving;
-    const currentAction = moving ? action : WALK_PERFORMANCES.has(action) ? 'idle' : action;
+    const sampledGait = sampleGait(root.position, t);
+    const walkingToBed = action === 'sleep_enter' && t < duration;
+    // Land the last step before the seated action takes over the legs.
+    const gait =
+      action === 'sleep_enter'
+        ? { ...sampledGait, weight: sampledGait.weight * (1 - ease(t - duration + 0.3, 0.3)) }
+        : sampledGait;
+    const stepping = gait.weight > 0 && (action !== 'sleep_enter' || walkingToBed);
+    if (rig.pose === 'standing')
+      root.gait =
+        action === 'sleep_enter' && !walkingToBed ? { ...gait, weight: 0, moving: false } : gait;
+    // Arrival, travel and observation keep their upper-body task through a
+    // pause in the path; only actual displacement controls the feet.
+    const currentAction = walkingToBed ? 'walk' : action;
+    if (walkingToBed) {
+      root.rotation[0] = 0;
+      root.pelvisSupportHeight = undefined;
+      root.animationState!.sleepFacing = undefined;
+    }
     root.blenderAction = clipAction(currentAction);
     const blenderDriven = root.blenderEnabled === true && Boolean(root.blenderAction);
     const actionTime = Math.max(0, t - duration);
@@ -159,16 +192,15 @@ export function animateCharacter(
       arm.rotation[1] = 0;
       armPose(rig, i, -0.06, -0.09, (i ? -1 : 1) * 0.035);
     });
-    // Always settle the lower body before applying the current gait. This is
-    // important when a transition ends between frames: a final lifted foot
-    // must return to the authored standing pose before the next scene starts.
+    // Start from the standing pose, then apply the distance-driven step or
+    // its short landing. A stationary root never advances the stride phase.
     legs.forEach((leg, i) => {
       leg.position = [...legBasePositions[i]];
       leg.rotation[0] = legBaseAngles[i];
       bend(leg, knees[i], kneeBaseAngles[i]);
     });
     if (still) return;
-    if (rig.pose === 'standing' && moving) {
+    if (rig.pose === 'standing' && stepping) {
       const { phase: stride, weight } = gait;
       body.position[1] += Math.abs(Math.sin(stride)) * 0.035 * weight;
       body.rotation[1] = Math.sin(stride) * 0.055 * weight;
@@ -186,7 +218,7 @@ export function animateCharacter(
         if (!root.skinTargets && step <= 0)
           leg.position[1] -=
             0.76 * (1 - Math.cos(leg.rotation[0])) - 0.07 * Math.sin(leg.rotation[0]);
-        if (!luchen && !blenderDriven) armPose(rig, i, -Math.sin(cycle) * 0.3 * weight, -0.15);
+        if (!luchen && !blenderDriven) armPose(rig, i, Math.sin(cycle) * 0.3 * weight, -0.15);
       });
     }
     if (!blenderDriven) {
@@ -199,9 +231,12 @@ export function animateCharacter(
           ['register_desk', 'register_drag_mark'].includes(state.shotKey || ''),
       );
       nightAction(rig, currentAction, actionTime, verse);
-      speak(currentAction, delta);
-      if (currentAction === 'sleep_enter') sleepAction(rig, actionTime);
+      if (currentAction === 'sleep_enter') {
+        root.animationState!.sleepFacing ??= root.rotation[1];
+        sleepAction(rig, actionTime, root.animationState!.sleepFacing);
+      }
     }
+    if (!blenderDriven || corridorBriefing) speak(currentAction, delta);
     // Lu Chen keeps the same resting arms in every story action. Lock their
     // parent too: breathing, gait bounce and torso turns would otherwise move
     // the hands even when their own joints have no animation.

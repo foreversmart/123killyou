@@ -35,7 +35,7 @@ func (f *fakeStoryJudge) JudgeRoomAction(_ context.Context, request RoomActionRe
 	return f.room, f.roomErr
 }
 
-func TestStoryJudgeSettlesCompanionPersuasionAndNaturalReply(t *testing.T) {
+func TestLinlanPersuasionUsesLocalConsentAndOwnVoice(t *testing.T) {
 	catalog, err := content.Load()
 	if err != nil {
 		t.Fatal(err)
@@ -48,8 +48,8 @@ func TestStoryJudgeSettlesCompanionPersuasionAndNaturalReply(t *testing.T) {
 	s := e.Initial("judge-meal")
 	e.setMiniScene(&s, "mini_refectory")
 	_, reply := e.Apply(&s, "劝林岚别吃肉粥")
-	if judge.mealCalls != 1 || !s.Flags["meal_linlan_refused"] || strings.Contains(reply, "同行者") || !strings.Contains(reply, "我也不吃肉粥了") {
-		t.Fatalf("jev meal decision was not applied: calls=%d flags=%v reply=%s", judge.mealCalls, s.Flags, reply)
+	if judge.mealCalls != 0 || !s.Flags["meal_linlan_refused"] || s.Dialogue.Speaker != "林岚" || strings.Contains(reply, "同行者") || !strings.Contains(reply, "吃素") {
+		t.Fatalf("林岚没有直接以自己的角色回应首次劝说: calls=%d flags=%v reply=%s", judge.mealCalls, s.Flags, reply)
 	}
 }
 

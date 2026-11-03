@@ -29,6 +29,8 @@ const { box, sphere, cylinder, torus } = await import('../src/scene/geometry/pri
 const { roofTile } = await import('../src/scene/geometry/roof_tile.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
 const { skin, bonePoint, createSkinPose } = await import('./skinned_character_fixture.mjs');
+const { ROOM_SLEEP_WALK_SECONDS, ROOM_SLEEP_ACTION_SECONDS } =
+  await import('../src/shared/lib/story_timing.ts');
 
 const actor = (id, extra = {}) => ({
   id,
@@ -100,22 +102,22 @@ test('peephole, false dawn, the gate and the departure shot follow existing stor
   assert.equal(visibleActors(ending, 'travel').length, 1);
 });
 
-test('山门参观会沿当前活动持续换位，并保持在既有构图范围内', () => {
+test('山门参观会先驻足再走向观景点，并保持在既有构图范围内', () => {
   const arrival = state('mini_arrival', {
     shotKey: 'arrival_weather',
     actors: ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id)),
   });
   const baseById = {
     linlan: [-2.1, 0, 2.2],
-    zhouyan: [2.25, 0, 1.2],
-    xuzhi: [1.05, 0, 3],
-    luchen: [-0.2, 0.24, -0.6],
+    zhouyan: [2.25, 0, 2],
+    xuzhi: [1.05, 0, 3.4],
+    luchen: [-0.2, 0.32, -0.6],
   };
   const world = createWorld({ state: arrival });
   const roots = Object.fromEntries(
     arrival.actors.map(({ id }) => [id, world.root.children.find((node) => node.name === id)]),
   );
-  const samples = [0, 2.1, 4.8].map((time) =>
+  const samples = [0, 12.5, 15.5].map((time) =>
     arrival.actors.map((person) => {
       const root = roots[person.id];
       assert.ok(root?.animate, `${person.id} has an animation callback`);
@@ -155,7 +157,7 @@ test('山门参观会沿当前活动持续换位，并保持在既有构图范�
     baseById.linlan,
   );
   assert.notDeepEqual(
-    gateActivityPosition(actor('linlan'), arrival, 'camera', 2.1, baseById.linlan),
+    gateActivityPosition(actor('linlan'), arrival, 'camera', 12.5, baseById.linlan),
     cameraAtStart,
   );
   assert.deepEqual(
@@ -169,12 +171,12 @@ test('山门连续镜头保留同一组活动键，便于渲染器延续动作�
   const actors = ['linlan', 'zhouyan', 'xuzhi', 'luchen'].map((id) => actor(id));
   const first = state('mini_arrival', { shotKey: 'arrival_gate', actors });
   const next = state('mini_arrival', { shotKey: 'arrival_weather', actors });
-  assert.notEqual(performanceKey(first, 'story'), performanceKey(next, 'story'));
+  assert.equal(performanceKey(first, 'story'), performanceKey(next, 'story'));
   assert.equal(scenePlace(first), 'gate');
   assert.equal(scenePlace(next), 'gate');
 });
 
-test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行走', () => {
+test('晚膳路线走到回廊尽头不转身，直接接大殿从右向左行走', () => {
   const guest = actor('linlan');
   const corridor = actorMovement(guest, state('mini_refectory'), 'travel', [0.8, 0, -1]);
   const returnWalk = actorMovement(guest, state('mini_corridor_candle'), 'travel', [0.8, 0, 5.7]);
@@ -188,6 +190,37 @@ test('晚膳路线先沿回廊再横穿大殿，队伍在大殿从右向左行�
   assert.equal(hall?.duration, 11.4);
   assert.ok((hall?.to[0] ?? 0) < (hall?.from[0] ?? 0));
   assert.equal(hall?.to[2], hall?.from[2]);
+
+  const actors = ['luchen', 'linlan', 'zhouyan', 'xuzhi'].map((id) => actor(id));
+  const game = state('mini_refectory', { actors });
+  const corridorWorld = createWorld({ state: game, mode: 'travel' });
+  const hallWorld = createWorld({ state: game, mode: 'hall' });
+  for (const person of actors) {
+    const walker = corridorWorld.root.children.find((node) => node.name === person.id);
+    assert.ok(walker?.animate, `${person.id} 出现在回廊转场`);
+    walker.animate(0, 0);
+    const start = [...walker.position];
+    walker.animate(8, 0);
+    const heading = Math.atan2(walker.position[0] - start[0], walker.position[2] - start[2]);
+    assert.ok(walker.position[2] < start[2], `${person.id} 朝回廊尽头行走`);
+    for (const time of [8.625, 8.76, 8.895, 9.03, 9.165, 9.3]) {
+      walker.animate(time, 0);
+      const turn = walker.rotation[1] - heading;
+      assert.ok(
+        Math.abs(Math.atan2(Math.sin(turn), Math.cos(turn))) < 1e-8,
+        `${person.id} 在 ${time} 秒保持行进朝向，不转向侧门`,
+      );
+    }
+
+    const hallWalker = hallWorld.root.children.find((node) => node.name === person.id);
+    assert.ok(hallWalker?.animate, `${person.id} 继续出现在大殿转场`);
+    hallWalker.animate(0, 0);
+    const hallStart = [...hallWalker.position];
+    hallWalker.animate(11.4, 0);
+    assert.ok(hallWalker.position[0] < hallStart[0], `${person.id} 在大殿从右向左行走`);
+    assert.equal(hallWalker.position[2], hallStart[2], `${person.id} 保持横穿大殿的路线`);
+    assert.ok(Math.abs(hallWalker.rotation[1] + Math.PI / 2) < 1e-8);
+  }
 });
 
 test('登记转场用慢速鸟群跟随陆沉，并让每个人保留自己的步行动作', () => {
@@ -573,17 +606,51 @@ test('3D hotspots project to the visible object and hide behind the camera', () 
   assert.equal(project([0, 1, 6], vp), null);
 });
 
-test('sleep shots lower the eye onto the bed and settle on the ceiling beams', () => {
-  const world = createWorld({
-    state: state('mini_wake_three_gongs', { shotKey: 'room_sleep_wait' }),
+test('every lie-down keeps the player visible while walking to the bed and settling', () => {
+  for (const [sceneKey, shotKey] of [
+    ['mini_wake_three_gongs', 'room_sleep_wait'],
+    ['mini_dawn_trap', 'escape_sleep_wait'],
+    ['mini_room', 'room_ghost_wait'],
+  ]) {
+    const world = createWorld({ state: state(sceneKey, { shotKey, actors: [actor('player')] }) });
+    const player = world.root.children.find((node) => node.name === 'player');
+    assert.ok(player, shotKey);
+    const camera = structuredClone(world.camera);
+    assert.ok(camera.eye[0] > -1 && camera.target[0] === -3, 'camera sees the bed from the side');
+    const vp = cameraMatrix(camera, 16 / 9);
+    for (let frame = 0; frame <= Math.ceil((ROOM_SLEEP_ACTION_SECONDS + 0.4) * 60); frame++) {
+      const time = frame / 60;
+      player.animate(time, 1 / 60);
+      assert.deepEqual(world.camera, camera, 'the camera keeps the complete action in view');
+      if (time < ROOM_SLEEP_WALK_SECONDS) {
+        assert.equal(player.position[1], 0, 'walk on the floor before getting onto the bed');
+        assert.equal(player.rotation[0], 0);
+        assert.ok(project([player.position[0], 1, player.position[2]], vp));
+      }
+    }
+    assert.deepEqual(player.position, [-3, 0, -1.55]);
+    assert.equal(player.rotation[0], 0);
+    assert.equal(player.skinTargets.body.rotation[0], -Math.PI / 2);
+    assert.equal(player.rotation[1], 0);
+    assert.ok(project([-3, 0.7, -1.5], vp), 'the sleeping body remains in frame');
+  }
+});
+
+test('the first lie-down retains candlelight for its performance without changing settled rules', () => {
+  const game = state('mini_wake_three_gongs', {
+    shotKey: 'room_sleep_wait',
+    flags: { sleep_pending: true, red_candle_lit: false },
   });
-  world.root.animate?.(0, 0);
-  const standingHeight = world.camera.eye[1];
-  world.root.animate?.(0.8, 0);
-  const transitionHeight = world.camera.eye[1];
-  world.root.animate?.(1.8, 0);
-  assert.ok(transitionHeight > world.camera.eye[1]);
-  assert.ok(world.camera.eye[1] < standingHeight);
-  assert.ok(world.camera.target[1] > 3);
-  assert.ok([...world.camera.eye, ...world.camera.target].every(Number.isFinite));
+  const sleep = createWorld({ state: game });
+  assert.equal(sleep.lighting.lamps.length, 1);
+  assert.ok(
+    sleep.root.children.some((node) => node.children.some((child) => child.name === 'flame')),
+  );
+  assert.equal(
+    game.flags.red_candle_lit,
+    false,
+    'presentation never relights the actual game state',
+  );
+  const awake = createWorld({ state: { ...game, shotKey: 'wake_candle' } });
+  assert.equal(awake.lighting.lamps.length, 0);
 });

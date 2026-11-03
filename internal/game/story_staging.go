@@ -11,22 +11,21 @@ var miniOpeningShots = map[string]string{
 }
 
 var miniShotDescriptions = map[string]string{
-	"arrival_unload":       "车门气阀声慢下来。林岚先迈下台阶，揉了揉久坐发麻的小腿，四只小旅行包已经放在檐下靠墙处。",
-	"arrival_gate_beauty":  "许栀下车后抬头看山门。新匾、檐角和树影落在她眼里，檐下的行李只到小腿高。",
+	"arrival_unload":       "车门气阀声慢下来。大家已经站在寺庙门口，林岚边看相机边聊起久坐发麻的小腿，四只小旅行包放在檐下靠墙处。",
+	"arrival_gate_beauty":  "许栀在行李旁驻足，抬头看山门与檐角；同伴们仍沿各自路线缓步参观。",
 	"arrival_weather":      "天气晴朗，山风从车门灌进来。林岚举起相机，对准月色将要升起的山门，却先没有按快门。",
-	"arrival_zhouyan":      "周砚走到新匾侧面，手指沿旧字和梁架比了比，像是在比对榫口。",
+	"arrival_zhouyan":      "周砚缓步换到另一个观察角度，驻足仰看旧字与梁架，像是在比对榫口。",
 	"arrival_luggage":      "四只小旅行包靠在山门檐下的墙边，蓝色发圈夹住入住须知，车门内已经空了。",
-	"arrival_luchen":       "车门气阀声彻底停下，陆沉从山门内侧迎上来，双手保持静止，用对白请众人先参观，再说明登记室位于东院长廊尽头。",
+	"arrival_luchen":       "车门气阀声彻底停下，陆沉在山门内侧一边驻足迎客、一边缓步让位，双手保持静止，用对白请众人先参观，再说明登记室位于东院长廊尽头。",
 	"arrival_inner":        "最后一缕树影在车门边晃动，鸟鸣和远处低钟隔着山风叠在一起；檐下行李安静靠墙。",
 	"arrival_cat":          "晒太阳的花猫收起前爪，铜铃没有响，旧匾‘明照寺’从新匾侧面露出来。",
-	"arrival_plaque":       "镜头贴近山门新匾，雨水磨花的旧字藏在金漆边缘，树影正好从中间切过。",
+	"arrival_plaque":       "众人仍在山门前聊天参观；顺着新匾边缘看去，雨水磨花的旧字藏在金漆旁，树影正好从中间切过。",
 	"register_desk":        "登记室的桌前只放一本小型登记簿。陆沉双手保持静止，以对白核对四个人的姓名与房间；登记结果由簿上姓名和桌面道具状态呈现。",
 	"register_key_tags":    "登记结果已经确认，四块旧铜牌与铜钥匙已备好，‘听、灯、纸、门’的字被指腹磨得发亮。陆沉双手保持静止，提醒众人领取并保管钥匙。",
 	"register_drag_mark":   "登记仍在进行，四位游客围在桌旁面向陆沉；周砚留在桌边，伸手指向脚边地砖上的旧拖痕，痕迹从偏殿方向延来。",
 	"register_camera_bell": "林岚把相机盖放到听房门边的铜铃旁，铃舌余音在回廊里慢慢散开。",
 	"register_ribbon":      "许栀的蓝色发圈夹住入住须知的一角，她抬头看向回廊尽头那扇合上的门。",
 	"register_rooms":       "东院四间偏房分列回廊两侧。林岚停在听房，周砚弯腰看灯房门轴，许栀用蓝色发圈夹住纸房的入住须知。",
-	"register_luggage":     "四只小旅行包靠在各自门边。念珠已放上门房矮桌，红烛还要在晚膳后的回廊领取。",
 	"refectory_porridge":   "周砚的木勺停在半空，米粒间露出一缕像肉丝的纤维。他忽然出声，桌边的人一起看向粥碗。",
 	"refectory_lamp":       "陆沉站在斋堂门边，双手保持静止，解释肉食只为照顾外来客人的口味，我们僧人有戒律，是不能吃荤的。众人的勺子暂时停在碗边。",
 	"refectory_table":      "粥碗旁的馒头还冒着热气，咸菜、笋干和香菇青菜摆在桌中央。林岚放下相机盖，听着桌边的讨论。",
@@ -44,7 +43,7 @@ var miniShotDescriptions = map[string]string{
 	"wake_ghost_wait":      "红烛熄灭后，过了一会儿，门外有东西重重撞门。隔了一会儿，第二次撞击震动门闩，门外的脚步仍在靠近。",
 	"room_history":         "摊开的游客寺史册停在顾怀山的记载。‘验身’一栏只剩一排被撕断的纸齿。",
 	"room_scripture":       "《大念处经》摊在烛前。四句经文沿着纸页末行写下，窗纸上的树影从字间慢慢移过。",
-	"listen_skin":          "半掩的门里，慧普背对走廊。撑起的后背只有一层缝合的人皮，他的手正在床沿剥下一整片肩背皮。",
+	"listen_skin":          "你留在门外，从窄窄的门缝向内看。慧普双脚站在床侧地面，俯身对床上躺着的另一个人动手；暗处只辨得出床沿、两个人的轮廓与手臂动作，撕裂声和低念从房里传来。",
 	"listen_vase":          "脚后跟碰到花瓶，瓷片碎在脚边。慧普的手停住，所有廊灯同时压暗，他正转向这扇门。",
 	"three_knocks":         "三下敲门先在门外响完，走廊留出一段静默，熟悉的同行人声音随后才靠近门缝。",
 	"escape_return":        "你回到门房后坐在床沿。过了一会儿，门外重新安静下来，红烛在桌边缓慢燃烧。",
@@ -120,7 +119,7 @@ func syncMiniStaging(state *State) {
 				if miniCompanionID(state) == id {
 					id = "xuzhi"
 				}
-				state.Actors = append(state.Actors, actor("victim", miniPersonName(id), "房内游客", "半掩房门后的床上", id, "肩背贴着床沿，一动不动"))
+				state.Actors = append(state.Actors, actor("victim", miniPersonName(id), "房内游客", "半掩房门后的床上", id, "平躺在床上，一动不动"))
 			}
 		}
 	}
@@ -194,7 +193,10 @@ func syncMiniStaging(state *State) {
 		case "huipu":
 			actor.Visible = state.SceneKey == "mini_refectory" || (state.SceneKey == "mini_listen" && state.Flags["skin_seen"])
 			if state.SceneKey == "mini_listen" {
-				actor.Status = "背皮空洞，停手侧听"
+				actor.Status = "站在床边，俯身对床上人动手"
+				if state.Flags["vase_broken"] {
+					actor.Status = "仍站在床边，停手向门缝回头"
+				}
 			}
 		case "skin_double":
 			actor.Name, actor.Portrait, actor.Role = miniDoubleName(state), miniDoubleID(state), "同行者"

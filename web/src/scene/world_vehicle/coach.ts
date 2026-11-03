@@ -4,6 +4,7 @@ import { cylinder, lathe } from '@/scene/geometry/primitives';
 import { node } from '@/scene/world/types';
 import { coachBody, finish } from '@/scene/world_vehicle/body';
 import { coachDetails } from '@/scene/world_vehicle/details';
+import { openCoachEntrance } from '@/scene/world_vehicle/door';
 
 export const WHEEL_RADIUS = 0.55;
 
@@ -71,15 +72,16 @@ function wheel(side: number) {
   return b.mesh('coach_wheel');
 }
 
-export function coach() {
+export function coach({ doorOpen = false }: { doorOpen?: boolean } = {}) {
   const b = new Builder();
-  coachBody(b);
-  coachDetails(b);
+  coachBody(b, doorOpen);
+  coachDetails(b, doorOpen);
   const root = node('bus');
   const body = b.mesh('coach_body');
   body.shadow = false;
   body.receiveShadow = false;
   root.children.push(body, coachShadow());
+  if (doorOpen) root.children.push(openCoachEntrance());
   const axles = [-2.85, 2.75].flatMap((z) =>
     [-1, 1].map((side) => {
       const steering = node(z > 0 ? 'front_axle' : 'rear_axle');

@@ -5,6 +5,10 @@ import "strings"
 const miniGuestMealExplanation = "寺里本该吃素。这些肉食是特意给外来客备的，怕大家吃不惯寺里的斋饭，照顾一下各人的口味。我们僧人有戒律，是不能吃荤的。"
 
 func miniChooseMeal(state *State, person, choice string) {
+	if progress, ok := state.MealPersuasion[person]; ok {
+		progress.Reply = ""
+		state.MealPersuasion[person] = progress
+	}
 	for _, suffix := range []string{"ate", "refused", "deferred"} {
 		delete(state.Flags, "meal_"+person+"_"+suffix)
 	}
@@ -18,18 +22,18 @@ func allCompanionsAte(state *State) bool {
 func miniMealReply(state *State, person, choice string) string {
 	name := miniPersonName(person)
 	replies := map[string]map[string]string{
-		"linlan":  {"ate": "你也尝了？那我试一小口。要是太腻，就换馒头。", "refused": "听你的，我也不吃肉粥了。", "deferred": "听你的，我也不吃肉粥了。"},
-		"zhouyan": {"ate": "看着挺香，我喝一点，尝尝也无妨。", "refused": "你说得有道理，我也不吃肉粥了。", "deferred": "你说得有道理，我也不吃肉粥了。"},
-		"xuzhi":   {"ate": "好，那我也喝一点。", "refused": "那我也不吃肉粥了，换馒头。", "deferred": "那我也不吃肉粥了，换馒头和素材吧感觉也不错。"},
+		"linlan":  {"ate": "你也尝了？那我试一小口。要是太腻，就换馒头。", "refused": "听你的，我也不吃肉粥了。", "deferred": "我还没决定，先把这碗放着。"},
+		"zhouyan": {"ate": "看着挺香，我喝一点，尝尝也无妨。", "refused": "你说得有道理，我也不吃肉粥了。", "deferred": "我还没被说服，请再认真讲讲不喝的理由。"},
+		"xuzhi":   {"ate": "好，那我也喝一点。", "refused": "那我也不吃肉粥了，换馒头。", "deferred": "我还没决定放弃肉粥，请讲出至少三个不同的具体理由。"},
 	}
 	return miniDialogue(state, name, replies[person][choice])
 }
 
 func miniMealReplyText(person, choice string) string {
 	replies := map[string]map[string]string{
-		"linlan":  {"ate": "你也尝了？那我试一小口。要是太腻，就换馒头。", "refused": "听你的，我也不吃肉粥了。", "deferred": "听你的，我也不吃肉粥了。"},
-		"zhouyan": {"ate": "看着挺香，我喝一点，尝尝也无妨", "refused": "你说得有道理，我也不吃肉粥了。", "deferred": "你说得有道理，我也不吃肉粥了。"},
-		"xuzhi":   {"ate": "好，那我也喝一点。", "refused": "那我也不吃肉粥了，换馒头。", "deferred": "那我也不吃肉粥了，换馒头和素材吧感觉也不错。"},
+		"linlan":  {"ate": "你也尝了？那我试一小口。要是太腻，就换馒头。", "refused": "听你的，我也不吃肉粥了。", "deferred": "我还没决定，先把这碗放着。"},
+		"zhouyan": {"ate": "看着挺香，我喝一点，尝尝也无妨", "refused": "你说得有道理，我也不吃肉粥了。", "deferred": "我还没被说服，请再认真讲讲不喝的理由。"},
+		"xuzhi":   {"ate": "好，那我也喝一点。", "refused": "那我也不吃肉粥了，换馒头。", "deferred": "我还没决定放弃肉粥，请讲出至少三个不同的具体理由。"},
 	}
 	return replies[person][choice]
 }

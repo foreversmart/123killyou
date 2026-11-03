@@ -97,6 +97,7 @@ async function loadSource(): Promise<Source> {
         model.skin,
         await requestArrayBuffer(model.skin.influences),
         geometry.vertices.length / 16,
+        geometry.vertices,
       );
     }),
   );

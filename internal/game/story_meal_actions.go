@@ -16,7 +16,7 @@ func miniMealChoice(text string) (string, bool) {
 	}
 	for {
 		previous := text
-		for _, prefix := range []string{"请", "让", "劝", "叫", "我", "决定"} {
+		for _, prefix := range []string{"请", "让", "劝", "叫", "我", "决定", "还是", "改"} {
 			text = strings.TrimPrefix(text, prefix)
 		}
 		if text == previous {

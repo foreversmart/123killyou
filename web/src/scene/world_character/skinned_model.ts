@@ -39,9 +39,10 @@ export function skinnedCharacterModel(
     hands.push(elbow.socket);
     const leg = node('leg');
     leg.position = [side * 0.095, body.position[1], 0];
-    leg.rotation[0] = pose === 'standing' ? 0 : pose === 'seated' ? -1.25 : -0.88;
+    const seatedAngle = id === 'zhouyan' ? 1.52 : 1.25;
+    leg.rotation[0] = pose === 'standing' ? 0 : pose === 'seated' ? -seatedAngle : -0.88;
     const knee = bendingJoint(leg, 'knee', [0, -0.38, 0.02], [0, -0.38, 0.05]);
-    bend(leg, knee.joint, pose === 'standing' ? 0 : pose === 'seated' ? 1.25 : 2.4);
+    bend(leg, knee.joint, pose === 'standing' ? 0 : pose === 'seated' ? seatedAngle : 2.4);
     root.children.push(leg);
     legs.push(leg);
     knees.push(knee.joint);

@@ -1,6 +1,7 @@
 import { mat4 } from 'wgpu-matrix';
 import type { Geometry, SkinBone, V3 } from '@/scene/world/types';
 import { fixHandSkin } from '@/scene/world_character/fixed_hand_skin';
+import { fitZhouyanSkin } from '@/scene/world_character/zhouyan_skin';
 
 type SkinNode = {
   name?: string;
@@ -26,6 +27,7 @@ export function decodeCharacterSkin(
   metadata: SkinMetadata,
   data: ArrayBuffer,
   vertexCount: number,
+  vertices?: Float32Array,
 ): NonNullable<Geometry['skin']> {
   if (data.byteLength !== vertexCount * 8 * 4) throw new Error('角色蒙皮顶点数量不匹配。');
   const { nodes, joints } = metadata;
@@ -101,5 +103,6 @@ export function decodeCharacterSkin(
     },
   };
   if (metadata.mesh === 'luchen_model_skin') fixHandSkin(skin);
+  if (metadata.mesh === 'zhouyan_model_skin' && vertices) fitZhouyanSkin(skin, vertices);
   return skin;
 }

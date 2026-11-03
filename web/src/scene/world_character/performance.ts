@@ -1,4 +1,5 @@
 import type { GameState, SceneActor } from '@/shared/types/game';
+import { isSleepInterlude } from '@/scene/world/sleep';
 
 export function performanceFor(
   actor: SceneActor,
@@ -7,8 +8,7 @@ export function performanceFor(
   alighting = false,
 ) {
   const shot = state.shotKey || '';
-  if (actor.id === 'player' && ['room_sleep_wait', 'escape_sleep_wait'].includes(shot))
-    return 'sleep_enter';
+  if (actor.id === 'player' && isSleepInterlude(state)) return 'sleep_enter';
   if (actor.id === 'victim') return 'still';
   if (actor.id === 'shangong' && state.flags.cup_failed) return 'stone';
   if (walking) {
@@ -22,23 +22,12 @@ export function performanceFor(
     }
     return 'walk';
   }
-  if (
-    state.sceneKey === 'mini_arrival' &&
-    (shot === 'arrival_gate' || shot.startsWith('arrival_'))
-  ) {
-    // Keep the whole gate tableau alive while individual lines play. The
-    // guests continue their own small tasks together: the camera is checked,
-    // the plaque and eaves are studied, bags are moved under the eave, and Lu
-    // Chen walks in to welcome them. A focused speaker therefore never turns
-    // the other actors into front-facing statues.
-    if (actor.id === 'linlan') return shot === 'arrival_unload' ? 'stretch' : 'camera';
-    if (actor.id === 'zhouyan') return shot === 'arrival_zhouyan' ? 'look_up' : 'admire';
-    if (actor.id === 'xuzhi') {
-      if (['arrival_gate_beauty', 'arrival_weather', 'arrival_plaque'].includes(shot))
-        return 'admire';
-      if (['arrival_inner', 'arrival_cat'].includes(shot)) return 'glance';
-      return 'luggage';
-    }
+  if (state.sceneKey === 'mini_arrival') {
+    // Dialogue and investigations are observations within one uninterrupted
+    // visit. Keep each person's task and its clock when the speaker changes.
+    if (actor.id === 'linlan') return 'camera';
+    if (actor.id === 'zhouyan') return 'admire';
+    if (actor.id === 'xuzhi') return 'glance';
     if (actor.id === 'luchen') return 'welcome';
   }
   if (actor.id === 'skin_double') {
@@ -49,7 +38,7 @@ export function performanceFor(
     return 'uneasy';
   }
   if (actor.id === 'huipu' && state.sceneKey === 'mini_listen')
-    return state.flags.vase_broken ? 'startled' : 'lean';
+    return state.flags.vase_broken ? 'bedside_startled' : 'bedside_work';
   if (actor.id === 'luchen') {
     if (shot === 'register_desk') return 'write';
     if (
@@ -115,7 +104,6 @@ export function performanceFor(
     register_camera_bell: { linlan: 'camera', zhouyan: 'glance', xuzhi: 'glance' },
     register_ribbon: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'ribbon' },
     register_rooms: { linlan: 'camera', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'offer' },
-    register_luggage: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'luggage', luchen: 'offer' },
     refectory_table: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'glance' },
     refectory_porridge: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'offer' },
     refectory_lamp: { linlan: 'glance', zhouyan: 'inspect', xuzhi: 'glance', luchen: 'offer' },

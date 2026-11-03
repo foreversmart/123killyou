@@ -12,43 +12,6 @@ import (
 	"nightwatch/internal/game"
 )
 
-func TestJudgeMealSendsParticipantsAndParsesChoices(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/v1/systemone" || r.Method != http.MethodPost {
-			t.Fatalf("unexpected request: %s %s", r.Method, r.URL.Path)
-		}
-		if got := r.Header.Get("Authorization"); got != "Bearer test-key" {
-			t.Fatalf("authorization = %q", got)
-		}
-		var body map[string]any
-		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			t.Fatal(err)
-		}
-		if body["model"] != "jev-latest" || !strings.Contains(body["state"].(string), "玩家发言") {
-			t.Fatalf("unexpected request body: %+v", body)
-		}
-		questions := body["questions"].(map[string]any)
-		if len(questions) != 2 || questions["meal_linlan"] == nil {
-			t.Fatalf("participants were not sent: %+v", questions)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"model":"jev-latest","answers":{"meal_linlan":{"type":"choice","choice":"refused","confidence":0.91},"meal_zhouyan":{"type":"choice","choice":"deferred","confidence":0.88}}}`))
-	}))
-	defer server.Close()
-	client := New(Config{APIKey: "test-key", APIBase: server.URL, RequestLimit: time.Second})
-	result, err := client.JudgeMeal(context.Background(), game.MealJudgeRequest{
-		PlayerText: "林岚，别吃这碗肉粥。",
-		Scene:      "斋堂",
-		Participants: []game.MealParticipant{
-			{ID: "linlan", Name: "林岚", Traits: []string{"谨慎"}},
-			{ID: "zhouyan", Name: "周砚", Traits: []string{"求证"}},
-		},
-	})
-	if err != nil || result.Decisions["linlan"].Choice != "refused" || result.Decisions["zhouyan"].Choice != "deferred" {
-		t.Fatalf("JudgeMeal() = %+v, %v", result, err)
-	}
-}
-
 func TestJudgeOracleParsesSincerityAndScore(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

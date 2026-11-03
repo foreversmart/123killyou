@@ -19,6 +19,7 @@ export function sceneChoices(state: GameState): StoryChoice[] {
     return [];
   switch (state.sceneKey) {
     case 'mini_register':
+      if (state.flags.register_intro_done) return [c('随陆沉去吃晚膳', '去斋堂吃晚膳')];
       return [c('先听听大家怎么安排', '继续听'), c('把行李放好，去吃晚膳', '去斋堂吃晚膳')];
     case 'mini_refectory':
       return [

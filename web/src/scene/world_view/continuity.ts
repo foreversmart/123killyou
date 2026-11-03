@@ -1,18 +1,15 @@
 import type { World } from '@/scene/world/types';
+import { continueCharacter } from '@/scene/world_character/continuity';
 
-/** Carry visible placement and the distance-based gait across gate shots. */
+/** Carry every visible character through an update within the same place. */
 export function carryCharacterContinuity(previous: World, next: World, time: number) {
-  const previousByName = new Map(
-    previous.root.children.filter((child) => child.animate).map((child) => [child.name, child]),
+  const previousByIdentity = new Map(
+    previous.root.children
+      .filter((child) => child.characterKey)
+      .map((child) => [child.characterKey, child]),
   );
   for (const child of next.root.children) {
-    const outgoing = previousByName.get(child.name);
-    if (!outgoing || !child.animate) continue;
-    child.animationContinuity = {
-      position: [...outgoing.position],
-      rotationY: outgoing.rotation[1],
-      time,
-      gait: outgoing.gait,
-    };
+    if (child === previousByIdentity.get(child.characterKey)) continue;
+    continueCharacter(previousByIdentity.get(child.characterKey), child, time);
   }
 }

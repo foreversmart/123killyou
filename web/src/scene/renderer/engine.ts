@@ -12,6 +12,7 @@ import {
 } from '@/scene/world_character/blender_action_library';
 import { batchVegetation } from '@/scene/vegetation/batches';
 import { createSkinPose } from '@/scene/world_character/skin_pose';
+import { applyCharacterContinuity } from '@/scene/world_character/continuity';
 
 type Pipelines = Awaited<ReturnType<typeof createPipelines>>;
 
@@ -29,6 +30,7 @@ export class TempleRenderer {
   private depth?: GPUTexture;
   private color?: GPUTexture;
   private disposed = false;
+  private vegetation = new WeakSet<WorldNode>();
   private width = 0;
   private height = 0;
   private constructor(
@@ -118,14 +120,18 @@ export class TempleRenderer {
   }
 
   setWorld(world: World) {
-    this.clearWorld();
-    batchVegetation(world.root, this.resources!.meshes);
+    const environment = world.environment?.root || world.root;
+    if (!this.vegetation.has(environment)) {
+      batchVegetation(environment, this.resources!.meshes);
+      this.vegetation.add(environment);
+    }
     this.enableBlenderAnimations(world.root, this.resources?.animations);
     this.draws = createDraws(
       this.device,
       world.root,
       this.resources!.meshes,
       this.pipelines.objectLayout,
+      this.draws,
     );
   }
 
@@ -177,6 +183,7 @@ export class TempleRenderer {
       n.animate?.(time, delta);
       if (n.blenderEnabled && n.blenderAction && n.blenderTargets && this.resources?.animations)
         applyBlenderPose(n.blenderAction, time, this.resources.animations, n.blenderTargets);
+      applyCharacterContinuity(n, time);
       n.updateSkin?.();
       let m: Float32Array;
       if (n.matrix) m = mat4.multiply(parent, n.matrix);

@@ -16,6 +16,7 @@ async function fixture(options = {}) {
     playbackReady = [];
   let handle;
   let connected = options.connected ?? true;
+  let sceneReady = options.sceneReady !== false;
   const state = {
     id: options.id ?? 'session',
     room: 'gate',
@@ -71,10 +72,10 @@ async function fixture(options = {}) {
     voice,
     playbackReady,
     setConnected: (value) => (connected = value),
+    setSceneReady: (value) => (sceneReady = value),
     render: () => {
       const game = runtime.render(hook);
-      if (options.sceneReady === false) return game;
-      game.setSceneReady(true);
+      game.setSceneReady(sceneReady);
       if (options.journeyReady !== false) game.setJourneyReady(true);
       return runtime.render(hook);
     },
@@ -82,7 +83,7 @@ async function fixture(options = {}) {
 }
 
 for (const method of ['click', 'voice']) {
-  test(`${method}开始后在大巴停门画面发送第一话，随后进入山门正片`, async () => {
+  test(`${method}开始后在持续山门画面发送第一话，九秒后继续同场参观`, async () => {
     const f = await fixture();
     let game = f.render();
     game.finishOpeningVideo();
@@ -111,7 +112,7 @@ for (const method of ['click', 'voice']) {
   });
 }
 
-test('3D 开场画面尚未就绪时不计时或发送对白，画面就绪后才续行', async () => {
+test('山路画面尚未就绪时不计时，到门口后由已就绪的持续场景接着播报', async () => {
   const f = await fixture({ journeyReady: false });
   let game = f.render();
   game.finishOpeningVideo();
@@ -127,9 +128,37 @@ test('3D 开场画面尚未就绪时不计时或发送对白，画面就绪后�
   f.runtime.flushTimers();
   game = f.render();
   assert.equal(game.openingPhase, 'alighting');
-  assert.deepEqual(f.sent, []);
-  game.setJourneyReady(true);
+  assert.deepEqual(f.sent, ['听第一话']);
+  assert.deepEqual(f.runtime.pendingDelays, [9000]);
+  f.runtime.dispose();
+});
+
+test('山门未就绪时迟到的山路回调不能启动对白或门口计时', async () => {
+  const f = await fixture({ sceneReady: false });
+  let game = f.render();
+  game.finishOpeningVideo();
+  game = f.render();
+  await game.begin();
+  game = f.render();
+  const roadReady = game.setJourneyReady;
+  assert.deepEqual(f.runtime.pendingDelays, [36000]);
+  f.runtime.flushTimers();
+  game = f.render();
+  assert.equal(game.openingPhase, 'alighting');
+  roadReady(true);
   f.render();
+  assert.deepEqual(f.sent, []);
+  assert.deepEqual(f.runtime.pendingDelays, []);
+
+  f.setSceneReady(true);
+  f.render();
+  assert.deepEqual(f.sent, ['听第一话']);
+  assert.deepEqual(f.runtime.pendingDelays, [9000]);
+  roadReady(false);
+  f.render();
+  assert.deepEqual(f.runtime.pendingDelays, [9000]);
+  f.runtime.flushTimers();
+  assert.equal(f.render().openingPhase, 'done');
   assert.deepEqual(f.sent, ['听第一话']);
   f.runtime.dispose();
 });

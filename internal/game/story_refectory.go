@@ -10,6 +10,10 @@ func (e *Engine) storyRefectory(state *State, text string) (string, string, bool
 // shot gives the table time to show bowls, vegetables, and the characters'
 // actions before the keeper leads everyone back to the east courtyard.
 func (e *Engine) startMealEating(state *State, speaker, text string) string {
+	if state.Flags["meal_persuasion_waiting"] {
+		state.DialogueNext = ""
+		return miniDialogue(state, speaker, strings.TrimSpace(text))
+	}
 	miniShot(state, "refectory_eating")
 	miniSetFlag(state, "refectory_eating_shown")
 	miniSetFlag(state, "refectory_intro_done")
@@ -29,6 +33,9 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 	if state.Flags["meal_group_pending"] && (text == mealGroupAdvance || text == "自动离开斋堂") {
 		return "story", e.continueMealGroupDialogue(state), true
 	}
+	if state.Flags["meal_persuasion_waiting"] && miniHasAny(text, "自动结束晚膳", "自动离开斋堂") {
+		return "story", mealPersuasionWaitingReply(state), true
+	}
 	// Older clients used the discussion handoff after a group choice. Treat
 	// that stale handoff as a request to finish the queued turns and show the
 	// existing closing line in the same turn.
@@ -46,6 +53,9 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		for state.Flags["meal_group_pending"] {
 			e.continueMealGroupDialogue(state)
 		}
+	}
+	if intent, speak, ok := e.persuadeMealCompanions(state, text, judged); ok {
+		return intent, speak, true
 	}
 	// Voice clients advance the eating beat with 自动离开斋堂. Keep direct
 	// command sequences from older clients usable when their next utterance is
@@ -167,72 +177,17 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		return "inspect", miniDialogue(state, "周砚", "勺底这一缕像肉丝，已经不是米油了。可碗签还没看清，肉从哪里来，我还说不上。"), true
 	}
 	if miniExactMealGroup(text, "大家都吃", "全都吃", "让所有人吃", "都喝粥", "大家都喝粥") {
+		delete(state.Flags, "meal_persuasion_waiting")
 		for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
 			miniChooseMeal(state, person, "ate")
 		}
 		return "story", e.startMealEatingGroup(state), true
 	}
-	if judged != nil && len(judged.Decisions) > 0 {
-		var replies []string
-		firstSpeaker := ""
-		group := miniVegetarianGroupRequest(text)
-		// A group persuasion is a separate JEV decision for every visible
-		// companion. If one answer is missing, keep the player in the discussion
-		// instead of silently turning that NPC into a deferred choice.
-		if group {
-			for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
-				if result, ok := judged.Decisions[person]; !ok || normalizeMealDecision(result.Choice) == "" {
-					return "clarify", miniSystem(state, "我还没听清每个人的决定。请再说一次，大家要不要尊重寺庙改吃馒头和素菜。"), true
-				}
-			}
-		}
-		for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
-			result, ok := judged.Decisions[person]
-			if !ok || result.Choice == "" {
-				continue
-			}
-			choice := normalizeMealDecision(result.Choice)
-			if choice == "" {
-				continue
-			}
-			miniChooseMeal(state, person, choice)
-			if choice == "refused" {
-				miniSetFlag(state, "persuasion_success")
-			}
-			reply := miniMealJudgeReply(person, choice, result.Reply)
-			if firstSpeaker == "" {
-				firstSpeaker = miniPersonName(person)
-			}
-			replies = append(replies, miniPersonName(person)+"：“"+reply+"”")
-		}
-		if len(replies) > 0 {
-			speak := strings.Join(replies, " ")
-			if group {
-				miniChooseGroupPlayerMeal(state, text)
-				return "story", e.startMealEatingGroup(state), true
-			}
-			if state.Flags["meal_player_refused"] {
-				return "story", e.startMealEating(state, firstSpeaker, speak), true
-			}
-			state.DialogueNext = nextMealDiscussion(state)
-			return "story", miniDialogue(state, firstSpeaker, speak), true
-		}
-	}
 	if judged != nil {
 		return "clarify", miniSystem(state, "这次劝说的意思还不够明确。请直接说明要不要吃肉粥，或告诉对方改吃馒头。"), true
 	}
-	if miniVegetarianGroupRequest(text) {
-		miniChooseGroupPlayerMeal(state, text)
-		for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
-			miniChooseMeal(state, person, "refused")
-		}
-		miniSetFlag(state, "persuasion_success")
-		// The fallback keeps each companion as an individual dialogue turn.
-		// The same sequence is used when JEV returns three separate decisions.
-		return "story", e.startMealEatingGroup(state), true
-	}
 	choice, explicitMeal := miniMealChoice(text)
-	if explicitMeal && miniHasAny(text, "林岚", "周砚", "许栀") {
+	if explicitMeal && !miniPersonalMealOnly(text) && miniHasAny(text, "林岚", "周砚", "许栀") {
 		person := ""
 		switch {
 		case strings.Contains(text, "林岚"):
@@ -242,17 +197,14 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		case strings.Contains(text, "许栀"):
 			person = "xuzhi"
 		}
+		if choice == "refused" {
+			return "clarify", miniSystem(state, "请直接告诉同伴为什么要放弃肉粥，改吃馒头和素菜。"), true
+		}
 		if person == "zhouyan" && choice == "ate" && !state.Flags["bowl_tags_seen"] {
 			return "dialogue", miniDialogue(state, "周砚", "先等一下。我想看清碗签，来历不清的东西，不能只凭一句‘照顾远客’。"), true
 		}
 		miniChooseMeal(state, person, choice)
-		if choice == "refused" && miniHasAny(text, "劝", "别吃", "不要吃") {
-			miniSetFlag(state, "persuasion_success")
-		}
 		speak := miniMealReply(state, person, choice)
-		if person == "player" && choice == "refused" {
-			return "story", e.startMealEating(state, state.Dialogue.Speaker, speak), true
-		}
 		state.DialogueNext = nextMealDiscussion(state)
 		return "story", speak, true
 	}
@@ -269,6 +221,12 @@ func (e *Engine) storyRefectoryWithDecision(state *State, text string, judged *M
 		return "story", miniDialogue(state, "陆沉", "慢一点，粥还热着，可以先喝喝看。"), true
 	}
 	if miniHasAny(text, "吃完", "晚膳结束", "离开斋堂", "回回廊", "回房") {
+		if state.Flags["meal_persuasion_waiting"] {
+			delete(state.Flags, "meal_persuasion_waiting")
+			if mealChoiceName(*state, "player") == "unknown" {
+				miniChooseMeal(state, "player", "deferred")
+			}
+		}
 		if !state.Flags["meal_player_ate"] && !state.Flags["meal_player_refused"] && !state.Flags["meal_player_deferred"] {
 			return "clarify", miniDialogue(state, "陆沉", "你的碗还没动。吃、换馒头，还是先放着？想好了，我们再回东院。"), true
 		}

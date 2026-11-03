@@ -143,12 +143,44 @@ test('pause freezes the feet; a real stop settles them and resuming travel start
   const phase = root.gait.phase;
   frame(root, 0.4);
   assert.deepEqual(legPose(root), paused, 'a frozen scene clock keeps the same foot pose');
-  frame(root, 0.5);
-  assert.equal(legMotion(root), 0, 'time advancing without displacement settles both feet');
+  const airborne = legMotion(root);
+  frame(root, 0.42);
+  assert.ok(
+    legMotion(root) > airborne * 0.9,
+    'the raised foot does not snap down on the stop frame',
+  );
+  assert.equal(root.gait.moving, false, 'the landing is not another traveling step');
+  for (const time of [0.46, 0.5, 0.56, 0.58]) {
+    const before = legMotion(root);
+    frame(root, time);
+    assert.ok(legMotion(root) <= before, 'stopping only lowers the airborne foot');
+    assert.equal(root.gait.phase, phase, 'standing cannot start another stride');
+  }
+  assert.equal(legMotion(root), 0, 'both feet finish their short landing');
   assert.equal(root.gait.phase, phase, 'standing cannot advance the gait');
   root.position[0] += 0.03;
   frame(root, 0.6);
   assert.ok(legMotion(root) > 0, 'reversing or stepping sideways resumes the gait');
+});
+
+test('ordinary walking swings the opposite arm with the advancing leg', () => {
+  const rig = characterModel('xuzhi');
+  animateCharacter(rig, actor('xuzhi'), state('mini_refectory', 'refectory_table'), {
+    traveling: true,
+  });
+  frame(rig.root, 0);
+  for (let i = 1; i <= 80; i++) {
+    rig.root.position[2] = i / 100;
+    frame(rig.root, i / 60);
+    for (const side of [0, 1]) {
+      const thigh = rig.legs[side].rotation[0];
+      const shoulder = rig.arms[side].rotation[0] + 0.08;
+      assert.ok(
+        thigh * shoulder <= 0,
+        'same-side arm counters the leg instead of marching with it',
+      );
+    }
+  }
 });
 
 test('actual routes lift both feet with Blender enabled and settle at route endpoints', () => {
@@ -171,7 +203,8 @@ test('actual routes lift both feet with Blender enabled and settle at route endp
       frame(root, 0);
       const start = [...root.position];
       const peaks = [0, 0];
-      for (let i = 1; i <= 300; i++) {
+      const frames = sceneKey === 'mini_arrival' && mode === 'story' ? 510 : 300;
+      for (let i = 1; i <= frames; i++) {
         frame(root, i / 30);
         if (i === 9) {
           const paused = placementPose(root);
@@ -212,27 +245,27 @@ test('continuity assigned after world creation blends from the visible position 
   const outgoing = createWorld({ state: state() }).root.children.find(
     (node) => node.name === 'linlan',
   );
-  for (let i = 0; i <= 180; i++) frame(outgoing, i / 60);
+  for (let i = 0; i <= 600; i++) frame(outgoing, i / 60);
   const world = createWorld({ state: state() });
   const root = world.root.children.find((node) => node.name === 'linlan');
   const from = [...outgoing.position];
   root.animationContinuity = {
     position: from,
     rotationY: outgoing.rotation[1],
-    time: 3,
+    time: 10,
     gait: outgoing.gait,
   };
-  frame(root, 3);
+  frame(root, 10);
   assert.deepEqual(root.position, from, 'the first frame preserves the outgoing shot position');
   assert.equal(root.gait.phase, outgoing.gait.phase, 'shot rebuild keeps the ongoing step');
   assert.deepEqual(legPose(root), legPose(outgoing), 'both feet keep their outgoing pose');
   const paused = placementPose(root);
-  frame(root, 3);
+  frame(root, 10);
   assert.deepEqual(placementPose(root), paused, 'pausing also freezes a continuity handoff');
-  frame(root, 3.1);
+  frame(root, 10.1);
   assert.ok(root.gait.moving);
   assert.ok(root.gait.phase > outgoing.gait.phase, 'continued movement advances the carried step');
   assert.ok(legMotion(root) > 0, 'the visible blended movement gets a foot lift');
-  frame(root, 3.5);
+  frame(root, 10.5);
   assert.equal(root.animationContinuity, undefined);
 });

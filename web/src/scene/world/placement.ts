@@ -7,7 +7,7 @@ export const cameras: Record<Place, CameraShot> = {
   register: { eye: [0.3, 1.65, 4.8], target: [0, 1.15, -0.9], fov: 51 },
   refectory: { eye: [0.15, 1.62, 4.1], target: [0, 1.05, -0.45], fov: 57 },
   bedroom: { eye: [0.3, 1.62, 4.2], target: [-0.35, 1.1, -1.25], fov: 57 },
-  listen: { eye: [2.8, 1.62, 4.1], target: [-1.2, 1.1, -1.4], fov: 54 },
+  listen: { eye: [-2.55, 1.52, 2.45], target: [-2.65, 0.95, -1.65], fov: 50 },
   oracle: { eye: [0.3, 1.62, 4.7], target: [0.2, 1.35, -0.7], fov: 54 },
   hall: { eye: [-1.5, 1.68, 6.5], target: [0, 1.7, -2.4], fov: 58 },
   road: { eye: [10, 6.8, 12], target: [0, 1.0, -2], fov: 51 },
@@ -16,9 +16,9 @@ export const cameras: Record<Place, CameraShot> = {
 export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
   gate: {
     linlan: [-2.1, 0, 2.2],
-    zhouyan: [2.25, 0, 1.2],
-    xuzhi: [1.05, 0, 3.0],
-    luchen: [-0.2, 0.24, -0.6],
+    zhouyan: [2.25, 0, 2],
+    xuzhi: [1.05, 0, 3.4],
+    luchen: [-0.2, 0.32, -0.6],
   },
   register: {
     luchen: [0, 0, -0.85],
@@ -46,18 +46,17 @@ export const actorPositions: Partial<Record<Place, Record<string, V3>>> = {
     xuzhi: [2.1, 0, 0.9],
   },
   listen: {
-    huipu: [-2.35, 0, -1.6],
-    victim: [-3, 0.57, -1.6],
-    linlan: [1.7, 0, 2.7],
-    zhouyan: [1.7, 0, 2.7],
-    xuzhi: [1.7, 0, 2.7],
+    huipu: [-2.1, 0, -1.55],
+    victim: [-3, 0.69, -0.85],
+    linlan: [-3.35, 0, 3.2],
+    zhouyan: [-3.35, 0, 3.2],
+    xuzhi: [-3.35, 0, 3.2],
   },
   oracle: { shangong: [0.65, 0, -0.7] },
   bedroom: {
     // The player is normally represented only by the first-person camera.
-    // During the sleep interlude the camera settles beside the mattress and
-    // this placement gives the rig room to fold onto the bed.
-    player: [-3, 0.63, -0.25],
+    // The sleep interlude starts on the floor, in the clear aisle to the bed.
+    player: [-2.05, 0, 0.8],
     skin_double: [1.3, 0, -0.5],
   },
 };
@@ -148,11 +147,11 @@ export const propPositions: Partial<Record<Place, Record<string, V3>>> = {
     lamp: [-0.5, 0.69, -0.1],
   },
   listen: {
-    vase: [1.3, 0.02, 2.1],
-    cat: [1, 0.02, 0.8],
-    bird: [0.3, 2.05, -2.2],
-    torch: [2, 0.7, 2.6],
-    plaque: [2.4, 2.7, -3.6],
+    vase: [-3.55, 0.02, 2.4],
+    cat: [-1.25, 0.02, 2.4],
+    bird: [-1.25, 2.05, 2.4],
+    torch: [-3.55, 0.4, 2.85],
+    plaque: [-2.55, 2.7, 1.81],
   },
   oracle: {
     cups: [0.65, 0.73, 0.3],

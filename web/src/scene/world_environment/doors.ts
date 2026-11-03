@@ -143,6 +143,7 @@ export function doorway(b: Builder, p: V3, open: boolean) {
 
 export function movingDoor(p: V3, state: DoorState, latched: boolean) {
   const root = node('hinged_door');
+  root.animationKey = state;
   root.position = p;
   const leaves = [-1, 1].map((side) => {
     const leaf = node('door_leaf', doorLeaf(0.65, 2.36, -side));

@@ -1,6 +1,7 @@
 package game
 
 import (
+	"slices"
 	"strings"
 	"testing"
 )
@@ -28,16 +29,37 @@ func TestSafeStorySegmentsExposeTimedNpcHandoffs(t *testing.T) {
 	}
 
 	advanceScriptedLines(t, e, &s)
-	if s.DialogueNext != "自动放好行李" || s.ShotKey != "register_key_tags" {
+	if s.DialogueNext != "自动去斋堂" || s.ShotKey != "register_key_tags" {
 		t.Fatalf("登记对白后没有完成钥匙房牌交接: shot=%s next=%q", s.ShotKey, s.DialogueNext)
 	}
 	e.Apply(&s, s.DialogueNext)
-	if s.DialogueNext != "自动去斋堂" || s.ShotKey != "register_luggage" || !s.Flags["luggage_placed"] {
-		t.Fatalf("放行李没有接到斋堂: next=%q flags=%v", s.DialogueNext, s.Flags)
+	if s.SceneKey != "mini_refectory" || s.ShotKey != "refectory_table" || !s.Flags["luggage_placed"] {
+		t.Fatalf("登记后没有直接前往斋堂并安置行李: scene=%s shot=%s flags=%v", s.SceneKey, s.ShotKey, s.Flags)
 	}
-	e.Apply(&s, s.DialogueNext)
-	if s.SceneKey != "mini_refectory" {
-		t.Fatalf("自动去斋堂未切换场景: %s", s.SceneKey)
+	if s.Dialogue.Speaker != "陆沉" || !strings.Contains(s.Dialogue.Text, "斋堂") {
+		t.Fatalf("登记后没有由陆沉直接带去晚膳: %+v", s.Dialogue)
+	}
+}
+
+func TestRegistrationDepartureCommandsSkipDoorwayGathering(t *testing.T) {
+	for _, command := range []string{"放好行李", "整理行李", "去各自房间", "去斋堂吃晚膳"} {
+		t.Run(command, func(t *testing.T) {
+			e := newStoryTestEngine(t)
+			s := e.Initial("register-departure")
+			e.Apply(&s, "登记入住")
+			intent, _ := e.Apply(&s, command)
+			if intent != "move" || s.SceneKey != "mini_refectory" || s.ShotKey != "refectory_table" {
+				t.Fatalf("离开登记室仍停留在中间镜头: intent=%s scene=%s shot=%s", intent, s.SceneKey, s.ShotKey)
+			}
+			if !s.Flags["registration_items_given"] || !s.Flags["luggage_placed"] || s.Flags["red_candle_held"] {
+				t.Fatalf("直接转场改变了登记、行李或领烛状态: %v", s.Flags)
+			}
+			for _, item := range []string{"key", "permit", "beads"} {
+				if !slices.ContainsFunc(s.Inventory, func(held Item) bool { return held.ID == item }) {
+					t.Fatalf("直接转场缺少登记物品: %s", item)
+				}
+			}
+		})
 	}
 }
 

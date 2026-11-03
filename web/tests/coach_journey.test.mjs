@@ -21,7 +21,7 @@ const { WHEEL_RADIUS } = await import('../src/scene/world_vehicle/coach.ts');
 const { road } = await import('../src/scene/world_environment/road.ts');
 const { cameraMatrix, project } = await import('../src/scene/renderer/frame.ts');
 const { roundedBox } = await import('../src/scene/geometry/rounded_box.ts');
-const { OPENING_ROAD_DURATION_MS, DEPARTURE_ROAD_DURATION_MS } =
+const { OPENING_ROAD_DURATION_MS, DEPARTURE_CAMERA_DURATION_MS, DEPARTURE_ROAD_DURATION_MS } =
   await import('../src/shared/lib/story_timing.ts');
 
 const distance = (a, b) => Math.hypot(...a.map((v, i) => v - b[i]));
@@ -121,7 +121,7 @@ for (const departing of [false, true]) {
         const matrix = cameraMatrix(frame.camera, aspect);
         // The new opening starts with a close overhead view; begin the
         // full-body framing assertion after that first camera handoff.
-        if (departing && step >= 40 && step <= 160)
+        if (departing && t >= 2.5 && t <= DEPARTURE_CAMERA_DURATION_MS / 1000)
           for (const x of [-1.3, 1.3])
             for (const y of [0, 3.35])
               for (const z of [-4.8, 4.8])

@@ -17,6 +17,7 @@ registerHooks({
   },
 });
 const { createWorld } = await import('../src/scene/world/create_world.ts');
+const { BOARDING_TRAVEL_SECONDS } = await import('../src/shared/lib/story_timing.ts');
 const { characterModel } = await import('../src/scene/world_character/model.ts');
 const { animateCharacter } = await import('../src/scene/world_character/animation.ts');
 const { performanceFor } = await import('../src/scene/world_character/performance.ts');
@@ -61,17 +62,19 @@ async function bindSkin(rig) {
   const range = manifest.meshes[metadata.mesh];
   const influences = await readFile(new URL(metadata.influences, root));
   const binary = await readFile(new URL(manifest.binary, root));
+  const vertices = new Float32Array(
+    binary.buffer,
+    binary.byteOffset + range.vertexOffset,
+    range.vertexCount,
+  );
   const skin = decodeCharacterSkin(
     metadata,
     influences.buffer.slice(influences.byteOffset, influences.byteOffset + influences.byteLength),
     range.vertexCount / 16,
+    vertices,
   );
   const geometry = {
-    vertices: new Float32Array(
-      binary.buffer,
-      binary.byteOffset + range.vertexOffset,
-      range.vertexCount,
-    ),
+    vertices,
     indices: new Uint32Array(
       binary.buffer,
       binary.byteOffset + range.indexOffset,
@@ -180,9 +183,10 @@ test('travel changes world position, stops at the destination, and leaves Lu Che
   const traveler = find(initial, 'linlan'),
     monk = find(initial, 'luchen');
   const moved = frame(world.root, 2),
-    arrived = frame(world.root, 4.5),
-    later = frame(world.root, 9);
-  assert.ok(moved.get(traveler)[14] < initial.get(traveler)[14] - 0.5);
+    arrived = frame(world.root, BOARDING_TRAVEL_SECONDS),
+    later = frame(world.root, BOARDING_TRAVEL_SECONDS + 3);
+  assert.ok(moved.get(traveler)[12] < initial.get(traveler)[12] - 0.5, '游客向大巴方向移动');
+  assert.ok(arrived.get(traveler)[12] < -5.8, '游客最终进入大巴车厢');
   assert.deepEqual([...arrived.get(traveler)], [...later.get(traveler)]);
   assert.deepEqual([...initial.get(monk)], [...later.get(monk)]);
 });

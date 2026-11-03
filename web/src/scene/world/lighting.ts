@@ -168,11 +168,13 @@ export function sceneLighting(state: GameState, place: Place, day: boolean): Lig
     light.sky = [0.009, 0.018, 0.028];
     light.sun = [0.05, 0.08, 0.12];
     light.lamps.push({
-      position: [3, 1.7, 3.4],
+      position: [-2.55, 1.7, 3.4],
       color: [0.6, 0.68, 0.75],
       power: state.flags.vase_broken ? 0.6 : 1.3,
     });
-    light.lamps.push({ position: [-2.2, 2.35, -2.9], color: [1, 0.45, 0.16], power: 2.4 });
+    // Cold spill from the existing window reveals the two silhouettes;
+    // there is no burning lamp inside the room.
+    light.lamps.push({ position: [-4.3, 2.35, -2.9], color: [0.52, 0.65, 0.82], power: 2.4 });
   }
   if (state.sceneKey === 'mini_death') {
     light.sky = [0.009, 0.012, 0.02];

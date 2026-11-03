@@ -25,7 +25,7 @@ export function panel(
 
 // The lower sides really stop at the wheel arches: no solid box intersects
 // the tyres. Local +Z is the nose of this 9.6 m, two-axle touring coach.
-function skirt(b: Builder, side: number) {
+function skirt(b: Builder, side: number, doorOpen: boolean) {
   const g: Shape = { positions: [], normals: [], uv: [], indices: [] };
   const samples = 240;
   for (let i = 0; i <= samples; i++) {
@@ -40,7 +40,8 @@ function skirt(b: Builder, side: number) {
       g.normals.push(side, 0, 0);
       g.uv.push(i / samples, y / 1.52);
     }
-    if (i < samples) {
+    const inDoorway = doorOpen && side === -1 && z > 3.4 && z < 4.4;
+    if (i < samples && !inDoorway) {
       const n = i * 2;
       g.indices.push(
         ...(side > 0
@@ -64,20 +65,47 @@ function skirt(b: Builder, side: number) {
   }
 }
 
-export function coachBody(b: Builder) {
-  panel(b, [2.5, 1.7, 9.6], [0, 2.32, 0], finish.paint, 0.24);
-  panel(b, [2.46, 0.24, 9.48], [0, 1.51, 0], finish.teal, 0.09);
-  b.box([1.88, 0.42, 8.6], [0, 0.94, 0], finish.rubber);
+export function coachBody(b: Builder, doorOpen = false) {
+  if (doorOpen) {
+    // Build around the entrance instead of placing an open door over the
+    // closed, solid coach hull. The recess stays clear all the way to the aisle.
+    panel(b, [2.5, 1.7, 8.22], [0, 2.32, -0.69], finish.paint, 0.24);
+    panel(b, [2.5, 1.7, 0.38], [0, 2.32, 4.61], finish.paint, 0.1);
+    panel(b, [2.5, 0.22, 1.04], [0, 3.06, 3.92], finish.paint, 0.07);
+    panel(b, [0.18, 1.7, 1.04], [1.16, 2.32, 3.92], finish.paint, 0.06);
+    panel(b, [2.46, 0.24, 8.13], [0, 1.51, -0.675], finish.teal, 0.09);
+    panel(b, [2.46, 0.24, 0.33], [0, 1.51, 4.575], finish.teal, 0.06);
+    panel(b, [0.16, 0.24, 1.02], [1.15, 1.51, 3.91], finish.teal, 0.04);
+  } else {
+    panel(b, [2.5, 1.7, 9.6], [0, 2.32, 0], finish.paint, 0.24);
+    panel(b, [2.46, 0.24, 9.48], [0, 1.51, 0], finish.teal, 0.09);
+  }
+  b.box([1.88, 0.42, doorOpen ? 7.72 : 8.6], [0, 0.94, doorOpen ? -0.44 : 0], finish.rubber);
   for (const side of [-1, 1]) {
-    skirt(b, side);
-    panel(b, [0.035, 1.12, 8.74], [side * 1.254, 2.41, -0.05], finish.rubber, 0.017);
+    skirt(b, side, doorOpen);
+    const openSide = doorOpen && side === -1;
+    const glazingEnd = openSide ? 3.4 : 4.32;
+    panel(
+      b,
+      [0.035, 1.12, glazingEnd + 4.42],
+      [side * 1.254, 2.41, (glazingEnd - 4.42) / 2],
+      finish.rubber,
+      0.017,
+    );
     for (let i = 0; i < 7; i++) {
       const z = -3.73 + i * 1.17;
-      panel(b, [0.039, 0.99, 1.1], [side * 1.274, 2.42, z], finish.glass, 0.019);
+      const end = Math.min(z + 0.55, glazingEnd);
+      const start = z - 0.55;
+      const width = end - start;
+      panel(b, [0.039, 0.99, width], [side * 1.274, 2.42, (end + start) / 2], finish.glass, 0.019);
       // A restrained sun visor and rubber seals break up the continuous glass band.
-      b.box([0.012, 0.08, 1.05], [side * 1.296, 2.87, z], finish.trim);
+      b.box([0.012, 0.08, width - 0.05], [side * 1.296, 2.87, (end + start) / 2], finish.trim);
     }
-    b.box([0.028, 0.038, 8.92], [side * 1.265, 1.76, -0.02], finish.chrome);
+    b.box(
+      [0.028, 0.038, openSide ? 7.88 : 8.92],
+      [side * 1.265, 1.76, openSide ? -0.54 : -0.02],
+      finish.chrome,
+    );
     for (const z of [-1.56, -0.12, 1.3]) {
       panel(b, [0.022, 0.62, 1.35], [side * 1.26, 0.92, z], finish.trim, 0.01);
       panel(b, [0.027, 0.59, 1.32], [side * 1.278, 0.93, z], finish.paint, 0.013);

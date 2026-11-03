@@ -109,7 +109,7 @@ export function createSkinPose(targets: Targets, skeleton: SkinSkeleton, geometr
   };
   return () => {
     local.clear();
-    const walking = targets.pose === 'standing' && targets.root.gait?.moving === true;
+    const walking = targets.pose === 'standing' && (targets.root.gait?.weight || 0) > 0;
     const dy = targets.body.position[1] - 0.82;
     const pelvis = get('pelvis');
     // Keep legs independent of a bowing torso, matching seated and kneeling controls.
@@ -148,7 +148,10 @@ export function createSkinPose(targets: Targets, skeleton: SkinSkeleton, geometr
       }
       // The shin's rest-axis correction must stop at the ankle. Otherwise
       // straightening the scanned leg also tilts its shoe through the floor.
-      const kneel = Math.max(0, Math.min(1, (targets.knees[side].rotation[0] - 1.25) / 1.15));
+      const kneel =
+        targets.pose === 'kneeling'
+          ? Math.max(0, Math.min(1, (targets.knees[side].rotation[0] - 1.25) / 1.15))
+          : 0;
       const ankle = walking
         ? -targets.legs[side].rotation[0] - targets.knees[side].rotation[0]
         : kneel * (Math.PI - targets.legs[side].rotation[0] - targets.knees[side].rotation[0]);
@@ -205,7 +208,11 @@ export function createSkinPose(targets: Targets, skeleton: SkinSkeleton, geometr
     // During a step one foot bears weight; bring that sole back to the floor
     // even when both uncorrected shoes would be above it. Stationary poses
     // retain their authored height and only receive penetration correction.
-    const ground = groundContact(matrices, walking);
+    const support = targets.root.pelvisSupportHeight;
+    const ground =
+      support === undefined
+        ? groundContact(matrices, walking)
+        : support - bones[pelvis].position[1] - dy;
     deform.forEach((matrix, index) => {
       // Lu Chen's fixed upper body must not inherit the corrective lift from
       // a swinging foot. Ground only his legs; his hands stay in root space.

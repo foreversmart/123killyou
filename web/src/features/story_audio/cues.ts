@@ -1,4 +1,5 @@
 import type { GameState } from '../../shared/types/game.ts';
+import { ROOM_SLEEP_ACTION_SECONDS } from '../../shared/lib/story_timing.ts';
 export type SoundEvent = {
   kind:
     | 'gong'
@@ -56,6 +57,10 @@ export function storyCues(state: GameState): SoundEvent[] {
         { kind: 'scrape', at: 5.75, pan: 0.55 },
       ];
     case 'room_ghost_wait':
+      return [
+        { kind: 'impact', at: ROOM_SLEEP_ACTION_SECONDS + 0.25, pan: 0.55 },
+        { kind: 'impact', at: ROOM_SLEEP_ACTION_SECONDS + 1.85, pan: 0.55 },
+      ];
     case 'wake_ghost_wait':
       return [
         // This is a heavy body hitting the door, rather than a person's

@@ -136,7 +136,7 @@ test('gate drift only lifts feet while the authored position is actually changin
   assert.ok(
     stepping.some(([rotation, bend]) => Math.abs(rotation) > 0.02 || Math.abs(bend) > 0.02),
   );
-  root.animate(2.2, 0);
+  root.animate(2.3, 0);
   assert.ok(
     rig.legs.every((leg) => Math.abs(leg.rotation[0]) < 0.001 && Math.abs(leg.bend.angle) < 0.001),
     'feet settle when time advances without another displacement',

@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { GameState } from '@/shared/types/game';
 import { createWorld } from '@/scene/world/create_world';
-import { performanceKey } from '@/scene/world/performance_key';
 import { visualKey } from '@/scene/world/visual_key';
-import { scenePlace } from '@/scene/world/scene_state';
-import type { WorldMode, V3 } from '@/scene/world/types';
+import { continuityKey } from '@/scene/world/continuity_key';
+import { isSleepInterlude } from '@/scene/world/sleep';
+import type { World, WorldMode, V3 } from '@/scene/world/types';
 import { TempleRenderer } from '@/scene/renderer/engine';
 import { project } from '@/scene/renderer/frame';
 import styles from '@/scene/world_view/style.module.css';
 import { WorldOverlay } from '@/scene/world_view/world_overlay';
 import { carryCharacterContinuity } from '@/scene/world_view/continuity';
+import { carryPropContinuity } from '@/scene/world_view/prop_continuity';
 import {
   createPlayerControls,
+  carryPlayerView,
   updateMouseLook,
   updatePlayerView,
   type PlayerControls,
@@ -24,6 +26,7 @@ type Props = {
   motionPaused?: boolean;
   onAction?: (command: string) => Promise<void>;
   onAvailability?: (available: boolean) => void;
+  onElapsed?: (seconds: number) => void;
 };
 export function WorldView({
   state,
@@ -33,39 +36,54 @@ export function WorldView({
   motionPaused = false,
   onAction,
   onAvailability,
+  onElapsed,
 }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hotspots = useRef<HTMLDivElement>(null);
   const engine = useRef<TempleRenderer | null>(null);
   const controls = useRef<PlayerControls>(createPlayerControls());
   const sceneKey = visualKey(state, mode);
-  const world = useMemo(() => createWorld({ state, mode }), [sceneKey]);
-  const previousSceneKey = useRef(sceneKey);
-  const [settling, setSettling] = useState(false);
-  const actionKey = performanceKey(state, mode);
+  const placeKey = continuityKey(state, mode);
+  const previousWorld = useRef<{ world: World; placeKey: string } | undefined>(undefined);
+  const world = useMemo(() => {
+    const previous = previousWorld.current;
+    const next = createWorld(
+      { state, mode },
+      previous?.placeKey === placeKey ? previous.world : undefined,
+    );
+    previousWorld.current = { world: next, placeKey };
+    return next;
+  }, [sceneKey]);
   const latest = useRef({
     world,
-    actionKey,
+    placeKey,
     speaker,
     state,
     paused: state.paused,
     motionPaused,
     onAvailability,
+    onElapsed,
   });
   latest.current = {
     world,
-    actionKey,
+    placeKey,
     speaker,
     state,
     paused: state.paused,
     motionPaused,
     onAvailability,
+    onElapsed,
   };
   const aim = useRef<V3>([0, 0, 0]);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [error, setError] = useState('');
   const enabled =
-    interactive && status === 'ready' && !state.paused && !state.caught && !state.overlay;
+    interactive &&
+    status === 'ready' &&
+    !state.paused &&
+    !state.caught &&
+    !state.overlay &&
+    !isSleepInterlude(state);
   const enabledRef = useRef(enabled);
   enabledRef.current = enabled;
   const modeRef = useRef(mode);
@@ -98,22 +116,11 @@ export function WorldView({
     };
   }, []);
   useEffect(() => {
-    if (previousSceneKey.current === sceneKey) return;
-    previousSceneKey.current = sceneKey;
-    if (mode !== 'story' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    setSettling(true);
-    const timer = window.setTimeout(() => setSettling(false), 280);
-    return () => window.clearTimeout(timer);
-  }, [mode, sceneKey]);
-  useEffect(() => {
     let disposed = false,
       failed = false,
       frame = 0,
       activeWorld = world,
-      activeActionKey = actionKey,
-      activeSceneKey = state.sceneKey,
-      activeMode = mode,
-      activeState = state;
+      activePlaceKey = placeKey;
     let clock = 0,
       previous = performance.now();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -142,38 +149,32 @@ export function WorldView({
             frame = requestAnimationFrame(tick);
             return;
           }
-          if (activeWorld !== latest.current.world) {
-            const continuingGateTableau =
-              activeMode === 'story' &&
-              modeRef.current === 'story' &&
-              activeSceneKey === latest.current.state.sceneKey &&
-              scenePlace(activeState, 'story') === 'gate' &&
-              scenePlace(latest.current.state, 'story') === 'gate';
-            if (continuingGateTableau) {
-              carryCharacterContinuity(activeWorld, latest.current.world, clock);
-            }
-            activeWorld = latest.current.world;
-            renderer.setWorld(activeWorld);
-            if (activeActionKey !== latest.current.actionKey && !continuingGateTableau) clock = 0;
-            activeActionKey = latest.current.actionKey;
-            activeSceneKey = latest.current.state.sceneKey;
-            activeMode = modeRef.current;
-            activeState = latest.current.state;
-          }
-          if (!latest.current.paused && !latest.current.motionPaused) clock += delta;
-          activeWorld.speaker = latest.current.speaker;
-          updatePlayerView(
-            controls.current,
-            activeWorld,
-            latest.current.state,
-            latest.current.paused ? 0 : delta,
-            enabledRef.current && modeRef.current === 'story',
-          );
           try {
+            if (activeWorld !== latest.current.world) {
+              const next = latest.current.world;
+              if (activePlaceKey === latest.current.placeKey) {
+                carryCharacterContinuity(activeWorld, next, clock);
+                carryPropContinuity(activeWorld, next, clock);
+                carryPlayerView(controls.current, activeWorld, next);
+              } else clock = 0;
+              renderer.setWorld(next);
+              activeWorld = next;
+              activePlaceKey = latest.current.placeKey;
+            }
+            const motionDelta = latest.current.paused || latest.current.motionPaused ? 0 : delta;
+            clock += motionDelta;
+            activeWorld.speaker = latest.current.speaker;
+            updatePlayerView(
+              controls.current,
+              activeWorld,
+              latest.current.state,
+              motionDelta,
+              enabledRef.current && modeRef.current === 'story',
+            );
             const matrix = renderer.render(
               activeWorld,
               clock,
-              latest.current.paused ? 0 : delta,
+              motionDelta,
               reduced ? [0, 0, 0] : aim.current,
             );
             for (const button of hotspots.current?.querySelectorAll<HTMLButtonElement>('button') ||
@@ -186,6 +187,7 @@ export function WorldView({
                 button.style.top = screen.y + '%';
               }
             }
+            latest.current.onElapsed?.(clock);
           } catch (error) {
             fail('3D 画面未能完成绘制：' + String(error));
             return;
@@ -208,7 +210,7 @@ export function WorldView({
   }, []);
   return (
     <div
-      className={settling ? `${styles.world} ${styles['world--settling']}` : styles.world}
+      className={styles.world}
       data-world-status={status}
       data-world-scene={state.sceneKey}
       data-world-mode={mode}
@@ -271,7 +273,12 @@ export function WorldView({
         status={status}
         error={error}
         enabled={
-          mode === 'story' && interactive && !state.paused && !state.caught && !state.overlay
+          mode === 'story' &&
+          interactive &&
+          !state.paused &&
+          !state.caught &&
+          !state.overlay &&
+          !isSleepInterlude(state)
         }
         hotspots={world.hotspots}
         hotspotsRef={hotspots}

@@ -1,6 +1,7 @@
 import type { GameState } from '@/shared/types/game';
 import { SceneHeading } from '@/scene/scene_heading';
 import { storyAssets } from '@/shared/lib/story_assets';
+import { ArrivalObservation } from '@/scene/arrival/observation';
 import openingStyles from './opening_reel.module.css';
 import interaction from './interaction.module.css';
 
@@ -32,6 +33,7 @@ export function ArrivalInteraction({
           aria-label="红烛寺片头回放"
         />
       </details>
+      <ArrivalObservation state={state} />
       <div className={interaction.actions} aria-label="接下来的行动">
         <button disabled={disabled} type="button" onClick={() => void onAction('听第一话')}>
           听听他们在说什么

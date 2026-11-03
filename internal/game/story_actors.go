@@ -10,10 +10,10 @@ func miniSceneActors(key string) []SceneActor {
 	actors := map[string][]SceneActor{
 		"mini_arrival": {
 			actor("player", protagonistName, "游客·主角", "山门外石阶 / 第一视角", "player", "随意环顾，听见车门和脚步"),
-			actor("linlan", "林岚", "摄影爱好者", "山门左侧台阶 / 边走边取相机", "", "沿台阶缓步取景，偶尔按下快门"),
-			actor("zhouyan", "周砚", "古建筑爱好者", "新匾侧前方 / 绕行观察", "", "绕到匾侧看旧字和梁架，不停在原地"),
-			actor("xuzhi", "许栀", "同行游客", "檐下与行李之间 / 往返取包", "", "把小包往墙边挪，回头招呼同伴"),
-			actor("luchen", "陆沉", "守夜人和尚", "山门内侧向台阶走来", "keeper", "车门声停后走出迎接，双手保持静止，用对白说明登记方向"),
+			actor("linlan", "林岚", "摄影爱好者", "山门左侧台阶 / 边走边取相机", "", "缓步换取景点，驻足举相机，与同伴聊天"),
+			actor("zhouyan", "周砚", "古建筑爱好者", "新匾侧前方 / 绕行观察", "", "缓步换观察角度，驻足仰看旧字和梁架"),
+			actor("xuzhi", "许栀", "同行游客", "山门前行李旁 / 缓步环顾", "", "行李已靠墙，驻足看檐角并回头招呼同伴"),
+			actor("luchen", "陆沉", "守夜人和尚", "山门内侧 / 迎客与让路", "keeper", "驻足迎客、缓步让位，双手保持静止，用对白说明登记方向"),
 		},
 		"mini_register": {
 			actor("player", protagonistName, "游客·主角", "登记桌前沿 / 与大家围桌", "player", "俯身看登记簿，等陆沉确认登记"),
@@ -54,9 +54,9 @@ func miniSceneActors(key string) []SceneActor {
 			actor("companion_voice", "同行人的声音", "身份未明", "门外三步处", "", "敲三下"),
 		},
 		"mini_listen": {
-			actor("player", protagonistName, "游客·主角", "偏房门侧", "player", "贴墙偷听"),
-			actor("companion", "同行者", "同行者", "你身后半步", "", "屏住呼吸"),
-			actor("huipu", "慧普", "红烛寺住持", "半掩房门内", "", "剥取人皮"),
+			actor("player", protagonistName, "游客·主角", "偏房门外 / 门缝前", "player", "贴墙从门缝向内偷看"),
+			actor("companion", "同行者", "同行者", "偏房门外回廊 / 你身后半步", "", "屏住呼吸，留在门外"),
+			actor("huipu", "慧普", "红烛寺住持", "半掩房门内 / 床侧地面", "", "站在床边，俯身对床上人动手"),
 		},
 		"mini_oracle": {
 			actor("player", protagonistName, "游客·主角", "大殿东侧偏殿", "player", "逃入"),

@@ -11,7 +11,10 @@
 // slowly instead of racing toward the gate at the end of the opening.
 export const OPENING_ROAD_DURATION_MS = 36_000;
 export const OPENING_ALIGHTING_DURATION_MS = 9_000;
-export const DEPARTURE_ROAD_DURATION_MS = 10_000;
+export const DEPARTURE_CAMERA_DURATION_MS = 10_000;
+export const DEPARTURE_ROAD_DURATION_MS = 24_000;
+// Let all four travellers reach the coach and clear its steps before departure.
+export const BOARDING_TRAVEL_SECONDS = 12;
 
 // Authored first-person travel shots. Keep the scene transition clock and the
 // character walk clock on the same values so the cut happens after the group
@@ -23,3 +26,9 @@ export const CORRIDOR_TRAVEL_REFECTORY_SECONDS = 9.3;
 export const CORRIDOR_TRAVEL_RETURN_SECONDS = 9.0;
 export const CORRIDOR_TRAVEL_LISTEN_SECONDS = 9.0;
 export const HALL_TRAVEL_SECONDS = 11.4;
+
+// Every lie-down shows the same walk, turn and settle before the quiet wait.
+export const ROOM_SLEEP_WALK_SECONDS = 3.2;
+export const ROOM_SLEEP_SETTLE_SECONDS = 2;
+export const ROOM_SLEEP_ACTION_SECONDS = ROOM_SLEEP_WALK_SECONDS + ROOM_SLEEP_SETTLE_SECONDS;
+export const ROOM_SLEEP_WAIT_SECONDS = ROOM_SLEEP_ACTION_SECONDS + 1.4;

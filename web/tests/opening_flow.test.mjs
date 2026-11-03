@@ -14,9 +14,9 @@ async function fixture() {
   return {
     runtime,
     render: (paused = false) => {
-      const flow = runtime.render(hook, paused);
+      const flow = runtime.render(hook, paused, true);
       flow.setJourneyReady(true);
-      return runtime.render(hook, paused);
+      return runtime.render(hook, paused, true);
     },
   };
 }

@@ -3,9 +3,12 @@ import type { Performance } from '@/scene/world_character/performance';
 import { armPose, reachHand } from '@/scene/world_character/day_actions';
 import { bend, ease } from '@/scene/world_character/joints';
 import { HEAD_MOTION_RATE } from '@/scene/world_character/motion_rates';
+import { bedsideAction } from '@/scene/world_character/bedside_action';
 
 export function nightAction(rig: CharacterRig, action: Performance, t: number, verse: number) {
   const { head, body } = rig;
+  if (action === 'bedside_work' || action === 'bedside_startled')
+    bedsideAction(rig, t, action === 'bedside_startled');
   if (action === 'lean' || action === 'startled') {
     armPose(rig, 0, -0.65, -0.32, 0.12);
     armPose(rig, 1, -0.65, -0.32, -0.12);

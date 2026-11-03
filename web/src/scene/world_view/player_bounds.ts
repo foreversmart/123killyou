@@ -2,6 +2,8 @@ import type { GameState } from '@/shared/types/game';
 import type { CameraShot } from '@/scene/world/types';
 import { scenePlace } from '@/scene/world/scene_state';
 import { ROOM_ENCLOSURE } from '@/scene/world_environment/enclosure_layout';
+import { LISTEN_CORRIDOR } from '@/scene/world_environment/listen_room';
+import { isListenDoorway } from '@/scene/world/listen_route';
 
 type AxisRange = [number, number];
 type Aabb = { x: AxisRange; z: AxisRange };
@@ -11,6 +13,7 @@ export const PLAYER_RADIUS = 0.32;
 /** Walls and furniture are in world space, independent of a detail-shot eye. */
 export function walkVolume(state: GameState, base: CameraShot): WalkVolume {
   const place = scenePlace(state);
+  if (isListenDoorway(state)) return listenDoorWalkVolume(base);
   if (place === 'gate' || place === 'road')
     return { x: [-4.6, 4.6], z: [-4.5, 4.5], obstacles: [] };
 
@@ -47,11 +50,32 @@ export function walkVolume(state: GameState, base: CameraShot): WalkVolume {
   if (place === 'oracle') {
     obstacles = [{ x: [-0.3, 1.6], z: [-0.48, 0.68] }];
   } else if (place === 'listen') {
-    obstacles = [{ x: [-3.9, -2.05], z: [-3.1, -0.2] }];
+    // Eavesdropping never lets a movement key carry the player over the
+    // threshold, including after investigating an object beside the door.
+    bounds = { x: [...LISTEN_CORRIDOR.x], z: [...LISTEN_CORRIDOR.z] };
   }
 
   // Convert every rectangle once. Shot-relative bounds used to let the player
   // leave the rear wall or side wall after investigating a prop or turning.
+  const relative = (box: Aabb): Aabb => ({
+    x: [box.x[0] - base.eye[0], box.x[1] - base.eye[0]],
+    z: [box.z[0] - base.eye[2], box.z[1] - base.eye[2]],
+  });
+  return { ...relative(bounds), obstacles: obstacles.map(relative) };
+}
+
+/** Keep the exterior doorway camera on the stone passage, outside every room. */
+function listenDoorWalkVolume(base: CameraShot): WalkVolume {
+  // Both sides use the same courtyard. Stop a body radius before the room
+  // walls and the rear garden bed, rather than measuring from each camera.
+  const bounds: Aabb = { x: [-5.08, 5.08], z: [-6.3, -1.2] };
+  const obstacles: Aabb[] = [];
+  for (const side of [-1, 1]) {
+    const bedX = side * 3.57;
+    obstacles.push({ x: [bedX - 0.825, bedX + 0.825], z: [-4.985, -3.115] });
+    const columnX = side * 4.65;
+    obstacles.push({ x: [columnX - 0.225, columnX + 0.225], z: [-4.325, -3.875] });
+  }
   const relative = (box: Aabb): Aabb => ({
     x: [box.x[0] - base.eye[0], box.x[1] - base.eye[0]],
     z: [box.z[0] - base.eye[2], box.z[1] - base.eye[2]],

@@ -3,10 +3,15 @@ import { OPENING_ROAD_DURATION_MS, OPENING_ALIGHTING_DURATION_MS } from '@/share
 
 type OpeningPhase = 'reel' | 'ready' | 'road' | 'alighting' | 'done';
 
-export function useOpeningFlow(paused = false) {
+export function useOpeningFlow(paused = false, gateReady = false) {
   const [openingPhase, setOpeningPhase] = useState<OpeningPhase>('reel');
-  const [journeyReady, setJourneyReady] = useState(false);
+  const [roadReady, setRoadReady] = useState(false);
   const openingGate = useRef<OpeningPhase>('reel');
+  const journeyReady = openingPhase === 'alighting' ? gateReady : roadReady;
+  const setJourneyReady = useCallback((available: boolean) => {
+    // A late road renderer callback cannot start the shared gate canvas.
+    if (openingGate.current === 'road') setRoadReady(available);
+  }, []);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const dueAt = useRef<number | undefined>(undefined);
   const remaining = useRef<number | undefined>(undefined);
@@ -17,7 +22,7 @@ export function useOpeningFlow(paused = false) {
     dueAt.current = undefined;
     remaining.current = undefined;
     timerPhase.current = undefined;
-    setJourneyReady(false);
+    setRoadReady(false);
     openingGate.current = phase;
     setOpeningPhase(phase);
   }, []);

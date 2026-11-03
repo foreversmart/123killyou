@@ -5,6 +5,9 @@ const mealDiscussionAdvance = "自动继续晚膳讨论"
 // The keeper's explanation ends at a quiet window. Only the later automatic
 // command lets an undecided companion suggest trying the meat porridge.
 func (e *Engine) continueMealDiscussion(state *State) string {
+	if state.Flags["meal_persuasion_waiting"] {
+		return mealPersuasionWaitingReply(state)
+	}
 	if !state.Flags["refectory_intro_done"] {
 		speak := miniSequence(state, "refectory_intro", refectoryLines)
 		if state.Flags["refectory_intro_1"] {
@@ -44,6 +47,9 @@ func (e *Engine) continueMealDiscussion(state *State) string {
 }
 
 func nextMealDiscussion(state *State) string {
+	if state.Flags["meal_persuasion_waiting"] {
+		return ""
+	}
 	if state.Flags["refectory_eating_shown"] {
 		return "自动离开斋堂"
 	}
@@ -62,8 +68,16 @@ func nextMealDiscussion(state *State) string {
 const mealGroupAdvance = "自动离开斋堂"
 
 func (e *Engine) startMealEatingGroup(state *State) string {
-	miniShot(state, "refectory_eating")
-	miniSetFlag(state, "refectory_eating_shown")
+	return e.startMealGroupDialogue(state, []string{"linlan", "zhouyan", "xuzhi"})
+}
+
+func (e *Engine) startMealGroupDialogue(state *State, targets []string) string {
+	if state.Flags["meal_persuasion_waiting"] {
+		miniShot(state, "refectory_table")
+	} else {
+		miniShot(state, "refectory_eating")
+		miniSetFlag(state, "refectory_eating_shown")
+	}
 	miniSetFlag(state, "refectory_intro_done")
 	miniSetFlag(state, "refectory_discussion_done")
 	delete(state.Flags, "refectory_meal_finished")
@@ -74,6 +88,9 @@ func (e *Engine) startMealEatingGroup(state *State) string {
 	state.Flags["skin_double_present"] = state.Flags["meal_player_ate"] || allCompanionsAte(state)
 	miniSetFlag(state, "meal_group_pending")
 	for _, person := range []string{"linlan", "zhouyan", "xuzhi"} {
+		state.Flags["meal_group_spoken_"+person] = true
+	}
+	for _, person := range targets {
 		delete(state.Flags, "meal_group_spoken_"+person)
 	}
 	return e.continueMealGroupDialogue(state)
@@ -97,13 +114,17 @@ func (e *Engine) continueMealGroupDialogue(state *State) string {
 		// the meal closing action. `meal_group_pending` makes the same
 		// command advance to the next NPC instead of closing the table.
 		state.DialogueNext = "自动离开斋堂"
-		if person == "xuzhi" {
+		if state.Flags["meal_group_spoken_linlan"] && state.Flags["meal_group_spoken_zhouyan"] && state.Flags["meal_group_spoken_xuzhi"] {
 			delete(state.Flags, "meal_group_pending")
-			state.DialogueNext = "自动离开斋堂"
+			state.DialogueNext = nextMealDiscussion(state)
 		}
-		return miniDialogue(state, miniPersonName(person), miniMealJudgeReply(person, choice, ""))
+		text := miniMealJudgeReply(person, choice, "")
+		if progress, ok := state.MealPersuasion[person]; ok && progress.Reply != "" {
+			text = progress.Reply
+		}
+		return miniDialogue(state, miniPersonName(person), text)
 	}
 	delete(state.Flags, "meal_group_pending")
-	state.DialogueNext = "自动离开斋堂"
+	state.DialogueNext = nextMealDiscussion(state)
 	return miniDialogue(state, "许栀", "大家按自己的选择吃吧，吃完一起走。")
 }

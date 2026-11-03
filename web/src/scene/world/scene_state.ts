@@ -1,6 +1,8 @@
 import type { GameState, SceneActor } from '@/shared/types/game';
 import type { WorldMode } from '@/scene/world/types';
 import { canShowScenePerson } from '@/scene/scene_person/visibility';
+import { isSleepInterlude } from '@/scene/world/sleep';
+import { isListenDoorway } from '@/scene/world/listen_route';
 
 export type Place =
   | 'gate'
@@ -28,18 +30,15 @@ export function scenePlace(state: GameState, mode: WorldMode = 'story'): Place {
   if (state.shotKey === 'four_peephole') return 'corridor';
   if (state.sceneKey === 'mini_arrival' || state.shotKey === 'dawn_gate') return 'gate';
   if (state.sceneKey === 'mini_register')
-    return [
-      'register_rooms',
-      'register_luggage',
-      'register_camera_bell',
-      'register_ribbon',
-    ].includes(state.shotKey || '')
+    return ['register_rooms', 'register_camera_bell', 'register_ribbon'].includes(
+      state.shotKey || '',
+    )
       ? 'corridor'
       : 'register';
   if (state.sceneKey === 'mini_corridor_candle' || state.sceneKey === 'mini_dawn')
     return 'corridor';
   if (state.sceneKey === 'mini_refectory') return 'refectory';
-  if (state.sceneKey === 'mini_listen') return 'listen';
+  if (state.sceneKey === 'mini_listen') return isListenDoorway(state) ? 'corridor' : 'listen';
   if (state.sceneKey === 'mini_oracle') return 'oracle';
   if (!state.sceneKey) return state.room === 'watch' ? 'register' : 'corridor';
   return 'bedroom';
@@ -64,10 +63,24 @@ export function visibleActors(state: GameState, mode: WorldMode = 'story'): Scen
     return [];
   return (state.actors || []).filter((actor) => {
     const sleepingPlayer =
-      mode === 'story' &&
+      mode === 'story' && actor.id === 'player' && actor.visible && isSleepInterlude(state);
+    const doorwayPlayer =
       actor.id === 'player' &&
-      ['room_sleep_wait', 'escape_sleep_wait'].includes(state.shotKey || '');
-    if ((!sleepingPlayer && !canShowScenePerson(actor)) || actor.id === 'evil') return false;
+      actor.visible &&
+      ((mode === 'story' && isListenDoorway(state)) ||
+        (mode === 'travel' && state.sceneKey === 'mini_listen'));
+    const boardingPlayer =
+      actor.id === 'player' &&
+      actor.visible &&
+      mode === 'travel' &&
+      state.sceneKey === 'mini_ending';
+    if (
+      (!sleepingPlayer && !doorwayPlayer && !boardingPlayer && !canShowScenePerson(actor)) ||
+      actor.id === 'evil'
+    )
+      return false;
+    if (state.sceneKey === 'mini_listen' && ['linlan', 'zhouyan', 'xuzhi'].includes(actor.id))
+      return state.flags.companion_present !== false;
     // No hidden character is revealed by camera movement or transition shots.
     if (mode === 'travel' || mode === 'hall')
       return !['huipu', 'victim', 'skin_double'].includes(actor.id);

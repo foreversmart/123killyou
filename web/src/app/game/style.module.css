@@ -8,6 +8,7 @@
   background: radial-gradient(ellipse at 50% 35%, #211e16 0, #10100d 47%, #060605 90%);
 }
 .game-shell {
+  --game-frame-padding: 3px;
   width: min(1600px, 100%, calc((100svh - 82px) * 16 / 9));
   min-height: 0;
   flex-shrink: 0;
@@ -20,7 +21,7 @@
   isolation: isolate;
   background: #0f0e0c;
   border: 1px solid #665435;
-  padding: 3px;
+  padding: var(--game-frame-padding);
   position: relative;
   box-shadow:
     0 0 0 3px #080806,

@@ -72,6 +72,15 @@ export type WorldNode = {
   bend?: { pivot: V3; angle: number };
   /** Actual horizontal travel owns the feet, independently of upper-body clips. */
   gait?: import('@/scene/world_character/distance_gait').DistanceGait;
+  /** Seat or mattress support, in root space; replaces the floor correction. */
+  pelvisSupportHeight?: number;
+  /** Stable actor identity and authored activity, independent of dialogue text. */
+  characterKey?: string;
+  animationKey?: string;
+  /** Per-character origin on the uninterrupted world clock. */
+  animationTimeOffset?: number;
+  /** Small stateful actions survive a same-place rebuild without restarting. */
+  animationState?: { sleepFacing?: number; speech?: { weight: number; time: number } };
   /**
    * A short hand-off used when a visual rebuild keeps the same physical
    * tableau (for example, consecutive shots at the temple gate). The next
@@ -81,6 +90,7 @@ export type WorldNode = {
   animationContinuity?: {
     position: V3;
     rotationY: number;
+    rotation?: V3;
     time: number;
     gait?: import('@/scene/world_character/distance_gait').DistanceGait;
   };
@@ -112,6 +122,7 @@ export type Lighting = {
 };
 export type World = {
   speaker?: string;
+  environment?: { key: string; root: WorldNode };
   root: WorldNode;
   hotspots: Hotspot[];
   camera: CameraShot;

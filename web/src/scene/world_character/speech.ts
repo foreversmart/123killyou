@@ -16,17 +16,29 @@ export function isActorSpeaking(actor: SceneActor, speaker: string) {
 }
 
 /** Speech has its own clock: a new line must not restart walking or writing. */
-export function speechMotion(rig: CharacterRig, actor: SceneActor, speaker: () => string) {
-  let weight = 0,
-    time = 0;
+export function speechMotion(
+  rig: CharacterRig,
+  actor: SceneActor,
+  speaker: () => string,
+  speakingNod = false,
+) {
   return (action: Performance, delta: number) => {
+    const state = (rig.root.animationState ??= {});
+    const motion = (state.speech ??= { weight: 0, time: 0 });
     const speaking = isActorSpeaking(actor, speaker());
     const step = Math.max(0, Math.min(delta, 0.1));
-    if (speaking && weight === 0) time = 0;
-    weight = Math.max(0, Math.min(1, weight + step * (speaking ? 5 : -4)));
-    time += step;
+    if (speaking && motion.weight === 0) motion.time = 0;
+    motion.weight = Math.max(0, Math.min(1, motion.weight + step * (speaking ? 5 : -4)));
+    motion.time += step;
+    const { weight, time } = motion;
     const jaw = rig.head.children[0].bend;
     if (jaw) jaw.angle = (0.018 + Math.abs(Math.sin(time * 8.3)) * 0.075) * weight;
+    if (speakingNod) {
+      // Small speech beats use their own rhythm, independent of slow ambient glances.
+      rig.head.rotation[0] +=
+        Math.sin(time * 4.2) * (0.028 + Math.sin(time * 1.1) * 0.008) * weight;
+      return;
+    }
     if (!weight || !['idle', 'admire', 'look_up', 'welcome'].includes(action)) return;
     rig.head.rotation[0] += Math.sin(time * 3.4 * HEAD_MOTION_RATE) * 0.045 * weight;
     rig.head.rotation[1] += Math.sin(time * 1.6 * HEAD_MOTION_RATE) * 0.07 * weight;

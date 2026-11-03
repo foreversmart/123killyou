@@ -11,10 +11,11 @@ import {
   actorFacing,
   actorMovement,
   corridorTravelReversed,
-  gateActivityPosition,
   movementPosition,
 } from '@/scene/world/movement';
+import { gateVisitPose } from '@/scene/world/gate_visit';
 import { performanceFor } from '@/scene/world_character/performance';
+import { isListenDoorway, listenActorPosition, listenRoomSide } from '@/scene/world/listen_route';
 
 export function addCast(world: World, state: GameState, place: Place, mode: WorldMode) {
   visibleActors(state, mode).forEach((actor, index) => {
@@ -41,6 +42,7 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     let position: V3 = actorPositions[place]?.[actor.id] || [index - 1.5, 0, -1 - index * 0.5];
     if (state.sceneKey === 'mini_corridor_candle' && place === 'corridor')
       position = corridorCandlePositions[actor.id] || position;
+    if (isListenDoorway(state)) position = listenActorPosition(actor, state);
     if (walking) {
       if (mode === 'hall') {
         const hallLine: Record<string, V3> = {
@@ -50,16 +52,15 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
           xuzhi: [0.15, 0, -0.15],
         };
         position = hallLine[actor.id] || [2 - index * 0.65, 0, 1.5 - index * 0.7];
-      } else if (state.sceneKey === 'mini_register') {
-        // The registration walk starts as a loose, staggered flock instead
-        // of rebuilding the corridor's parallel lanes. actorMovement owns the
-        // deterministic separation and follow offsets for this route.
+      } else if (['mini_register', 'mini_listen', 'mini_ending'].includes(state.sceneKey || '')) {
+        // These routes own their starting positions: a loose registration
+        // flock, the two people leaving the room, or the return to the coach.
         position = actorMovement(actor, state, mode, [0, 0, 0])?.from || [
           index * 0.18 - 0.3,
           0,
           5.8 - index * 0.45,
         ];
-      } else if (state.sceneKey !== 'mini_ending') {
+      } else {
         // Start at the route's actual end. The refectory route begins by the
         // side rooms and walks outward; return routes begin at the open end
         // and walk back toward those rooms.
@@ -75,8 +76,6 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
           0,
           (reversed ? -5.8 : 5.8) + (reversed ? 1 : -1) * index * 0.45,
         ];
-      } else {
-        position = [index % 2 ? 0.8 : -0.8, 0, -1 - index * 1.1];
       }
     }
     rig.root.position = [...position];
@@ -92,13 +91,19 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       if (actor.id === 'xuzhi') rig.root.rotation[1] = -1.2;
     }
     if (place === 'register' && actor.id === 'luchen') rig.root.rotation[1] = 0;
+    if (isListenDoorway(state) && !walking)
+      rig.root.rotation[1] = (listenRoomSide(state) * Math.PI) / 2;
     if (actor.id === 'huipu' && place === 'listen') {
-      rig.root.position = [-2.7, 0.35, -1.65];
-      rig.root.rotation = [-0.95, -Math.PI / 2, 0];
+      // His feet stay beside the mattress; the dedicated action bends only
+      // the torso and arms toward the person on the bed.
+      rig.root.position = [-2.1, 0, -1.55];
+      rig.root.rotation = [0, -Math.PI / 2, 0];
     }
     if (actor.id === 'victim') {
-      rig.root.rotation[2] = Math.PI / 2;
-      rig.root.scale = [0.85, 0.85, 0.85];
+      // The root is at the feet. Rotate along the bed's length so the head
+      // reaches the pillow, instead of laying the person across its edge.
+      rig.root.position = [-3, 0.69, -0.85];
+      rig.root.rotation = [-Math.PI / 2, 0, 0];
     }
     if (actor.id === 'skin_double' && state.flags.double_calm) {
       rig.root.position = [-2.8, 0, 0.25];
@@ -107,11 +112,7 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     const activityBase = [...rig.root.position] as V3;
     const movement = actorMovement(actor, state, mode, rig.root.position);
     const activity = performanceFor(actor, state, false, mode === 'alighting');
-    const gateDrift =
-      !movement &&
-      mode === 'story' &&
-      state.sceneKey === 'mini_arrival' &&
-      state.shotKey?.startsWith('arrival_');
+    const gateVisit = !movement && mode === 'story' && state.sceneKey === 'mini_arrival';
     if (movement) rig.root.position = [...movement.from];
     const { held, heldBowl } = animateCharacter(rig, actor, state, {
       walkDuration: movement?.duration,
@@ -156,6 +157,22 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
     if (candleGuest) rig.root.rotation[1] = authoredFacing;
     const perform = rig.root.animate!;
     const originFacing = rig.root.rotation[1];
+    rig.root.animationKey = JSON.stringify([
+      rig.root.animationKey,
+      activityBase,
+      originFacing,
+      authoredFacing,
+      gateVisit,
+      movement && [
+        movement.from,
+        movement.to,
+        movement.duration,
+        movement.endFacing,
+        movement.path,
+        movement.pathTimes,
+        movement.actorId,
+      ],
+    ]);
     let placementTime: number | undefined;
     const angleDelta = (from: number, to: number) =>
       Math.atan2(Math.sin(to - from), Math.cos(to - from));
@@ -166,39 +183,28 @@ export function addCast(world: World, state: GameState, place: Place, mode: Worl
       }
       placementTime = t;
       if (movement) {
-        const heading = Math.atan2(
-          movement.to[0] - movement.from[0],
-          movement.to[2] - movement.from[2],
-        );
+        const next = movement.path
+          ? movementPosition(movement, Math.min(movement.duration, t + 0.04))
+          : movement.to;
+        const previous = movement.path
+          ? movementPosition(movement, Math.min(movement.duration - 0.04, Math.max(0, t - 0.04)))
+          : movement.from;
+        const heading = Math.atan2(next[0] - previous[0], next[2] - previous[2]);
         rig.root.position = movementPosition(movement, t);
-        const settle = ease(t - movement.duration + 0.675, 0.675);
+        // The bed action owns its turn after both feet reach the bedside.
+        const settle = activity === 'sleep_enter' ? 0 : ease(t - movement.duration + 0.675, 0.675);
         const turn = angleDelta(heading, movement.endFacing ?? authoredFacing);
         rig.root.rotation[1] = angleDelta(0, heading + turn * settle);
       } else if (!candleGuest) {
         rig.root.rotation[1] =
           originFacing + angleDelta(originFacing, authoredFacing) * ease(t, 1.65);
       }
-      if (gateDrift) {
-        const next = gateActivityPosition(actor, state, activity, t, activityBase);
-        const previous = [...rig.root.position] as V3;
-        rig.root.position = next;
-        if (next[0] !== previous[0] || next[2] !== previous[2]) {
-          const drift = Math.atan2(next[0] - previous[0], next[2] - previous[2]);
-          rig.root.rotation[1] = authoredFacing + angleDelta(authoredFacing, drift) * 0.12;
-        }
+      if (gateVisit) {
+        const visit = gateVisitPose(actor.id, t, activityBase);
+        rig.root.position = visit.position;
+        rig.root.rotation[1] = visit.facing;
       }
-      // WorldView supplies continuity after constructing the new world. Read
-      // it each frame, then sample gait from the final, blended position.
       const continuity = rig.root.animationContinuity;
-      if (continuity) {
-        const progress = ease(t - continuity.time, 0.42);
-        const turn = angleDelta(continuity.rotationY, rig.root.rotation[1]);
-        const targetPosition = [...rig.root.position] as V3;
-        rig.root.position = continuity.position.map(
-          (value, index) => value + (targetPosition[index] - value) * progress,
-        ) as V3;
-        rig.root.rotation[1] = continuity.rotationY + turn * progress;
-      }
       perform(t, dt);
       if (continuity && t >= continuity.time + 0.42) rig.root.animationContinuity = undefined;
     };

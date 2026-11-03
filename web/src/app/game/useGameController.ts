@@ -36,7 +36,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     finishOpening,
     journeyReady,
     setJourneyReady,
-  } = useOpeningFlow(pauseActive);
+  } = useOpeningFlow(pauseActive, sceneReady && !travelActive && roomPhase === 'idle');
   const openingFlow = openingPhase !== 'done';
   useEffect(() => {
     if (!openingFlow && openingPaused) setOpeningPaused(false);
@@ -162,8 +162,8 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     !openingFlow && connected && sceneReady && !travelActive && roomPhase === 'idle' && !soundBusy,
   );
   useEffect(() => {
-    // Start the first line as the stopped-bus frame fades in. send() creates a
-    // session if needed, and the dialogue panel is mounted over that frame.
+    // The first line and later dialogue share the already mounted gate world.
+    // send() creates a session if needed once that canvas is ready.
     const alighting = openingPhase === 'alighting' && journeyReady;
     if ((openingFlow && !alighting) || openingAnnounced.current || !connected || !state) return;
     if (state.sceneKey !== 'mini_arrival' || state.flags.arrival_intro_linlan) return;
@@ -217,6 +217,7 @@ export function useGameController({ voiceReady = false }: { voiceReady?: boolean
     sceneReady,
     setSceneReady,
     setTravelActive,
+    travelActive,
     error,
     connected,
     opening,

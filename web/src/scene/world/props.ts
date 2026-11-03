@@ -6,6 +6,7 @@ import { sceneLayout } from '@/scene/story_stage/layouts';
 import { propPositions } from '@/scene/world/placement';
 import { propModel } from '@/scene/world_prop/models';
 import { Builder, materials as M } from '@/scene/geometry/builder';
+import { isListenDoorway, listenPropPositions, listenRoomSide } from '@/scene/world/listen_route';
 
 const gateProps: StageProp[] = [
   { id: 'bell', name: '山门铜铃', kind: 'bell', command: '看铜铃', x: 0, y: 0 },
@@ -35,7 +36,9 @@ function catModel() {
 export function addProps(world: World, state: GameState, place: Place, interactive: boolean) {
   if (place === 'road' || place === 'hall') return;
   const props = place === 'gate' ? gateProps : sceneLayout(state).props;
-  const positions = propPositions[place] || {};
+  const positions = isListenDoorway(state)
+    ? listenPropPositions(state)
+    : propPositions[place] || {};
   for (const prop of props) {
     const position =
       place === 'oracle' &&
@@ -66,7 +69,10 @@ export function addProps(world: World, state: GameState, place: Place, interacti
     if (prop.command && interactive)
       world.hotspots.push({
         id: prop.id,
-        name: prop.name,
+        name:
+          state.sceneKey === 'mini_listen' && prop.id === 'plaque'
+            ? `${listenRoomSide(state) === 1 ? '纸' : '灯'}房房牌`
+            : prop.name,
         command: prop.command,
         position: [position[0], position[1] + (prop.kind === 'candle' ? 0.22 : 0.1), position[2]],
       });

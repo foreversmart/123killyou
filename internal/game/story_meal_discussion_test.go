@@ -1,10 +1,11 @@
 package game
 
 import (
-	"nightwatch/internal/content"
 	"reflect"
 	"strings"
 	"testing"
+
+	"nightwatch/internal/content"
 )
 
 func advanceMealDiscussion(t *testing.T, e *Engine, state *State) {
@@ -53,41 +54,50 @@ func TestMealEncouragementWaitsUntilAfterPersuasionWindow(t *testing.T) {
 	}
 }
 
-func TestTimelyVegetarianGroupPersuasionSuppressesMeatEncouragement(t *testing.T) {
+func TestTimelyVegetarianGroupPersuasionKeepsHarderCompanionsOpen(t *testing.T) {
 	for _, request := range []string{"劝大家吃素菜和馒头", "劝大家吃素材和馒头", "大家还是吃素吧", "大家别吃肉粥，换馒头吧", "劝大家不要吃粥", "大家还是尊重寺庙，吃馒头和素菜吧"} {
 		t.Run(request, func(t *testing.T) {
 			e, s := mealAtPersuasionWindow(t)
 			e.Apply(&s, request)
-			if s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" || !strings.Contains(s.Dialogue.Text, "尊重一下") {
-				t.Fatalf("劝素后没有回应并进入用膳: shot=%s next=%s dialogue=%+v", s.ShotKey, s.DialogueNext, s.Dialogue)
+			if s.ShotKey == "refectory_eating" || !s.Flags["meal_linlan_refused"] || !s.Flags["meal_player_refused"] {
+				t.Fatalf("首次劝素应只说服林岚并保留桌边对话: shot=%s flags=%v", s.ShotKey, s.Flags)
 			}
-			for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
-				if !s.Flags["meal_"+person+"_refused"] || s.Flags["meal_"+person+"_ate"] {
-					t.Fatalf("劝素未记录%s的选择: %v", person, s.Flags)
+			for _, person := range []string{"zhouyan", "xuzhi"} {
+				if s.Flags["meal_"+person+"_refused"] || s.Flags["meal_"+person+"_ate"] {
+					t.Fatalf("没有 JEV 的简单请求直接结算了%s: %v", person, s.Flags)
 				}
 			}
-			// Restoring the state or a stale continuation cannot reopen the
-			// skipped pro-meat lines after the accepted vegetarian meal.
-			s = Clone(s)
-			e.Apply(&s, mealDiscussionAdvance)
-			if !strings.Contains(s.Dialogue.Text, "吃完") || s.Flags["refectory_discussion_linlan"] || s.Flags["refectory_discussion_xuzhi"] {
-				t.Fatalf("已劝素后又恢复了劝肉对白: %+v", s.Dialogue)
+			drainMealGroupReplies(t, e, &s)
+			if s.SceneKey != "mini_refectory" || s.DialogueNext != "" || !s.Flags["meal_persuasion_waiting"] {
+				t.Fatalf("逐人回应后没有等待继续劝说: next=%s flags=%v", s.DialogueNext, s.Flags)
 			}
 		})
+	}
+}
+
+func drainMealGroupReplies(t *testing.T, e *Engine, state *State) {
+	t.Helper()
+	for count := 0; state.Flags["meal_group_pending"]; count++ {
+		if count > 2 || state.DialogueNext == "" {
+			t.Fatal("逐人晚膳回应没有完成")
+		}
+		e.Apply(state, state.DialogueNext)
 	}
 }
 
 func TestGroupMealRepliesKeepEachCompanionVoiceSeparate(t *testing.T) {
 	e, s := mealAtPersuasionWindow(t)
 	e.Apply(&s, "劝大家吃素材和馒头")
-	for _, speaker := range []string{"林岚", "周砚", "许栀"} {
-		if s.Dialogue.Speaker != speaker || s.Dialogue.Text == "" || !s.Flags["meal_group_pending"] && speaker != "许栀" {
+	for index, speaker := range []string{"林岚", "周砚", "许栀"} {
+		if s.Dialogue.Speaker != speaker || s.Dialogue.Text == "" {
 			t.Fatalf("集体劝素没有按角色逐句回应: want=%s state=%+v", speaker, s)
 		}
-		e.Apply(&s, "自动离开斋堂")
+		if index < 2 {
+			e.Apply(&s, s.DialogueNext)
+		}
 	}
-	if s.Dialogue.Speaker != "许栀" || s.Dialogue.Text != "吃完了，大家一起走吧。" {
-		t.Fatalf("逐人对白结束后没有进入收碗对白: %+v", s.Dialogue)
+	if s.DialogueNext != "" || s.Flags["refectory_meal_finished"] {
+		t.Fatalf("未说服所有人就自动收碗: next=%s flags=%v", s.DialogueNext, s.Flags)
 	}
 }
 
@@ -95,21 +105,25 @@ func TestVegetarianPersuasionBetweenCompanionLinesSkipsRemainingEncouragement(t 
 	e, s := mealAtPersuasionWindow(t)
 	e.Apply(&s, mealDiscussionAdvance)
 	e.Apply(&s, "劝大家换馒头和素菜")
-	if !strings.Contains(s.Dialogue.Text, "尊重一下") || s.Flags["refectory_discussion_xuzhi"] || !s.Flags["refectory_discussion_done"] {
-		t.Fatalf("林岚说话后仍未阻止后续劝肉: %+v flags=%v", s.Dialogue, s.Flags)
+	drainMealGroupReplies(t, e, &s)
+	if s.Flags["refectory_discussion_xuzhi"] || strings.Contains(s.Dialogue.Text, "想吃肉的就吃肉") || s.DialogueNext != "" {
+		t.Fatalf("集体劝素后仍继续劝肉或自动收束: %+v flags=%v", s.Dialogue, s.Flags)
 	}
 }
 
 func TestIndividualVegetarianChoiceDoesNotLaterEncourageMeat(t *testing.T) {
 	e, s := mealAtPersuasionWindow(t)
-	e.Apply(&s, "劝许栀别吃粥，换馒头")
+	e.Apply(&s, "劝林岚别吃粥，换馒头")
+	if !s.Flags["meal_linlan_refused"] {
+		t.Fatal("林岚没有一次接受劝说")
+	}
 	advanceMealDiscussion(t, e, &s)
-	if s.Dialogue.Speaker != "许栀" || !strings.Contains(s.Dialogue.Text, "尊重一下") || strings.Contains(s.Dialogue.Text, "想吃肉的就吃肉") {
-		t.Fatalf("已拒肉的许栀仍然劝肉: %+v", s.Dialogue)
+	if s.Dialogue.Speaker == "林岚" && strings.Contains(s.Dialogue.Text, "肉粥应该也没关系") {
+		t.Fatalf("已拒肉的林岚仍然劝肉: %+v", s.Dialogue)
 	}
 }
 
-func TestJudgedGroupVegetarianRequestUsesTheSameSafeContinuation(t *testing.T) {
+func TestJudgedGroupVegetarianRequestCannotBypassDifficulty(t *testing.T) {
 	catalog, err := content.Load()
 	if err != nil {
 		t.Fatal(err)
@@ -118,28 +132,24 @@ func TestJudgedGroupVegetarianRequestUsesTheSameSafeContinuation(t *testing.T) {
 	s := e.Initial("judged-meal-discussion")
 	storyCommands(e, &s, "登记入住", "去斋堂", "继续听", "继续听")
 	judge := &fakeStoryJudge{meal: MealJudgeResult{Decisions: map[string]MealDecision{
-		"linlan":  {Choice: "refused", Reply: "听你的。", Confidence: .9},
-		"zhouyan": {Choice: "refused", Reply: "好。", Confidence: .9},
-		"xuzhi":   {Choice: "refused", Reply: "也行。", Confidence: .9},
+		"linlan":  {Choice: "refused", Confidence: .9},
+		"zhouyan": {Choice: "refused", Sincere: true, Confidence: .9},
+		"xuzhi":   {Choice: "refused", ReasonCount: 2, Confidence: .9},
 	}}}
 	e.SetStoryJudge(judge)
 	e.Apply(&s, "劝大家吃素菜和馒头")
-	if judge.mealCalls != 1 || s.ShotKey != "refectory_eating" || s.DialogueNext != "自动离开斋堂" || !strings.Contains(s.Dialogue.Text, "尊重一下") {
-		t.Fatalf("JEV集体劝素没有接到吃素分支: calls=%d next=%s dialogue=%+v", judge.mealCalls, s.DialogueNext, s.Dialogue)
-	}
-	for _, person := range []string{"player", "linlan", "zhouyan", "xuzhi"} {
-		if !s.Flags["meal_"+person+"_refused"] {
-			t.Fatalf("JEV结果未记录%s的选择", person)
-		}
+	drainMealGroupReplies(t, e, &s)
+	if judge.mealCalls != 1 || !s.Flags["meal_linlan_refused"] || s.Flags["meal_zhouyan_refused"] || s.Flags["meal_xuzhi_refused"] || s.DialogueNext != "" {
+		t.Fatalf("JEV 的接受选项绕过了角色门槛: calls=%d next=%s flags=%v", judge.mealCalls, s.DialogueNext, s.Flags)
 	}
 }
 
-func TestMealChoiceDuringEatingKeepsTheMealHandoff(t *testing.T) {
+func TestMealChoiceDuringEatingReopensPersuasionWindow(t *testing.T) {
 	e, s := mealAtPersuasionWindow(t)
 	e.Apply(&s, "我吃馒头")
 	e.Apply(&s, "劝许栀别吃粥，换馒头")
-	if s.DialogueNext != "自动离开斋堂" || s.ShotKey != "refectory_eating" {
-		t.Fatalf("用膳中劝素丢失了收碗衔接: next=%s shot=%s", s.DialogueNext, s.ShotKey)
+	if s.DialogueNext != "" || s.Flags["meal_xuzhi_refused"] || !s.Flags["meal_persuasion_waiting"] {
+		t.Fatalf("用膳中未完成劝说仍自动离桌: next=%s flags=%v", s.DialogueNext, s.Flags)
 	}
 }
 
@@ -197,10 +207,10 @@ func TestGroupPersuasionPreservesThePlayersOwnPorridgeChoice(t *testing.T) {
 				e.Apply(&s, tt.prior)
 			}
 			e.Apply(&s, tt.request)
-			if !s.Flags["meal_player_ate"] || s.Flags["meal_player_refused"] || !s.Flags["meal_linlan_refused"] || s.DialogueNext != "自动离开斋堂" {
+			if !s.Flags["meal_player_ate"] || s.Flags["meal_player_refused"] || !s.Flags["meal_linlan_refused"] {
 				t.Fatalf("集体劝素覆盖了主角吃肉: judged=%v request=%s next=%s flags=%v", judged, tt.request, s.DialogueNext, s.Flags)
 			}
-			storyCommands(e, &s, "自动离开斋堂", "自动离开斋堂")
+			storyCommands(e, &s, "吃完晚膳", "自动离开斋堂", "自动离开斋堂")
 			if !s.Flags["skin_double_present"] || !s.Flags["meal_player_ate"] {
 				t.Fatalf("收碗丢失了主角吃肉后果: judged=%v request=%s flags=%v", judged, tt.request, s.Flags)
 			}

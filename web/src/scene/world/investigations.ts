@@ -7,6 +7,7 @@ import type { V3, World } from '@/scene/world/types';
 
 // Carried evidence can be held up to the camera without changing the inventory.
 export function addInvestigation(world: World, state: GameState) {
+  if (state.sceneKey === 'mini_arrival') return;
   const b = new Builder();
   let position: V3;
   if (state.shotKey === 'room_key') {

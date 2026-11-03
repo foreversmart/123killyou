@@ -180,16 +180,23 @@ test('the first-person player is rendered only during the bed sleep interlude', 
     status: '躺下休息',
     visible: true,
   };
-  const sleeping = {
-    sceneKey: 'mini_wake_three_gongs',
-    shotKey: 'room_sleep_wait',
-    flags: {},
-    actors: [player],
-  };
-  assert.deepEqual(
-    visibleActors(sleeping).map((actor) => actor.id),
-    ['player'],
-  );
+  const sleeping = { flags: {}, actors: [player] };
+  for (const [sceneKey, shotKey] of [
+    ['mini_wake_three_gongs', 'room_sleep_wait'],
+    ['mini_dawn_trap', 'escape_sleep_wait'],
+    ['mini_room', 'room_ghost_wait'],
+  ]) {
+    const game = { ...sleeping, sceneKey, shotKey };
+    assert.deepEqual(
+      visibleActors(game).map((actor) => actor.id),
+      ['player'],
+    );
+    assert.deepEqual(
+      visibleActors(game, 'travel').map((actor) => actor.id),
+      [],
+    );
+    assert.deepEqual(visibleActors({ ...game, actors: [{ ...player, visible: false }] }), []);
+  }
   assert.deepEqual(
     visibleActors({ ...sleeping, shotKey: 'wake_candle' }).map((actor) => actor.id),
     [],

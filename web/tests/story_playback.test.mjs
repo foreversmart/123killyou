@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { hookRuntime, loadHook } from './helpers/hook_runtime.mjs';
+import { ROOM_SLEEP_WAIT_SECONDS } from '../src/shared/lib/story_timing.ts';
 
 async function fixture() {
   const runtime = hookRuntime();
@@ -8,6 +9,7 @@ async function fixture() {
     '../../src/app/game/useStoryPlayback.ts',
     'useStoryPlayback',
     runtime,
+    { ROOM_SLEEP_WAIT_SECONDS },
   );
   const submitted = [];
   const state = {
@@ -102,7 +104,8 @@ test('四敲空门静默五秒后自动进入三敲', async () => {
 
 test('睡下、撞门和三敲对白都等环境声完成后再自动接续', async () => {
   const cases = [
-    { dialogueNext: '自动进入三更', flags: { sleep_pending: true }, delay: 5000 },
+    { dialogueNext: '自动进入三更', flags: { sleep_pending: true }, delay: 6600 },
+    { dialogueNext: '自动进入四声更锣', flags: { escape_sleep_pending: true }, delay: 6600 },
     { dialogueNext: '自动进入死亡结算', flags: { death_pending: true }, delay: 500 },
     {
       dialogueNext: '三敲后听同行',

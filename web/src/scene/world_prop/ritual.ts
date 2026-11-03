@@ -202,6 +202,7 @@ export function cups(flags: Record<string, boolean>, falling: boolean) {
     const b = new Builder();
     b.add(cupGeometry(), { color: 0x922f25, rough: 0.4, pattern: 1 });
     const cup = b.mesh('cup_' + i);
+    cup.animationKey = JSON.stringify([falling, faces]);
     const faceUp = faces?.[i] === 'flat';
     const restingY = faceUp ? 0.065 : 0.005;
     cup.position = [i * 0.34 - 0.17, restingY, 0];

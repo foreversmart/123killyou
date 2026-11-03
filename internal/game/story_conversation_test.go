@@ -76,8 +76,15 @@ func TestVegetarianCommandsNeverCreateMeatAffinity(t *testing.T) {
 			s := e.Initial("vegetarian")
 			e.setMiniScene(&s, "mini_refectory")
 			e.Apply(&s, tt.text)
-			if s.Flags["meal_"+tt.person+"_ate"] || !s.Flags["meal_"+tt.person+"_refused"] {
+			if s.Flags["meal_"+tt.person+"_ate"] {
 				t.Fatalf("吃素被当成喝肉粥：%v", s.Flags)
+			}
+			if tt.person == "player" || tt.person == "linlan" {
+				if !s.Flags["meal_"+tt.person+"_refused"] {
+					t.Fatalf("主角或林岚未接受素食选择: %v", s.Flags)
+				}
+			} else if s.Flags["meal_"+tt.person+"_refused"] {
+				t.Fatalf("简单素食请求绕过了较难角色的劝说门槛: %v", s.Flags)
 			}
 		})
 	}
